@@ -1,1 +1,2 @@
 2026-10-15T23:53:02Z hand-run session: first write from Claude (step 4 test)
+2026-10-15T23:56:55Z scheduled cloud session: second write (step 5 test, computer off)
