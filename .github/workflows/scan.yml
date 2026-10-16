@@ -25,7 +25,7 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -45,6 +45,7 @@ jobs:
         run: |
           git config user.name "ft-game scan"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -f scan/log.txt.part ]; then mv scan/log.txt.part scan/log.txt; echo "(run stopped before the end)" >> scan/log.txt; fi
           git add scan
           if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
           session=$(python -c "import json;print(json.load(open('scan/latest.json')).get('session_us','?'))" 2>/dev/null || echo "?")

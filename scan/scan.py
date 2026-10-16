@@ -59,12 +59,19 @@ WIKI = {
 }
 
 LOG = []
+LOG_PATH = None  # set in main; the log is written as the run goes
 
 
 def log(msg):
     line = f"{datetime.now(timezone.utc).strftime('%H:%M:%SZ')} {msg}"
     LOG.append(line)
     print(line, flush=True)
+    if LOG_PATH:
+        try:
+            with open(LOG_PATH, "a") as f:
+                f.write(line + "\n")
+        except OSError:
+            pass
 
 
 # ---------------------------------------------------------------- universe
@@ -264,13 +271,22 @@ def _stooq_symbol(t):
     return t.lower() + ".us"
 
 
-def download_stooq(tickers, limit=200):
+def download_stooq(tickers, limit=200, budget_s=180):
+    """Best effort, with a time budget; gives up after five failures in a row."""
     import requests
     data = {}
+    start, fails = time.time(), 0
     for t in tickers[:limit]:
+        if time.time() - start > budget_s:
+            log(f"stooq: time budget used after {len(data)} stocks")
+            break
+        if fails >= 5:
+            log("stooq: five failures in a row, giving up")
+            break
         url = f"https://stooq.com/q/d/l/?s={_stooq_symbol(t)}&i=d"
+        n_before = len(data)
         try:
-            r = requests.get(url, headers=UA, timeout=20)
+            r = requests.get(url, headers=UA, timeout=8)
             if r.status_code != 200 or not r.text[:4].lower() == "date":
                 if t == tickers[0]:
                     log(f"stooq: first reply {r.status_code} {r.text[:80]!r}")
@@ -280,9 +296,11 @@ def download_stooq(tickers, limit=200):
             df = df[df.index >= df.index.max() - pd.Timedelta(days=460)]
             if len(df):
                 data[t] = df[[c for c in ["Open", "High", "Low", "Close", "Volume"] if c in df.columns]]
-        except Exception:  # noqa: BLE001
-            pass
-        time.sleep(0.5)
+        except Exception as e:  # noqa: BLE001
+            if fails == 0:
+                log(f"stooq: {t} failed ({type(e).__name__})")
+        fails = 0 if len(data) > n_before else fails + 1
+        time.sleep(0.3)
     return data
 
 
@@ -491,6 +509,10 @@ def main():
     a = ap.parse_args()
     out = a.out
     os.makedirs(out, exist_ok=True)
+    global LOG_PATH
+    LOG_PATH = os.path.join(out, "log.txt.part")
+    if os.path.exists(LOG_PATH):
+        os.remove(LOG_PATH)
     meta_path = os.path.join(out, "latest.json")
     prev_meta = json.load(open(meta_path)) if os.path.exists(meta_path) else {}
 
@@ -695,6 +717,8 @@ def main():
     finally:
         if not skipped:
             open(os.path.join(out, "log.txt"), "w").write("\n".join(LOG) + "\n")
+        if LOG_PATH and os.path.exists(LOG_PATH):
+            os.remove(LOG_PATH)
 
 
 if __name__ == "__main__":
