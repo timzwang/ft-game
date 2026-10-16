@@ -1,0 +1,854 @@
+ticker,name,sector,market,index,built
+3IN.L,3i Infrastructure,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+AAF.L,Airtel Africa,Telecommunications services,UK,FTSE100,2026-10-16T07:08:46+00:00
+AAL.L,Anglo American plc,Mining,UK,FTSE100,2026-10-16T07:08:46+00:00
+AAS.L,Aberdeen Asia Focus,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+ABDN.L,Aberdeen Group,Financial Services,UK,FTSE100,2026-10-16T07:08:46+00:00
+ABF.L,Associated British Foods,Food & tobacco,UK,FTSE100,2026-10-16T07:08:46+00:00
+ADM.L,Admiral Group,Insurance,UK,FTSE100,2026-10-16T07:08:46+00:00
+AEP.L,AEP Plantations,Food Producers,UK,FTSE250,2026-10-16T07:08:46+00:00
+AGT.L,AVI Global Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+AIE.L,Ashoka India Equity Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+AJB.L,AJ Bell,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+ALFA.L,Alfa Financial Software,Software and Computer Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+ALW.L,Alliance Witan,Investment Trusts,UK,FTSE100,2026-10-16T07:08:46+00:00
+AMRQ.L,Amaroq,Industrial Metals and Mining,UK,FTSE250,2026-10-16T07:08:46+00:00
+ANTO.L,Antofagasta plc,Mining,UK,FTSE100,2026-10-16T07:08:46+00:00
+AO.L,AO World,Retail,UK,FTSE250,2026-10-16T07:08:46+00:00
+APN.L,Applied Nutrition,Food Producers,UK,FTSE250,2026-10-16T07:08:46+00:00
+ASC.L,ASOS,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+ASHM.L,Ashmore Group,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+ASL.L,Aberforth Smaller Companies Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+ATG.L,Auction Technology Group,Software and Computer Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+ATR.L,Schroder Asian Total Return Investment Company,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+ATT.L,Allianz Technology Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+ATYM.L,Atalaya Mining,Industrial Metals and Mining,UK,FTSE250,2026-10-16T07:08:46+00:00
+AUTO.L,Autotrader Group,Media,UK,FTSE100,2026-10-16T07:08:46+00:00
+AV.L,Aviva,Life insurance,UK,FTSE100,2026-10-16T07:08:46+00:00
+AVON.L,Avon Technologies,Industrial Goods and Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+AZN.L,AstraZeneca,Pharmaceuticals & biotechnology,UK,FTSE100,2026-10-16T07:08:46+00:00
+BA.L,BAE Systems,Aerospace & defence,UK,FTSE100,2026-10-16T07:08:46+00:00
+BAB.L,Babcock International,Aerospace & defence,UK,FTSE100,2026-10-16T07:08:46+00:00
+BAG.L,A.G. Barr,Beverages,UK,FTSE250,2026-10-16T07:08:46+00:00
+BARC.L,Barclays,Banks,UK,FTSE100,2026-10-16T07:08:46+00:00
+BATS.L,British American Tobacco,Tobacco,UK,FTSE100,2026-10-16T07:08:46+00:00
+BBOX.L,Tritax Big Box REIT,Real Estate Investment Trusts,UK,FTSE100,2026-10-16T07:08:46+00:00
+BBY.L,Balfour Beatty,Construction & Materials,UK,FTSE100,2026-10-16T07:08:46+00:00
+BCG.L,Baltic Classifieds,Consumer Digital Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+BGEO.L,Lion Finance Group,Banking Services,UK,FTSE100,2026-10-16T07:08:46+00:00
+BGFD.L,Baillie Gifford Japan Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+BHMG.L,BH Macro,Hedge Funds,UK,FTSE250,2026-10-16T07:08:46+00:00
+BKG.L,Berkeley Group Holdings,Household goods & home construction,UK,FTSE250,2026-10-16T07:08:46+00:00
+BLND.L,British Land,Real estate,UK,FTSE100,2026-10-16T07:08:46+00:00
+BME.L,B&M,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+BMY.L,Bloomsbury Publishing,Media,UK,FTSE250,2026-10-16T07:08:46+00:00
+BNKR.L,Bankers Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+BNZL.L,Bunzl,Support services,UK,FTSE100,2026-10-16T07:08:46+00:00
+BOWL.L,Hollywood Bowl Group,Travel and leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+BOY.L,Bodycote,Industrial Engineering,UK,FTSE250,2026-10-16T07:08:46+00:00
+BP.L,BP,Oil & gas producers,UK,FTSE100,2026-10-16T07:08:46+00:00
+BPCR.L,Biopharma Credit,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+BPT.L,Bridgepoint Group,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+BRBY.L,Burberry Group,Personal goods,UK,FTSE100,2026-10-16T07:08:46+00:00
+BREE.L,Breedon Group,Construction & Materials,UK,FTSE250,2026-10-16T07:08:46+00:00
+BRGE.L,BlackRock Greater Europe Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+BRSC.L,BlackRock Smaller Companies Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+BRWM.L,BlackRock World Mining Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+BT-A.L,BT Group,Telecommunications services,UK,FTSE100,2026-10-16T07:08:46+00:00
+BTRW.L,Barratt Redrow,Household goods & home construction,UK,FTSE100,2026-10-16T07:08:46+00:00
+BUT.L,Brunner Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+BWY.L,Bellway,Home Construction,UK,FTSE250,2026-10-16T07:08:46+00:00
+BYG.L,Big Yellow Group,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+BYIT.L,Bytes Technology Group,Aerospace & Defence,UK,FTSE250,2026-10-16T07:08:46+00:00
+CBG.L,Close Brothers Group,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+CCC.L,Computacenter,Software & Computer Services,UK,FTSE100,2026-10-16T07:08:46+00:00
+CCEP.L,Coca-Cola Europacific Partners,Beverages,UK,FTSE100,2026-10-16T07:08:46+00:00
+CCH.L,Coca-Cola HBC,Beverages,UK,FTSE100,2026-10-16T07:08:46+00:00
+CGT.L,Capital Gearing Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+CHG.L,Chemring Group,Aerospace & Defence,UK,FTSE250,2026-10-16T07:08:46+00:00
+CKN.L,Clarkson,Industrial Transportation,UK,FTSE250,2026-10-16T07:08:46+00:00
+CLDN.L,Caledonia Investments,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+CMCX.L,CMC Markets,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+CNA.L,Centrica,Multiline utilities,UK,FTSE100,2026-10-16T07:08:46+00:00
+COA.L,Coats Group,Consumer Staples,UK,FTSE250,2026-10-16T07:08:46+00:00
+CORD.L,Cordiant Digital Infrastructure,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+COST.L,Costain Group,Engineering and Construction,UK,FTSE250,2026-10-16T07:08:46+00:00
+CPG.L,Compass Group,Support services,UK,FTSE100,2026-10-16T07:08:46+00:00
+CRDA.L,Croda International,Chemicals,UK,FTSE100,2026-10-16T07:08:46+00:00
+CSN.L,Chesnara,Life Insurance,UK,FTSE250,2026-10-16T07:08:46+00:00
+CTEC.L,Convatec,Health care equipment & supplies,UK,FTSE100,2026-10-16T07:08:46+00:00
+CTY.L,City of London Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+CURY.L,Currys,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+CVSG.L,CVS Group,Health Care,UK,FTSE250,2026-10-16T07:08:46+00:00
+CWK.L,Cranswick,Food Producers,UK,FTSE250,2026-10-16T07:08:46+00:00
+CWR.L,Ceres Power,Alternative Energy,UK,FTSE250,2026-10-16T07:08:46+00:00
+DATA.L,GlobalData,Industrial Goods and Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+DCC.L,DCC Energy,Support services,UK,FTSE100,2026-10-16T07:08:46+00:00
+DGE.L,Diageo,Beverages,UK,FTSE100,2026-10-16T07:08:46+00:00
+DLN.L,Derwent London,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+DNLM.L,Dunelm Group,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+DOCS.L,Dr. Martens,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+DOM.L,Domino's Pizza,Travel & Leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+DPLM.L,Diploma,Industrial Support services,UK,FTSE100,2026-10-16T07:08:46+00:00
+DRX.L,Drax Group,Electricity,UK,FTSE250,2026-10-16T07:08:46+00:00
+DSCV.L,discoverIE,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+EDIN.L,Edinburgh Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+EDV.L,Endeavour Mining,Mining,UK,FTSE100,2026-10-16T07:08:46+00:00
+ELM.L,Elementis,Chemicals,UK,FTSE250,2026-10-16T07:08:46+00:00
+EMG.L,Man Group,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+ENOG.L,Energean,Oil & Gas Producers,UK,FTSE250,2026-10-16T07:08:46+00:00
+ENT.L,Entain,Travel & leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+ESCT.L,European Smaller Companies Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+EWG.L,Eurowag,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+EWI.L,Edinburgh Worldwide Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+EXPN.L,Experian,Support services,UK,FTSE100,2026-10-16T07:08:46+00:00
+EZJ.L,EasyJet,Travel and Leisure,UK,FTSE100,2026-10-16T07:08:46+00:00
+FAN.L,Volution Group,Construction & Materials,UK,FTSE250,2026-10-16T07:08:46+00:00
+FCH.L,Funding Circle,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+FCIT.L,F & C Investment Trust,Collective investments,UK,FTSE100,2026-10-16T07:08:46+00:00
+FCSS.L,Fidelity China Special Situations,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+FEML.L,Fidelity Emerging Markets,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+FEV.L,Fidelity European Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+FGEN.L,Foresight Environmental Infrastructure,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+FGP.L,FirstGroup,Travel & Leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+FGT.L,Finsbury Growth & Income Trust,Equity Investments,UK,FTSE250,2026-10-16T07:08:46+00:00
+FOUR.L,4imprint,Media,UK,FTSE250,2026-10-16T07:08:46+00:00
+FRAS.L,Frasers Group,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+FRES.L,Fresnillo plc,Mining,UK,FTSE100,2026-10-16T07:08:46+00:00
+FSG.L,Foresight Group,Investment Banking and Brokerage Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+FSV.L,Fidelity Special Values,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+GAMA.L,Gamma Communications,Telecommunications,UK,FTSE250,2026-10-16T07:08:46+00:00
+GAW.L,Games Workshop,Leisure Goods,UK,FTSE100,2026-10-16T07:08:46+00:00
+GCP.L,GCP Infrastructure Investments,General Financial,UK,FTSE250,2026-10-16T07:08:46+00:00
+GDWN.L,Goodwin,General Industrials,UK,FTSE250,2026-10-16T07:08:46+00:00
+GEN.L,Genuit Group,Construction & Materials,UK,FTSE250,2026-10-16T07:08:46+00:00
+GFRD.L,Galliford Try,Construction,UK,FTSE250,2026-10-16T07:08:46+00:00
+GFTU.L,Grafton Group,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+GLEN.L,Glencore,Mining,UK,FTSE100,2026-10-16T07:08:46+00:00
+GNC.L,Greencore,"Food, Beverage and Tobacco",UK,FTSE250,2026-10-16T07:08:46+00:00
+GNS.L,Genus,Pharmaceuticals & Biotechnology,UK,FTSE250,2026-10-16T07:08:46+00:00
+GPE.L,Great Portland Estates,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+GRG.L,Greggs,Food & Drug Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+GRI.L,Grainger,Real Estate Investment & Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+GROW.L,Molten Ventures,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+GSCT.L,Global Smaller Companies Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+GSK.L,GSK plc,Pharmaceuticals & biotechnology,UK,FTSE100,2026-10-16T07:08:46+00:00
+HANA.L,Hansa Investment Company,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+HAS.L,Hays,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+HBR.L,Harbour Energy,Oil & Gas Producers,UK,FTSE250,2026-10-16T07:08:46+00:00
+HFD.L,Halfords,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+HFEL.L,Henderson Far East Income,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+HFG.L,Hilton Food Group,Food Producers,UK,FTSE250,2026-10-16T07:08:46+00:00
+HGT.L,Hg Capital Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+HICL.L,HICL Infrastructure Company,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+HIK.L,Hikma Pharmaceuticals,Pharmaceuticals and Biotechnology,UK,FTSE250,2026-10-16T07:08:46+00:00
+HILS.L,Hill & Smith,Industrial Engineering,UK,FTSE250,2026-10-16T07:08:46+00:00
+HLMA.L,Halma plc,Electronic equipment & parts,UK,FTSE100,2026-10-16T07:08:46+00:00
+HLN.L,Haleon,Pharmaceuticals & biotechnology,UK,FTSE100,2026-10-16T07:08:46+00:00
+HMSO.L,Hammerson,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+HOC.L,Hochschild Mining,Basic Resources,UK,FTSE250,2026-10-16T07:08:46+00:00
+HRI.L,Herald Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+HSBA.L,HSBC,Banks,UK,FTSE100,2026-10-16T07:08:46+00:00
+HSL.L,Henderson Smaller Companies Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+HSX.L,Hiscox,Non-life Insurance,UK,FTSE100,2026-10-16T07:08:46+00:00
+HTG.L,Hunting,"Oil, Gas and Coal",UK,FTSE250,2026-10-16T07:08:46+00:00
+HTWS.L,Helios Towers,Telecomms,UK,FTSE250,2026-10-16T07:08:46+00:00
+HVPE.L,HarbourVest Global Private Equity,Equity Investments,UK,FTSE250,2026-10-16T07:08:46+00:00
+HWDN.L,Howdens Joinery,Homebuilding & construction supplies,UK,FTSE100,2026-10-16T07:08:46+00:00
+HWG.L,Harworth Group,Real Estate,UK,FTSE250,2026-10-16T07:08:46+00:00
+IAD.L,Invesco Asia Dragon Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+IAG.L,International Airlines Group,Travel & leisure,UK,FTSE100,2026-10-16T07:08:46+00:00
+ICG.L,ICG,Financial services,UK,FTSE100,2026-10-16T07:08:46+00:00
+ICGT.L,ICG Enterprise Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+IGG.L,IG Group,Financial services,UK,FTSE100,2026-10-16T07:08:46+00:00
+IHG.L,IHG Hotels & Resorts,Travel & leisure,UK,FTSE100,2026-10-16T07:08:46+00:00
+IHP.L,IntegraFin Holdings,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+III.L,3i,Financial services,UK,FTSE100,2026-10-16T07:08:46+00:00
+IMB.L,Imperial Brands,Tobacco,UK,FTSE100,2026-10-16T07:08:46+00:00
+IMI.L,IMI,Industrial engineering,UK,FTSE100,2026-10-16T07:08:46+00:00
+INCH.L,Inchcape,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+INF.L,Informa,Media,UK,FTSE100,2026-10-16T07:08:46+00:00
+INPP.L,International Public Partnerships,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+INVP.L,Investec,Financial Services,UK,FTSE100,2026-10-16T07:08:46+00:00
+IPO.L,IP Group,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+ITH.L,Ithaca Energy,Oil & Gas Producers,UK,FTSE100,2026-10-16T07:08:46+00:00
+ITRK.L,Intertek,Support services,UK,FTSE100,2026-10-16T07:08:46+00:00
+ITV.L,ITV,Media,UK,FTSE250,2026-10-16T07:08:46+00:00
+IWG.L,International Workplace Group,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+JAM.L,JPMorgan American Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+JCH.L,JPMorgan Claverhouse Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+JD.L,JD Sports,General retailers,UK,FTSE100,2026-10-16T07:08:46+00:00
+JDW.L,Wetherspoons,Travel & Leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+JEDT.L,JPMorgan European Discovery,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+JEGI.L,JPMorgan European Growth & Income,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+JEMI.L,JPMorgan Emerging Markets Dividend Income,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+JFJ.L,JPMorgan Japanese Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+JGGI.L,JPMorgan Global Growth & Income,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+JMAT.L,Johnson Matthey,Chemicals,UK,FTSE250,2026-10-16T07:08:46+00:00
+JMGI.L,JPMorgan Emerging Markets Growth & Income,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+JSG.L,Johnson Service Group,Industrial Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+JUP.L,Jupiter Fund Management,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+KGF.L,Kingfisher plc,Retailers,UK,FTSE100,2026-10-16T07:08:46+00:00
+KIE.L,Kier Group,Construction & Materials,UK,FTSE250,2026-10-16T07:08:46+00:00
+KLR.L,Keller Group,Construction & Materials,UK,FTSE250,2026-10-16T07:08:46+00:00
+KNOS.L,Kainos,Software & Computer Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+LAND.L,Land Securities,Real estate investment trusts,UK,FTSE100,2026-10-16T07:08:46+00:00
+LGEN.L,Legal & General,Life insurance,UK,FTSE100,2026-10-16T07:08:46+00:00
+LLOY.L,Lloyds Banking Group,Banks,UK,FTSE100,2026-10-16T07:08:46+00:00
+LMP.L,LondonMetric Property,Real Estate Investment Trusts,UK,FTSE100,2026-10-16T07:08:46+00:00
+LRE.L,Lancashire Holdings,Nonlife Insurance,UK,FTSE250,2026-10-16T07:08:46+00:00
+LSEG.L,London Stock Exchange Group,Financial services,UK,FTSE100,2026-10-16T07:08:46+00:00
+LWDB.L,Law Debenture,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+MAB.L,Mitchells & Butlers,Travel & Leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+MEGP.L,ME Group International,Leisure Goods,UK,FTSE250,2026-10-16T07:08:46+00:00
+MGAM.L,Morgan Advanced Materials,Electronic & Electrical Equipment,UK,FTSE250,2026-10-16T07:08:46+00:00
+MGNS.L,Morgan Sindall Group,Construction & Materials,UK,FTSE250,2026-10-16T07:08:46+00:00
+MKS.L,Marks & Spencer,Food & drug retailing,UK,FTSE100,2026-10-16T07:08:46+00:00
+MNDI.L,Mondi,Containers & packaging,UK,FTSE250,2026-10-16T07:08:46+00:00
+MNG.L,M&G,Financial services,UK,FTSE100,2026-10-16T07:08:46+00:00
+MNKS.L,Monks Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+MNO.L,Meridian Mining,Industrial Metals and Mining,UK,FTSE250,2026-10-16T07:08:46+00:00
+MNTN.L,Schiehallion Fund,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+MONY.L,MONY Group,Media,UK,FTSE250,2026-10-16T07:08:46+00:00
+MOON.L,Moonpig,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+MRC.L,Mercantile Investment Trust,Collective Investments,UK,FTSE250,2026-10-16T07:08:46+00:00
+MRCH.L,Merchants Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+MRO.L,Melrose Industries,Aerospace & defence,UK,FTSE100,2026-10-16T07:08:46+00:00
+MTLN.L,Metlen Energy & Metals,Multiline utilities,UK,FTSE100,2026-10-16T07:08:46+00:00
+MTO.L,Mitie,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+MTRO.L,Metro Bank,Banks,UK,FTSE250,2026-10-16T07:08:46+00:00
+MUT.L,Murray Income Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+MYI.L,Murray International Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+N91.L,Ninety One,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+NAIT.L,North American Income Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+NAS.L,North Atlantic Smaller Companies Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+NBPE.L,Neuberger Private Equity Partners,Collective Investments,UK,FTSE250,2026-10-16T07:08:46+00:00
+NCC.L,NCC Group,Software and Computer Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+NG.L,National Grid plc,Multiline utilities,UK,FTSE100,2026-10-16T07:08:46+00:00
+NWG.L,NatWest Group,Banks,UK,FTSE100,2026-10-16T07:08:46+00:00
+NXT.L,Next plc,General retailers,UK,FTSE100,2026-10-16T07:08:46+00:00
+OCDO.L,Ocado Group,Food & drug retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+OCI.L,Oakley Capital Investments,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+ONT.L,Oxford Nanopore Technologies,Health Care,UK,FTSE250,2026-10-16T07:08:46+00:00
+OSB.L,OSB Group,Banks,UK,FTSE250,2026-10-16T07:08:46+00:00
+OXB.L,Oxford Biomedica,Pharmaceuticals and Biotechnology,UK,FTSE250,2026-10-16T07:08:46+00:00
+OXIG.L,Oxford Instruments,Electronic & Electrical Equipment,UK,FTSE250,2026-10-16T07:08:46+00:00
+PAF.L,Pan African Resources,Precious Metals and Mining,UK,FTSE250,2026-10-16T07:08:46+00:00
+PAG.L,Paragon Banking Group,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+PAGE.L,Michael Page,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+PCGH.L,Polar Capital Global Healthcare Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+PCT.L,Polar Capital Technology Trust,Investment trusts,UK,FTSE100,2026-10-16T07:08:46+00:00
+PETS.L,Pets at Home,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+PEY.L,Partners Group Private Equity,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+PFD.L,Premier Foods,Food & Drug Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+PHI.L,Pacific Horizon Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+PHP.L,Primary Health Properties,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+PIN.L,Pantheon International,Equity Investments,UK,FTSE250,2026-10-16T07:08:46+00:00
+PINT.L,Pantheon Infrastructure,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+PLUS.L,Plus500,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+PNL.L,Personal Assets Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+PNN.L,Pennon Group,"Gas, Water & Multiutilities",UK,FTSE250,2026-10-16T07:08:46+00:00
+POLN.L,Pollen Street Group,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+PPET.L,Patria Private Equity Trust,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+PPH.L,PPHE Hotel Group,Travel and Leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+PRN.L,Princes Group,Food and drink,UK,FTSE250,2026-10-16T07:08:46+00:00
+PRU.L,Prudential plc,Life insurance,UK,FTSE100,2026-10-16T07:08:46+00:00
+PSH.L,Pershing Square Holdings,Financial services,UK,FTSE100,2026-10-16T07:08:46+00:00
+PSN.L,Persimmon,Household goods & home construction,UK,FTSE250,2026-10-16T07:08:46+00:00
+PSON.L,Pearson plc,Media,UK,FTSE100,2026-10-16T07:08:46+00:00
+PTEC.L,Playtech,Software & Computer Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+QLT.L,Quilter,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+QQ.L,Qinetiq,Aerospace & Defence,UK,FTSE250,2026-10-16T07:08:46+00:00
+RAT.L,Rathbones,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+RCP.L,RIT Capital Partners,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+REL.L,RELX,Media,UK,FTSE100,2026-10-16T07:08:46+00:00
+RHIM.L,RHI Magnesita,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+RICA.L,Ruffer Investment Company,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+RIO.L,Rio Tinto,Mining,UK,FTSE100,2026-10-16T07:08:46+00:00
+RKT.L,Reckitt,Household goods & home construction,UK,FTSE100,2026-10-16T07:08:46+00:00
+RMV.L,Rightmove,Media,UK,FTSE250,2026-10-16T07:08:46+00:00
+RNK.L,Rank Group,Travel and Leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+ROR.L,Rotork,Industrial Engineering,UK,FTSE250,2026-10-16T07:08:46+00:00
+ROSE.L,Rosebank Industries,Industrial Goods and Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+RPI.L,Raspberry Pi Holdings,Technology,UK,FTSE250,2026-10-16T07:08:46+00:00
+RR.L,Rolls-Royce Holdings,Aerospace & defence,UK,FTSE100,2026-10-16T07:08:46+00:00
+RS1.L,RS Group,Industrials,UK,FTSE250,2026-10-16T07:08:46+00:00
+RSW.L,Renishaw,Electronic & Electrical Equipment,UK,FTSE250,2026-10-16T07:08:46+00:00
+RTO.L,Rentokil Initial,Support services,UK,FTSE100,2026-10-16T07:08:46+00:00
+RTW.L,RTW Biotech Opportunities,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+SAFE.L,Safestore,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+SAGA.L,Saga,Travel and Leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+SAIN.L,Scottish American Investment Company,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+SBRY.L,Sainsbury's,Food & drug retailing,UK,FTSE100,2026-10-16T07:08:46+00:00
+SCT.L,Softcat,Software & Computer Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+SDLF.L,Standard Life,Life insurance,UK,FTSE100,2026-10-16T07:08:46+00:00
+SDP.L,Schroder AsiaPacific Fund,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+SEIT.L,SDCL Efficiency Income Trust,Energy,UK,FTSE250,2026-10-16T07:08:46+00:00
+SEQI.L,Sequoia Economic Infrastructure Income Fund,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+SGE.L,Sage Group,Software & computer services,UK,FTSE100,2026-10-16T07:08:46+00:00
+SGRO.L,Segro,Real estate investment trusts,UK,FTSE100,2026-10-16T07:08:46+00:00
+SHAW.L,Shawbrook Bank,Banking,UK,FTSE250,2026-10-16T07:08:46+00:00
+SHC.L,Shaftesbury Capital,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+SHEL.L,Shell plc,Oil & gas producers,UK,FTSE100,2026-10-16T07:08:46+00:00
+SMIN.L,Smiths Group,General industrials,UK,FTSE100,2026-10-16T07:08:46+00:00
+SMT.L,Scottish Mortgage Investment Trust,Collective investments,UK,FTSE100,2026-10-16T07:08:46+00:00
+SMWH.L,WHSmith,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+SN.L,Smith & Nephew,Health care equipment & supplies,UK,FTSE100,2026-10-16T07:08:46+00:00
+SOI.L,Schroder Oriental Income Fund,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+SPI.L,Spire Healthcare,Health Care Equipment & Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+SPX.L,Spirax Group,Industrial engineering,UK,FTSE100,2026-10-16T07:08:46+00:00
+SRE.L,Sirius Real Estate,Real Estate,UK,FTSE250,2026-10-16T07:08:46+00:00
+SRP.L,Serco,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+SSE.L,SSE plc,Electrical utilities & independent power producers,UK,FTSE100,2026-10-16T07:08:46+00:00
+SSIT.L,Seraphim Space Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+SSPG.L,SSP Group,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+STAN.L,Standard Chartered,Banks,UK,FTSE100,2026-10-16T07:08:46+00:00
+STJ.L,St. James's Place,Financial services,UK,FTSE100,2026-10-16T07:08:46+00:00
+SUPR.L,Supermarket Income REIT,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+SVS.L,Savills,Real Estate Investment & Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+SVT.L,Severn Trent,Multiline utilities,UK,FTSE100,2026-10-16T07:08:46+00:00
+SYNC.L,Syncona,Pharmaceuticals & Biotechnology,UK,FTSE250,2026-10-16T07:08:46+00:00
+TATE.L,Tate & Lyle,Food Producers,UK,FTSE250,2026-10-16T07:08:46+00:00
+TBCG.L,TBC Bank,Banks,UK,FTSE250,2026-10-16T07:08:46+00:00
+TCAP.L,TP ICAP,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+TEM.L,Templeton Emerging Markets Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+TEP.L,Telecom Plus,Telecomms,UK,FTSE250,2026-10-16T07:08:46+00:00
+TFIF.L,Twentyfour Income Fund,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+THG.L,THG,Personal Products,UK,FTSE250,2026-10-16T07:08:46+00:00
+THRL.L,Target Healthcare REIT,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+TMPL.L,Temple Bar Investment Trust,Collective Investments,UK,FTSE250,2026-10-16T07:08:46+00:00
+TPK.L,Travis Perkins,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+TRIG.L,The Renewables Infrastructure Group,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+TRN.L,Trainline,Industrial Transportation,UK,FTSE250,2026-10-16T07:08:46+00:00
+TRST.L,Trustpilot,Technology,UK,FTSE250,2026-10-16T07:08:46+00:00
+TRY.L,TR Property Investment Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+TSCO.L,Tesco,Food & drug retailing,UK,FTSE100,2026-10-16T07:08:46+00:00
+TW.L,Taylor Wimpey,Household goods & home construction,UK,FTSE250,2026-10-16T07:08:46+00:00
+UEM.L,Utilico Emerging Markets,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+UKW.L,Greencoat UK Wind,"Gas, Water & Multiutilities",UK,FTSE250,2026-10-16T07:08:46+00:00
+ULVR.L,Unilever,Personal goods,UK,FTSE100,2026-10-16T07:08:46+00:00
+USA.L,Baillie Gifford US Growth Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+UTG.L,Unite Group,Real estate investment trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+UU.L,United Utilities,Multiline utilities,UK,FTSE100,2026-10-16T07:08:46+00:00
+VCT.L,Victrex,Chemicals,UK,FTSE250,2026-10-16T07:08:46+00:00
+VEIL.L,Vietnam Enterprise Investments,General Financial,UK,FTSE250,2026-10-16T07:08:46+00:00
+VLX.L,Volex,Industrial Goods and Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+VOD.L,Vodafone Group,Mobile telecommunications,UK,FTSE100,2026-10-16T07:08:46+00:00
+VOF.L,VinaCapital Vietnam Opportunity Fund,General Financial,UK,FTSE250,2026-10-16T07:08:46+00:00
+VSVS.L,Vesuvius,General Industrials,UK,FTSE250,2026-10-16T07:08:46+00:00
+VTY.L,Vistry Group,Home Construction,UK,FTSE250,2026-10-16T07:08:46+00:00
+WEIR.L,Weir,Industrial goods and services,UK,FTSE100,2026-10-16T07:08:46+00:00
+WIX.L,Wickes,Retailers,UK,FTSE250,2026-10-16T07:08:46+00:00
+WIZZ.L,Wizz Air,Travel & Leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+WKP.L,Workspace Group,Real Estate Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+WOSG.L,Watches of Switzerland,Personal Goods,UK,FTSE250,2026-10-16T07:08:46+00:00
+WPP.L,WPP,Media,UK,FTSE100,2026-10-16T07:08:46+00:00
+WTB.L,Whitbread,Retail hospitality,UK,FTSE100,2026-10-16T07:08:46+00:00
+WWH.L,Worldwide Healthcare Trust,Investment Trusts,UK,FTSE250,2026-10-16T07:08:46+00:00
+XPP.L,XP Power,Industrial Goods and Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+XPS.L,XPS Pensions,Financial Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+YNGA.L,Young's,Travel and Leisure,UK,FTSE250,2026-10-16T07:08:46+00:00
+ZIG.L,Zigup,Support Services,UK,FTSE250,2026-10-16T07:08:46+00:00
+A,Agilent Technologies,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+AAPL,Apple Inc.,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ABBV,AbbVie,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+ABNB,Airbnb,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+ABT,Abbott Laboratories,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+ACGL,Arch Capital Group,Financials,US,SP500,2026-10-16T07:08:46+00:00
+ACN,Accenture,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ADBE,Adobe Inc.,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ADI,Analog Devices,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ADM,Archer Daniels Midland,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+ADP,Automatic Data Processing,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+ADSK,Autodesk,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+AEE,Ameren,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+AEP,American Electric Power,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+AES,AES Corporation,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+AFL,Aflac,Financials,US,SP500,2026-10-16T07:08:46+00:00
+AIG,American International Group,Financials,US,SP500,2026-10-16T07:08:46+00:00
+AIZ,Assurant,Financials,US,SP500,2026-10-16T07:08:46+00:00
+AJG,Arthur J. Gallagher & Co.,Financials,US,SP500,2026-10-16T07:08:46+00:00
+AKAM,Akamai Technologies,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ALB,Albemarle Corporation,Materials,US,SP500,2026-10-16T07:08:46+00:00
+ALGN,Align Technology,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+ALL,Allstate,Financials,US,SP500,2026-10-16T07:08:46+00:00
+ALLE,Allegion,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+AMAT,Applied Materials,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+AMCR,Amcor,Materials,US,SP500,2026-10-16T07:08:46+00:00
+AMD,Advanced Micro Devices,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+AME,Ametek,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+AMGN,Amgen,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+AMP,Ameriprise Financial,Financials,US,SP500,2026-10-16T07:08:46+00:00
+AMT,American Tower,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+AMZN,Amazon,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+ANET,Arista Networks,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+AON,Aon plc,Financials,US,SP500,2026-10-16T07:08:46+00:00
+AOS,A. O. Smith,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+APA,APA Corporation,Energy,US,SP500,2026-10-16T07:08:46+00:00
+APD,Air Products,Materials,US,SP500,2026-10-16T07:08:46+00:00
+APH,Amphenol,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+APO,Apollo Global Management,Financials,US,SP500,2026-10-16T07:08:46+00:00
+APP,AppLovin,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+APTV,Aptiv,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+ARE,Alexandria Real Estate Equities,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+ARES,Ares Management,Financials,US,SP500,2026-10-16T07:08:46+00:00
+ATO,Atmos Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+AVGO,Broadcom,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+AVY,Avery Dennison,Materials,US,SP500,2026-10-16T07:08:46+00:00
+AWK,American Water Works,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+AXON,Axon Enterprise,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+AXP,American Express,Financials,US,SP500,2026-10-16T07:08:46+00:00
+AZO,AutoZone,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+BA,Boeing,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+BAC,Bank of America,Financials,US,SP500,2026-10-16T07:08:46+00:00
+BALL,Ball Corporation,Materials,US,SP500,2026-10-16T07:08:46+00:00
+BAX,Baxter International,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+BBY,Best Buy,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+BDX,Becton Dickinson,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+BE,Bloom Energy,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+BEN,Franklin Resources,Financials,US,SP500,2026-10-16T07:08:46+00:00
+BF-B,Brown–Forman,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+BG,Bunge Global,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+BIIB,Biogen,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+BKNG,Booking Holdings,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+BKR,Baker Hughes,Energy,US,SP500,2026-10-16T07:08:46+00:00
+BLK,BlackRock,Financials,US,SP500,2026-10-16T07:08:46+00:00
+BMY,Bristol Myers Squibb,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+BNY,BNY Mellon,Financials,US,SP500,2026-10-16T07:08:46+00:00
+BR,Broadridge Financial Solutions,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+BRK-B,Berkshire Hathaway,Financials,US,SP500,2026-10-16T07:08:46+00:00
+BRO,Brown & Brown,Financials,US,SP500,2026-10-16T07:08:46+00:00
+BSX,Boston Scientific,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+BX,Blackstone Inc.,Financials,US,SP500,2026-10-16T07:08:46+00:00
+BXP,"BXP, Inc.",Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+C,Citigroup,Financials,US,SP500,2026-10-16T07:08:46+00:00
+CAH,Cardinal Health,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+CARR,Carrier Global,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+CASY,Casey's,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+CAT,Caterpillar Inc.,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+CB,Chubb Limited,Financials,US,SP500,2026-10-16T07:08:46+00:00
+CBOE,Cboe Global Markets,Financials,US,SP500,2026-10-16T07:08:46+00:00
+CBRE,CBRE Group,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+CCI,Crown Castle,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+CCL,Carnival Corporation,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+CDNS,Cadence Design Systems,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+CDW,CDW Corporation,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+CEG,Constellation Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+CF,CF Industries,Materials,US,SP500,2026-10-16T07:08:46+00:00
+CFG,Citizens Financial Group,Financials,US,SP500,2026-10-16T07:08:46+00:00
+CHD,Church & Dwight,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+CHRW,C.H. Robinson,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+CHTR,Charter Communications,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+CI,Cigna,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+CIEN,Ciena,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+CINF,Cincinnati Financial,Financials,US,SP500,2026-10-16T07:08:46+00:00
+CL,Colgate-Palmolive,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+CLX,Clorox,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+CMCSA,Comcast,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+CME,CME Group,Financials,US,SP500,2026-10-16T07:08:46+00:00
+CMG,Chipotle Mexican Grill,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+CMI,Cummins,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+CMS,CMS Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+CNC,Centene Corporation,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+CNP,CenterPoint Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+COF,Capital One,Financials,US,SP500,2026-10-16T07:08:46+00:00
+COHR,Coherent Corp.,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+COIN,Coinbase,Financials,US,SP500,2026-10-16T07:08:46+00:00
+COO,Cooper Companies (The),Health Care,US,SP500,2026-10-16T07:08:46+00:00
+COP,ConocoPhillips,Energy,US,SP500,2026-10-16T07:08:46+00:00
+COR,Cencora,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+COST,Costco,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+CPAY,Corpay,Financials,US,SP500,2026-10-16T07:08:46+00:00
+CPRT,Copart,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+CPT,Camden Property Trust,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+CRH,CRH plc,Materials,US,SP500,2026-10-16T07:08:46+00:00
+CRL,Charles River Laboratories,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+CRM,Salesforce,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+CRWD,CrowdStrike,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+CSCO,Cisco,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+CSGP,CoStar Group,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+CSX,CSX Corporation,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+CTAS,Cintas,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+CTSH,Cognizant,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+CVNA,Carvana,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+CVS,CVS Health,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+CVX,Chevron Corporation,Energy,US,SP500,2026-10-16T07:08:46+00:00
+D,Dominion Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+DAL,Delta Air Lines,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+DASH,DoorDash,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+DD,DuPont,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+DDOG,Datadog,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+DE,Deere & Company,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+DECK,Deckers Brands,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+DELL,Dell Technologies,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+DG,Dollar General,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+DGX,Quest Diagnostics,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+DHI,D. R. Horton,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+DHR,Danaher Corporation,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+DIS,Walt Disney Company (The),Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+DLR,Digital Realty,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+DLTR,Dollar Tree,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+DOC,Healthpeak Properties,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+DOV,Dover Corporation,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+DOW,Dow Inc.,Materials,US,SP500,2026-10-16T07:08:46+00:00
+DPZ,Domino's,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+DRI,Darden Restaurants,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+DTE,DTE Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+DUK,Duke Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+DVA,DaVita,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+DVN,Devon Energy,Energy,US,SP500,2026-10-16T07:08:46+00:00
+DXCM,Dexcom,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+EBAY,eBay Inc.,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+ECHO,EchoStar,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+ECL,Ecolab,Materials,US,SP500,2026-10-16T07:08:46+00:00
+ED,Consolidated Edison,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+EFX,Equifax,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+EG,Everest Group,Financials,US,SP500,2026-10-16T07:08:46+00:00
+EIX,Edison International,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+EL,Estée Lauder Companies (The),Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+ELV,Elevance Health,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+EME,Emcor,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+EMR,Emerson Electric,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+EOG,EOG Resources,Energy,US,SP500,2026-10-16T07:08:46+00:00
+EQIX,Equinix,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+EQT,EQT Corporation,Energy,US,SP500,2026-10-16T07:08:46+00:00
+ERIE,Erie Indemnity,Financials,US,SP500,2026-10-16T07:08:46+00:00
+ES,Eversource Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+ESS,Essex Property Trust,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+ETN,Eaton Corporation,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+ETR,Entergy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+EVRG,Evergy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+EW,Edwards Lifesciences,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+EXC,Exelon,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+EXE,Expand Energy,Energy,US,SP500,2026-10-16T07:08:46+00:00
+EXPD,Expeditors International,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+EXPE,Expedia Group,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+EXR,Extra Space Storage,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+F,Ford Motor Company,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+FANG,Diamondback Energy,Energy,US,SP500,2026-10-16T07:08:46+00:00
+FAST,Fastenal,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+FCX,Freeport-McMoRan,Materials,US,SP500,2026-10-16T07:08:46+00:00
+FDS,FactSet,Financials,US,SP500,2026-10-16T07:08:46+00:00
+FDX,FedEx,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+FDXF,FedEx Freight,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+FE,FirstEnergy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+FERG,Ferguson Enterprises,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+FFIV,"F5, Inc.",Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+FICO,Fair Isaac,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+FIS,Fidelity National Information Services,Financials,US,SP500,2026-10-16T07:08:46+00:00
+FISV,Fiserv,Financials,US,SP500,2026-10-16T07:08:46+00:00
+FITB,Fifth Third Bancorp,Financials,US,SP500,2026-10-16T07:08:46+00:00
+FIX,Comfort Systems USA,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+FLEX,Flex Ltd.,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+FOX,Fox Corporation (Class B),Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+FOXA,Fox Corporation (Class A),Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+FRT,Federal Realty Investment Trust,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+FSLR,First Solar,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+FTNT,Fortinet,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+FTV,Fortive,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+GD,General Dynamics,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+GDDY,GoDaddy,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+GE,GE Aerospace,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+GEHC,GE HealthCare,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+GEN,Gen Digital,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+GEV,GE Vernova,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+GILD,Gilead Sciences,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+GIS,General Mills,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+GL,Globe Life,Financials,US,SP500,2026-10-16T07:08:46+00:00
+GLW,Corning Inc.,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+GM,General Motors,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+GNRC,Generac,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+GOOG,Alphabet Inc. (Class C),Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+GOOGL,Alphabet Inc. (Class A),Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+GPC,Genuine Parts Company,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+GPN,Global Payments,Financials,US,SP500,2026-10-16T07:08:46+00:00
+GRMN,Garmin,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+GS,Goldman Sachs,Financials,US,SP500,2026-10-16T07:08:46+00:00
+GWW,W. W. Grainger,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+HAL,Halliburton,Energy,US,SP500,2026-10-16T07:08:46+00:00
+HAS,Hasbro,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+HBAN,Huntington Bancshares,Financials,US,SP500,2026-10-16T07:08:46+00:00
+HCA,HCA Healthcare,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+HD,Home Depot (The),Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+HIG,Hartford (The),Financials,US,SP500,2026-10-16T07:08:46+00:00
+HII,Huntington Ingalls Industries,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+HLT,Hilton Worldwide,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+HON,Honeywell Technologies,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+HONA,Honeywell Aerospace,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+HOOD,Robinhood Markets,Financials,US,SP500,2026-10-16T07:08:46+00:00
+HPE,Hewlett Packard Enterprise,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+HPQ,HP Inc.,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+HRL,Hormel Foods,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+HSIC,Henry Schein,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+HST,Host Hotels & Resorts,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+HSY,Hershey Company (The),Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+HUBB,Hubbell Incorporated,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+HUM,Humana,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+HWM,Howmet Aerospace,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+IBKR,Interactive Brokers,Financials,US,SP500,2026-10-16T07:08:46+00:00
+IBM,IBM,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ICE,Intercontinental Exchange,Financials,US,SP500,2026-10-16T07:08:46+00:00
+IDXX,Idexx Laboratories,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+IEX,IDEX Corporation,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+IFF,International Flavors & Fragrances,Materials,US,SP500,2026-10-16T07:08:46+00:00
+ILMN,"Illumina, Inc.",Health Care,US,SP500,2026-10-16T07:08:46+00:00
+INCY,Incyte,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+INTC,Intel,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+INTU,Intuit,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+INVH,Invitation Homes,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+IP,International Paper,Materials,US,SP500,2026-10-16T07:08:46+00:00
+IQV,IQVIA,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+IR,Ingersoll Rand,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+IRM,Iron Mountain,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+ISRG,Intuitive Surgical,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+IT,Gartner,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ITW,Illinois Tool Works,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+IVZ,Invesco,Financials,US,SP500,2026-10-16T07:08:46+00:00
+J,Jacobs Solutions,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+JBHT,J.B. Hunt,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+JBL,Jabil,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+JCI,Johnson Controls,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+JKHY,Jack Henry & Associates,Financials,US,SP500,2026-10-16T07:08:46+00:00
+JNJ,Johnson & Johnson,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+JPM,JPMorgan Chase,Financials,US,SP500,2026-10-16T07:08:46+00:00
+KDP,Keurig Dr Pepper,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+KEY,KeyCorp,Financials,US,SP500,2026-10-16T07:08:46+00:00
+KEYS,Keysight Technologies,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+KHC,Kraft Heinz,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+KIM,Kimco Realty,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+KKR,KKR & Co.,Financials,US,SP500,2026-10-16T07:08:46+00:00
+KLAC,KLA Corporation,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+KMB,Kimberly-Clark,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+KMI,Kinder Morgan,Energy,US,SP500,2026-10-16T07:08:46+00:00
+KO,Coca-Cola Company (The),Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+KR,Kroger,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+KVUE,Kenvue,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+L,Loews Corporation,Financials,US,SP500,2026-10-16T07:08:46+00:00
+LDOS,Leidos,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+LEN,Lennar,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+LH,Labcorp,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+LHX,L3Harris,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+LII,Lennox International,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+LIN,Linde plc,Materials,US,SP500,2026-10-16T07:08:46+00:00
+LITE,Lumentum,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+LLY,Lilly (Eli),Health Care,US,SP500,2026-10-16T07:08:46+00:00
+LMT,Lockheed Martin,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+LNT,Alliant Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+LOW,Lowe's,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+LRCX,Lam Research,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+LULU,Lululemon Athletica,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+LUV,Southwest Airlines,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+LVS,Las Vegas Sands,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+LYB,LyondellBasell,Materials,US,SP500,2026-10-16T07:08:46+00:00
+LYV,Live Nation Entertainment,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+MA,Mastercard,Financials,US,SP500,2026-10-16T07:08:46+00:00
+MAA,Mid-America Apartment Communities,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+MAR,Marriott International,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+MAS,Masco,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+MCD,McDonald's,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+MCHP,Microchip Technology,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+MCK,McKesson,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+MCO,Moody's Corporation,Financials,US,SP500,2026-10-16T07:08:46+00:00
+MDLZ,Mondelez International,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+MDT,Medtronic,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+MET,MetLife,Financials,US,SP500,2026-10-16T07:08:46+00:00
+META,Meta Platforms,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+MGM,MGM Resorts,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+MKC,McCormick & Company,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+MLM,Martin Marietta Materials,Materials,US,SP500,2026-10-16T07:08:46+00:00
+MMM,3M,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+MNST,Monster Beverage,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+MO,Altria,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+MOS,Mosaic Company (The),Materials,US,SP500,2026-10-16T07:08:46+00:00
+MPC,Marathon Petroleum,Energy,US,SP500,2026-10-16T07:08:46+00:00
+MPWR,Monolithic Power Systems,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+MRK,Merck & Co.,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+MRNA,Moderna,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+MRSH,Marsh McLennan,Financials,US,SP500,2026-10-16T07:08:46+00:00
+MRVL,Marvell Technology,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+MS,Morgan Stanley,Financials,US,SP500,2026-10-16T07:08:46+00:00
+MSCI,MSCI,Financials,US,SP500,2026-10-16T07:08:46+00:00
+MSFT,Microsoft,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+MSI,Motorola Solutions,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+MTB,M&T Bank,Financials,US,SP500,2026-10-16T07:08:46+00:00
+MTD,Mettler Toledo,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+MU,Micron Technology,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+NCLH,Norwegian Cruise Line Holdings,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+NDAQ,"Nasdaq, Inc.",Financials,US,SP500,2026-10-16T07:08:46+00:00
+NDSN,Nordson Corporation,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+NEE,NextEra Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+NEM,Newmont,Materials,US,SP500,2026-10-16T07:08:46+00:00
+NFLX,Netflix,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+NI,NiSource,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+NKE,"Nike, Inc.",Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+NOC,Northrop Grumman,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+NOW,ServiceNow,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+NRG,NRG Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+NSC,Norfolk Southern,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+NTAP,NetApp,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+NTRS,Northern Trust,Financials,US,SP500,2026-10-16T07:08:46+00:00
+NUE,Nucor,Materials,US,SP500,2026-10-16T07:08:46+00:00
+NVDA,Nvidia,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+NVR,"NVR, Inc.",Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+NWS,News Corp (Class B),Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+NWSA,News Corp (Class A),Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+NXPI,NXP Semiconductors,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+O,Realty Income,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+ODFL,Old Dominion,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+OKE,Oneok,Energy,US,SP500,2026-10-16T07:08:46+00:00
+OMC,Omnicom Group,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+ON,ON Semiconductor,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ORCL,Oracle Corporation,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ORLY,O'Reilly Automotive,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+OTIS,Otis Worldwide,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+OXY,Occidental Petroleum,Energy,US,SP500,2026-10-16T07:08:46+00:00
+P,Everpure,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+PANW,Palo Alto Networks,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+PAYX,Paychex,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+PCAR,Paccar,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+PCG,PG&E Corporation,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+PEG,Public Service Enterprise Group,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+PEP,PepsiCo,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+PFE,Pfizer,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+PFG,Principal Financial Group,Financials,US,SP500,2026-10-16T07:08:46+00:00
+PG,Procter & Gamble,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+PGR,Progressive Corporation,Financials,US,SP500,2026-10-16T07:08:46+00:00
+PH,Parker Hannifin,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+PHM,PulteGroup,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+PKG,Packaging Corporation of America,Materials,US,SP500,2026-10-16T07:08:46+00:00
+PLD,Prologis,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+PLTR,Palantir Technologies,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+PM,Philip Morris International,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+PNC,PNC Financial Services,Financials,US,SP500,2026-10-16T07:08:46+00:00
+PNR,Pentair,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+PNW,Pinnacle West Capital,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+PODD,Insulet Corporation,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+PPG,PPG Industries,Materials,US,SP500,2026-10-16T07:08:46+00:00
+PPL,PPL Corporation,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+PRU,Prudential Financial,Financials,US,SP500,2026-10-16T07:08:46+00:00
+PSA,Public Storage,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+PSX,Phillips 66,Energy,US,SP500,2026-10-16T07:08:46+00:00
+PTC,PTC Inc.,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+PWR,Quanta Services,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+PYPL,PayPal,Financials,US,SP500,2026-10-16T07:08:46+00:00
+Q,Qnity Electronics,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+QCOM,Qualcomm,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+RCL,Royal Caribbean Group,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+RDDT,Reddit,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+REG,Regency Centers,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+REGN,Regeneron Pharmaceuticals,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+RF,Regions Financial Corporation,Financials,US,SP500,2026-10-16T07:08:46+00:00
+RJF,Raymond James Financial,Financials,US,SP500,2026-10-16T07:08:46+00:00
+RL,Ralph Lauren Corporation,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+RMD,ResMed|,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+ROK,Rockwell Automation,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+ROL,"Rollins, Inc.",Industrials,US,SP500,2026-10-16T07:08:46+00:00
+ROP,Roper Technologies,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ROST,Ross Stores,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+RSG,Republic Services,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+RTX,RTX Corporation,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+RVTY,Revvity,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+SBAC,SBA Communications,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+SBUX,Starbucks,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+SCHW,Charles Schwab Corporation,Financials,US,SP500,2026-10-16T07:08:46+00:00
+SHW,Sherwin-Williams,Materials,US,SP500,2026-10-16T07:08:46+00:00
+SJM,J.M. Smucker Company (The),Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+SKYD,Skydance Corporation,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+SLB,Schlumberger,Energy,US,SP500,2026-10-16T07:08:46+00:00
+SMCI,Supermicro,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+SNA,Snap-on,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+SNDK,Sandisk,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+SNPS,Synopsys,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+SO,Southern Company,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+SOLV,Solventum,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+SPG,Simon Property Group,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+SPGI,S&P Global,Financials,US,SP500,2026-10-16T07:08:46+00:00
+SRE,Sempra,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+STE,Steris,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+STLD,Steel Dynamics,Materials,US,SP500,2026-10-16T07:08:46+00:00
+STT,State Street Corporation,Financials,US,SP500,2026-10-16T07:08:46+00:00
+STX,Seagate Technology,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+STZ,Constellation Brands,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+SW,Smurfit Westrock,Materials,US,SP500,2026-10-16T07:08:46+00:00
+SWK,Stanley Black & Decker,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+SWKS,Skyworks Solutions,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+SYF,Synchrony Financial,Financials,US,SP500,2026-10-16T07:08:46+00:00
+SYK,Stryker Corporation,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+SYY,Sysco,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+T,AT&T,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+TDG,TransDigm Group,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+TDY,Teledyne Technologies,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+TECH,Bio-Techne,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+TEL,TE Connectivity,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+TER,Teradyne,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+TFC,Truist Financial,Financials,US,SP500,2026-10-16T07:08:46+00:00
+TGT,Target Corporation,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+TJX,TJX Companies,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+TKO,TKO Group Holdings,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+TMO,Thermo Fisher Scientific,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+TMUS,T-Mobile US,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+TPL,Texas Pacific Land Corporation,Energy,US,SP500,2026-10-16T07:08:46+00:00
+TPR,"Tapestry, Inc.",Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+TRGP,Targa Resources,Energy,US,SP500,2026-10-16T07:08:46+00:00
+TRMB,Trimble Inc.,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+TROW,T. Rowe Price,Financials,US,SP500,2026-10-16T07:08:46+00:00
+TRV,Travelers Companies (The),Financials,US,SP500,2026-10-16T07:08:46+00:00
+TSCO,Tractor Supply,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+TSLA,"Tesla, Inc.",Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+TSN,Tyson Foods,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+TT,Trane Technologies,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+TTWO,Take-Two Interactive,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+TWLO,Twilio,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+TXN,Texas Instruments,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+TXT,Textron,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+TYL,Tyler Technologies,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+UAL,United Airlines Holdings,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+UBER,Uber,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+UDR,"UDR, Inc.",Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+UHS,Universal Health Services,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+ULTA,Ulta Beauty,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+UNH,UnitedHealth Group,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+UNP,Union Pacific Corporation,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+UPS,United Parcel Service,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+URI,United Rentals,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+USB,U.S. Bancorp,Financials,US,SP500,2026-10-16T07:08:46+00:00
+V,Visa Inc.,Financials,US,SP500,2026-10-16T07:08:46+00:00
+VEEV,Veeva Systems,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+VICI,Vici Properties,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+VLO,Valero Energy,Energy,US,SP500,2026-10-16T07:08:46+00:00
+VLTO,Veralto,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+VMC,Vulcan Materials Company,Materials,US,SP500,2026-10-16T07:08:46+00:00
+VMRK,Vivmark Residential,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+VRSK,Verisk Analytics,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+VRSN,Verisign,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+VRT,Vertiv,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+VRTX,Vertex Pharmaceuticals,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+VST,Vistra Corp.,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+VTR,Ventas,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+VTRS,Viatris,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+VYLR,Vylor,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+VZ,Verizon,Communication Services,US,SP500,2026-10-16T07:08:46+00:00
+WAB,Wabtec,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+WAT,Waters Corporation,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+WDAY,"Workday, Inc.",Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+WDC,Western Digital,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+WEC,WEC Energy Group,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+WELL,Welltower,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+WFC,Wells Fargo,Financials,US,SP500,2026-10-16T07:08:46+00:00
+WM,Waste Management,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+WMB,Williams Companies,Energy,US,SP500,2026-10-16T07:08:46+00:00
+WMT,Walmart,Consumer Staples,US,SP500,2026-10-16T07:08:46+00:00
+WRB,W. R. Berkley Corporation,Financials,US,SP500,2026-10-16T07:08:46+00:00
+WSM,"Williams-Sonoma, Inc.",Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+WST,West Pharmaceutical Services,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+WTW,Willis Towers Watson,Financials,US,SP500,2026-10-16T07:08:46+00:00
+WY,Weyerhaeuser,Real Estate,US,SP500,2026-10-16T07:08:46+00:00
+WYNN,Wynn Resorts,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+XEL,Xcel Energy,Utilities,US,SP500,2026-10-16T07:08:46+00:00
+XOM,ExxonMobil,Energy,US,SP500,2026-10-16T07:08:46+00:00
+XYL,Xylem Inc.,Industrials,US,SP500,2026-10-16T07:08:46+00:00
+XYZ,"Block, Inc.",Financials,US,SP500,2026-10-16T07:08:46+00:00
+YUM,Yum! Brands,Consumer Discretionary,US,SP500,2026-10-16T07:08:46+00:00
+ZBH,Zimmer Biomet,Health Care,US,SP500,2026-10-16T07:08:46+00:00
+ZBRA,Zebra Technologies,Information Technology,US,SP500,2026-10-16T07:08:46+00:00
+ZTS,Zoetis,Health Care,US,SP500,2026-10-16T07:08:46+00:00
