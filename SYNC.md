@@ -35,7 +35,7 @@ The Project docs were first copied as text on 16 Oct. Docs marked "uploaded from
 |---|---|---|
 | `docs/ft-game-data.md` | Project doc `claude/ft-game-data.md`, uploaded from this file on 16 Oct (identical) | `08771eb9590f4bf69d4c68eaf87e8187ee4a9ad1a511d2d6d04e0f76148e0b51` |
 | `docs/ft-game-page.md` | Project doc `claude/ft-game-page.md` | `d8c076155aa305b97660d609634ae4c8f7bd6c288276983efa99977be913b9a7` |
-| `docs/ft-game-playbook.md` | Project doc `claude/ft-game-playbook.md`, uploaded from this file on 16 Oct (identical) | `969f9210f02bbb046f55859e530dedf3c38840c18f45cb398e07f66b26e8eaa4` |
+| `docs/ft-game-playbook.md` | Project doc `claude/ft-game-playbook.md`, uploaded from this file on 16 Oct (identical) | `f27f2cc0a1b2447e03757903553dec9ff030817587a681161f6af7e8d62f12c4` |
 | `docs/ft-game-roadmap.md` | Project doc `claude/ft-game-roadmap.md`, uploaded from this file on 16 Oct (identical) | `c8e7fa6c5a0f037bcbacb4d6d12bf6ea7645d7f39b457a2fefdb236234e7f107` |
 | `docs/ft-game-rules.md` | Project doc `claude/ft-game-rules.md` | `1419632623a6b535ce22260a9b83fa1582dd581cf6c7146c0cbdd4d74b097d93` |
 | `docs/ft-game-run-evening.md` | Project doc `claude/ft-game-run-evening.md`, uploaded from this file on 16 Oct (identical) | `66d1f9543241f4676dc3bc8d3ab23df3f18dbab421550646b543b4b3712e425f` |
