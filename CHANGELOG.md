@@ -2,25 +2,25 @@
 
 Versions of the system behind Tim's FT Stock Picking Game entry ("Seeking Beta"). The version number is the playbook's (`docs/ft-game-playbook.md`); the pipeline script and the page are noted where they changed. Newest first. Times are UK.
 
-Before 16 Oct 2026 the system lived only in Claude, so those versions have no commits here. Their dates come from the Project docs, the scheduled tasks and the dashboard artifact's files. Version 6.0 is the first one with a snapshot in this repository (tag `v6.0`).
+Before 16 Oct 2026 the system lived only in Claude, so those versions have no commits here. Their dates come from the Project docs, the scheduled tasks and the dashboard artifact's files. Version 6.0 is the first one with a snapshot in this repository: commit `9d3ce05` (the first full export, made on 16 Oct from the 6.0 files).
 
 How a new version is recorded is set out at the end.
 
 ## 6.1 (Fri 16 Oct 2026, about 01:30)
 
-GitHub mirror. Tag `v6.1`.
+GitHub mirror. Commits `bfd5b15` (playbook) and `8459eae` (this changelog).
 
 - New private repository `timzwang/ft-game`, shared by Claude and ChatGPT. Tested end to end: a push from a chat, a push from a one-off scheduled cloud session with nobody present, and a ChatGPT branch and pull request merged by Tim.
 - First full export: docs, state, scripts, data, page, skills, and the scheduled tasks with the market data key redacted. Scripts and data byte-identical to the artifact.
 - G6 (data doc): the evening and weekly reviews mirror the data files and the state doc to GitHub as their last step, best effort, with a check for keys before every commit.
 - Part J (core playbook): the state doc is always written to a local file first and uploaded from that file, so the Project and GitHub copies are identical.
 - Evening and weekly run docs: new last step, G6.
-- Versioning: every new version gets an entry here, a tag, a GitHub release and an updated repository description.
+- Versioning: every new version gets an entry here, the README's version line, and a release and repository description that Tim sets on GitHub from text Claude supplies.
 - No change to the scheduled tasks, the pipeline, the page or the portfolio.
 
 ## 6.0 (Thu 15 Oct 2026, 22:20)
 
-Split playbook, a fair test of the score, results season. Tag `v6.0`. Pipeline version 6 (uploaded 21:13).
+Split playbook, a fair test of the score, results season. Pipeline version 6 (uploaded 21:13).
 
 - The playbook split into a core doc (parts A to D, I to K, with a routing table), a rules doc (E), a data doc (F, G) and one doc per run (H1 to H7), so each run reads only what it needs. Part letters unchanged.
 - Panel test: 30 stocks fixed in advance by rank alone (every fifth of the 150 largest in the S&P 500), with the measure and pass mark fixed before any data was seen. First result on 15 members: no evidence the price points rank stocks (+0.028, t +0.5, 48 dates).
@@ -90,5 +90,5 @@ Versions change only in a session with Tim; scheduled runs never change the vers
 
 1. Raise the version line at the top of `docs/ft-game-playbook.md` and of each doc that changed, and upload those files to the Project from the repository files (part J).
 2. Add an entry at the top of this file: version, UK date and time, a one-line title, the changes as bullets.
-3. Commit, tag the commit `vX.Y`, push the tag, and publish a GitHub release with the entry as its notes.
-4. Rewrite the repository description (the "About" text on GitHub) to name the current version and its date, its changes in a few words, the version before it, and this file.
+3. Update the "Current version" line at the top of `README.md`, then commit and push.
+4. Give Tim, in the chat, two pieces of text to paste on GitHub: the release (tag `vX.Y` on `main`, title "Version X.Y: <title>", notes from the entry here), and a new repository description (the "About" text, at most 350 characters) naming the current version and its date, its changes in a few words, the version before it, and this file. Claude cannot do either itself: on 16 Oct the session's git proxy refused tag pushes and repository settings changes (HTTP 403).

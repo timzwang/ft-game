@@ -2,7 +2,7 @@
 
 Tim's entry ("Seeking Beta") in the FT Stock Picking Game, 5 Oct to 27 Nov 2026: a virtual 100,000-credit portfolio of 5 to 20 stocks. The aim is a finish in roughly the top 2% of players. No real money is involved.
 
-**Current version: 6.1 (16 Oct 2026), the GitHub mirror.** Every version and its changes are in `CHANGELOG.md`, with a tag and a release for each version from 6.0 on.
+**Current version: 6.1 (16 Oct 2026), the GitHub mirror.** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
 
 This repository is a **mirror and a place to propose changes**. The live system runs in Claude (scheduled tasks, a Claude Project and a dashboard artifact). Claude writes snapshots here; ChatGPT and Tim read them and propose changes through pull requests.
 
