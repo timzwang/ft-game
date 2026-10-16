@@ -1,10 +1,17 @@
-07:13:41Z universe: SP500 503 rows
-07:13:41Z universe: NDX FAILED (NDX: no table with a ticker column among 18 tables: [0, 1]; ['Category', 'All-Time Highs[13]', 'All-Time Highs[13].1']; ['Year', 'Closing level', 'Change in Index in Points', 'Change in Index in\xa0%']; ['Milestone (closing)[13]', 'Date of Record (closing)[13]', 'Trading Days[13]']; ['Milestone (closing)[13]', 'Date of Record (closing)[13]', 'Trading Days[13]']; ['vteList of NASDAQ-100 companies', 'vteList of NASDAQ-100 companies.1']; ['vteNasdaq, Inc.', 'vteNasdaq, Inc..1', 'vteNasdaq, Inc..2']; ['vteStock market indices', 'vteStock market indices.1']; [0, 1]; [0, 1]; [0, 1]; [0, 1])
-07:13:41Z universe: FTSE100 100 rows
-07:13:41Z universe: FTSE250 250 rows
-07:13:41Z universe: rebuilt, 853 stocks (503 US, 350 UK)
-07:13:44Z yahoo: 2 of 2
-07:15:49Z yahoo: 853 of 853
-07:15:50Z measured 502; missing 0; stale or not traded 350
-07:15:50Z WARNING: only 502 of 853 stocks measured
-07:15:50Z session 2026-10-15: 2 events, 30 leaders written
+07:16:45Z universe: SP500 503 rows
+07:16:45Z universe: NDX FAILED (404 Client Error: Not Found for url: https://en.wikipedia.org/wiki/List_of_Nasdaq-100_companies)
+07:16:45Z universe: FTSE100 100 rows
+07:16:46Z universe: FTSE250 250 rows
+07:16:46Z universe: rebuilt, 853 stocks (503 US, 350 UK)
+07:16:48Z yahoo: 1 of 1
+07:16:50Z yahoo: 1 of 1
+07:17:46Z yahoo: 503 of 503
+07:18:26Z yahoo: 350 of 350
+07:18:27Z measured 502; missing 0; stale or not traded 350
+07:18:27Z last bars SPY: ['2026-10-13', '2026-10-14', '2026-10-15']
+07:18:27Z last bars ^FTSE: ['2026-10-13', '2026-10-14', '2026-10-15']
+07:18:27Z last bars 3IN.L: ['2026-10-12', '2026-10-13', '2026-10-14']
+07:18:27Z last bars AAF.L: ['2026-10-12', '2026-10-13', '2026-10-14']
+07:18:27Z last bars AAL.L: ['2026-10-12', '2026-10-13', '2026-10-14']
+07:18:27Z WARNING: only 502 of 853 stocks measured
+07:18:27Z session 2026-10-15: 2 events, 30 leaders written
