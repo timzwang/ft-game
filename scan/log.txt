@@ -1,17 +1,17 @@
-07:16:45Z universe: SP500 503 rows
-07:16:45Z universe: NDX FAILED (404 Client Error: Not Found for url: https://en.wikipedia.org/wiki/List_of_Nasdaq-100_companies)
-07:16:45Z universe: FTSE100 100 rows
-07:16:46Z universe: FTSE250 250 rows
-07:16:46Z universe: rebuilt, 853 stocks (503 US, 350 UK)
-07:16:48Z yahoo: 1 of 1
-07:16:50Z yahoo: 1 of 1
-07:17:46Z yahoo: 503 of 503
-07:18:26Z yahoo: 350 of 350
-07:18:27Z measured 502; missing 0; stale or not traded 350
-07:18:27Z last bars SPY: ['2026-10-13', '2026-10-14', '2026-10-15']
-07:18:27Z last bars ^FTSE: ['2026-10-13', '2026-10-14', '2026-10-15']
-07:18:27Z last bars 3IN.L: ['2026-10-12', '2026-10-13', '2026-10-14']
-07:18:27Z last bars AAF.L: ['2026-10-12', '2026-10-13', '2026-10-14']
-07:18:27Z last bars AAL.L: ['2026-10-12', '2026-10-13', '2026-10-14']
-07:18:27Z WARNING: only 502 of 853 stocks measured
-07:18:27Z session 2026-10-15: 2 events, 30 leaders written
+07:19:42Z universe: SP500 503 rows
+07:19:43Z universe: NDX 101 rows
+07:19:43Z universe: FTSE100 100 rows
+07:19:43Z universe: FTSE250 250 rows
+07:19:43Z universe: rebuilt, 868 stocks (518 US, 350 UK)
+07:19:46Z yahoo: 1 of 1
+07:19:49Z yahoo: 1 of 1
+07:21:21Z yahoo: 518 of 518
+07:22:24Z yahoo: 350 of 350
+07:22:25Z measured 517; missing 0; stale or not traded 350
+07:22:25Z last bars SPY: ['2026-10-13', '2026-10-14', '2026-10-15']
+07:22:25Z last bars ^FTSE: ['2026-10-13', '2026-10-14', '2026-10-15']
+07:22:25Z last bars 3IN.L: ['2026-10-12', '2026-10-13', '2026-10-14']
+07:22:25Z last bars AAF.L: ['2026-10-12', '2026-10-13', '2026-10-14']
+07:22:25Z last bars AAL.L: ['2026-10-12', '2026-10-13', '2026-10-14']
+07:22:25Z WARNING: only 517 of 868 stocks measured
+07:22:25Z session 2026-10-15: 2 events, 30 leaders written
