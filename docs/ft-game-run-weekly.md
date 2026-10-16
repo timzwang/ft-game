@@ -1,6 +1,6 @@
 # FT Stock Picking Game: weekly performance review (H5)
 
-Part H5 of the playbook (version 6, 15 Oct 2026). Runs on Saturday at 09:12 UK. Read with the core playbook (`claude/ft-game-playbook.md`), the rules (`claude/ft-game-rules.md`), the data doc (`claude/ft-game-data.md`) and the state doc.
+Part H5 of the playbook (version 6.1, 16 Oct 2026). Runs on Saturday at 09:12 UK. Read with the core playbook (`claude/ft-game-playbook.md`), the rules (`claude/ft-game-rules.md`), the data doc (`claude/ft-game-data.md`) and the state doc.
 
 This run also keeps the panel test and the drift record supplied with prices. Both need the market data key in this run's instructions; without it, say so and skip those two steps.
 
@@ -31,7 +31,8 @@ This run also keeps the panel test and the drift record supplied with prices. Bo
    - Risk now: the largest shares of risk, the most correlated pairs, the worst scenario (the report prints all three).
    - The rank stance from part D, and two or three specific changes for the coming week for the Sunday review to consider.
    - Ask Tim for his current value, rank and number of players, and for the return of the player on the top 2% line if the leaderboard shows it.
-9. Add a line to the review log in the state doc and update its status section (including the panel test's latest line). Send a five-line summary through SendUserMessage.
+9. Add a line to the review log in the state doc and update its status section (including the panel test's latest line), writing the doc from a local file (part J). Send a five-line summary through SendUserMessage.
+10. Mirror to GitHub (G6). Best effort: a failure goes under unverified items and changes nothing else.
 
 ## Output
 

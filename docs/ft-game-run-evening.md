@@ -1,6 +1,6 @@
 # FT Stock Picking Game: evening review (H1)
 
-Part H1 of the playbook (version 6, 15 Oct 2026). Runs at 21:30 UK, Sunday to Thursday. Read with the core playbook (`claude/ft-game-playbook.md`, parts A to D and I to K), the rules (`claude/ft-game-rules.md`, part E), the data doc (`claude/ft-game-data.md`, parts F and G) and the state doc.
+Part H1 of the playbook (version 6.1, 16 Oct 2026). Runs at 21:30 UK, Sunday to Thursday. Read with the core playbook (`claude/ft-game-playbook.md`, parts A to D and I to K), the rules (`claude/ft-game-rules.md`, part E), the data doc (`claude/ft-game-data.md`, parts F and G) and the state doc.
 
 This review runs every evening and may change the order on any of them. Tim is sent a message only when there is something for him to enter (part I, "When Tim is told"). On a change evening he enters the order before 08:00 UK on the next trading day; on a quiet evening the page and the state doc are updated and he hears nothing.
 
@@ -33,8 +33,9 @@ This review runs every evening and may change the order on any of them. Tim is s
 6. Fill today.json (G3) and run the pipeline with `--panel` (G4). Then, from its output: decide the order using parts D and E, with a score and a confidence rating on every position; act on the DRIFT SCAN verdicts (part E, "Earnings drift"); apply the crypto rules of part E to any crypto-linked stock that is held or being considered, reading Bitcoin's trend from the CRYPTO block; settle the watchlist removals; write the bull case, the bear case and any adjustment into `daycall`. Decide whether this is a change evening or a quiet evening (part I): compare the final `order`, weight by weight, with the one the template wrote into today.json, which is the order in force. Add two rows to `alerts` so the page says which it is, each with today's UK date as `date` and the UK time now as `time_uk` (the page's banner works out the 08:00 cut-off from them): one with `stock` "Order", reading "Changed for <order_for>: enter before 08:00 UK. <the changes in a few words>" or "No change for <order_for>: nothing to enter."; and one with `stock` "Watchlist" naming the stocks added and removed tonight (leave it out if there were none). Run again. The run is safe to repeat.
 7. On a change evening, send the order first: items 1 to 3 of the change-evening output through SendUserMessage if that tool is available. On a quiet evening send nothing through SendUserMessage.
 8. Publish the files that changed (G5).
-9. Write the state doc back (part J).
-10. Final message: the change-evening output or the quiet-evening output below, whichever applies.
+9. Write the state doc back (part J), from a local file.
+10. Mirror to GitHub (G6). Best effort: a failure costs one line in the final message and nothing else.
+11. Final message: the change-evening output or the quiet-evening output below, whichever applies.
 
 Sunday also scans the coming week's results and economic calendars and updates the events list, with the forecast and previous figure for each release. Its intake may draw on the whole week's movers and upgrades rather than one day's. The screening script (part B) is kept for ranking a long list quickly by hand; the nightly intake does not need it. If there is no portfolio at all, this run builds the first one with deeper work on at least 15 candidates.
 
@@ -48,7 +49,7 @@ Quiet evening. Nothing through SendUserMessage. The final message is at most nin
 4. Tomorrow's call for the portfolio with its figure and the usual rate.
 5. Watchlist: the names added and removed, on one line, with any drift verdict of "enter" or "watch".
 6. Up to three lines on what tomorrow's review is watching: a result due, an exit signal, a stock close to promotion, a release.
-7. Any page that was refused, on one line.
+7. Any page that was refused, and G6's line if the GitHub mirror failed, on one line.
 
 Change evening, in this order:
 
@@ -67,5 +68,5 @@ Change evening, in this order:
 13. Coming up: the next three trading days in UK time, with the forecast for each economic release.
 14. Bear case against the portfolio.
 15. Checks: confidence ratings whose window closed, yesterday's day call against what happened, any shadow ratings or drift windows that settled, and the panel test's latest line.
-16. Assumptions, unverified items (including any page that was refused), and anything needed from Tim. On Sundays ask for his value, rank and number of players.
+16. Assumptions, unverified items (including any page that was refused, and G6's line if it failed), and anything needed from Tim. On Sundays ask for his value, rank and number of players.
 17. Sources.

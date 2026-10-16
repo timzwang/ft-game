@@ -29,21 +29,21 @@ Data as of the Thu 15 Oct 2026 evening review (files published 21:52 UK).
 
 ## Copied from the Claude Project and Claude
 
-The Project docs were copied as text. The Projects tool gives no file hash, so these hashes are of this repository's copy only.
+The Project docs were first copied as text on 16 Oct. Docs marked "uploaded from this file" were then sent to the Project from the repository file itself (playbook part J), so the two are identical; the others are text copies until they next change.
 
 | File | Source | sha256 |
 |---|---|---|
-| `docs/ft-game-data.md` | Project doc `claude/ft-game-data.md` | `e60302e13cca33f1278ad4ba602f418084ee9473822c86a8191247615767427f` |
+| `docs/ft-game-data.md` | Project doc `claude/ft-game-data.md`, uploaded from this file on 16 Oct (identical) | `08771eb9590f4bf69d4c68eaf87e8187ee4a9ad1a511d2d6d04e0f76148e0b51` |
 | `docs/ft-game-page.md` | Project doc `claude/ft-game-page.md` | `d8c076155aa305b97660d609634ae4c8f7bd6c288276983efa99977be913b9a7` |
-| `docs/ft-game-playbook.md` | Project doc `claude/ft-game-playbook.md` | `913f1474b63cf034d41da5b677748aa2967c5f7ddc19d992951b5134561acb0e` |
-| `docs/ft-game-roadmap.md` | Project doc `claude/ft-game-roadmap.md` | `352ed873308ce7581932d78003cfe2aa277b8a21248d8ed9af373f539e4ed86e` |
+| `docs/ft-game-playbook.md` | Project doc `claude/ft-game-playbook.md`, uploaded from this file on 16 Oct (identical) | `969f9210f02bbb046f55859e530dedf3c38840c18f45cb398e07f66b26e8eaa4` |
+| `docs/ft-game-roadmap.md` | Project doc `claude/ft-game-roadmap.md`, uploaded from this file on 16 Oct (identical) | `c8e7fa6c5a0f037bcbacb4d6d12bf6ea7645d7f39b457a2fefdb236234e7f107` |
 | `docs/ft-game-rules.md` | Project doc `claude/ft-game-rules.md` | `1419632623a6b535ce22260a9b83fa1582dd581cf6c7146c0cbdd4d74b097d93` |
-| `docs/ft-game-run-evening.md` | Project doc `claude/ft-game-run-evening.md` | `267f24d15e20f6a3cbe7459dcadfaecda065ff6baceef58e6c587dc099835025` |
+| `docs/ft-game-run-evening.md` | Project doc `claude/ft-game-run-evening.md`, uploaded from this file on 16 Oct (identical) | `66d1f9543241f4676dc3bc8d3ab23df3f18dbab421550646b543b4b3712e425f` |
 | `docs/ft-game-run-morning.md` | Project doc `claude/ft-game-run-morning.md` | `f7c798459fae34b49b868073c4acb2828715b2607529939ec2944dbdfaed453b` |
 | `docs/ft-game-run-refresh.md` | Project doc `claude/ft-game-run-refresh.md` | `43e1d23857d977bd36b58ad733f43e4eced553779b6ffefc5945fcf39f481b26` |
 | `docs/ft-game-run-weekend.md` | Project doc `claude/ft-game-run-weekend.md` | `4aa1931bd2c6172828d1dd931cd0b1f6d510560a298605a6be33624023cd5f07` |
-| `docs/ft-game-run-weekly.md` | Project doc `claude/ft-game-run-weekly.md` | `b10b6d1c1518e8645ca976811e95d33bbe070fe4306657e6e80992b90e7e8f2c` |
-| `state/ft-game-state.md` | Project doc `claude/ft-game-state.md` (last updated Thu 15 Oct 2026, 22:20 UK) | `e4a481cb0ebf73f8faf8187f515aebcd307d1d172eb453c60a782f4ab49ec41a` |
+| `docs/ft-game-run-weekly.md` | Project doc `claude/ft-game-run-weekly.md`, uploaded from this file on 16 Oct (identical) | `933641988f2ea64e0d317059e2b8c165d35d6be36666af62ffafb2125051a342` |
+| `state/ft-game-state.md` | Project doc `claude/ft-game-state.md`, uploaded from this file on 16 Oct (identical); from now on written by G6, see `state/last-sync.md` | `78f6418d94989ac941ec064e84a7aedfa62ca194f60d62aad84921925935cb9b` |
 | `skills/ft-game-playbook/SKILL.md` | saved skill ft-game-playbook | `2e17f85089ad183c984cf477ee7ee86c8f93cea118e08703d69e9b79ccb59bba` |
 | `skills/stock-score/SKILL.md` | saved skill stock-score | `00cb644326f59f07644c701b2bacd9ccb61ecbeaae7190584edab83439b3006d` |
 | `ops/scheduled-tasks.md` | the 8 scheduled tasks, key redacted | `285587c438249ca0953cd1879aeab08648c9961ef6374aea270f5a1abb4af599` |

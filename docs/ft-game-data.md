@@ -1,6 +1,6 @@
 # FT Stock Picking Game: data sources and the pipeline
 
-Parts F and G of the playbook (version 6, 15 Oct 2026). Every run that fetches prices or runs the script reads this doc. The core playbook (`claude/ft-game-playbook.md`) holds parts A to D and I to K; part B there is the only record of the script's asset id and hash.
+Parts F and G of the playbook (version 6.1, 16 Oct 2026: G6, the GitHub mirror, added). Every run that fetches prices or runs the script reads this doc. The core playbook (`claude/ft-game-playbook.md`) holds parts A to D and I to K; part B there is the only record of the script's asset id and hash.
 
 ## F. Data sources
 
@@ -126,3 +126,15 @@ If the review changes the order after seeing the scores, edit today.json and run
 4. Only then delete each old data asset: Artifact tool, action `delete`, the artifact URL, `path` set to the old asset id. Never delete the script assets.
 5. Check: `list` the `datasets` collection and `get` `store/panel` again and, with the Artifact tool, `list` with `scope: "assets"`. Each document should point at its new url. The store should hold the five data files those documents name and the scripts in part B, plus the files part B describes as kept but not in use. A file that no document and no row of part B names is a leftover: it is not a fault, and this run does not delete it.
 6. If a step fails, stop, leave the old files in place and report it. The order matters more than the page.
+
+**G6. Mirror to GitHub (evening and weekly runs, last)**
+
+The private repository `timzwang/ft-game` holds a copy of the data files and the state doc so that ChatGPT and Tim can read them; its README explains the layout. It is never a source for a run: runs read the Project docs and the artifact exactly as before. Run this step only after the order message, G5 and the state doc (part J) are done. It is best effort: if any step fails, stop, leave the repository as it is, and add one line to the final message, "GitHub mirror failed at G6 step <n>: <reason>". Retry nothing more than once, never force-push, never delete a file in the repository, and never let this step delay or change anything else. When it succeeds, say nothing about it.
+
+1. Attach the repository with the `add_repo` tool (load it through ToolSearch if needed): owner `timzwang`, repo `ft-game`, access `push`. Clone it once into the working directory with a long timeout (up to 10 minutes): `git clone --depth 1 https://github.com/timzwang/ft-game ft-game`. Below, `<repo>` means that folder.
+2. Copy in, overwriting: each data file this run published in G5 into `<repo>/data/` (from the `out` folder: `stocks.json`, `ledger.json`, `history.json`, `macro.json`, `panel.json`; a file this run did not produce stays as it is), and the state doc into `<repo>/state/ft-game-state.md`, from the same local file that was uploaded to the Project (part J). Copy nothing else: `docs/`, `scripts/`, `page/`, `skills/`, `ops/` and `proposals/` change only in a session with Tim.
+3. Write `<repo>/state/last-sync.md`, replacing it, with this command (fill in the two descriptions):
+   `( cd <repo> && { echo "# Last sync"; echo; echo "Run: <evening review|weekly review>, $(date -u +%Y-%m-%dT%H:%M:%SZ). Prices as of: <prices_as_of>."; echo; echo "sha256 of each file as published to the artifact and the Project:"; echo; echo '~~~'; sha256sum data/*.json state/ft-game-state.md; echo '~~~'; } > state/last-sync.md )`
+4. Secret check before committing: `git -C <repo> add data state`, then `git -C <repo> diff --cached -U0 | grep -cE 'apiKey=[A-Za-z0-9]|api\.massive\.com/[^ ]*\?'` must print 0. If it prints anything else, run `git -C <repo> reset -q`, stop, and report "GitHub mirror stopped: possible key in the files" without quoting any line. Never search for the key itself: that would put it into a command.
+5. If `git -C <repo> diff --cached --quiet` succeeds, nothing changed: stop. Otherwise commit with the message "<Evening review|Weekly review>: data and state as of <prices_as_of>", then `git -C <repo> pull --rebase origin main` and `git -C <repo> push origin main`. If the push is refused, pull with rebase and push once more. If a rebase stops on a conflict, `git -C <repo> rebase --abort`, stop and report it.
+6. Check: `git -C <repo> fetch origin main`, and `git -C <repo> rev-parse HEAD` must equal `git -C <repo> rev-parse origin/main`.
