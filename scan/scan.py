@@ -107,7 +107,8 @@ def fetch_index(key):
         if best is None or len(t) > len(best[0]):
             best = (t, tcol)
     if best is None:
-        raise RuntimeError(f"{key}: no table with a ticker column")
+        heads = "; ".join(str(list(t.columns)[:6]) for t in tables[:12])
+        raise RuntimeError(f"{key}: no table with a ticker column among {len(tables)} tables: {heads}")
     t, tcol = best
     ncol = _pick(t.columns, "security", "company", "name")
     scol = _pick(t.columns, "gics sector", "sector", "industry")
@@ -159,7 +160,10 @@ def build_universe(path):
     order = {"SP500": 0, "NDX": 1, "FTSE100": 2, "FTSE250": 3}
     uni["_o"] = uni["index"].map(order)
     uni = uni.sort_values("_o").drop_duplicates("ticker").drop(columns="_o")
-    uni["built"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    # A partial build (a source failed and there was no previous file) is
+    # dated in the past so that the next run tries again.
+    uni["built"] = ("1970-01-01T00:00:00+00:00" if failed
+                    else datetime.now(timezone.utc).isoformat(timespec="seconds"))
     uni = uni.sort_values(["market", "ticker"]).reset_index(drop=True)
     uni.to_csv(path, index=False)
     log(f"universe: rebuilt, {len(uni)} stocks ({(uni.market == 'US').sum()} US, {(uni.market == 'UK').sum()} UK)")
@@ -396,6 +400,15 @@ def us_session_final(spy):
     return last.strftime("%Y-%m-%d"), False
 
 
+def uk_session_final(ftse):
+    """The latest London session whose bar is final (after 16:45 UK)."""
+    now = datetime.now(UK)
+    last = ftse.index[-1].date()
+    if last == now.date() and (now.hour, now.minute) < (16, 45):
+        return ftse.index[-2].strftime("%Y-%m-%d"), True
+    return last.strftime("%Y-%m-%d"), False
+
+
 def fmt_pct(x, d=1):
     return "" if x is None or (isinstance(x, float) and math.isnan(x)) else f"{x * 100:+.{d}f}%"
 
@@ -446,7 +459,17 @@ def main():
             for t in list(data):
                 if t != "^FTSE" and not str(t).endswith(".L"):
                     data[t] = data[t][data[t].index <= cut]
-        session_uk = data["^FTSE"].index[-1].strftime("%Y-%m-%d") if "^FTSE" in data else None
+        session_uk = None
+        if "^FTSE" in data:
+            if a.offline:
+                session_uk = data["^FTSE"].index[-1].strftime("%Y-%m-%d")
+            else:
+                session_uk, uk_waiting = uk_session_final(data["^FTSE"])
+                if uk_waiting:
+                    cut = pd.Timestamp(session_uk)
+                    for t in list(data):
+                        if t == "^FTSE" or str(t).endswith(".L"):
+                            data[t] = data[t][data[t].index <= cut]
 
         rows, stale, missing = [], [], []
         info = uni.set_index("ticker")
