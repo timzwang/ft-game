@@ -96,7 +96,7 @@ Tonight: Amgen added. Walmart, ServiceNow and GE Vernova were candidates, but th
 
 ## 6. Review log (newest first, keep the latest 15)
 
-- Fri 16 Oct 2026 (about 01:30, later): Hand-run session with Tim, after an outside review of the system by ChatGPT. Playbook version 6.2: the day call is a research record only and never moves cash; "overbought" is a warning, not a 5% cap ("extended" still caps at 5%). Roadmap phase 6 (items 38 to 43): counterfactual portfolios, a top-five panel test and a test of the judgement points for pipeline version 7; score weights fixed for the game unless Saturday's verdict is decisive; a broad scanner of about 900 US and London stocks designed to run on GitHub, waiting for Tim's agreement that runs may read `scan/` from the repository. Open: whether the FT's 08:00 cut-off means BST after 25 Oct. No scheduled task, script or data file was changed.
+- Fri 16 Oct 2026 (about 01:30, later): Hand-run session with Tim, after an outside review of the system by ChatGPT. Playbook version 6.2: the day call is a research record only and never moves cash; "overbought" is a warning, not a 5% cap ("extended" still caps at 5%). Roadmap phase 6 (items 38 to 43): counterfactual portfolios, a top-five panel test and a test of the judgement points for pipeline version 7; score weights fixed for the game unless Saturday's verdict is decisive; a broad scanner of about 900 US and London stocks designed to run on GitHub, Tim agreed that runs may read `scan/` from the repository, so it is ready to build. Releases, tags and the repository description cannot be set from Claude's sessions (refused by policy on retry); Tim sets them. Open: whether the FT's 08:00 cut-off means BST after 25 Oct. No scheduled task, script or data file was changed.
 - Fri 16 Oct 2026 (about 01:30): Hand-run session with Tim. Private GitHub repository `timzwang/ft-game` set up as a shared mirror for Claude and ChatGPT and tested end to end (push from a chat, push from a scheduled cloud session, ChatGPT pull request merged by Tim); first full export pushed. Playbook version 6.1: G6 (mirror data and this doc to GitHub, last step of the evening and weekly runs, best effort) and part J (this doc always written from a local file). No scheduled task was changed.
 - Thu 15 Oct 2026 (22:20): Hand-run session with Tim. Playbook version 6 published after the evening review finished: the playbook split into a core doc, a rules doc, a data doc and five run docs; pipeline version 6 (panel test, drift scan, `panel` command); the panel file (30 stocks fixed by rank, 15 loaded) in `store/panel`. First panel result: no evidence the price points rank stocks (+0.028, t +0.5, 48 dates).
 - Thu 15 Oct 2026 (22:00): Tim confirmed he entered the Wed 14 Oct order (Eli Lilly is in the game's list) and the corrected Fri 16 Oct order in full.
@@ -146,8 +146,7 @@ Still open:
 2. Are Strategy and Coinbase in the game's list? Not needed until one is close to being bought.
 3. The value of a player nearer rank 268 (the top 2% line), if Tim comes across one.
 4. Once all 30 panel stocks are loaded: weights change only if the history verdict is "useful" or "the wrong way" (roadmap item 41), and then only with Tim's agreement.
-5. The broad scanner (roadmap item 43): agree that runs may read `scan/` from the GitHub repository, so it can be built.
-6. Does the game's 08:00 cut-off mean BST after the clock change on 25 Oct? If so it becomes 07:00 UK and the morning check must move earlier.
+5. Does the game's 08:00 cut-off mean BST after the clock change on 25 Oct? If so it becomes 07:00 UK and the morning check must move earlier.
 
 ## 9. Game rules
 

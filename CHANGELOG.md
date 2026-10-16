@@ -13,6 +13,7 @@ After ChatGPT's strategy review.
 - Rules (part E): the day call is a research record only and never moves cash; it may become a cash input again only after beating always-green over at least 20 settled calls, with Tim's agreement.
 - Rules (part E): "overbought" (RSI) is a warning, no longer a 5% cap. "Extended" still caps a new position at 5%.
 - Roadmap phase 6 (items 38 to 43): counterfactual portfolios (standstill, previous order, price-only and full-score top five), a top-five panel test, a test of the 40 judgement points, score weights fixed for the game unless Saturday's 30-stock verdict is decisive, and a design for a broad scanner of about 900 US and London stocks on GitHub Actions. Items 38 to 40 wait for pipeline version 7; the scanner waits for Tim's agreement that runs may read `scan/` from this repository.
+- G6 and part B: runs may read the repository's `scan/` folder to find candidates once the broad scan is built (agreed by Tim). Scan figures never enter today.json.
 - Open question added: whether the game's 08:00 cut-off means BST after the clock change on 25 Oct.
 - ChatGPT's review saved as `proposals/chatgpt/2026-10-16-strategy-review.md`.
 - No change to the scheduled tasks, the pipeline, the page or the portfolio.

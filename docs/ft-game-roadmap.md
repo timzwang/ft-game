@@ -93,7 +93,7 @@ An outside review by ChatGPT on 16 Oct agreed that the system's machinery is ahe
     - Output: `scan/latest.csv` and `scan/latest.md`, dated by session. Two lists, with rules fixed now, before any results are seen. Leaders: above the 50-day and 200-day averages, within 10% of the 52-week high, enough daily turnover to be a well-known listing, ranked by 12-month return excluding the latest month, relative to the S&P 500 (FTSE 100 for London); top 30. Events: a gap of 3% or more that closed at or above its open, in the upper half of the range, on volume at least 1.5 times its 20-day average; this also finds earnings reactions without the search that the drift scan relies on now.
     - Use: the evening review clones the repository at the start (now done only in G6), reads `scan/latest.csv`, and draws the night's intake and drift candidates from it first. Every name it shortlists is then fetched and checked from part F's sources as now; scan figures never enter today.json or the score. The scan finds; the pipeline measures. This needs one rule change in G6, where runs never read from the repository: `scan/` becomes the exception.
     - Record: the top 10 of each list is settled five sessions later against the S&P 500 from the scan's own data. That tests whether the scan's ranking works, and doubles as a record of the opportunities not taken.
-    - Needed from Tim: agreement to the G6 exception. Actions are on by default for his repository.
+    - Agreed by Tim on 16 Oct: runs may read `scan/` from the repository (G6 and part B record the exception). Ready to build.
 
 ## Still open
 
