@@ -35,17 +35,17 @@ The Project docs were first copied as text on 16 Oct. Docs marked "uploaded from
 
 | File | Source | sha256 |
 |---|---|---|
-| `docs/ft-game-data.md` | Project doc `claude/ft-game-data.md`, uploaded from this file on 16 Oct (identical) | `e2938a684a2602051aa2e30ef1f53a21db3777ffeec96f7f44877d9515bd4e30` |
+| `docs/ft-game-data.md` | Project doc `claude/ft-game-data.md`, uploaded from this file on 16 Oct (identical) | `9e2979e1124c5e3b8f0c2a713a8ce3b6feacd99709d73f1eb1100b6165960f1c` |
 | `docs/ft-game-page.md` | Project doc `claude/ft-game-page.md` | `d8c076155aa305b97660d609634ae4c8f7bd6c288276983efa99977be913b9a7` |
-| `docs/ft-game-playbook.md` | Project doc `claude/ft-game-playbook.md`, uploaded from this file on 16 Oct (identical) | `cda2d2efae8b1517fb1e9998591d4b8d5c8f8e741a3c11d7736e89288e38c50e` |
-| `docs/ft-game-roadmap.md` | Project doc `claude/ft-game-roadmap.md`, uploaded from this file on 16 Oct (identical) | `0fb95fda5f5b4119424fac528861e23b55b7d4d4d9cc7c37566e763a74b5582d` |
-| `docs/ft-game-rules.md` | Project doc `claude/ft-game-rules.md`, uploaded from this file on 16 Oct (identical) | `da871fa59f051bc5c2615afe601b75b7037f78bcf609162e5551124717dfcff6` |
-| `docs/ft-game-run-evening.md` | Project doc `claude/ft-game-run-evening.md`, uploaded from this file on 16 Oct (identical) | `66d1f9543241f4676dc3bc8d3ab23df3f18dbab421550646b543b4b3712e425f` |
+| `docs/ft-game-playbook.md` | Project doc `claude/ft-game-playbook.md`, uploaded from this file on 16 Oct (identical) | `a588176e337bf710161aec1da64bb22db5333d2651d4ca8ed2076cf31687ff4a` |
+| `docs/ft-game-roadmap.md` | Project doc `claude/ft-game-roadmap.md`, uploaded from this file on 16 Oct (identical) | `ce33d098f71060f2d1e237001cd3def21d1b0de4f1b91b242d43460e674e18b1` |
+| `docs/ft-game-rules.md` | Project doc `claude/ft-game-rules.md`, uploaded from this file on 16 Oct (identical) | `5a8d8c289e1a603359b00c00b34e9e0281c575c0f7d8a568c10ef9d2fc486d0d` |
+| `docs/ft-game-run-evening.md` | Project doc `claude/ft-game-run-evening.md`, uploaded from this file on 16 Oct (identical) | `c45aa2ec8b430ae289c4f0191b9e164c0e6c60d4adbb3f63a3e7836fd82be467` |
 | `docs/ft-game-run-morning.md` | Project doc `claude/ft-game-run-morning.md` | `f7c798459fae34b49b868073c4acb2828715b2607529939ec2944dbdfaed453b` |
 | `docs/ft-game-run-refresh.md` | Project doc `claude/ft-game-run-refresh.md` | `43e1d23857d977bd36b58ad733f43e4eced553779b6ffefc5945fcf39f481b26` |
 | `docs/ft-game-run-weekend.md` | Project doc `claude/ft-game-run-weekend.md` | `4aa1931bd2c6172828d1dd931cd0b1f6d510560a298605a6be33624023cd5f07` |
-| `docs/ft-game-run-weekly.md` | Project doc `claude/ft-game-run-weekly.md`, uploaded from this file on 16 Oct (identical) | `933641988f2ea64e0d317059e2b8c165d35d6be36666af62ffafb2125051a342` |
-| `state/ft-game-state.md` | Project doc `claude/ft-game-state.md`, uploaded from this file on 16 Oct (identical); from now on written by G6, see `state/last-sync.md` | `6a254d7340a8f5ae45db63426f2a18f22f007f62787e7dbcc0a74bea8d369c2c` |
+| `docs/ft-game-run-weekly.md` | Project doc `claude/ft-game-run-weekly.md`, uploaded from this file on 16 Oct (identical) | `d29897adc6111acf1346bb2a03c7b6ad2a7b40a480c64d13f9caf4567a3ebb03` |
+| `state/ft-game-state.md` | Project doc `claude/ft-game-state.md`, uploaded from this file on 16 Oct (identical); from now on written by G6, see `state/last-sync.md` | `acfa8c562c60ef6ee394fca530e0541e4628607d3a7e20eaea5faebcbc0abdf6` |
 | `skills/ft-game-playbook/SKILL.md` | saved skill ft-game-playbook | `2e17f85089ad183c984cf477ee7ee86c8f93cea118e08703d69e9b79ccb59bba` |
 | `skills/stock-score/SKILL.md` | saved skill stock-score | `00cb644326f59f07644c701b2bacd9ccb61ecbeaae7190584edab83439b3006d` |
 | `ops/scheduled-tasks.md` | the 8 scheduled tasks, key redacted | `285587c438249ca0953cd1879aeab08648c9961ef6374aea270f5a1abb4af599` |
@@ -55,3 +55,7 @@ The Project docs were first copied as text on 16 Oct. Docs marked "uploaded from
 | File | Source |
 |---|---|
 | `proposals/chatgpt/2026-10-16-strategy-review.md` | ChatGPT's strategy review of 16 Oct, as Tim pasted it; Claude's response is roadmap phase 6 |
+
+## The broad scan
+
+`scan/` and `.github/workflows/scan.yml` live only here (from 16 Oct, version 6.3). The script and rules change only in a session with Tim; the scan job itself writes `latest.*`, `record.csv`, `universe.csv` and `log.txt` after each US close.

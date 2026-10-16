@@ -1,6 +1,6 @@
 # FT Stock Picking Game: evening review (H1)
 
-Part H1 of the playbook (version 6.1, 16 Oct 2026). Runs at 21:30 UK, Sunday to Thursday. Read with the core playbook (`claude/ft-game-playbook.md`, parts A to D and I to K), the rules (`claude/ft-game-rules.md`, part E), the data doc (`claude/ft-game-data.md`, parts F and G) and the state doc.
+Part H1 of the playbook (version 6.3, 16 Oct 2026: the broad scan, G7). Runs at 21:30 UK, Sunday to Thursday. Read with the core playbook (`claude/ft-game-playbook.md`, parts A to D and I to K), the rules (`claude/ft-game-rules.md`, part E), the data doc (`claude/ft-game-data.md`, parts F and G) and the state doc.
 
 This review runs every evening and may change the order on any of them. Tim is sent a message only when there is something for him to enter (part I, "When Tim is told"). On a change evening he enters the order before 08:00 UK on the next trading day; on a quiet evening the page and the state doc are updated and he hears nothing.
 
@@ -18,7 +18,8 @@ This review runs every evening and may change the order on any of them. Tim is s
    - The panel is not topped up in the evening; the weekly review does it.
    - Apply the freshness rules in part F to every page, and build today's session rows as G3 describes. On a Sunday the last session is Friday's.
 4. Earnings-drift scan and watchlist intake (part E):
-   - Find the session's reporters (part F, "The day's reporters"): holdings and watchlist stocks with a results event on this session or the evening before; any of the 15 largest S&P 500 gainers whose quote page headlines show results; and large US or FTSE 100 names from a search for the day's beat-and-raise reports. Keep large, well-known listings only.
+   - First read the broad scan (G7): its Events list leads the search for reporters and its two lists lead the intake.
+   - Find the session's reporters (part F, "The day's reporters"): the scan's Events; holdings and watchlist stocks with a results event on this session or the evening before; any of the 15 largest S&P 500 gainers whose quote page headlines show results; and large US or FTSE 100 names from a search for the day's beat-and-raise reports. Keep large, well-known listings only.
    - Take up to six: holdings and watchlist reporters first, then the largest day moves. For each, fetch its quote page (the reaction session's row, reading "At close") and statistics page, and find its earnings and revenue against the consensus and what it said about guidance from the company's release or a report that gives both figures. Add each as a `drift` entry (G3). On a Sunday the scan covers Friday's session.
    - Then pick five to ten new watchlist candidates, "enter" and "watch" verdicts from tonight's scan first once the run has printed them, and fetch each one's quote page, statistics page and history page (up to 50 rows). Decide removals after the first pipeline run, when the scores are known.
 5. Research, aiming for 25 to 40 distinct current sources beyond the price pages, with independent searches sent together and extended search mode for anything from the last 48 hours:
@@ -34,7 +35,7 @@ This review runs every evening and may change the order on any of them. Tim is s
 7. On a change evening, send the order first: items 1 to 3 of the change-evening output through SendUserMessage if that tool is available. On a quiet evening send nothing through SendUserMessage.
 8. Publish the files that changed (G5).
 9. Write the state doc back (part J), from a local file.
-10. Mirror to GitHub (G6). Best effort: a failure costs one line in the final message and nothing else.
+10. Mirror to GitHub (G6), reusing G7's clone. Best effort: a failure costs one line in the final message and nothing else.
 11. Final message: the change-evening output or the quiet-evening output below, whichever applies.
 
 Sunday also scans the coming week's results and economic calendars and updates the events list, with the forecast and previous figure for each release. Its intake may draw on the whole week's movers and upgrades rather than one day's. The screening script (part B) is kept for ranking a long list quickly by hand; the nightly intake does not need it. If there is no portfolio at all, this run builds the first one with deeper work on at least 15 candidates.

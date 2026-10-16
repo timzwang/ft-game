@@ -340,7 +340,7 @@ def _get_prices(tickers, tz):
             src[t] = "stooq"
         data.update(got)
         log(f"stooq: {len(got)} of {len(missing)} missing")
-    if any(str(t).endswith(".L") for t in tickers) and os.environ.get("SCAN_DEBUG"):
+    if any(str(t).endswith(".L") for t in tickers) and os.environ.get("SCAN_DEBUG", "0") not in ("", "0"):
         import yfinance as yf
         for t in tickers[:2]:
             d1 = yf.download(t, period="10d", interval="1d", auto_adjust=True, progress=False)

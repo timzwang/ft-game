@@ -1,6 +1,6 @@
 # FT Stock Picking Game: weekly performance review (H5)
 
-Part H5 of the playbook (version 6.1, 16 Oct 2026). Runs on Saturday at 09:12 UK. Read with the core playbook (`claude/ft-game-playbook.md`), the rules (`claude/ft-game-rules.md`), the data doc (`claude/ft-game-data.md`) and the state doc.
+Part H5 of the playbook (version 6.3, 16 Oct 2026: the broad scan's record in the review). Runs on Saturday at 09:12 UK. Read with the core playbook (`claude/ft-game-playbook.md`), the rules (`claude/ft-game-rules.md`), the data doc (`claude/ft-game-data.md`) and the state doc.
 
 This run also keeps the panel test and the drift record supplied with prices. Both need the market data key in this run's instructions; without it, say so and skip those two steps.
 
@@ -25,6 +25,7 @@ This run also keeps the panel test and the drift record supplied with prices. Bo
    - Calibration: the shadow ratings by score band and the old backtest, labelled as weaker evidence than the panel.
    - The earnings-drift record: settled cases by verdict (share that beat the index, average gap), any drift position held and how it went, and whether "enter" is doing better than "fail" yet. Say when the sample is too small.
    - The day call: how many were right against the bar of always saying green, and the Brier score.
+   - The broad scan: clone the repository (G6 step 1) and quote the record table at the end of `scan/latest.md` (Leaders and Events, first appearances, share that beat the index and average excess from the next open), how many intake names came from the scan this week, and how those did. Say when the sample is too small. If the repository cannot be read, say so and skip this point.
    - Macro: the week's moves in the US and UK 10-year yields and in Brent, each release against its forecast with the market's reaction, and whether the scenario assumptions held.
    - Rules: which helped or hurt this week (the score filter, news momentum and drift entries and exits, results holds against implied moves), with the cases.
    - Closed positions and their lessons.

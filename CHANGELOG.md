@@ -6,6 +6,18 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.3 (Fri 16 Oct 2026, about 09:10)
+
+The broad scan (roadmap item 43).
+
+- New GitHub Actions job (`.github/workflows/scan.yml`, `scan/scan.py`, rules in `scan/README.md`): after every US close it scans 868 stocks (S&P 500, the rest of the Nasdaq-100, FTSE 100, FTSE 250) from a bulk Yahoo Finance download and writes two lists to `scan/`: Leaders (12-month trend excluding the last month, near the 52-week high, above both averages) and Events (a 3% gap that held, on 1.5 times volume). Rules version 1, fixed before any result was seen.
+- The top 10 of each list is settled five sessions later, close to close and from the next open, in `scan/record.csv`. First rows: Fri 16 Oct.
+- Data doc: new G7 (reading the scan, forcing a run through `scan/request.txt` if the scheduled one is late, and how the lists feed the intake). G6 reuses G7's clone. Part F: the scan's Events lead the search for reporters.
+- Evening review (H1 step 4) reads the scan first; weekly review (H5) quotes its record. Rules (part E): the intake draws at least half its names from the scan when enough pass a first look.
+- Scan figures never enter today.json or the score; every name is checked from part F's sources.
+- Tested on synthetic prices and in eight live runs on 16 Oct. Yahoo's London stock data was missing 15 Oct that morning, so London is first tested in Friday evening's run. Stooq, the planned fallback, refuses GitHub's servers.
+- No change to the scheduled tasks, the pipeline, the page or the portfolio.
+
 ## 6.2 (Fri 16 Oct 2026, about 01:30, later)
 
 After ChatGPT's strategy review.
