@@ -38,7 +38,7 @@ jobs:
       - name: Scan
         shell: bash
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ]; then python scan/scan.py; else python scan/scan.py --force; fi
+          if [ "${{ github.event_name }}" = "schedule" ]; then python scan/scan.py; else SCAN_DEBUG="$(grep -c debug scan/request.txt)" python scan/scan.py --force; fi
       - name: Commit results
         if: always()
         shell: bash

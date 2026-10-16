@@ -320,6 +320,15 @@ def _get_prices(tickers, tz):
             src[t] = "stooq"
         data.update(got)
         log(f"stooq: {len(got)} of {len(missing)} missing")
+    if any(str(t).endswith(".L") for t in tickers) and os.environ.get("SCAN_DEBUG"):
+        import yfinance as yf
+        for t in tickers[:2]:
+            d1 = yf.download(t, period="10d", interval="1d", auto_adjust=True, progress=False)
+            log(f"single download {t}: {[str(x) for x in d1.index[-3:]]}")
+            h = yf.Ticker(t).history(period="10d", auto_adjust=True)
+            log(f"Ticker.history {t}: {[str(x) for x in h.index[-3:]]}")
+        d2 = yf.download(tickers[:5], period="10d", interval="1d", auto_adjust=True, group_by="ticker", threads=False, progress=False)
+        log(f"bulk of 5, threads off: {[str(x) for x in d2.index[-3:]]}")
     for t in list(data)[:2]:
         ix = data[t].index
         log(f"raw index {t}: tz={getattr(ix, 'tz', None)} last={[str(x) for x in ix[-3:]]} close={[round(float(x), 2) for x in data[t]['Close'].iloc[-3:]]}")
