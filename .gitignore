@@ -1,0 +1,22 @@
+# Working files the pipeline makes during a run
+today.json
+quotes.json
+order.json
+scores.json
+out/
+work/
+
+# Secrets and local settings: never commit
+.env
+.env.*
+*.key
+*secret*
+*credential*
+*token*
+
+# Python and editor clutter
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/
+.idea/

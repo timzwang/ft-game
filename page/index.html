@@ -1,0 +1,448 @@
+<style>
+  #dash-root { --dash-gutter: 0; }
+  /* Research terminal: grey desk, white panels, hairline rules. Blue is only for the order queue and selection;
+     green and red only for direction and strength. Widths: s one column, m two, l terminal grid with a research pane. */
+  .sb {
+    --bg: #eef0f3; --panel: #ffffff; --panel2: #f7f8fa; --hover: #f2f4f7; --rule: #dde1e7; --rule2: #eceef2;
+    --ink: #14171c; --ink2: #535b66; --ink3: #858c97;
+    --acc: #1f4fa3; --acc-bg: rgba(31, 79, 163, 0.08); --acc-rule: rgba(31, 79, 163, 0.45); --on-acc: #ffffff;
+    --up: #0a7a52; --up-bg: rgba(10, 122, 82, 0.09); --down: #b42318; --down-bg: rgba(180, 35, 24, 0.08);
+    --warn: #8a5a00; --warn-bg: rgba(184, 120, 0, 0.12);
+    --s1: #1f4fa3; --s2: #b8650a; --s3: #7a4bb0; --bench: #8a919c;
+    --pop: #1c2128; --on-pop: #f2f4f7;
+    --font: "IBM Plex Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font); font-size: 0.8125rem; line-height: 1.4; color: var(--ink); background: var(--bg);
+    font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; -webkit-font-smoothing: antialiased;
+    box-sizing: border-box; min-height: 100vh; padding: 0.5rem 0.5rem 2.5rem;
+  }
+  .sb[data-theme="dark"] {
+    --bg: #0b0e12; --panel: #12161c; --panel2: #161b22; --hover: #1a2029; --rule: #262d37; --rule2: #1d232b;
+    --ink: #e3e6ea; --ink2: #9aa3ae; --ink3: #6c7480;
+    --acc: #7fa8ee; --acc-bg: rgba(127, 168, 238, 0.12); --acc-rule: rgba(127, 168, 238, 0.5); --on-acc: #0b0e12;
+    --up: #45b98c; --up-bg: rgba(69, 185, 140, 0.13); --down: #f07a70; --down-bg: rgba(240, 122, 112, 0.12);
+    --warn: #e2ad52; --warn-bg: rgba(226, 173, 82, 0.14);
+    --s1: #7fa8ee; --s2: #e0954a; --s3: #b48ae0; --bench: #7d8590;
+    --pop: #2a313b; --on-pop: #f2f4f7;
+  }
+  .sb[data-w="m"], .sb[data-w="l"] { padding: 0.625rem 0.625rem 3rem; }
+  .sb *, .sb *::before, .sb *::after { box-sizing: border-box; }
+  .sb [hidden] { display: none !important; }
+  .sb button { font: inherit; color: inherit; }
+  .sb :is(button, a, summary, [tabindex="0"]):focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
+  .sb .in { max-width: 110rem; margin-inline: auto; display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+  .sb .up { color: var(--up); } .sb .down { color: var(--down); } .sb .flat, .sb .mut { color: var(--ink2); } .sb .faint { color: var(--ink3); }
+  .sb .b { font-weight: 600; }
+  .sb .num { text-align: right; white-space: nowrap; }
+  .sb .nowrap { white-space: nowrap; }
+
+  /* header */
+  .sb .hd { background: var(--panel); border: 1px solid var(--rule); border-radius: 3px; display: grid; grid-template-columns: minmax(0, 1fr); }
+  .sb .hd-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.125rem 1rem; padding: 0.5rem 0.75rem 0.25rem; }
+  .sb .hd h1 { margin: 0; font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.005em; white-space: nowrap; }
+  .sb .hd h1 span { font-weight: 400; color: var(--ink2); margin-left: 0.5rem; font-size: 0.8125rem; }
+  .sb .fresh { display: flex; flex-wrap: wrap; gap: 0.125rem 1rem; font-size: 0.75rem; color: var(--ink2); }
+  .sb .fresh b { font-weight: 500; color: var(--ink); }
+  .sb .tabs { display: flex; gap: 0 1.25rem; overflow-x: auto; scrollbar-width: none; padding: 0 0.75rem; border-top: 1px solid var(--rule2); }
+  .sb .tabs::-webkit-scrollbar { display: none; }
+  .sb .tab { flex: none; background: none; border: 0; border-bottom: 2px solid transparent; height: 2.25rem; padding: 0; font-size: 0.8125rem; font-weight: 500; color: var(--ink2); cursor: pointer; }
+  .sb .tab:hover { color: var(--ink); }
+  .sb .tab[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--ink); }
+  .sb[data-w="s"] .tabs { gap: 0 0.875rem; }
+
+  /* state labels: text first, colour second */
+  .sb .st { display: inline-flex; align-items: center; gap: 0.3125rem; height: 1.25rem; padding: 0 0.375rem; border-radius: 2px; font-size: 0.6875rem; font-weight: 600; white-space: nowrap; background: var(--panel2); color: var(--ink2); border: 1px solid var(--rule); }
+  .sb .st::before { content: ""; width: 0.375rem; height: 0.375rem; border-radius: 1px; background: currentColor; opacity: 0.85; }
+  .sb .st.plain::before { display: none; }
+  .sb .st.acc { background: var(--acc-bg); color: var(--acc); border-color: var(--acc-rule); }
+  .sb .st.okay { background: var(--up-bg); color: var(--up); border-color: transparent; }
+  .sb .st.bad { background: var(--down-bg); color: var(--down); border-color: transparent; }
+  .sb .st.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+  .sb .band { display: inline-flex; align-items: center; gap: 0.3125rem; white-space: nowrap; }
+  .sb .band i { width: 0.4375rem; height: 0.4375rem; border-radius: 1px; background: var(--ink3); flex: none; }
+  .sb .band.strong i { background: var(--up); } .sb .band.middling i { background: var(--warn); } .sb .band.weak i { background: var(--down); }
+
+  /* panels */
+  .sb .pn { background: var(--panel); border: 1px solid var(--rule); border-radius: 3px; min-width: 0; display: flex; flex-direction: column; }
+  .sb .ph { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 0.75rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--rule2); min-height: 2.375rem; }
+  .sb .ph h2 { margin: 0; font-size: 0.8125rem; font-weight: 600; }
+  .sb .ph .meta { font-size: 0.75rem; color: var(--ink2); }
+  .sb .ph .meta b { color: var(--ink); font-weight: 500; }
+  .sb .pb { padding: 0.5rem 0.75rem 0.625rem; min-width: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  .sb .pb.flush { padding: 0; }
+  .sb .note { margin: 0; font-size: 0.75rem; color: var(--ink2); line-height: 1.45; }
+  .sb .msg { display: flex; align-items: center; justify-content: center; gap: 0.375rem; min-height: 3rem; padding: 0.5rem; color: var(--ink2); font-size: 0.75rem; text-align: center; }
+  .sb .msg i { width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--down); }
+  .sb .skel { min-height: 4rem; background: linear-gradient(90deg, var(--panel2), var(--hover), var(--panel2)); background-size: 200% 100%; }
+  @media (prefers-reduced-motion: no-preference) { .sb .skel { animation: sb-skel 1.4s linear infinite; } }
+  @keyframes sb-skel { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+  .sb [data-dash-source-state=refreshing] { opacity: 0.55; transition: opacity var(--cds-dur-slow); }
+
+  /* status strip */
+  .sb .strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); background: var(--panel); border: 1px solid var(--rule); border-radius: 3px; }
+  .sb .kp { display: flex; flex-direction: column; gap: 0.0625rem; padding: 0.5rem 0.75rem; min-width: 0; border-top: 1px solid var(--rule2); }
+  .sb .kp:nth-child(-n+2) { border-top: 0; }
+  .sb .kp:nth-child(2n) { border-left: 1px solid var(--rule2); }
+  .sb .kp-l { font-size: 0.75rem; color: var(--ink2); display: flex; gap: 0.375rem; align-items: center; flex-wrap: wrap; }
+  .sb .kp-v { font-size: 1.125rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; white-space: nowrap; }
+  .sb .kp-v small { font-size: 0.8125rem; font-weight: 500; margin-left: 0.375rem; }
+  .sb .kp-n { font-size: 0.75rem; color: var(--ink2); line-height: 1.35; }
+  .sb .kp.first .kp-v { font-size: 1.5rem; }
+  .sb[data-w="m"] .strip, .sb[data-w="l"] .strip { grid-template-columns: minmax(0, 1.3fr) repeat(4, minmax(0, 1fr)); }
+  .sb[data-w="m"] .kp, .sb[data-w="l"] .kp { border-top: 0; border-left: 1px solid var(--rule2); }
+  .sb[data-w="m"] .kp:first-child, .sb[data-w="l"] .kp:first-child { border-left: 0; }
+  .sb[data-w="s"] .kp.first { grid-column: 1 / -1; border-bottom: 1px solid var(--rule2); }
+  .sb[data-w="s"] .kp.first + .kp { border-left: 0; border-top: 0; }
+  .sb[data-w="s"] .kp.first + .kp + .kp { border-top: 0; }
+  .sb[data-w="s"] .kp:nth-child(2n) { border-left: 0; } .sb[data-w="s"] .kp:nth-child(2n+1):not(.first) { border-left: 1px solid var(--rule2); }
+
+  /* today grid */
+  .sb .tgrid { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+  .sb .col { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+  .sb[data-w="l"] .tgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 23rem); align-items: start; }
+  .sb[data-w="l"] .tgrid.open { grid-template-columns: minmax(0, 1fr) minmax(0, 40rem); }
+  .sb[data-w="l"] #rail { position: sticky; top: 0.625rem; }
+  .sb[data-w="l"] #research { position: sticky; top: 0.625rem; max-height: calc(100vh - 1.25rem); overflow: auto; }
+  .sb[data-focus="1"] .hd, .sb[data-focus="1"] #strip, .sb[data-focus="1"] #main, .sb[data-focus="1"] #rail, .sb[data-focus="1"] #key { display: none; }
+
+  /* tables */
+  .sb .tw { overflow-x: auto; min-width: 0; }
+  .sb table.t { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+  .sb table.t th { position: sticky; top: 0; z-index: 1; background: var(--panel); text-align: left; font-size: 0.75rem; font-weight: 500; color: var(--ink2); padding: 0.375rem 0.5rem; border-bottom: 1px solid var(--rule); white-space: nowrap; vertical-align: bottom; }
+  .sb table.t td { padding: 0.375rem 0.5rem; border-bottom: 1px solid var(--rule2); vertical-align: middle; white-space: nowrap; }
+  .sb table.t :is(th, td):first-child { padding-left: 0.75rem; }
+  .sb table.t :is(th, td):last-child { padding-right: 0.75rem; }
+  .sb table.t tr:last-child td { border-bottom: 0; }
+  .sb table.t th.num, .sb table.t td.num { text-align: right; }
+  .sb table.t td.wrap { white-space: normal; min-width: 10rem; }
+  .sb table.t tbody tr.sel { cursor: pointer; }
+  .sb table.t tbody tr.sel:hover td { background: var(--hover); }
+  .sb table.t tbody tr.on td { background: var(--acc-bg); }
+  .sb table.t tbody tr.on td:first-child { box-shadow: inset 2px 0 0 var(--acc); }
+  .sb table.t tr.dim td { color: var(--ink3); }
+  .sb table.t tr.grp td { background: var(--panel2); font-size: 0.75rem; color: var(--ink2); font-weight: 500; padding-top: 0.25rem; padding-bottom: 0.25rem; }
+  .sb .sort { background: none; border: 0; padding: 0; cursor: pointer; font-size: inherit; font-weight: inherit; color: inherit; display: inline-flex; align-items: center; gap: 0.25rem; white-space: nowrap; }
+  .sb .sort:hover { color: var(--ink); }
+  .sb th[aria-sort="ascending"] .sort, .sb th[aria-sort="descending"] .sort { color: var(--ink); font-weight: 600; }
+  .sb .sort svg { width: 0.5rem; height: 0.5rem; opacity: 0.35; }
+  .sb th[aria-sort] .sort svg { opacity: 1; }
+  .sb th[aria-sort="ascending"] .sort svg { transform: rotate(180deg); }
+  .sb .stk { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
+  .sb .stk-t { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+  .sb .stk-t b { font-weight: 600; }
+  .sb .stk-t span { font-size: 0.75rem; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 11rem; }
+  .sb .spark { display: block; width: 4.5rem; height: 1.25rem; overflow: visible; }
+  .sb .spark path { fill: none; stroke: var(--ink2); stroke-width: 1.25; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .sb .spark circle { fill: var(--ink); }
+  .sb .delta { font-size: 0.75rem; font-weight: 600; }
+  .sb .bar { position: relative; height: 0.25rem; background: var(--rule2); border-radius: 1px; width: 3rem; display: inline-block; vertical-align: middle; margin-left: 0.375rem; }
+  .sb .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ink2); border-radius: 1px; }
+
+  /* tooltips */
+  .sb [data-tip] { position: relative; }
+  .sb [data-tip]:is(:hover, :focus-visible)::after { content: attr(data-tip); position: absolute; left: 0; top: calc(100% + 0.25rem); z-index: 5; width: max-content; max-width: 16rem; white-space: normal; padding: 0.375rem 0.5rem; border-radius: 3px; background: var(--pop); color: var(--on-pop); font-size: 0.6875rem; font-weight: 400; line-height: 1.4; text-align: left; pointer-events: none; }
+  .sb th.num [data-tip]:is(:hover, :focus-visible)::after, .sb .tipr[data-tip]:is(:hover, :focus-visible)::after { left: auto; right: 0; }
+  .sb .q { display: inline-grid; place-items: center; width: 0.875rem; height: 0.875rem; border-radius: 50%; border: 1px solid var(--ink3); color: var(--ink2); font-size: 0.5625rem; font-weight: 600; cursor: help; }
+
+  /* mobile rows */
+  .sb .mrows { display: flex; flex-direction: column; }
+  .sb .mr { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr) auto; column-gap: 0.625rem; row-gap: 0.125rem; align-items: center; width: 100%; padding: 0.5rem 0.75rem; border: 0; border-bottom: 1px solid var(--rule2); background: none; text-align: left; cursor: pointer; }
+  .sb .mr:last-child { border-bottom: 0; }
+  .sb .mr:hover { background: var(--hover); }
+  .sb .mr .logo { grid-row: 1 / span 2; align-self: start; margin-top: 0.125rem; }
+  .sb .mr-a { display: flex; align-items: baseline; gap: 0.375rem; min-width: 0; }
+  .sb .mr-a b { font-weight: 600; }
+  .sb .mr-a span { font-size: 0.75rem; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sb .mr-p { text-align: right; font-weight: 600; white-space: nowrap; }
+  .sb .mr-b { font-size: 0.75rem; color: var(--ink2); display: flex; flex-wrap: wrap; gap: 0 0.625rem; min-width: 0; }
+  .sb .mr-d { text-align: right; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+  .sb .mgroup { padding: 0.25rem 0.75rem; background: var(--panel2); font-size: 0.75rem; color: var(--ink2); font-weight: 500; border-bottom: 1px solid var(--rule2); }
+
+  /* logos */
+  .sb .logo { position: relative; width: 1.5rem; height: 1.5rem; border-radius: 3px; overflow: hidden; flex: none; display: grid; place-items: center; background: var(--panel2); color: var(--ink2); font-size: 0.5625rem; font-weight: 600; }
+  .sb .logo img { display: block; width: 100%; height: 100%; max-width: none; }
+  .sb .logo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--rule); pointer-events: none; }
+  .sb .logo.s { width: 1.125rem; height: 1.125rem; border-radius: 2px; font-size: 0.5rem; }
+  .sb .logo.l { width: 2.25rem; height: 2.25rem; border-radius: 4px; font-size: 0.75rem; }
+
+  /* filters */
+  .sb .fl { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem 0.75rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--rule2); }
+  .sb .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; max-width: 100%; }
+  .sb .seg button { background: var(--panel); border: 0; border-left: 1px solid var(--rule); padding: 0 0.625rem; height: 1.75rem; font-size: 0.75rem; font-weight: 500; color: var(--ink2); cursor: pointer; white-space: nowrap; }
+  .sb .seg button:first-child { border-left: 0; }
+  .sb .seg button:hover { color: var(--ink); background: var(--hover); }
+  .sb .seg button[aria-pressed="true"] { background: var(--ink); color: var(--panel); }
+  .sb .tg { display: inline-flex; align-items: center; gap: 0.375rem; height: 1.75rem; padding: 0 0.625rem; border: 1px solid var(--rule); border-radius: 3px; background: var(--panel); font-size: 0.75rem; font-weight: 500; color: var(--ink2); cursor: pointer; }
+  .sb .tg[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); }
+  .sb .tg[aria-pressed="true"]::before { content: ""; width: 0.375rem; height: 0.375rem; background: var(--ink); border-radius: 1px; }
+  .sb select.sel { font: inherit; font-size: 0.75rem; height: 1.75rem; border: 1px solid var(--rule); border-radius: 3px; background: var(--panel); color: var(--ink); padding: 0 0.375rem; }
+  .sb .fl-count { margin-left: auto; font-size: 0.75rem; color: var(--ink2); }
+  .sb .subnav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+
+  /* order queue */
+  .sb .oq { border-color: var(--acc-rule); }
+  .sb .oq .ph { background: var(--acc-bg); border-bottom-color: var(--acc-rule); }
+  .sb .oq .ph h2 { color: var(--acc); }
+  .sb .oq-cta { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.125rem 1rem; padding: 0.5rem 0.75rem; background: var(--acc); color: var(--on-acc); font-weight: 600; }
+  .sb .oq-cta small { font-weight: 400; font-size: 0.75rem; }
+  .sb .steps { display: flex; gap: 0; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--rule2); overflow-x: auto; }
+  .sb .step { flex: 1 1 0; min-width: 6.5rem; display: flex; flex-direction: column; gap: 0.125rem; padding-top: 0.375rem; border-top: 2px solid var(--rule); font-size: 0.75rem; color: var(--ink3); margin-right: 0.375rem; }
+  .sb .step b { font-weight: 600; font-size: 0.75rem; }
+  .sb .step.done { border-top-color: var(--ink2); color: var(--ink2); }
+  .sb .step.now { border-top-color: var(--acc); color: var(--acc); }
+  .sb .step.now b { color: var(--acc); }
+  .sb[data-w="s"] .steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 0.5rem; }
+  .sb[data-w="s"] .step { min-width: 0; }
+  .sb[data-w="m"] #rail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .sb[data-w="m"] #alerts-pn { grid-column: 1 / -1; }
+  .sb .oq-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; padding: 0.5rem 0.75rem; border-top: 1px solid var(--rule2); font-size: 0.75rem; color: var(--ink2); }
+  .sb .oq-foot b { color: var(--ink); font-weight: 500; }
+
+  /* context table and lists */
+  .sb .kv { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; column-gap: 0.75rem; align-items: baseline; font-size: 0.8125rem; }
+  .sb .kv > * { padding: 0.3125rem 0; border-bottom: 1px solid var(--rule2); }
+  .sb .kv > .h { font-size: 0.75rem; color: var(--ink2); padding-top: 0; }
+  .sb .kv .last { border-bottom: 0; }
+  .sb .ag { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .sb .ag > li { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); column-gap: 0.625rem; padding: 0.4375rem 0; border-bottom: 1px solid var(--rule2); }
+  .sb .ag > li:last-child { border-bottom: 0; }
+  .sb .ag-w { font-size: 0.75rem; color: var(--ink2); line-height: 1.35; }
+  .sb .ag-w b { display: block; color: var(--ink); font-weight: 500; }
+  .sb .ag-x { min-width: 0; font-size: 0.8125rem; font-weight: 500; }
+  .sb .ag-x .st { margin-left: 0.375rem; vertical-align: 0.0625rem; }
+  .sb .ag-x small { display: block; font-size: 0.75rem; font-weight: 400; color: var(--ink2); line-height: 1.45; margin-top: 0.0625rem; }
+  .sb ul.bl { margin: 0; padding: 0 0 0 0.875rem; display: flex; flex-direction: column; gap: 0.1875rem; font-size: 0.8125rem; line-height: 1.45; }
+  .sb ul.bl li::marker { color: var(--ink3); }
+  .sb ul.bl.s { font-size: 0.75rem; color: var(--ink2); }
+  .sb .more { align-self: flex-start; background: none; border: 0; padding: 0.125rem 0; font-size: 0.75rem; font-weight: 500; color: var(--acc); cursor: pointer; }
+
+  /* research pane */
+  .sb .rs-h { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 0.625rem; align-items: center; padding: 0.625rem 0.75rem; border-bottom: 1px solid var(--rule2); }
+  .sb .rs-h h2 { margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.2; }
+  .sb .rs-h .sub { font-size: 0.75rem; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sb .rs-px { text-align: right; white-space: nowrap; }
+  .sb .rs-px b { display: block; font-size: 1.125rem; font-weight: 600; }
+  .sb .rs-px span { font-size: 0.8125rem; font-weight: 500; }
+  .sb .rs-bar { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.375rem 0.75rem; border-bottom: 1px solid var(--rule2); }
+  .sb .btn { display: inline-flex; align-items: center; gap: 0.25rem; height: 1.75rem; padding: 0 0.625rem; border: 1px solid var(--rule); border-radius: 3px; background: var(--panel); font-size: 0.75rem; font-weight: 500; color: var(--ink); cursor: pointer; text-decoration: none; }
+  .sb .btn:hover { background: var(--hover); }
+  .sb .btn:disabled { opacity: 0.4; cursor: default; }
+  .sb .btn svg { width: 0.75rem; height: 0.75rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .sb .rs-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--rule2); }
+  .sb .rs-sec { padding: 0.625rem 0.75rem; border-bottom: 1px solid var(--rule2); display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+  .sb .rs-sec:last-child { border-bottom: 0; }
+  .sb .rs-sec h3 { margin: 0; font-size: 0.75rem; font-weight: 600; display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+  .sb .rs-sec h3 span { font-weight: 400; color: var(--ink2); }
+  .sb .ev { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem 1rem; }
+  .sb[data-w="s"] .ev { grid-template-columns: minmax(0, 1fr); }
+  .sb .ev h4 { margin: 0 0 0.25rem; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 0.375rem; }
+  .sb .ev h4 i { width: 0.4375rem; height: 0.4375rem; border-radius: 1px; }
+  .sb .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem 0.75rem; margin: 0; }
+  .sb[data-w="s"] .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sb .facts div { display: flex; flex-direction: column; min-width: 0; }
+  .sb .facts dt { font-size: 0.6875rem; color: var(--ink2); }
+  .sb .facts dd { margin: 0; font-weight: 600; font-size: 0.8125rem; }
+  .sb .range { display: flex; flex-direction: column; gap: 0.25rem; }
+  .sb .range-t { display: flex; justify-content: space-between; font-size: 0.6875rem; color: var(--ink2); }
+  .sb .range-k { position: relative; height: 0.1875rem; background: var(--rule2); border-radius: 1px; margin: 0.25rem 0; }
+  .sb .range-k i { position: absolute; top: 50%; width: 0.5rem; height: 0.5rem; background: var(--ink); transform: translate(-50%, -50%) rotate(45deg); }
+
+  /* charts and bars */
+  .sb .ch { position: relative; min-height: 11rem; }
+  .sb .ch svg { display: block; width: 100%; touch-action: pan-y; }
+  .sb .ax { fill: var(--ink2); font-size: 0.6875rem; }
+  .sb .ax-t { fill: var(--ink2); font-size: 0.6875rem; }
+  .sb .tip { position: absolute; z-index: 3; pointer-events: none; padding: 0.3125rem 0.5rem; border-radius: 3px; background: var(--pop); color: var(--on-pop); font-size: 0.6875rem; white-space: nowrap; }
+  .sb .tip div { display: flex; align-items: center; gap: 0.375rem; }
+  .sb .tip .h { opacity: 0.7; }
+  .sb .sw { width: 0.625rem; height: 2px; display: inline-block; flex: none; }
+  .sb .lg { display: flex; flex-wrap: wrap; gap: 0.125rem 0.75rem; font-size: 0.6875rem; color: var(--ink2); margin: 0; padding: 0; list-style: none; }
+  .sb .lg li { display: flex; align-items: center; gap: 0.3125rem; }
+  .sb .lg .dt { width: 0.4375rem; height: 0.4375rem; border-radius: 50%; background: var(--ink); }
+  .sb .bars { display: flex; flex-direction: column; gap: 0.4375rem; }
+  .sb .br { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.1875rem 0.5rem; align-items: baseline; font-size: 0.8125rem; }
+  .sb .br-l { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sb .br-l small { color: var(--ink2); font-size: 0.6875rem; margin-left: 0.375rem; }
+  .sb .br-v { font-weight: 600; text-align: right; white-space: nowrap; }
+  .sb .br-k { grid-column: 1 / -1; position: relative; height: 0.25rem; background: var(--rule2); border-radius: 1px; }
+  .sb .br-k i { position: absolute; top: 0; bottom: 0; border-radius: 1px; background: var(--ink2); min-width: 2px; }
+  .sb .br-k i.p { background: var(--up); } .sb .br-k i.n { background: var(--down); }
+  .sb .br-k .z { position: absolute; top: -0.1875rem; bottom: -0.1875rem; width: 1px; background: var(--ink3); }
+  .sb .br-k .g { position: absolute; top: -0.25rem; bottom: -0.25rem; border-left: 1px dashed var(--ink); }
+  .sb .duo { position: relative; height: 0.5rem; width: 100%; }
+  .sb .duo i { position: absolute; left: 0; height: 0.1875rem; border-radius: 1px; min-width: 2px; }
+  .sb .duo i:first-child { top: 0; background: var(--ink3); }
+  .sb .duo i:last-child { bottom: 0; background: var(--ink); }
+  .sb .duo.hot i:last-child { background: var(--down); }
+
+  /* other tabs */
+  .sb .pg { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+  .sb .grid2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; align-items: start; }
+  .sb[data-w="m"] .grid2, .sb[data-w="l"] .grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sb[data-w="l"] .grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sb .grid2 > .wide { grid-column: 1 / -1; }
+  .sb[data-w="l"] .grid3 > .w2 { grid-column: span 2; }
+  .sb .calls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .sb .call-n { font-size: 1.375rem; font-weight: 600; letter-spacing: -0.01em; }
+  .sb .call-n small { font-size: 0.8125rem; font-weight: 500; margin-left: 0.375rem; }
+  .sb .meter { position: relative; height: 0.25rem; background: var(--rule2); border-radius: 1px; margin: 0.375rem 0; }
+  .sb .meter i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ink2); border-radius: 1px; }
+  .sb .meter b { position: absolute; top: -0.25rem; bottom: -0.25rem; border-left: 2px solid var(--ink); }
+  .sb .days { display: block; }
+  .sb[data-w="m"] .days { columns: 2; column-gap: 1.5rem; }
+  .sb[data-w="l"] .days { columns: 3; column-gap: 1.75rem; }
+  .sb .dg { break-inside: avoid; padding-bottom: 0.5rem; }
+  .sb .dg-h { display: flex; align-items: baseline; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0; border-bottom: 1px solid var(--rule); }
+  .sb .dg-h small { font-weight: 400; color: var(--ink2); }
+  .sb .dg.past { opacity: 0.6; }
+  .sb .dg .ag > li { grid-template-columns: 3.75rem minmax(0, 1fr); }
+  .sb .banner { display: flex; gap: 0.5rem; align-items: flex-start; padding: 0.5rem 0.75rem; background: var(--warn-bg); color: var(--ink); font-size: 0.75rem; line-height: 1.45; border-bottom: 1px solid var(--rule2); }
+  .sb .banner b { color: var(--warn); }
+  .sb .key { background: var(--panel); border: 1px solid var(--rule); border-radius: 3px; padding: 0.5rem 0.75rem; }
+  .sb .key summary { cursor: pointer; font-size: 0.75rem; font-weight: 500; color: var(--ink2); }
+  .sb .key dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 0.5rem 1.5rem; margin: 0.5rem 0 0; }
+  .sb .key dt { font-weight: 600; font-size: 0.75rem; }
+  .sb .key dd { margin: 0; font-size: 0.75rem; color: var(--ink2); line-height: 1.45; }
+  .sb[data-w="s"] .subnav .seg { display: flex; width: 100%; }
+  .sb[data-w="s"] .subnav .seg button { flex: 1 1 auto; padding: 0 0.375rem; }
+  .sb[data-w="s"] table.t :is(th, td) { padding-left: 0.3125rem; padding-right: 0.3125rem; }
+</style>
+<link rel="stylesheet" href="fonts.css">
+<div class="sb" data-theme="light" data-w="s" data-focus="0">
+<div class="in">
+  <header class="hd">
+    <div class="hd-top">
+      <h1>Seeking Beta<span>FT Stock Picking Game, 5 Oct to 27 Nov</span></h1>
+      <div class="fresh" id="fresh" data-source="stocks ledger"></div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" type="button" data-tab="today" aria-selected="true">Today</button>
+      <button class="tab" role="tab" type="button" data-tab="macro" aria-selected="false">Macro</button>
+      <button class="tab" role="tab" type="button" data-tab="performance" aria-selected="false">Performance</button>
+      <button class="tab" role="tab" type="button" data-tab="risk" aria-selected="false">Risk</button>
+      <button class="tab" role="tab" type="button" data-tab="calendar" aria-selected="false">Calendar</button>
+      <button class="tab" role="tab" type="button" data-tab="log" aria-selected="false">Log</button>
+    </nav>
+  </header>
+
+  <!-- TODAY -->
+  <div class="pg" id="today" role="tabpanel">
+    <section class="strip" id="strip" aria-label="Where the portfolio stands" data-source="standing ledger stocks"></section>
+    <div class="tgrid" id="tgrid">
+      <div class="col" id="main">
+        <section class="pn oq" id="oq" aria-label="Order queue" data-source="ledger stocks logos"></section>
+        <section class="pn" id="hold" aria-label="Holdings">
+          <div class="ph"><h2>Holdings</h2><span class="meta" id="hold-meta"></span></div>
+          <div class="pb flush skel" id="hold-body" data-source="stocks history ledger logos"></div>
+        </section>
+        <section class="pn" id="watch" aria-label="Research watchlist">
+          <div class="ph"><h2>Research watchlist</h2><span class="meta" id="watch-meta"></span></div>
+          <div class="fl" id="watch-fl"></div>
+          <div class="pb flush skel" id="watch-body" data-source="stocks history ledger logos"></div>
+        </section>
+      </div>
+      <div class="col" id="rail">
+        <section class="pn" id="ctx">
+          <div class="ph"><h2>Market context</h2><span class="meta" id="ctx-meta"></span></div>
+          <div class="pb" id="ctx-body" data-source="ledger history stocks"></div>
+        </section>
+        <section class="pn" id="next">
+          <div class="ph"><h2>Coming up</h2><span class="meta">UK time</span></div>
+          <div class="pb"><ul class="ag" id="next-list" data-source="ledger"></ul></div>
+        </section>
+        <section class="pn" id="alerts-pn">
+          <div class="ph"><h2>Alerts</h2><span class="meta" id="alerts-meta"></span></div>
+          <div class="pb"><ul class="ag" id="alerts-list" data-source="ledger"></ul></div>
+        </section>
+      </div>
+      <aside class="pn" id="research" aria-label="Stock research" data-source="stocks history ledger logos" hidden></aside>
+    </div>
+  </div>
+
+  <!-- MACRO -->
+  <div class="pg" id="macro" role="tabpanel" hidden>
+    <div class="subnav"><div class="seg" id="seg-macro" role="group" aria-label="Macro views"></div><span class="note" id="macro-asof" data-source="ledger"></span></div>
+    <div class="grid2 grid3" data-view="call">
+      <section class="pn"><div class="ph"><h2>Next session</h2><span class="meta" id="call-for"></span></div><div class="banner" id="call-cal" data-source="ledger"></div><div class="pb"><div class="calls" id="call-cards" data-source="ledger"></div><p class="note" id="call-why" data-source="ledger"></p></div></section>
+      <section class="pn"><div class="ph"><h2>Bull case</h2><span class="meta">S&amp;P 500</span></div><div class="pb" id="case-bull" data-source="ledger"></div></section>
+      <section class="pn"><div class="ph"><h2>Bear case</h2><span class="meta">S&amp;P 500</span></div><div class="pb" id="case-bear" data-source="ledger"></div></section>
+      <section class="pn w2"><div class="ph"><h2>After similar days</h2><span class="meta">share of next days that rose</span></div><div class="pb flush" id="analog" data-source="ledger"></div></section>
+      <section class="pn"><div class="ph"><h2>Call record</h2><span class="meta" id="call-sum" data-source="ledger"></span></div><div class="pb flush" id="call-rec" data-source="ledger"></div></section>
+    </div>
+    <div class="grid2" data-view="rates" hidden>
+      <section class="pn wide"><div class="ph"><h2>Yields and commodities</h2><span class="meta" id="backdrop" data-source="ledger"></span></div><div class="pb flush" id="rates" data-source="ledger"></div></section>
+      <section class="pn"><div class="ph"><h2>Government bond yields, 1 year</h2><ul class="lg" id="lg-y"></ul></div><div class="pb"><div class="ch" id="ch-yields" data-source="macro"></div></div></section>
+      <section class="pn"><div class="ph"><h2>Brent oil, 1 year</h2><span class="meta">return index, 100 a year ago</span></div><div class="pb"><div class="ch" id="ch-oil" data-source="history"></div></div></section>
+      <section class="pn wide"><div class="ph"><h2>How the portfolio has moved with them</h2><span class="meta">last 120 sessions at today's weights; association, not a forecast</span></div><div class="pb flush" id="sens" data-source="ledger"></div></section>
+    </div>
+    <div class="grid2" data-view="crypto" hidden>
+      <section class="pn"><div class="ph"><h2>Coins at the last US close</h2></div><div class="pb flush" id="coins" data-source="ledger"></div><div class="pb" id="coin-read" data-source="ledger"></div></section>
+      <section class="pn"><div class="ph"><h2>Bitcoin, 1 year</h2><span class="meta">IBIT fund, 100 a year ago</span></div><div class="pb"><div class="ch" id="ch-btc" data-source="history"></div></div></section>
+      <section class="pn wide"><div class="ph"><h2>Stocks that move with Bitcoin</h2><span class="meta">move per 1% in Bitcoin, 120 sessions</span></div><div class="pb flush" id="btc-links" data-source="stocks logos"></div></section>
+    </div>
+    <div class="grid2" data-view="releases" hidden>
+      <section class="pn wide"><div class="ph"><h2>Economic releases</h2><span class="meta">UK time</span></div><div class="pb flush" id="releases" data-source="ledger"></div></section>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <div class="pg" id="performance" role="tabpanel" hidden>
+    <div class="subnav"><div class="seg" id="seg-performance" role="group" aria-label="Performance views"></div></div>
+    <div class="grid2 grid3" data-view="overview">
+      <section class="pn w2"><div class="ph"><h2>Portfolio against the S&amp;P 500</h2><ul class="lg"><li><span class="sw" style="background: var(--s1)"></span>Portfolio, estimate</li><li><span class="sw" style="background: var(--bench)"></span>S&amp;P 500 (SPY)</li><li><span class="dt"></span>FT site value</li></ul></div><div class="pb"><div class="ch" id="ch-value" data-source="indexed"></div></div></section>
+      <section class="pn"><div class="ph"><h2>Rank on the FT leaderboard</h2><span class="meta">top % of players, lower is better</span></div><div class="pb"><div class="ch" id="ch-rank" data-source="ledger"></div></div></section>
+      <section class="pn"><div class="ph"><h2>Drawdown from peak</h2><span class="meta">estimated portfolio value</span></div><div class="pb"><div class="ch" id="ch-dd" data-source="indexed"></div></div></section>
+      <section class="pn"><div class="ph"><h2>Contribution by holding</h2><span class="meta">weight × move since the start, points</span></div><div class="pb"><div class="bars" id="contrib" data-source="contrib_total"></div></div></section>
+      <section class="pn"><div class="ph"><h2>Theme exposure by order</h2><span class="meta">weight at each order's open</span></div><div class="pb flush" id="expo" data-source="ledger"></div></section>
+      <section class="pn wide"><div class="ph"><h2>Day by day</h2><span class="meta">estimates from weights and closing prices</span></div><div class="pb flush" id="daily" data-source="ledger"></div></section>
+    </div>
+    <div class="grid2" data-view="ratings" hidden>
+      <section class="pn"><div class="ph"><h2>Hit rate by rating</h2><span class="meta">beat the S&amp;P 500 over 5 sessions</span></div><div class="banner" id="rate-cal" data-source="ledger"></div><div class="pb flush" id="bands" data-source="conf_bands"></div></section>
+      <section class="pn"><div class="ph"><h2>Confidence ratings</h2><span class="meta" id="conf-meta" data-source="ledger"></span></div><div class="pb flush" id="conf" data-source="ledger logos"></div></section>
+    </div>
+    <div class="grid2" data-view="score" hidden>
+      <section class="pn"><div class="ph"><h2>Live check: every listed stock, rated nightly</h2><span class="meta">settled 5 sessions later</span></div><div class="banner" id="calib-cal" data-source="ledger"></div><div class="pb flush" id="calib-live" data-source="ledger"></div></section>
+      <section class="pn"><div class="ph"><h2>Replay of the price-only points</h2><span class="meta">stocks chosen with hindsight</span></div><div class="pb flush" id="calib-back" data-source="ledger"></div><div class="pb" id="calib-sum" data-source="ledger"></div></section>
+    </div>
+  </div>
+
+  <!-- RISK -->
+  <div class="pg" id="risk" role="tabpanel" hidden>
+    <div class="grid2 grid3">
+      <section class="pn"><div class="ph"><h2>Weight by theme</h2><span class="meta">dashed line: 45% limit</span></div><div class="pb"><div class="bars" id="themes" data-source="ledger"></div></div></section>
+      <section class="pn"><div class="ph"><h2>Scenarios</h2><span class="meta">assumed moves, points of the portfolio</span></div><div class="pb"><div class="bars" id="scen" data-source="ledger"></div></div></section>
+      <section class="pn"><div class="ph"><h2>Share of the swings</h2><ul class="lg"><li><span class="sw" style="background: var(--ink3)"></span>weight</li><li><span class="sw" style="background: var(--ink)"></span>share of risk</li></ul></div><div class="pb flush" id="riskshare" data-source="ledger logos"></div></section>
+      <section class="pn"><div class="ph"><h2>Holdings that move together</h2><span class="meta">correlation of daily moves</span></div><div class="pb flush" id="corr" data-source="ledger"></div></section>
+      <section class="pn w2"><div class="ph"><h2>Results risk on holdings</h2><span class="meta">weight × options-implied move; budget 0.6 points</span></div><div class="pb flush" id="rrisk" data-source="results_risk logos"></div></section>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="pg" id="calendar" role="tabpanel" hidden>
+    <div class="subnav"><div class="seg" id="seg-calendar" role="group" aria-label="Which events"></div><span class="note">UK time. Last order is the latest moment to act before the event.</span></div>
+    <section class="pn"><div class="pb"><div class="days" id="events" data-source="ledger"></div></div></section>
+  </div>
+
+  <!-- LOG -->
+  <div class="pg" id="log" role="tabpanel" hidden>
+    <div class="subnav"><div class="seg" id="seg-log" role="group" aria-label="Log views"></div></div>
+    <section class="pn" data-view="orders"><div class="pb"><div class="days" id="log-orders" data-source="ledger logos"></div></div></section>
+    <section class="pn" data-view="alerts" hidden><div class="pb"><div class="days" id="log-alerts" data-source="ledger"></div></div></section>
+    <section class="pn" data-view="analysts" hidden><div class="pb"><div class="days" id="log-rev" data-source="ledger logos"></div></div></section>
+    <section class="pn" data-view="closed" hidden><div class="pb flush" id="log-closed" data-source="ledger logos"></div></section>
+  </div>
+
+  <details class="key" id="key">
+    <summary>Definitions and sources</summary>
+    <dl>
+      <div><dt>Points</dt><dd>Weight × move. A 15% position that rises 2% adds 0.30 points to the portfolio.</dd></div>
+      <div><dt>Score and band</dt><dd>Out of 100 from the pipeline: trend 40, recent behaviour 20, catalyst 20, analyst changes 20. Strong is 60 or more in an uptrend; weak is under 45 or a downtrend.</dd></div>
+      <div><dt>Conviction</dt><dd>The confidence anchor from the latest nightly rating: the estimated chance of beating the S&amp;P 500 over five sessions. Not yet calibrated: treat it as a ranking, not a probability.</dd></div>
+      <div><dt>vs S&amp;P 500, 20d</dt><dd>The stock's return over its last 20 stored sessions minus the S&amp;P 500's (SPY) over the same dates, in percentage points. Sector benchmarks are not stored, so this is market-relative, not sector-relative.</dd></div>
+      <div><dt>Order states</dt><dd>Proposed: issued by a review, to enter before 08:00 UK. Pending fill: assumed entered, waiting for the open. Filled: past the open, estimate only. Confirmed: an FT site value has been read since the fill.</dd></div>
+      <div><dt>Sources</dt><dd>US prices: stockanalysis.com. UK prices: lse.co.uk. US yields: US Treasury. Other yields and commodities: tradingeconomics.com. Coins: Coinbase. Ranks and FT values: read off the FT site by Tim.</dd></div>
+    </dl>
+  </details>
+</div>
+</div>
+
+<script src="app.js"></script>

@@ -1,0 +1,135 @@
+# FT Stock Picking Game: playbook (core)
+
+Playbook version 6, 15 Oct 2026. The playbook used to be one long doc; at Tim's request it is now split so that each run reads only what it needs. This core doc holds the parts every run needs (A to D, I to K) and the routing table below. Version 6 also adds, at Tim's request, the panel test (a fair test of the score on 30 stocks fixed in advance) and the earnings-drift scan. Earlier versions: 5 (9 Oct) yields, oil, the day call, nightly watchlist intake, strength bands, moving averages, release tracker, calibration log; 5.1 weekend news check; 5.2 quiet-day rule; 5.3 crypto tracking; 5.4 the market data service.
+
+This is the single procedure for every scheduled run and every hand-run review of Tim's entry ("Seeking Beta") in the FT Stock Picking Game. Each scheduled task tells its run to read this doc and carry out one section of part H. Runs read these docs; they do not edit them. Changes are made in a conversation with Tim.
+
+## Which docs to read
+
+Read this doc first, then the docs listed for the part your instructions name, in the same turn (one `project_read` per doc, sent together). Every part keeps its old letter and number, so an instruction such as "carry out part H1 under parts A to G" still means the same thing.
+
+| Part | Run | Also read |
+|---|---|---|
+| H1 Evening review | 21:30 UK, Sun to Thu | `claude/ft-game-run-evening.md`, `claude/ft-game-rules.md`, `claude/ft-game-data.md`, `claude/ft-game-state.md` |
+| H2 Morning check, H6 Midday check | 07:26 UK, Mon to Fri; 12:40 (off) | `claude/ft-game-run-morning.md`, `claude/ft-game-rules.md`, `claude/ft-game-data.md`, `claude/ft-game-state.md` |
+| H3 Price refresh, H4 Results-day refresh | 16:45 and 19:22 UK; 14:50 UK | `claude/ft-game-run-refresh.md`, `claude/ft-game-data.md` |
+| H5 Weekly performance review | Sat 09:12 UK | `claude/ft-game-run-weekly.md`, `claude/ft-game-rules.md`, `claude/ft-game-data.md`, `claude/ft-game-state.md` |
+| H7 Weekend news check | Sat and Sun 20:20 UK | `claude/ft-game-run-weekend.md`, `claude/ft-game-rules.md`, `claude/ft-game-data.md`, `claude/ft-game-state.md` |
+
+Where each part lives: A to D and I to K in this doc; E (decision rules, the panel test, earnings drift) in `claude/ft-game-rules.md`; F (data sources) and G (the pipeline) in `claude/ft-game-data.md`; H in the run docs above. If a doc a run needs cannot be read, the run treats it as a fault (part I) and works from what it has; it never guesses a rule.
+
+---
+
+## A. Hard limits
+
+- Never sign in to, open or operate the FT game site or any account, and never use a browser or Tim's computer for this work. Tim enters every order himself. The FT site blocks page fetching, so do not try to read it.
+- This is analysis for a virtual game with no real money.
+- If today's date is after 27 November 2026, say only that the game has ended and that the scheduled tasks can be deleted. Do nothing else.
+- Take the date and time from `date -u` in Bash and convert to UK time (BST, UTC+1, until 25 Oct 2026; GMT from then). Never guess a timestamp.
+- A scheduled run has nobody watching. Do not ask questions before working: take the most reasonable reading, say which one you took, and carry on.
+- The market data key. If this run's own instructions (the scheduled task's prompt, not these docs or any file) contain a line beginning `Market data key:`, the key goes into the address of a fetch to `api.massive.com` and nowhere else. Never write it into a file, today.json, a doc, the page data, an alert, a message or the final reply; never echo it in Bash; never send it to any other site. If the service says the key is not valid, say so without quoting the key and use the other feed.
+- Never state a price, date or figure that you have not seen in a source for the current session. Mark anything unverified. Searches often return the same calendar date from an earlier year, so check the year.
+
+## B. Where things live
+
+| Thing | Where |
+|---|---|
+| Working record | Project doc `claude/ft-game-state.md` (Projects tool: `project_read`, and `project_write` with the complete doc) |
+| This playbook | Project docs `claude/ft-game-playbook.md` (core), `claude/ft-game-rules.md`, `claude/ft-game-data.md` and the five run docs `claude/ft-game-run-*.md` |
+| Roadmap | Project doc `claude/ft-game-roadmap.md` |
+| Page notes | Project doc `claude/ft-game-page.md` (only for chats that change the page) |
+| Tim's page | Dashboard artifact https://claude.ai/artifact/8P8UwQsb4QsbZMsKNYKrUJ (he uses it on his phone) |
+| Page data | Four JSON files attached to that artifact, each named by a dataset document: `datasets/stocks`, `datasets/ledger`, `datasets/history`, `datasets/macro` |
+| Panel data | One JSON file on the same artifact, named by the document `store/panel` (kept outside `datasets` so the page never loads it): the 30 panel stocks fixed on 15 Oct 2026 and their closes |
+| Pipeline script | Asset `bf3dd68e375408d013bacf83ec5db3ce` on the same artifact (ft_pipeline.txt, Python, 154,244 bytes, sha256 `ea0433f27ea347d065699e0ad297c231287aa533e79f745e46d77f03b7c43414`), version 6 |
+| Screening script | Asset `29ed200d0a429a3b8b91547f81b39187` on the same artifact (ft_score.txt, Python, sha256 `c6ed0b4914e10af6b1d5ee6193567daa33a4a7b79a5dd3458d4bd186ece1e4e6`) |
+
+Never delete the script assets. If the state doc or any other note gives a different id or hash for a script, this table wins. The artifact also holds files that are kept but not in use: the previous pipeline scripts (asset `f50a1a4197f0dd4136b51b4d76b80513`, version 5.4, replaced on 15 Oct; asset `7d77ccefc0a91641c364da3cc53b235f`, replaced on 11 Oct) and data files superseded in hand-run sessions. Leave them alone. Never edit the page's own documents (`files/index.html`, `dash/meta`) and never render, open or screenshot the page.
+
+What each data file holds:
+
+- `stocks.json`: one row per holding, one cash row and one row per watchlist stock, with prices, the weighted contribution, the score and its parts, a strength band (`tier`), simple and exponential moving averages, indicators, the inputs used last time, the date it joined the list (`added`), status and notes, and each stock's measured link to Bitcoin and Ether (`btc_beta`, `btc_corr`, `btc_net`, `eth_beta`, `eth_corr`, `crypto_link`).
+- `ledger.json`: the running log, one row per entry with a `table` column: `meta`, `position`, `trade`, `confidence`, `perf` (daily estimated value), `contrib` (each position's weight times move each day), `reported` (value and rank Tim reads off the FT site), `risk`, `corr`, `theme`, `scenario`, `event` (the calendar, with forecast, previous and actual figures for economic releases), `revision`, `alert`, `postmortem`, `macro`, `daycall`, `analog`, `shadow` (a rating for every scored stock every evening), `drift` (every reporter the earnings-drift scan looked at, with its verdict and, five sessions later, its result) and `calib` (what the shadow ratings, the panel test, the drift record and the old backtest say).
+- `history.json`: daily open, high, low, close and volume for every stock and for SPY, with up to a year of closes where collected (two years for SPY), plus `OIL`, `SHEL-US`, `BP-US`, `IBIT` and `ETHA`, and the reaction-day rows of drift reporters until they settle.
+- `macro.json`: one row per series per day (`date`, `series`, `value`): `us2y`, `us10y`, `us30y`, `uk10y`, `de10y`, `fr10y`, `it10y`, `jp10y` in percent, `brent`, `wti`, `natgas`, `gold` in dollars, and `btc`, `eth`, `sol`, `xrp`, the coin prices in dollars at the US close.
+- `panel.json`: `frozen` (2026-10-15), `rule` (how the members were chosen, and any swap), `test` (the measure and the verdict rule, fixed in advance), `members` (rank, ticker, name) and `closes` (for each member, a list of [date, close]).
+
+Scheduled tasks: evening review (21:30 UK, Sun to Thu), morning check (07:26 UK, Mon to Fri), price refresh (16:45 UK, Mon to Fri), late price refresh (19:22 UK, Mon to Fri), results-day refresh (14:50 UK, Mon to Fri, acts only on results days), weekly performance review (Sat 09:12 UK), weekend news check (Sat and Sun 20:20 UK). A midday check (12:40 UK) exists but is switched off: the game's rules rule out same-day changes (part C).
+
+## C. The game
+
+- Runs 5 Oct to 27 Nov 2026 (ends 23:59 UK). Virtual 100,000 credits. Highest percentage return wins. Final values use official closing prices on 27 Nov.
+- 5 to 20 stocks, each 5% to 25%. Up to 25% cash, which earns nothing. No shorting, no leverage, no trading costs, unlimited changes. Dividends are reinvested.
+- About 1,610 eligible stocks from the LSE, Nasdaq, NYSE and main European listings. The list cannot be seen from here: prefer large, well-known listings and name one substitute for every new stock.
+- An order is a set of target weights. Changes fill at the next trading day's opening price: London stocks at 08:00 UK, US stocks at the US open. Weights are reset to target at each close.
+- **Performance is weighted.** The portfolio's daily return is the sum over holdings of weight times return. On a day a change fills: kept weight earns close over previous close, added weight earns close over that day's open, sold weight earns that day's open over previous close. Every portfolio figure in this work is a sum of weight times return, never an average of returns. A 15% position rising 2% adds 0.30 points; a 5% position rising 5% adds 0.25.
+
+Timing: an order never fills before a gap, so a position must be in place, or gone, before the event.
+
+- US results after the close on day D: the order must be entered before 08:00 UK on day D.
+- US results before the open on day D: the stock must be held (or sold) by the open of D-1, so the order goes in before 08:00 UK on D-1, which means the evening review of D-2.
+- UK and European results at 07:00 UK: held from the previous day.
+- After any report the earliest exit is the next open, after the gap. Likewise the earliest entry after a report is the next open after its reaction session, which is what the earnings-drift rule uses.
+- Weekends work the same way. A holding is valued from Friday's close, so a Monday gap in something already held cannot be dodged: selling at Monday's open still takes the gap. What a weekend order can do is avoid, or catch, the move after the open.
+- US session: 14:30 to 21:00 UK, except 13:30 to 20:00 UK in the week of 26 Oct (UK clocks go back on 25 Oct, US clocks on 1 Nov). US markets are closed on 26 Nov and close early (18:00 UK) on 27 Nov.
+- Cut-off. An order entered before 08:00 UK counts for that day (Tim's first order, entered at about midnight UK, filled the same day). An order entered once the trading day has begun waits for the next trading day, US stocks included. Treat 08:00 UK as the daily cut-off for everything; there is no same-day midday change.
+- The game's "Today" figure for a London or European stock can read 0.00% in the evening even when the stock moved, so do not read a zero there as proof that a position was not held.
+
+## D. Objective, guardrails and rank
+
+Target: finish in roughly the top 2% of players, not first place. Tim wants a credible result for his CV, so no lottery-ticket concentration. Top 2% still needs a return well above the index, so the portfolio has to differ from it.
+
+Standard guardrails:
+
+- 6 to 10 holdings. Largest position normally 20% or less. One theme no more than about 45%. Cash 0% to 25% by regime.
+- No position above its volatility cap (`weight_cap_pct` from the pipeline: about 30 divided by the stock's average true range in percent, so 15% for a stock that ranges 2% a day and 10% for one that ranges 3%).
+- A position bought only for a results report, as a news momentum trade or as an earnings-drift trade, is capped at 10%.
+- Turnover is free, so change the order whenever the evidence supports it, but every change needs a reason that will still make sense tomorrow.
+- In a risk-off regime the only defences are cash (25% at most) and low-beta names. Rank is relative, so falling less than other players still helps.
+
+Sizing by weight times edge:
+
+- Size positions by expected contribution, which is weight times expected excess return. The strongest cases with the smallest daily ranges get the largest weights, up to their caps.
+- A 5% position hardly moves the portfolio. Use 5% only for a trial momentum or drift position or a capped hold through results. A core position is 10% to 20%.
+- Check the Risk output of the pipeline before finalising. If one theme supplies more than about 60% of the portfolio's risk, or two holdings have a correlation above 0.85 and together exceed 30%, say so and either trim or state why the concentration is deliberate.
+- Check the scenario lines. No single listed scenario should cost more than about 3 points of the portfolio unless the review argues for that exposure.
+
+Rank-aware stance (use the latest `reported` row in the ledger; the pipeline prints it):
+
+- The target line is position `floor(players x 0.02)` or better. If Tim supplies the return of the player on that line (`top2_return_pct`), the gap to it in points is the number that matters.
+- Outside the target with three or more weeks left: standard guardrails, cash usually 0% to 15%. Do not hold cash for comfort.
+- Outside the target from 13 Nov: keep risk on. Cash 0% to 10%, six to eight holdings, and the results risk budget in part E rises from 0.6 to 0.8 points. Never break a guardrail to chase.
+- Inside the target before 13 Nov: no change of approach.
+- Inside the target from 13 Nov: protect it. Cash 15% to 25%, eight to ten holdings, nothing above 15%, no holding through results, prefer stocks with a small daily range.
+- A rank read in the first few sessions means little, since most players are bunched near zero.
+
+## I. Output style
+
+Every message starts with "Tim,", with one exception: a quiet reply starts with the words "No change" and has no "Tim," in front, because the first words of a reply are what shows in the notification on Tim's phone. British English. No em-dashes anywhere. UK times. Concise, with tables where they help. Be direct and give a view; if an idea of Tim's does not hold up, say so plainly and show the numbers. Flag only significant risks. Talk about weighted contributions, not raw moves, when explaining what happened to the portfolio. End with sources as markdown links. Each run doc gives that run's exact output.
+
+**When Tim is told.** The reviews run every day so that the order can change on any day, but Tim does not want to check every day. A run sends him a message only when there is something for him to do:
+
+| Run | Sends a message |
+|---|---|
+| Evening review | On a change evening: the order for the next session differs in any weight from the order in force, or something is needed from Tim before the next cut-off |
+| Morning check | Only when it revises last night's order |
+| Weekly review | Always: it asks for his value and rank |
+| Weekend news check | Only for an item rated A |
+| Price refreshes, results-day refresh | Never: nothing can be entered during the trading day, so their alerts go on the page |
+
+- On every other occasion the run sends nothing through SendUserMessage and ends with the short fixed reply its run doc gives. Do not pad that reply with a market read, tables or sources: anything that reads as news may reach Tim's phone as a notification.
+- The work is the same either way. A quiet evening still carries out all of H1, publishes the page and writes the state doc. The watchlist changes, the alerts and the day call are on the page; none of them makes a message by itself.
+- A fault is never a quiet day. If a run cannot get as far as checking the order (the state doc or a playbook doc it needs cannot be read, the script's hash does not match, the pipeline ends in an error that cannot be fixed), say so in the first line, say that the order in force stands until Tim hears otherwise, and send it through SendUserMessage.
+- A change message must be enough to act on by itself: the full order, what changed, and the cut-off. Its last line is "If you cannot enter this before 08:00 UK, say so in the project chat so the log can be corrected."
+- The order is assumed entered once its message has gone (H1 step 1). The check on that assumption is the weekly comparison of the estimated value with the figure Tim reads off the FT site.
+
+## J. The state doc
+
+`claude/ft-game-state.md` is the narrative record; the ledger is the numerical one. The doc's status section also carries the latest day call (session, green or red, figure, usual rate), the macro backdrop, Bitcoin's price and trend, and the panel test's latest line, one line each, so a morning run can quote them before the files arrive. The evening review rewrites the doc at the end of every run (it replaces the whole doc, so include everything): status, current portfolio with weights, ratings, scores and flags, pending order, watchlist with statuses and promotion triggers, trade log (one row per order change with the reason), review log (add one or two lines, keep the latest 15), regime notes and the near calendar, open questions, worked examples and the list of sources. Performance figures, the confidence log, the day-call record, the macro figures, the calibration and panel tables, the drift record and the full calendar live in the ledger; the doc need only carry the latest estimated return and reported rank. If Tim says he did not enter an order, entered something different, or found a stock missing, correct the doc and put the correction through the pipeline (a changed order through the `order` list of the next run, a changed fill date through `fixes`). The morning and midday checks write the doc only when they change the order. Section 3 (pending order) records, for the latest change, the time its message went out; the order is taken as entered unless Tim says otherwise. The weekend news check changes only the "Weekend log" in section 7 and adds a line to the review log.
+
+## K. What only Tim can supply
+
+- Portfolio value, leaderboard position and number of players, ideally after Friday's close each week, and the return of the player on the top 2% line if shown.
+- Whether an order was entered, when, and any stock missing from the game's list. With messages going out only on change days, the one thing he must report is a change he could not enter before the cut-off.
+- What the game shows as the fill date and price of a new position.
+- Agreement before any change to the score's weights or the confidence anchor, and before any swap in the panel.

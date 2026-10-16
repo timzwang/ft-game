@@ -1,0 +1,32 @@
+# FT Stock Picking Game: price refreshes (H3) and results-day refresh (H4)
+
+Parts H3 and H4 of the playbook (version 6, 15 Oct 2026). Read with the core playbook (`claude/ft-game-playbook.md`) and the data doc (`claude/ft-game-data.md`, parts F and G). These runs do not need the rules doc or the state doc.
+
+## H3. Price refresh (16:45 UK and 19:22 UK, Monday to Friday)
+
+Quick and quiet. It changes prices and raises alerts. It never changes the order, the watchlist, a score or a rating. The two runs are the same; the later one catches the second half of the US session, and on a day when a holding or watchlist stock has reported it also gives the results reaction described in H4 step 2.
+
+1. Fetch `stocks.json`, `ledger.json` and the script (G1; the panel file is not needed).
+2. For every row except cash, fetch the latest quote, pacing the requests as part F says: US from the stockanalysis.com quote page with a clock suffix on the address, asking for price, previous close, open, high, low, the status text and today's headlines; UK from lse.co.uk. Also fetch the two tradingeconomics pages for live yields and oil.
+3. Note each quote's own time (part F). Ask once more, with a new clock suffix, for any US quote more than 45 minutes behind the clock or dated another day. Write quotes.json: `date` (today, YYYY-MM-DD), `prices_as_of` (such as "Mon 12 Oct, 16:45 UK (US session open)"; in the week of 26 Oct the US closes at 20:00 UK, so say so), `quotes` (a map from ticker, exactly as in the file, to `price`, `prev_close`, `open`), `macro_now` (`as_of` such as "16:45 UK" and `values` for `us10y`, `uk10y`, `de10y`, `jp10y`, `brent`, `wti`, `gold`, and `btc` and `eth` from the live Coinbase price) and `alerts` (below). Leave out any stock whose quote could not be fetched. A quote that is still stale goes in, but name it and its time in the final message, and never raise an alert from it without giving its time.
+4. Run `refresh` with `--ledger` and no alerts first. Its output gives every holding's move and the weighted total, and the MACRO lines give each live reading's change against the last stored close. Write the alerts from those figures and from the stocks.json it produced (`day_pct`, `from_open_pct`), then run `refresh` again from the same fetched files with the alerts added.
+5. Publish `stocks.json` and `ledger.json` (G5). A file whose sha256 has not changed is skipped.
+
+Alerts, each as `{"time_uk", "stock", "text"}`, with `stock` set to the stock's name, or "Portfolio" for the weighted move, or "Market" for yields and oil:
+
+- Any stock up or down 3% or more today.
+- Any holding trading more than 2% below today's open: a possible exit signal for the evening review.
+- Any watchlist stock with status "Needs follow-through" or "Drift: needs 2nd day" that is above its open and in the upper half of today's range: on track to qualify.
+- Any holding or watchlist stock with a notable headline today: a rating change or large target change from a major bank, a material contract or deal, results, or a guidance change.
+- The portfolio's weighted move so far, if it is beyond 1% either way.
+- The US 10-year yield more than 8bp from last night's close, the UK 10-year gilt more than 10bp, or Brent more than 3%: give the level, the move and which way it cuts for the portfolio.
+- Bitcoin more than 4% from its last stored close: give the level and the move, and for each crypto-linked holding the move that has gone with it in points, from the CRYPTO lines the script prints.
+- Do not repeat an alert the earlier run already logged today unless the picture has changed (check the `alert` rows in the ledger).
+
+Nothing can be entered during the trading day (part C), so this run never sends Tim a message: do not call SendUserMessage. Final message, one line and nothing else: with alerts, exactly "No change. Prices refreshed at <time>, <number> alerts on the page."; with none, exactly "No change. Prices refreshed at <time>, no alerts." If a step failed or a page was refused, add one more line saying which.
+
+## H4. Results-day refresh (14:50 UK, Monday to Friday)
+
+1. Fetch `ledger.json` only (G1, without the script) and look at its `event` rows with `kind` "results". This run acts only if a holding or watchlist stock reported before today's US open, reports after today's close, or reported after yesterday's close. Use today's date from the clock. If none applies, reply exactly "No change. No results today." and stop: no other fetches and no message.
+2. Otherwise carry out H3 in full. For each stock that has reported, add an alert giving the headline numbers against expectations if a source has them (earnings and revenue against the consensus, and guidance: raised, reaffirmed, lowered or none), the move from the previous close and from the open, and how it compares with the implied move stored on its event. For a holding, say whether the move so far points to the exit rule in part E. For a stock reporting after tonight's close, say whether it is in the portfolio and at what weight. Tonight's evening review runs the drift tests on the completed session.
+3. Do not call SendUserMessage: the alerts are on the page and tonight's evening review decides any change. Final message, one line and nothing else: "No change. Results-day refresh at <time>, <number> alerts on the page." If a step failed or a page was refused, add one more line saying which.

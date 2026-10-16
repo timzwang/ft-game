@@ -1,1 +1,65 @@
 # ft-game
+
+Tim's entry ("Seeking Beta") in the FT Stock Picking Game, 5 Oct to 27 Nov 2026: a virtual 100,000-credit portfolio of 5 to 20 stocks. The aim is a finish in roughly the top 2% of players. No real money is involved.
+
+This repository is a **mirror and a place to propose changes**. The live system runs in Claude (scheduled tasks, a Claude Project and a dashboard artifact). Claude writes snapshots here; ChatGPT and Tim read them and propose changes through pull requests.
+
+## Start here
+
+| To understand | Read |
+|---|---|
+| What is held now, why, and what happened recently | `state/ft-game-state.md` (sections 1 to 5) |
+| The rules every decision follows | `docs/ft-game-rules.md` (part E) |
+| The game's rules, guardrails, timing and output style | `docs/ft-game-playbook.md` (parts A to D, I to K) |
+| How each scheduled run works | `docs/ft-game-run-*.md` (part H) |
+| Data sources and the pipeline's commands | `docs/ft-game-data.md` (parts F and G) |
+| What has been built and what is still open | `docs/ft-game-roadmap.md` |
+| The schedule | `ops/scheduled-tasks.md` |
+| When this copy was taken, and its file hashes | `SYNC.md` |
+
+## Layout
+
+```
+docs/        playbook (core, rules, data, five run docs), roadmap, page notes
+state/       ft-game-state.md: the narrative record, rewritten by every evening review
+scripts/     ft_pipeline.py (version 6: scoring, performance, risk, day call, panel test,
+             drift scan); ft_score.py (screening). Standard-library Python 3.
+data/        stocks, ledger, history, macro, panel (JSON), written only by the pipeline
+page/        the dashboard: index.html, app.js, fonts.css, logos.json
+skills/      the two saved Claude skills (ft-game-playbook, stock-score)
+ops/         the scheduled tasks, key redacted
+proposals/   chatgpt/ and claude/: proposals for Tim to review
+sync-test/   the 16 Oct connection test (kept as a record)
+SYNC.md      sync manifest
+```
+
+The docs keep the paths they have in the Claude Project (`claude/ft-game-*.md`). In this repository those files are in `docs/`, except the state doc, which is in `state/`.
+
+## Running the pipeline
+
+```
+python3 -I scripts/ft_pipeline.py                 # prints the full instructions
+python3 -I scripts/ft_pipeline.py report --ledger data/ledger.json
+python3 -I scripts/ft_pipeline.py panel --panel data/panel.json --history data/history.json
+```
+
+`report` and `panel` only read. The other commands (`template`, `run`, `refresh`, `reorder`, `closes`) are for Claude's scheduled runs, and write to a folder given by `--out`.
+
+## Who writes what
+
+| Writer | May change | How |
+|---|---|---|
+| Claude's scheduled runs | `data/`, `state/`, `SYNC.md` | Commit to `main` after each evening and weekly review. Pull and rebase first; never force-push |
+| Claude in a session with Tim | `docs/`, `scripts/`, `page/`, `skills/`, `ops/` | Only to mirror a change Tim approved |
+| ChatGPT | Nothing on `main` | A branch and pull request, or a file under `proposals/chatgpt/` |
+| Tim | Everything | Reviews and merges pull requests |
+
+A change merged here does **not** reach the live system by itself. A code or playbook change goes live only when Tim asks Claude to apply it in the Claude Project and artifact; for the pipeline, that also means recording its new sha256 in part B of the playbook, which every run checks before running the script.
+
+## Rules for any proposal
+
+- Never commit an API key, token, password, account number or personal detail. The market data key lives only inside two Claude scheduled tasks; files here show it as `<REDACTED: held only in the scheduled task>`.
+- Keep the existing style: British English, no em-dashes, UK times, plain words.
+- The score's weights, the confidence anchor and the panel's members change only with Tim's agreement (playbook part K).
+- Every portfolio figure is a sum of weight times return, never an average of returns (playbook part C).
+- Say what evidence a change rests on. Seven weeks is too short to prove a method, so be honest about sample sizes.
