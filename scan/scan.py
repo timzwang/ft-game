@@ -53,7 +53,7 @@ UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) ft-game-scan/1.0 (private r
 
 WIKI = {
     "SP500": "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies",
-    "NDX": "https://en.wikipedia.org/wiki/List_of_Nasdaq-100_companies",
+    "NDX": "https://en.wikipedia.org/wiki/Nasdaq-100",
     "FTSE100": "https://en.wikipedia.org/wiki/FTSE_100_Index",
     "FTSE250": "https://en.wikipedia.org/wiki/FTSE_250_Index",
 }
@@ -97,7 +97,38 @@ def uk_symbol(s):
     return s.replace(".", "-") + ".L"
 
 
+def fetch_ndx():
+    """Nasdaq-100: Wikipedia no longer carries the table, so try two others."""
+    import requests
+    errs = []
+    try:
+        r = requests.get("https://www.slickcharts.com/nasdaq100", headers=UA, timeout=30)
+        r.raise_for_status()
+        for t in pd.read_html(io.StringIO(r.text)):
+            tcol = _pick(t.columns, "symbol")
+            if tcol is not None and len(t) >= 95:
+                ncol = _pick(t.columns, "company")
+                return pd.DataFrame([{"ticker": us_symbol(x), "name": str(n) if ncol is not None else "",
+                                      "sector": "", "market": "US", "index": "NDX"}
+                                     for x, n in zip(t[tcol], t[ncol] if ncol is not None else t[tcol])])
+        errs.append("slickcharts: no table")
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"slickcharts: {e}")
+    try:
+        r = requests.get("https://api.nasdaq.com/api/quote/list-type/nasdaq100",
+                         headers={**UA, "Accept": "application/json"}, timeout=30)
+        r.raise_for_status()
+        rows = r.json()["data"]["data"]["rows"]
+        return pd.DataFrame([{"ticker": us_symbol(x["symbol"]), "name": x.get("companyName", ""),
+                              "sector": "", "market": "US", "index": "NDX"} for x in rows])
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"nasdaq: {e}")
+    raise RuntimeError("; ".join(errs))
+
+
 def fetch_index(key):
+    if key == "NDX":
+        return fetch_ndx()
     tables = _wiki_tables(WIKI[key])
     best = None
     for t in tables:
@@ -290,10 +321,13 @@ def _get_prices(tickers, tz):
         data.update(got)
         log(f"stooq: {len(got)} of {len(missing)} missing")
     for t, df in data.items():
+        # Daily bars come either zone-aware at the exchange's midnight or as
+        # naive UTC times (London midnight in summer is 23:00 UTC the day
+        # before). Adding 12 hours and taking the day is right for both.
         idx = pd.to_datetime(df.index)
         if idx.tz is not None:
             idx = idx.tz_convert(tz).tz_localize(None)
-        df.index = idx.normalize()
+        df.index = (idx + pd.Timedelta(hours=12)).normalize()
         data[t] = df[~df.index.duplicated(keep="last")].sort_index()
     return data, src
 
@@ -486,12 +520,14 @@ def main():
             if a.offline:
                 session_uk = data["^FTSE"].index[-1].strftime("%Y-%m-%d")
             else:
-                session_uk, uk_waiting = uk_session_final(data["^FTSE"])
-                if uk_waiting:
-                    cut = pd.Timestamp(session_uk)
-                    for t in list(data):
-                        if t == "^FTSE" or str(t).endswith(".L"):
-                            data[t] = data[t][data[t].index <= cut]
+                session_uk, _ = uk_session_final(data["^FTSE"])
+        # Cut every stock to its market's final session, so a part-day bar
+        # (London trades while the US job runs early, or a late Yahoo bar)
+        # never counts.
+        for t in list(data):
+            cut = session_uk if _market_of(t) == "UK" else session
+            if cut:
+                data[t] = data[t][data[t].index <= pd.Timestamp(cut)]
 
         rows, stale, missing = [], [], []
         info = uni.set_index("ticker")
