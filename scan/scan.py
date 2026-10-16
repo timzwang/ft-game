@@ -320,6 +320,9 @@ def _get_prices(tickers, tz):
             src[t] = "stooq"
         data.update(got)
         log(f"stooq: {len(got)} of {len(missing)} missing")
+    for t in list(data)[:2]:
+        ix = data[t].index
+        log(f"raw index {t}: tz={getattr(ix, 'tz', None)} last={[str(x) for x in ix[-3:]]} close={[round(float(x), 2) for x in data[t]['Close'].iloc[-3:]]}")
     for t, df in data.items():
         # Daily bars come either zone-aware at the exchange's midnight or as
         # naive UTC times (London midnight in summer is 23:00 UTC the day
