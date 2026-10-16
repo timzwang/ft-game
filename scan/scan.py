@@ -53,7 +53,7 @@ UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) ft-game-scan/1.0 (private r
 
 WIKI = {
     "SP500": "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies",
-    "NDX": "https://en.wikipedia.org/wiki/Nasdaq-100",
+    "NDX": "https://en.wikipedia.org/wiki/List_of_Nasdaq-100_companies",
     "FTSE100": "https://en.wikipedia.org/wiki/FTSE_100_Index",
     "FTSE250": "https://en.wikipedia.org/wiki/FTSE_250_Index",
 }
@@ -253,7 +253,26 @@ def download_stooq(tickers, limit=200):
     return data
 
 
+MARKET_TZ = {"US": "America/New_York", "UK": "Europe/London"}
+
+
+def _market_of(t):
+    return "UK" if t == "^FTSE" or str(t).endswith(".L") else "US"
+
+
 def get_prices(tickers):
+    """Download each market on its own and date bars in the exchange's zone."""
+    data, src = {}, {}
+    for mk in ["US", "UK"]:
+        part = [t for t in tickers if _market_of(t) == mk]
+        if part:
+            d, s_ = _get_prices(part, MARKET_TZ[mk])
+            data.update(d)
+            src.update(s_)
+    return data, src
+
+
+def _get_prices(tickers, tz):
     src = {}
     data = {}
     try:
@@ -271,7 +290,10 @@ def get_prices(tickers):
         data.update(got)
         log(f"stooq: {len(got)} of {len(missing)} missing")
     for t, df in data.items():
-        df.index = pd.to_datetime(df.index).tz_localize(None).normalize()
+        idx = pd.to_datetime(df.index)
+        if idx.tz is not None:
+            idx = idx.tz_convert(tz).tz_localize(None)
+        df.index = idx.normalize()
         data[t] = df[~df.index.duplicated(keep="last")].sort_index()
     return data, src
 
@@ -500,6 +522,9 @@ def main():
             rows.append(m)
         allm = pd.DataFrame(rows)
         log(f"measured {len(allm)}; missing {len(missing)}; stale or not traded {len(stale)}")
+        for t in ["SPY", "^FTSE"] + stale[:3]:
+            if t in data:
+                log(f"last bars {t}: {[d.strftime('%Y-%m-%d') for d in data[t].index[-3:]]}")
         if len(allm) < 0.8 * len(uni):
             log(f"WARNING: only {len(allm)} of {len(uni)} stocks measured")
 

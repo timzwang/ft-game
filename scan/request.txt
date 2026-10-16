@@ -1,3 +1,4 @@
 Scan requests. Pushing a new line here starts the broad scan on GitHub Actions (forced, even if this session was already scanned).
 2026-10-16T07:08:24Z first live test
 2026-10-16T07:11:26Z test 2: London final-bar rule, Nasdaq-100 table
+2026-10-16T07:16:24Z test 3: per-market downloads, Nasdaq-100 list page
