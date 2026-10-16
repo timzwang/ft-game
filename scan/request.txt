@@ -1,0 +1,1 @@
+Scan requests. Pushing a new line here starts the broad scan on GitHub Actions (forced, even if this session was already scanned).
