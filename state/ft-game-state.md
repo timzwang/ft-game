@@ -1,6 +1,6 @@
 # FT Stock Picking Game: state and log
 
-Last updated: Fri 16 Oct 2026, about 01:30 UK (hand-run session with Tim: GitHub mirror set up and playbook version 6.1 published; nothing about the portfolio changed. Before that, Thu 15 Oct 22:20 UK: playbook version 6 published, with the split docs, the panel test and the earnings-drift scan. Earlier: 22:00 Tim confirmed he entered the Wed 14 Oct order and the corrected Fri 16 Oct order; 21:55 evening review, a change evening: TSMC out; Microsoft and Eli Lilly each 10 to 15 for Fri 16 Oct)
+Last updated: Fri 16 Oct 2026, about 01:30 UK (hand-run session with Tim: after an outside review by ChatGPT, playbook version 6.2 published (the day call no longer moves cash; "overbought" is a warning, not a cap) and roadmap phase 6 added (counterfactual portfolios, a top-five panel test, a test of the judgement points, weights fixed for the game, a broad scanner on GitHub); earlier the same session the GitHub mirror was set up and playbook 6.1 published; nothing about the portfolio changed. Before that, Thu 15 Oct 22:20 UK: playbook version 6 published, with the split docs, the panel test and the earnings-drift scan. Earlier: 22:00 Tim confirmed he entered the Wed 14 Oct order and the corrected Fri 16 Oct order; 21:55 evening review, a change evening: TSMC out; Microsoft and Eli Lilly each 10 to 15 for Fri 16 Oct)
 
 This doc is the narrative record for Tim's entry, "Seeking Beta". The procedure for every run is in `claude/ft-game-playbook.md` (the core doc) and the docs its routing table names. The numbers (prices, scores, daily performance, contributions, ratings and their outcomes, the full calendar, analyst changes, alerts, the panel test, the drift record) live in the data files behind Tim's page and the panel file, and are produced by the pipeline script; this doc carries the decisions and the reasons.
 
@@ -10,7 +10,7 @@ Scheduled runs: evening review 21:30 UK Sun to Thu; morning check 07:26 UK Mon t
 
 ## 1. Status
 
-- **Playbook version 6 from Fri 16 Oct's runs.** The playbook is split (core doc plus rules, data and one doc per run), and two features are added: the panel test of the score and the earnings-drift scan (part E). Pipeline script version 6 (part B). The evening review now also scans the day's reporters and runs with `--panel`.
+- **Playbook version 6.2 from Fri 16 Oct's runs** (6.2: the day call never moves cash; "overbought" is a warning only). The playbook is split (core doc plus rules, data and one doc per run), and two features are added: the panel test of the score and the earnings-drift scan (part E). Pipeline script version 6 (part B). The evening review now also scans the day's reporters and runs with `--panel`.
 - **Panel test (first result, 15 Oct):** 15 of the 30 panel stocks loaded; over 48 non-overlapping five-session windows the price-only points show no evidence of ranking stocks: average rank correlation +0.028 (t +0.5), positive on 56% of dates; the 36 to 48 point band beat the index 49% of the time. One-year and two-month strength lean positive (t +1.3, +1.5), the five-day part leans negative (t -0.7). Saturday's weekly review loads the other 15 (Wells Fargo, Citigroup, Western Digital, Newmont, McKesson, Corning, Adobe, Quanta Services, Constellation Energy, Synopsys, PNC, Marsh & McLennan, Vertiv, Hewlett Packard Enterprise, and Valero's second year).
 - **Wed 14 Oct evening review: partly lost.** It issued a change order for Thu 15 Oct (alert at 21:44 UK: Meta Platforms out, Microsoft 15 to 10, Eli Lilly in at 10; watchlist added Eli Lilly, Merck, AbbVie, Procter & Gamble, Constellation Energy and removed Goldman Sachs, ASML, Lumentum, Nvidia). It uploaded its four data files but never pointed the page at them and never wrote this doc. Tonight's run found those files and built tonight's files on them. **Tim confirmed at 22:00 UK on 15 Oct that he entered the 14 Oct order**, so the log is right and Eli Lilly is in the game's list.
 - Estimated value at Thu 15 Oct close: 100,790, +0.79% since the start, against -0.57% for the S&P 500 fund. Wed 14 Oct +0.09% (Coca-Cola +0.37 points, Chevron +0.30; TSMC -0.34, Microsoft -0.27); Thu 15 Oct -0.38% (Eli Lilly +0.13, Microsoft +0.10; Exxon -0.20, Chevron -0.18, TSMC -0.18).
@@ -96,6 +96,7 @@ Tonight: Amgen added. Walmart, ServiceNow and GE Vernova were candidates, but th
 
 ## 6. Review log (newest first, keep the latest 15)
 
+- Fri 16 Oct 2026 (about 01:30, later): Hand-run session with Tim, after an outside review of the system by ChatGPT. Playbook version 6.2: the day call is a research record only and never moves cash; "overbought" is a warning, not a 5% cap ("extended" still caps at 5%). Roadmap phase 6 (items 38 to 43): counterfactual portfolios, a top-five panel test and a test of the judgement points for pipeline version 7; score weights fixed for the game unless Saturday's verdict is decisive; a broad scanner of about 900 US and London stocks designed to run on GitHub, waiting for Tim's agreement that runs may read `scan/` from the repository. Open: whether the FT's 08:00 cut-off means BST after 25 Oct. No scheduled task, script or data file was changed.
 - Fri 16 Oct 2026 (about 01:30): Hand-run session with Tim. Private GitHub repository `timzwang/ft-game` set up as a shared mirror for Claude and ChatGPT and tested end to end (push from a chat, push from a scheduled cloud session, ChatGPT pull request merged by Tim); first full export pushed. Playbook version 6.1: G6 (mirror data and this doc to GitHub, last step of the evening and weekly runs, best effort) and part J (this doc always written from a local file). No scheduled task was changed.
 - Thu 15 Oct 2026 (22:20): Hand-run session with Tim. Playbook version 6 published after the evening review finished: the playbook split into a core doc, a rules doc, a data doc and five run docs; pipeline version 6 (panel test, drift scan, `panel` command); the panel file (30 stocks fixed by rank, 15 loaded) in `store/panel`. First panel result: no evidence the price points rank stocks (+0.028, t +0.5, 48 dates).
 - Thu 15 Oct 2026 (22:00): Tim confirmed he entered the Wed 14 Oct order (Eli Lilly is in the game's list) and the corrected Fri 16 Oct order in full.
@@ -110,7 +111,6 @@ Tonight: Amgen added. Walmart, ServiceNow and GE Vernova were candidates, but th
 - Mon 12 Oct 2026 (13:10): Market data key added to the evening and weekly review tasks at the family's request.
 - Sun 11 Oct 2026 (23:10): Market data service wired in (playbook 5.4), with the `closes` command.
 - Sun 11 Oct 2026 (22:30): Crypto tracking added (playbook 5.3).
-- Sun 11 Oct 2026 (22:05): Tim agreed 0% cash; CPI rule: stay invested unless a hot print looks about 75% likely and unpriced.
 
 ## 7. Market regime notes
 
@@ -145,7 +145,9 @@ Still open:
 1. Portfolio value, rank and number of players after each Friday's close.
 2. Are Strategy and Coinbase in the game's list? Not needed until one is close to being bought.
 3. The value of a player nearer rank 268 (the top 2% line), if Tim comes across one.
-4. Once all 30 panel stocks are loaded: whether to change the score's weights if the parts point that way (Tim's call; no run changes them on its own).
+4. Once all 30 panel stocks are loaded: weights change only if the history verdict is "useful" or "the wrong way" (roadmap item 41), and then only with Tim's agreement.
+5. The broad scanner (roadmap item 43): agree that runs may read `scan/` from the GitHub repository, so it can be built.
+6. Does the game's 08:00 cut-off mean BST after the clock change on 25 Oct? If so it becomes 07:00 UK and the morning check must move earlier.
 
 ## 9. Game rules
 
