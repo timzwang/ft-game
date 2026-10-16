@@ -271,7 +271,9 @@ def download_stooq(tickers, limit=200):
         url = f"https://stooq.com/q/d/l/?s={_stooq_symbol(t)}&i=d"
         try:
             r = requests.get(url, headers=UA, timeout=20)
-            if r.status_code != 200 or not r.text.startswith("Date"):
+            if r.status_code != 200 or not r.text[:4].lower() == "date":
+                if t == tickers[0]:
+                    log(f"stooq: first reply {r.status_code} {r.text[:80]!r}")
                 continue
             df = pd.read_csv(io.StringIO(r.text), parse_dates=["Date"], index_col="Date")
             df = df.rename(columns=str.title)
@@ -541,6 +543,37 @@ def main():
             if cut:
                 data[t] = data[t][data[t].index <= pd.Timestamp(cut)]
 
+        # Stocks without the session's bar (or with a hole in the last three
+        # sessions) are tried on Stooq; Yahoo's London data sometimes skips a day.
+        def gaps(t):
+            df = data.get(t)
+            if df is None:
+                return None
+            b = data.get(BENCH[_market_of(t)])
+            want = (session_uk if _market_of(t) == "UK" else session)
+            if b is None or want is None or df.index[-1] != pd.Timestamp(want):
+                return "stale"
+            recent = [d for d in b.index[-3:] if d not in df.index]
+            return "hole" if recent else None
+        bad = [t for t in uni["ticker"] if gaps(t) is not None]
+        if bad and not a.offline:
+            log(f"{len(bad)} stocks lack a recent bar on Yahoo; trying Stooq")
+            got = download_stooq(bad, limit=400)
+            fixed = 0
+            for t, df in got.items():
+                df.index = (pd.to_datetime(df.index) + pd.Timedelta(hours=12)).normalize()
+                cut = session_uk if _market_of(t) == "UK" else session
+                df = df[df.index <= pd.Timestamp(cut)]
+                old = data.get(t)
+                data[t] = df
+                if gaps(t) is None:
+                    src[t] = "stooq"
+                    fixed += 1
+                elif old is not None:
+                    data[t] = old
+            log(f"stooq: {len(got)} returned, {fixed} complete")
+        holes = [t for t in uni["ticker"] if gaps(t) == "hole"]
+
         rows, stale, missing = [], [], []
         info = uni.set_index("ticker")
         for t in uni["ticker"]:
@@ -566,7 +599,7 @@ def main():
             m.update({"ticker": t, "name": info.at[t, "name"], "sector": info.at[t, "sector"],
                       "market": market, "index": info.at[t, "index"], "source": src.get(t, "")})
             m["leader"] = is_leader(m, market)
-            m["event"] = is_event(m, market)
+            m["event"] = is_event(m, market) and t not in holes
             rows.append(m)
         allm = pd.DataFrame(rows)
         log(f"measured {len(allm)}; missing {len(missing)}; stale or not traded {len(stale)}")
@@ -621,6 +654,7 @@ def main():
             "measured": int(len(allm)),
             "missing": missing,
             "stale": stale,
+            "holes": holes,
             "leaders": int(len(leaders)),
             "events": int(len(events)),
             "sources": {k: int(v) for k, v in pd.Series(list(src.values())).value_counts().items()},
@@ -630,7 +664,8 @@ def main():
         md = [f"# Broad scan: US session {session}" + (f", London {session_uk}" if session_uk else ""),
               "",
               f"Generated {meta['generated_utc']} UTC. Rules version {RULES_VERSION}; the rules are in `scan/README.md`. "
-              f"{len(allm)} of {len(uni)} stocks measured ({len(missing)} without prices, {len(stale)} not traded or stale). "
+              f"{len(allm)} of {len(uni)} stocks measured ({len(missing)} without prices, {len(stale)} not traded or stale; "
+              f"{len(holes)} with a missing recent day, kept out of Events). "
               "These lists only point at stocks: every figure used in a decision is fetched again from the playbook's sources.",
               "", f"## Events ({len(events)})", "",
               "| # | Stock | Name | Mkt | Day | vs index | Gap | Close in range | Volume x | Above 50d |",

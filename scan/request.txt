@@ -5,3 +5,4 @@ Scan requests. Pushing a new line here starts the broad scan on GitHub Actions (
 2026-10-16T07:19:16Z test 4: date rule, Nasdaq-100 fallbacks
 2026-10-16T07:22:46Z test 5: raw London timestamps
 2026-10-16T07:25:14Z test 6: debug single London downloads
+2026-10-16T07:28:54Z test 7: Stooq fallback, hole rule
