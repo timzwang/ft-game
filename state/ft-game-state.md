@@ -1,6 +1,6 @@
 # FT Stock Picking Game: state and log
 
-Last updated: Thu 15 Oct 2026, 22:20 UK (hand-run session with Tim: playbook version 6 published, with the split docs, the panel test and the earnings-drift scan. Earlier: 22:00 Tim confirmed he entered the Wed 14 Oct order and the corrected Fri 16 Oct order; 21:55 evening review, a change evening: TSMC out; Microsoft and Eli Lilly each 10 to 15 for Fri 16 Oct)
+Last updated: Fri 16 Oct 2026, about 01:30 UK (hand-run session with Tim: GitHub mirror set up and playbook version 6.1 published; nothing about the portfolio changed. Before that, Thu 15 Oct 22:20 UK: playbook version 6 published, with the split docs, the panel test and the earnings-drift scan. Earlier: 22:00 Tim confirmed he entered the Wed 14 Oct order and the corrected Fri 16 Oct order; 21:55 evening review, a change evening: TSMC out; Microsoft and Eli Lilly each 10 to 15 for Fri 16 Oct)
 
 This doc is the narrative record for Tim's entry, "Seeking Beta". The procedure for every run is in `claude/ft-game-playbook.md` (the core doc) and the docs its routing table names. The numbers (prices, scores, daily performance, contributions, ratings and their outcomes, the full calendar, analyst changes, alerts, the panel test, the drift record) live in the data files behind Tim's page and the panel file, and are produced by the pipeline script; this doc carries the decisions and the reasons.
 
@@ -96,6 +96,7 @@ Tonight: Amgen added. Walmart, ServiceNow and GE Vernova were candidates, but th
 
 ## 6. Review log (newest first, keep the latest 15)
 
+- Fri 16 Oct 2026 (about 01:30): Hand-run session with Tim. Private GitHub repository `timzwang/ft-game` set up as a shared mirror for Claude and ChatGPT and tested end to end (push from a chat, push from a scheduled cloud session, ChatGPT pull request merged by Tim); first full export pushed. Playbook version 6.1: G6 (mirror data and this doc to GitHub, last step of the evening and weekly runs, best effort) and part J (this doc always written from a local file). No scheduled task was changed.
 - Thu 15 Oct 2026 (22:20): Hand-run session with Tim. Playbook version 6 published after the evening review finished: the playbook split into a core doc, a rules doc, a data doc and five run docs; pipeline version 6 (panel test, drift scan, `panel` command); the panel file (30 stocks fixed by rank, 15 loaded) in `store/panel`. First panel result: no evidence the price points rank stocks (+0.028, t +0.5, 48 dates).
 - Thu 15 Oct 2026 (22:00): Tim confirmed he entered the Wed 14 Oct order (Eli Lilly is in the game's list) and the corrected Fri 16 Oct order in full.
 - Thu 15 Oct 2026 (21:55): Evening review, a change evening. TSMC out; Microsoft and Eli Lilly to 15%. Found that the 14 Oct evening run had issued an order (Lilly in, Meta out, Microsoft 10) and uploaded files but never published them or wrote this doc; rebuilt on its files and sent a correction to a first message that had used the 13 Oct base. Pipeline hash matched. Refused pages (429): Humana, Walmart, ServiceNow and GE Vernova quote pages. Market data key worked (Amgen, Eli Lilly years). Watchlist: Amgen in.
@@ -110,7 +111,6 @@ Tonight: Amgen added. Walmart, ServiceNow and GE Vernova were candidates, but th
 - Sun 11 Oct 2026 (23:10): Market data service wired in (playbook 5.4), with the `closes` command.
 - Sun 11 Oct 2026 (22:30): Crypto tracking added (playbook 5.3).
 - Sun 11 Oct 2026 (22:05): Tim agreed 0% cash; CPI rule: stay invested unless a hot print looks about 75% likely and unpriced.
-- Sun 11 Oct 2026 (21:55): Sunday evening review. Order rebuilt for Mon 12 Oct.
 
 ## 7. Market regime notes
 
@@ -222,4 +222,5 @@ In this game an order fills at the open, so the gap on the news day cannot be ca
 - A free price feed found on 11 Oct, not yet used: Cboe's delayed quotes (`https://cdn-api.cboe.com/api/global/delayed_quotes/quotes/<TICKER>.json`).
 - Coin prices: Coinbase's public candle and ticker pages.
 - Sources that did not work: CNN article pages (robots), the US News CPI article, CNBC's oil page (fetch errors on 15 Oct).
+- GitHub mirror: private repository `timzwang/ft-game` (playbook part B and G6). The evening and weekly runs commit the data files and this doc as their last step; docs, scripts and the page are updated there only in sessions with Tim. ChatGPT reads it and proposes changes through pull requests, which Tim merges; nothing merged there reaches the live system until it is applied here. `state/last-sync.md` there shows the last mirror's time and file hashes.
 - Two saved skills, `ft-game-playbook` and `stock-score`, load in scheduled runs; the `ft-game-playbook` skill still describes the single playbook; it still works, because it sends a run to `claude/ft-game-playbook.md`, whose routing table names the other docs. An update to the skill could not be proposed from the 15 Oct session.
