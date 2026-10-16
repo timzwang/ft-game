@@ -1,6 +1,6 @@
 # Broad scan: US session 2026-10-15, London 2026-10-15
 
-Generated 2026-10-16T07:28:08+00:00 UTC. Rules version 1 (fixed 16 Oct 2026); the rules are in `scan/README.md`. 517 of 868 stocks measured (0 without prices, 350 not traded or stale). These lists only point at stocks: every figure used in a decision is fetched again from the playbook's sources.
+Generated 2026-10-16T08:03:11+00:00 UTC. Rules version 1 (fixed 16 Oct 2026); the rules are in `scan/README.md`. 517 of 868 stocks measured (0 without prices, 350 not traded or stale; 0 with a missing recent day, kept out of Events). These lists only point at stocks: every figure used in a decision is fetched again from the playbook's sources.
 
 ## Events (2)
 
