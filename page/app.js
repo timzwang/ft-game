@@ -144,6 +144,7 @@ dash.calc('standing', {
   };
   const sessionsBetween = (a, b) => { let n = 0; let d = a; while (d < b) { d = addDays(d, 1); if (isWeekday(d)) n += 1; } return n; };
   const usOpenUk = (s) => (s >= '2026-10-26' && s <= '2026-10-30' ? '13:30' : '14:30');
+  const CUTOFF = '07:00';   // order cut-off, UK time: 07:00 until the FT confirms it after the clock change (playbook 6.4, part C)
   const whenKey = (r) => String(r.date) + String(r.time_uk || '');
   const shortTime = (t) => String(t || '').replace(/\s*\(est\.\)/i, '').replace(/before US open/i, 'pre-open').replace(/after US close/i, 'after close');
 
@@ -522,13 +523,13 @@ dash.calc('standing', {
     const noChange = alert && /^no change/i.test(String(alert.text || '')) && String(alert.date) >= String(round.length ? round[0].date : '');
     const reps = L.filter((r) => r.table === 'reported');
     const stateOf = (r) => {
-      if (now < E + ' 08:00') return 'proposed';
+      if (now < E + ' ' + CUTOFF) return 'proposed';
       const s = rows.find((x) => x.name === r.name) || {};
       const fill = E + ' ' + (s.market === 'UK' || /\.$/.test(String(r.ticker || '')) ? '08:00' : usOpenUk(E));
       if (now < fill) return 'pending';
       return reps.some((x) => whenKey(x) >= E + (s.market === 'UK' ? '08:00' : usOpenUk(E))) ? 'confirmed' : 'filled';
     };
-    const STATES = {proposed: ['Proposed', 'acc', 'Issued by the review. Enter it on the FT site before 08:00 UK on ' + dateText(E) + '.'],
+    const STATES = {proposed: ['Proposed', 'acc', 'Issued by the review. Enter it on the FT site before ' + CUTOFF + ' UK on ' + dateText(E) + '.'],
       pending: ['Pending fill', '', 'Assumed entered before the cut-off; fills at the next open. Say in the project chat if it was not entered.'],
       filled: ['Filled, estimated', '', 'Past the open. The fill is assumed at the opening price until an FT value is read.'],
       confirmed: ['Confirmed', 'okay', 'An FT site value has been read since the fill.']};
@@ -542,8 +543,8 @@ dash.calc('standing', {
     if (E) meta.append(document.createTextNode('For the open of '), el('b', '', dateText(E)), document.createTextNode(alert ? ', issued ' + shortDate(alert.date) + ' ' + (alert.time_uk || '') : ''));
     head.append(meta);
     if (overall === 'proposed' && E >= t0) {
-      const c = el('div', 'oq-cta', 'Enter on the FT site before 08:00, ' + dateText(E));
-      const mins = Math.round((new Date(E + 'T08:00:00') - new Date(now.replace(' ', 'T') + ':00')) / 60000);
+      const c = el('div', 'oq-cta', 'Enter on the FT site before ' + CUTOFF + ' UK, ' + dateText(E));
+      const mins = Math.round((new Date(E + 'T' + CUTOFF + ':00') - new Date(now.replace(' ', 'T') + ':00')) / 60000);
       if (mins > 0) c.append(el('small', '', 'Cut-off in ' + (mins >= 60 ? Math.floor(mins / 60) + 'h ' : '') + (mins % 60) + 'm'));
       kids.push(c);
     }
@@ -552,7 +553,7 @@ dash.calc('standing', {
     if (noChange) { const b = el('div', 'pb'); b.append(el('p', 'note', 'Latest review: no change. ' + String(alert.text || '').replace(/^no change[^.:]*[.:]\s*/i, ''))); kids.push(b); }
     const steps = el('div', 'steps');
     steps.setAttribute('aria-label', 'Order progress');
-    order.forEach((k, i) => { const s = el('div', 'step' + (overall === k ? ' now' : overall && order.indexOf(overall) > i ? ' done' : '')); s.append(el('b', '', STATES[k][0]), span('', k === 'proposed' ? 'Before 08:00' : k === 'pending' ? 'Until the open' : k === 'filled' ? 'At the open' : 'FT value read')); if (overall === k) s.setAttribute('aria-current', 'step'); steps.append(s); });
+    order.forEach((k, i) => { const s = el('div', 'step' + (overall === k ? ' now' : overall && order.indexOf(overall) > i ? ' done' : '')); s.append(el('b', '', STATES[k][0]), span('', k === 'proposed' ? 'Before ' + CUTOFF : k === 'pending' ? 'Until the open' : k === 'filled' ? 'At the open' : 'FT value read')); if (overall === k) s.setAttribute('aria-current', 'step'); steps.append(s); });
     kids.push(steps);
     const body = el('div', 'pb flush');
     const lines = round.slice().sort((a, b) => (num(b.to_w) - num(b.from_w)) - (num(a.to_w) - num(a.from_w)));
@@ -578,7 +579,7 @@ dash.calc('standing', {
     foot.append(k1, k2);
     kids.push(foot);
     if (false) {
-      const parts = sentences(String(alert.text || '').replace(/^(changed|revised)[^:]*:\s*/i, '').replace(/enter before 08:00 UK\.?\s*/i, '')).flatMap((x) => x.split(/;\s+/)).map((x) => x.trim()).filter(Boolean).map((x) => x.charAt(0).toUpperCase() + x.slice(1));
+      const parts = sentences(String(alert.text || '').replace(/^(changed|revised)[^:]*:\s*/i, '').replace(/enter before 0[78]:00 UK\.?\s*/i, '')).flatMap((x) => x.split(/;\s+/)).map((x) => x.trim()).filter(Boolean).map((x) => x.charAt(0).toUpperCase() + x.slice(1));
       const why = el('div', 'pb'); const b = bullets(parts, {small: true, max: 2}); if (b) { why.append(b); kids.push(why); }
     }
     box.replaceChildren(...kids);
