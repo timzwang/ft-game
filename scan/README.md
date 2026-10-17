@@ -39,4 +39,4 @@ The top 10 of each list is written to `record.csv` once per session, with a flag
 
 ## Timing
 
-Scheduled at 20:10 and 21:05 UTC on weekdays. Until 30 Oct the first slot is 16:10 New York; from 2 Nov (after the US clock change) the second slot is 16:05 New York. The script works out the latest US session whose bar is final and does nothing if that session is already in `latest.json`. GitHub can start scheduled jobs late, sometimes by 15 minutes or more, so the evening review checks the session date and, if it is behind, pushes a line to `request.txt` to force a run.
+Scheduled at 20:20 and 21:20 UTC on weekdays (from 17 Oct; before then 20:10 and 21:05). Until 30 Oct the first slot is 16:20 New York; from 2 Nov (after the US clock change) the second slot is 16:20 New York. A US bar counts as final from 16:15 New York. The script works out the latest US session whose bar is final and does nothing if that session is already in `latest.json`. GitHub can start scheduled jobs late, sometimes by 15 minutes or more, so the evening review checks the session date and, if it is behind, pushes a line to `request.txt` to force a run.

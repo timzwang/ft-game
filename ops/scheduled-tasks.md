@@ -1,6 +1,6 @@
 # Scheduled tasks
 
-The schedule and instructions of the Claude scheduled tasks that run this system, copied on Fri 16 Oct 2026 at about 01:15 UK. All run in Anthropic's cloud (not on anyone's computer), with automatic approval, on model `claude-opus-5-5`. Times are UK local (`CRON_TZ=Europe/London`).
+The schedule and instructions of the Claude scheduled tasks that run this system, copied on Fri 16 Oct 2026 at about 01:15 UK; the morning check updated on Sat 17 Oct 2026. All run in Anthropic's cloud (not on anyone's computer), with automatic approval, on model `claude-opus-5-5`. Times are UK local (`CRON_TZ=Europe/London`).
 
 **Redacted:** the evening and weekly review prompts contain a market data API key in a line beginning `Market data key:`. It is replaced below by `<REDACTED: held only in the scheduled task>`. The key must never be written into this repository.
 
@@ -9,7 +9,7 @@ This file is a copy for reading. Changing it changes nothing: the live tasks are
 | Task | Schedule (UK) | Cron | Playbook part |
 |---|---|---|---|
 | FT game evening review | 21:30 Sun to Thu | `30 21 * * 0-4` | H1 |
-| FT game morning check | 07:26 Mon to Fri | `26 7 * * 1-5` | H2 |
+| FT game morning check | 06:36 Mon to Fri (07:26 until 17 Oct) | `36 6 * * 1-5` | H2 |
 | FT game price refresh | 16:45 Mon to Fri | `45 16 * * 1-5` | H3 |
 | FT game late price refresh | 19:22 Mon to Fri | `22 19 * * 1-5` | H3 |
 | FT game results-day refresh | 14:50 Mon to Fri | `50 14 * * 1-5` | H4 |
@@ -37,15 +37,21 @@ Tim's father's massive.com key, stored at the family's request. Use it only in f
 
 ## Morning check
 
+Changed 17 Oct 2026 (playbook 6.4): 06:36 UK, cut-off 07:00 UK.
+
 ```
-FT Stock Picking Game, MORNING CHECK for Tim. Unattended: never ask questions. Finish within about ten minutes: Tim must enter any change before 08:00 UK. Virtual game. Never open or operate the FT site, any account, a browser or the user's computer. After 27 Nov 2026: reply only that the game has ended. Time from `date -u`, shown as UK time.
+FT Stock Picking Game, MORNING CHECK for Tim (06:36 UK). Unattended: never ask questions. Finish within about ten minutes: Tim must enter any change before 07:00 UK, the cut-off until the FT confirms it after the clock change (playbook part C). Virtual game. Never open or operate the FT site, any account, a browser or the user's computer. After 27 Nov 2026: reply only that the game has ended. Time from `date -u`, shown as UK time.
 
 Read `claude/ft-game-playbook.md` and `claude/ft-game-state.md` together and carry out part H2 under parts A to E, output per part I. Confirm last night's order unless something material and new changes it; 10 to 15 fetches and searches sent together. Check the script's sha256 against part B before running it.
-- Order revised: send verdict and full order table (Stock, Weight, Confidence, Change, with cash) through SendUserMessage FIRST, then record it (H2 step 5) and update the state doc. Final message starts "Tim," (part I format).
+- Order revised: send verdict and full order table (Stock, Weight, Confidence (not calibrated), Change, with cash) through SendUserMessage FIRST, saying "enter before 07:00 UK", then record it (H2 step 5) and update the state doc. Final message starts "Tim," (part I format).
 - Order stands: no SendUserMessage, leave the state doc alone, final message exactly "No change this morning. Nothing to enter." plus at most one line for tonight.
 - Then H2 step 6 (overnight yields, oil, Bitcoin, day-call revision); never let it delay an order.
 Any order: 5 to 20 stocks, 5% to 25% each, cash at most 25%, total 100%, a confidence rating on each. Pre-open news is already in the opening price. If the playbook cannot be read, work from the state doc and do not touch the page. British English, no em-dashes.
 ```
+
+## One-off: GitHub access test (Sun 18 Oct 2026, 10:07 UK)
+
+Created 17 Oct with Tim's approval: checks whether a scheduled run can attach, clone and dry-run push this repository, and writes the result to the Project doc `claude/ft-game-diag-github.md`. Read-only; it fires once.
 
 ## Price refresh (16:45)
 

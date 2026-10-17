@@ -1,14 +1,15 @@
 # Last sync
 
-Run: hand-run session (G6 test), 2026-10-16T00:18:40Z. Prices as of: Thu 15 Oct close.
+Run: hand-run session with Tim (playbook 6.4), 2026-10-17T22:34:00Z. Prices as of: Fri 16 Oct close (files as published by the weekly review and weekend check of Sat 17 Oct).
 
 sha256 of each file as published to the artifact and the Project:
 
 ~~~
-943449a30483105c4e35b4b9acc52a45ea2ed1b5ee7f2530dd5f1213d3f26a71  data/history.json
-459b8af505860570a6314b8dacd57abb83f775e468a78c4e7e9e4254fe3759b9  data/ledger.json
-7aa4c06db9916abe8308e5a276a288d31633c761895cc8a30d743dffa4f626de  data/macro.json
-1b668564bb4ad74d4267511ddc67d27a47ea0e66ad8f7b38835fcb6ad9d4e1b6  data/panel.json
-12539720864ccea95b58545b86ee2ebb33bc1a28ed5831d47315badc0c632dc1  data/stocks.json
-78f6418d94989ac941ec064e84a7aedfa62ca194f60d62aad84921925935cb9b  state/ft-game-state.md
+956a71bf4cd8584bed574b0d51c16c02c39883a5e183f398a6137d06afc310ae  data/history.json
+0e52db728fdbd038715c3212a129c6cd770191c5f1e914e0a6f2bc1f5f1d574f  data/ledger.json
+26edccc3dc4e92c8883819252d4216b925fd11ece91c316d171ba5ad1429604c  data/macro.json
+aec1ef88a0af760413a9b9288c70b60e6aa48b38e2d30f48d3faff89d437046c  data/panel.json
+a993e62a9c6eb93c089afd92cbaa69e0b32985a24cbb6dc0f71b499511a131cf  data/stocks.json
+b836cb23f15acdfb528ae2f50f39c9b24314f2a2e664739cf5fb51589b15807f  state/ft-game-state.md
+23e9c9fe7645ed4df2b66d5b8263378c983ed7c9c47e1bf0ef07531dca1867b1  scripts/ft_pipeline.py
 ~~~

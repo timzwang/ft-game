@@ -6,6 +6,20 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.4 (Sun 18 Oct 2026, about 00:30)
+
+After an outside audit (ChatGPT, 17 Oct) that Claude checked against the live Project, artifact, scheduled tasks and code. Tim approved fourteen changes. Pipeline version 7 (uploaded 17 Oct, asset `fdfb8e108f26b962b62a9ca0a9909846`, sha256 `23e9c9fe7645ed4df2b66d5b8263378c983ed7c9c47e1bf0ef07531dca1867b1`).
+
+- Cut-off: the FT's terms quote BST even for November, so from 17 Oct every order is to be entered before 07:00 UK until the FT confirms the cut-off after the clock change (part C). Morning check moved from 07:26 to 06:36 UK (scheduled task changed). A one-point Exxon and Chevron test at about 07:15 on Mon 26 Oct settles it. A question to FT help is drafted.
+- GitHub access: the 17 Oct weekly run had no repository tool, so G6 and G7 failed. A one-off scheduled test at 10:07 UK on 18 Oct decides whether they stay in scheduled runs or become hand-run only.
+- Pipeline 7: drift results settled from the next session's open (the old close-based figure kept beside it); STANDSTILL (each change against the order it replaced, five sessions; each week against its first-session order); RESULTS TOTAL (weight times implied move added up over five and ten sessions); RECONCILE (each FT figure against the estimate at the same close, flagging reads before the US close); JUDGEMENT TEST (shadow ratings now store the 60 price and session points and the 40 judgement points). The template names stocks sold in the last five sessions that left the list. Tested against the live files: stocks, history, macro and panel byte for byte the same as version 6.
+- Rules (part E): implied moves for holdings reporting inside ten sessions; results total quoted; sold stocks stay on the watchlist five sessions; score, anchor and panel rule frozen for the game (Marsh & McLennan swap agreed); confidence labelled "not calibrated" in order tables.
+- Weekly review: reconciliation, standstill and judgement sections; FT value to be read after the US close.
+- Broad scan: slots 20:20 and 21:20 UTC (from 20:10 and 21:05), a US bar final from 16:15 New York, and stocks that cannot be measured are logged (the 867 of 868 on 16 Oct).
+- Data: Tim's 16 Oct FT figures (101,402, rank 3,269 of 13,918) recorded in the state doc for the Sunday review; 35 credits below the estimate, so the 144-credit gap on 13 Oct was the reading time.
+- This repository refreshed by hand: data to the Fri 16 Oct close, state, docs, pipeline 7, scheduled tasks copy.
+- No change to the order, the page or any data file.
+
 ## 6.3 (Fri 16 Oct 2026, about 09:10)
 
 The broad scan (roadmap item 43).

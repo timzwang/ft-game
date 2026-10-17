@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
-"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game.
+"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7 (17 Oct 2026).
+
+Version 7 adds, at Tim's request after the outside audit of 17 Oct 2026:
+  - drift trades settled from the next session's open (the price an order can actually get), with the old
+    reaction-close figure kept beside it (cum_pct, spx_cum_pct) for continuity;
+  - STANDSTILL: every order change judged against keeping the order before it, both held fixed for up to five
+    sessions from the change's fill, and each week's changes judged against the order in force at the week's
+    first session ("standstill" rows in the ledger, rebuilt every run);
+  - RESULTS TOTAL: the weight x implied move of every holding reporting inside the next five and ten sessions, added up;
+  - RECONCILE: each value Tim reads off the FT site set beside the estimate for that session, flagged when it was read
+    before the US close;
+  - JUDGEMENT TEST: whether the 40 judgement points (catalyst, revisions) add anything to the 60 price and session
+    points, from the shadow ratings (which now store both parts);
+  - the template names stocks sold in the last five sessions that are no longer on the list, whose rows the
+    standstill test needs under extra_history.
 
 Commands
   python3 ft_pipeline.py run     --stocks stocks.json --ledger ledger.json --history history.json --macro macro.json --today today.json --out OUTDIR
@@ -126,6 +140,8 @@ import json
 import math
 import os
 import sys
+
+PIPELINE_VERSION = "7"
 
 LEDGER_KEYS = ["id", "table", "date", "time_uk", "effective", "name", "ticker", "stock", "kind", "bank", "action", "theme",
                "weight", "from_w", "to_w", "score", "confidence", "ret_pct", "spx_ret_pct", "beat", "contrib_pts",
@@ -1155,8 +1171,11 @@ def add_shadow(ledger, date, scores, tick_of, hist):
         ledger[:] = [r for r in ledger if not (r["table"] == "shadow" and r["date"] == date and r["name"] == name and r["beat"] is None)]
         if any(r["table"] == "shadow" and r["date"] == date and r["name"] == name for r in ledger):
             continue
+        parts = {"quant": r2((num(x.get("trend_pts")) or 0) + (num(x.get("short_pts")) or 0), 1),
+                 "judg": r2((num(x.get("catalyst_pts")) or 0) + (num(x.get("revisions_pts")) or 0), 1)}
         ledger.append(lrow("shadow", date=date, name=name, ticker=tick_of[name], score=x["score"], confidence=x["confidence_anchor"],
-                           value=row["close"], theme=tier_of(x["score"], x["flags"]), text="; ".join(x["flags"])))
+                           value=row["close"], theme=tier_of(x["score"], x["flags"]), text="; ".join(x["flags"]),
+                           plan=json.dumps(parts)))
 
 
 def resolve_shadow(ledger, hist, bench):
@@ -1473,8 +1492,19 @@ def add_drift(ledger, items, hist, bench, listed_tickers):
     return out
 
 
+def real_open(row):
+    """True when a stored row carries a traded open. Rows added by `closes` hold only a close (open = high = low =
+    close, no volume), so their open cannot be used as a fill price."""
+    if not row:
+        return False
+    return not (row.get("volume") is None and row["open"] == row["close"] == row["high"] == row["low"])
+
+
 def resolve_drift(ledger, hist, bench):
-    """Five sessions from the close of the reaction day, against the index over the same sessions."""
+    """The tradable result: bought at the open of the session after the reaction day (the first fill an order can get)
+    and valued at the close five sessions after the reaction day, against the index over the same span (ret_pct,
+    spx_ret_pct, beat). The version 6 figure, from the reaction day's close, is kept beside it (cum_pct, spx_cum_pct).
+    If the next session's open never arrives, the row settles on the close basis after 15 sessions and says so (unit)."""
     bser = series(hist, bench)
     bidx = {r["date"]: i for i, r in enumerate(bser)}
     n = 0
@@ -1488,15 +1518,261 @@ def resolve_drift(ledger, hist, bench):
         ser = series(hist, r["ticker"])
         start = next((x for x in ser if x["date"] == r["date"]), None)
         fin = next((x for x in ser if x["date"] == end), None)
+        nxt = next((x for x in ser if x["date"] == bser[i + 1]["date"]), None)
         if not start or not fin:
             if i + 15 < len(bser):
                 r["beat"], r["window_end"] = "n/a", end
             continue
-        s_ret, b_ret = pct(fin["close"], start["close"]), pct(bser[i + 5]["close"], bser[i]["close"])
+        c_ret, cb_ret = pct(fin["close"], start["close"]), pct(bser[i + 5]["close"], bser[i]["close"])
+        if real_open(nxt):
+            s_ret, b_ret = pct(fin["close"], nxt["open"]), pct(bser[i + 5]["close"], bser[i + 1]["open"])
+            basis = "from the next open"
+        elif i + 15 < len(bser):
+            s_ret, b_ret, basis = c_ret, cb_ret, "from the reaction close (next open never supplied)"
+        else:
+            continue                                    # wait for the next session's full row
         r["window_end"], r["ret_pct"], r["spx_ret_pct"] = end, r2(s_ret), r2(b_ret)
+        r["cum_pct"], r["spx_cum_pct"], r["unit"] = r2(c_ret), r2(cb_ret), basis
         r["beat"] = "yes" if s_ret > b_ret else "no"
         n += 1
     return n
+
+
+def drift_need_open(ledger, hist, bench):
+    """Open drift rows whose session after the reaction day has passed but has no traded open stored."""
+    bser = series(hist, bench)
+    bidx = {r["date"]: i for i, r in enumerate(bser)}
+    out = []
+    for r in ledger:
+        if r["table"] != "drift" or r["beat"] is not None or r["date"] not in bidx:
+            continue
+        i = bidx[r["date"]]
+        if i + 1 >= len(bser):
+            continue
+        d1 = bser[i + 1]["date"]
+        if not real_open(hist.get((r["ticker"], d1))):
+            out.append((r["name"], r["ticker"], d1))
+    return sorted(set(out))
+
+
+# ---------------------------------------------------------------- version 7: standstill, results total, reconcile, judgement
+def _tick_map(ledger):
+    return {r["name"]: r["ticker"] for r in ledger if r["table"] == "position" and r["ticker"]}
+
+
+def _row_on_or_before(hist, tick, d):
+    rows = [r for r in series(hist, tick) if r["date"] <= d]
+    return rows[-1] if rows else None
+
+
+def port_day(w_prev, w_new, d, dprev, hist, tick_of, fills):
+    """Weighted return (points) of moving from weights w_prev (held at dprev's close) to w_new on session d, with the
+    game's rules: kept weight close over previous close, added weight close over the open (or a stated fill price),
+    sold weight open over previous close. Returns (points, missing tickers)."""
+    pts, missing = 0.0, set()
+    for name in set(w_prev) | set(w_new):
+        wp, wn = w_prev.get(name, 0.0), w_new.get(name, 0.0)
+        if not wp and not wn:
+            continue
+        tick = tick_of.get(name)
+        cur = hist.get((tick, d)) if tick else None
+        prv = _row_on_or_before(hist, tick, dprev) if tick else None
+        if not cur or not prv:
+            missing.add(tick or name)
+            continue
+        kept, add_w, sold = min(wp, wn), max(wn - wp, 0.0), max(wp - wn, 0.0)
+        if kept:
+            pts += kept * (cur["close"] / prv["close"] - 1.0)
+        if add_w:
+            if not real_open(cur) and not fills.get((name, d)):
+                missing.add(tick)
+                continue
+            pts += add_w * (cur["close"] / (fills.get((name, d)) or cur["open"]) - 1.0)
+        if sold:
+            if not real_open(cur):
+                missing.add(tick)
+                continue
+            pts += sold * (cur["open"] / prv["close"] - 1.0)
+    return pts, missing
+
+
+def _weights(ledger, d):
+    return {n: w for n, (w, t) in live_weights(ledger, d).items()}
+
+
+def standstill_rows(ledger, hist, bench, date, horizon=5):
+    """Two tests of whether changing the order paid, both from stored prices and the game's fill rules.
+    change: for each effective date E, the new order and the order before it, each held fixed from E for up to
+            `horizon` sessions (the new one filling at E's open); the gap is what the decision added.
+    week:   for each week, the actual estimate against the order in force after the week's first session held fixed."""
+    meta = {r["name"]: r for r in ledger if r["table"] == "meta"}
+    start = (meta.get("start_date") or {}).get("text") or "0000-00-00"
+    dates = [r["date"] for r in series(hist, bench) if start <= r["date"] <= date]
+    tick_of = _tick_map(ledger)
+    fills = {(r["name"], r["effective"]): num(r["value"]) for r in ledger if r["table"] == "position" and num(r["value"])}
+    rows = []
+    effs = sorted({r["effective"] for r in ledger if r["table"] == "trade" and r["effective"] in dates})
+    for e in effs:
+        i = dates.index(e)
+        if i == 0:
+            continue                                    # the first order replaced cash: nothing to compare
+        dprev = dates[i - 1]
+        w_old, w_new = _weights(ledger, dprev), _weights(ledger, e)
+        if not w_old:
+            continue
+        span = dates[i:i + horizon]
+        v_new = v_old = 1.0
+        miss = set()
+        prev_d = dprev
+        for k, d in enumerate(span):
+            a, m1 = port_day(w_old if k == 0 else w_new, w_new, d, prev_d, hist, tick_of, fills)
+            b, m2 = port_day(w_old, w_old, d, prev_d, hist, tick_of, fills)
+            miss |= m1 | m2
+            v_new *= 1 + a / 100.0
+            v_old *= 1 + b / 100.0
+            prev_d = d
+        eff_pts = (v_new - v_old) * 100.0
+        changes = sorted(n for n in set(w_old) | set(w_new) if abs(w_old.get(n, 0) - w_new.get(n, 0)) > 1e-9)
+        what = ", ".join(f"{n} {w_old.get(n, 0):g} to {w_new.get(n, 0):g}" for n in changes)
+        rows.append(lrow("standstill", date=e, effective=e, kind="change", days=len(span),
+                         ret_pct=None if miss else r2((v_new - 1) * 100.0, 3), spx_ret_pct=None if miss else r2((v_old - 1) * 100.0, 3),
+                         value=None if miss else r2(eff_pts, 3),
+                         confirmed="incomplete" if miss else ("complete" if len(span) == horizon else "running"),
+                         window_end=span[-1], name=f"Change for {e}",
+                         text=what + (f". Missing prices: {', '.join(sorted(miss))}" if miss else "")))
+    perf = {r["date"]: num(r["day_pct"]) for r in ledger if r["table"] == "perf" and r["day_pct"] is not None}
+    weeks = {}
+    for d in dates:
+        y, wk, _ = __import__("datetime").date.fromisoformat(d).isocalendar()
+        weeks.setdefault((y, wk), []).append(d)
+    for key in sorted(weeks):
+        ds = weeks[key]
+        if len(ds) < 2:
+            continue
+        w0 = _weights(ledger, ds[0])
+        v_act = v_st = 1.0
+        miss = set()
+        prev_d = ds[0]
+        for d in ds[1:]:
+            if d not in perf:
+                miss.add("estimate for " + d)
+                continue
+            v_act *= 1 + perf[d] / 100.0
+            b, m = port_day(w0, w0, d, prev_d, hist, tick_of, fills)
+            miss |= m
+            v_st *= 1 + b / 100.0
+            prev_d = d
+        n_changes = len([e for e in effs if ds[0] < e <= ds[-1]])
+        rows.append(lrow("standstill", date=ds[0], kind="week", days=len(ds) - 1, window_end=ds[-1],
+                         ret_pct=None if miss else r2((v_act - 1) * 100.0, 3), spx_ret_pct=None if miss else r2((v_st - 1) * 100.0, 3),
+                         value=None if miss else r2((v_act - v_st) * 100.0, 3), name=f"Week from {ds[0]}",
+                         confirmed="incomplete" if miss else "complete",
+                         text=f"{n_changes} change(s) after the first session; standstill = the order in force at the close of {ds[0]}"
+                              + (f". Missing prices: {', '.join(sorted(miss))}" if miss else "")))
+    return rows
+
+
+def standstill_needs(ledger, hist, bench, date, listed, horizon=5):
+    """Stocks sold within the last `horizon` sessions that are no longer on the list and lack a row for `date`."""
+    dates = [r["date"] for r in series(hist, bench) if r["date"] <= date]
+    recent = set(dates[-horizon:])
+    out = []
+    for r in ledger:
+        if r["table"] == "trade" and r["effective"] in recent and (num(r["to_w"]) or 0) < (num(r["from_w"]) or 0):
+            t = r["ticker"]
+            if t and t not in listed and not hist.get((t, date)):
+                out.append((r["name"], t))
+    return sorted(set(out))
+
+
+def _sessions_ahead(date, n):
+    """The next n weekdays after `date` (US holidays aside), as YYYY-MM-DD."""
+    import datetime as _dt
+    d = _dt.date.fromisoformat(date)
+    out = []
+    while len(out) < n:
+        d += _dt.timedelta(days=1)
+        if d.weekday() < 5 and d.isoformat() != "2026-11-26":
+            out.append(d.isoformat())
+    return out
+
+
+def results_total(ledger, weights, date, default_move=6.0):
+    """Holdings reporting inside the next 5 and 10 sessions: weight x implied move added up (a missing implied move
+    counts at default_move). Returns {5: (points, reports, missing), 10: (...)}."""
+    out = {}
+    for n in (5, 10):
+        ahead = set(_sessions_ahead(date, n))
+        pts, k, missing = 0.0, 0, []
+        for e in ledger:
+            if e["table"] == "event" and e["kind"] == "results" and e["stock"] in weights and (e["date"] or "") in ahead and weights[e["stock"]] > 0:
+                mv = num(e["implied_pct"])
+                if mv is None:
+                    missing.append(e["stock"])
+                    mv = default_move
+                pts += weights[e["stock"]] * mv / 100.0
+                k += 1
+        out[n] = (pts, k, missing)
+    return out
+
+
+def us_close_uk(d):
+    """The US close (16:00 New York) in UK time on date d, as HH:MM."""
+    try:
+        import datetime as _dt
+        from zoneinfo import ZoneInfo
+        ny = _dt.datetime.fromisoformat(d + "T16:00").replace(tzinfo=ZoneInfo("America/New_York"))
+        return ny.astimezone(ZoneInfo("Europe/London")).strftime("%H:%M")
+    except Exception:  # noqa: BLE001
+        return "21:00"
+
+
+def reconcile(ledger):
+    """Sets value_est on every `reported` row to the estimate at the close of the last session on or before its date,
+    and returns (row, estimate, gap, read_before_close) for each."""
+    perf = sorted((r for r in ledger if r["table"] == "perf" and r["value_est"] is not None), key=lambda r: r["date"])
+    out = []
+    for r in sorted((r for r in ledger if r["table"] == "reported"), key=lambda r: (r["date"] or "", r["time_uk"] or "")):
+        p = [x for x in perf if x["date"] <= (r["date"] or "")]
+        if not p or r["value_reported"] is None:
+            continue
+        est = p[-1]["value_est"]
+        r["value_est"] = est
+        t = (r["time_uk"] or "").strip()
+        early = p[-1]["date"] == r["date"] and len(t) == 5 and t[2] == ":" and t < us_close_uk(r["date"])
+        out.append((r, est, num(r["value_reported"]) - est, early))
+    return out
+
+
+def judgement_rows(ledger, hist, bench, date, step=5, min_stocks=8):
+    """Do the 40 judgement points add to the 60 price and session points? On settled shadow ratings that store both
+    parts, every `step`-th session (so no two windows overlap), rank the stocks by the full score, by each half, and by
+    the five-session return against the index; average each rank correlation over the dates."""
+    done = [r for r in ledger if r["table"] == "shadow" and r["beat"] in ("yes", "no") and r["plan"]]
+    by_date = {}
+    for r in done:
+        try:
+            pr = json.loads(r["plan"])
+        except ValueError:
+            continue
+        if pr.get("quant") is None or pr.get("judg") is None:
+            continue
+        by_date.setdefault(r["date"], []).append((num(r["score"]), pr["quant"], pr["judg"], r["ret_pct"] - r["spx_ret_pct"]))
+    bdates = [r["date"] for r in series(hist, bench)]
+    pos = {d: i for i, d in enumerate(bdates)}
+    chosen, last = [], None
+    for d in sorted(d for d in by_date if d in pos and len(by_date[d]) >= min_stocks):
+        if last is None or pos[d] - pos[last] >= step:
+            chosen.append(d)
+            last = d
+    rows = []
+    for k, label in ((0, "Full score (100)"), (1, "Price and session points (60)"), (2, "Judgement points (40)")):
+        cs = [spearman([x[k] for x in by_date[d]], [x[3] for x in by_date[d]]) for d in chosen]
+        m, t, n = mean_t(cs)
+        rows.append(lrow("calib", date=date, name=label, kind="judgement", days=n, value=r2(m, 3), confidence=r2(t, 1),
+                         text=(f"average rank correlation {m:+.3f} (t {('n/a' if t is None else format(t, '+.1f'))}) over {n} dates"
+                               if n else f"no settled dates yet ({len(done)} settled ratings store both parts)")))
+    return rows
 
 
 def drift_rows(ledger, date):
@@ -1739,7 +2015,9 @@ def cmd_run(a):
     skip_bt = {oil_proxy} | set(CRYPTO_PROXY.values()) | {(s.get("stats") or {}).get("trend_ticker") for s in today["stocks"]}
     crows, bt_obs = calibration_rows(ledger, hist, bench, skip_bt, date)
     prows, psum = panel_rows(panel, hist, bench, date) if panel is not None else ([], None)
-    crows += prows + drift_rows(ledger, date)
+    crows += prows + drift_rows(ledger, date) + judgement_rows(ledger, hist, bench, date)
+    drift_open_need = drift_need_open(ledger, hist, bench)
+    still_need = standstill_needs(ledger, hist, bench, date, {s["ticker"] for s in today["stocks"]})
     for n_ in today.get("postmortems") or []:
         kept_notes[n_["name"]] = n_
     closed = add_postmortems(ledger, date, list(kept_notes.values()))
@@ -1763,8 +2041,10 @@ def cmd_run(a):
             scen_in = []
     risk, corr, themes, scen, port_vol = risk_tables(order, by_name, hist, scen_in, links)
     keep_scen = [r for r in ledger if r["table"] == "scenario"] if not scen_in else []
-    ledger = [r for r in ledger if r["table"] not in ("risk", "corr", "theme", "scenario", "macro", "analog", "calib")]
+    ledger = [r for r in ledger if r["table"] not in ("risk", "corr", "theme", "scenario", "macro", "analog", "calib", "standstill")]
     ledger += risk + corr + themes + (scen or keep_scen) + mrows + (call["evidence"] if call else []) + crows
+    ledger += standstill_rows(ledger, hist, bench, date)
+    recon = reconcile(ledger)
     scen = scen or keep_scen
     for e in today.get("events") or []:
         old_e = next((r for r in ledger if r["table"] == "event" and r["date"] == e.get("date") and r["name"] == e.get("name")), None)
@@ -1878,7 +2158,7 @@ def cmd_run(a):
 
     # ---- printed summary
     f = lambda v, w=7, d=2: ("" if v is None else (f"{v:.{d}f}" if isinstance(v, float) else str(v))).rjust(w)
-    print(f"Session {date}; order effective {eff}; regime {regime}; {len(hrows)} history rows")
+    print(f"Pipeline version {PIPELINE_VERSION}. Session {date}; order effective {eff}; regime {regime}; {len(hrows)} history rows")
     print("\nSCORES (highest first)")
     print("Stock".ljust(20) + "  Wt Score Anchor Trend Short Cat Rev  vs50d% offHigh%   RSI  ATR% Cap  Tier      EMAs   Flags")
     for n, x in sorted(sc.items(), key=lambda kv: -kv[1]["score"]):
@@ -1915,6 +2195,10 @@ def cmd_run(a):
             print(f"  RESULTS {e['stock']} {e['date']}: weight {weights[e['stock']]:g}% x implied move {e['implied_pct']:g}% = {risk_pts:.2f} points, {tag}")
         elif e["date"] > date:
             print(f"  RESULTS {e['stock']} {e['date']}: no implied move stored yet")
+    for n_, (pts_, k_, miss_) in results_total(ledger, weights, date).items():
+        if k_:
+            print(f"  RESULTS TOTAL next {n_} sessions: {pts_:.2f} points across {k_} report(s)"
+                  + (f"; no implied move yet for {', '.join(miss_)} (counted at 6%)" if miss_ else ""))
     evs = sorted((r for r in ledger if r["table"] == "event"), key=lambda r: (r["date"] or "", r["time_uk"] or ""))
     print("\nEVENTS ahead (use these exact names to update one):")
     for r in [r for r in evs if (r["date"] or "") > date][:10]:
@@ -1943,6 +2227,17 @@ def cmd_run(a):
         r_ = reps[-1]
         print(f"RANK (reported {r_['date']}): {int(r_['rank'])} of {int(r_['players'])}, top {r_['percentile']:g}%; the top 2% needs {int(r_['players'] * 0.02)} or better. "
               + ("Inside the target: protect it." if r_["percentile"] <= 2 else "Outside the target: keep risk on within the guardrails."))
+    for r_, est_, gap_, early_ in recon[-4:]:
+        print(f"RECONCILE {r_['date']} {r_['time_uk'] or ''}: FT {r_['value_reported']:.0f} against the estimate {est_:.0f} at the close, "
+              f"gap {gap_:+.0f} credits ({gap_ / est_ * 100:+.2f}%)" + (" (read before the US close: not comparable)" if early_ else ""))
+    ss_ = [r for r in ledger if r["table"] == "standstill"]
+    if ss_:
+        print("STANDSTILL (what each change added against keeping the order before it, both held fixed; points):")
+        for r in sorted(ss_, key=lambda r: (r["kind"], r["date"]))[-8:]:
+            v_ = "not priced" if r["value"] is None else f"{r['value']:+.3f}"
+            print(f"    {r['name'][:22].ljust(23)} {v_} over {r['days']} session(s), {r['confirmed']}; {r['text']}")
+    if still_need: print("STANDSTILL NEEDS today's row under extra_history for stocks sold in the last five sessions: "
+                         + ", ".join(f"{n_} ({t_})" for n_, t_ in still_need))
     if resolved: print(f"CONFIDENCE: {resolved} rating(s) resolved")
     src_n = {}
     for x in sc.values():
@@ -2010,6 +2305,9 @@ def cmd_run(a):
     if pruned: print("PRUNED the stored prices of stocks no longer on the list: " + ", ".join(pruned))
     print(f"\nCALIBRATION: {shadow_done} shadow rating(s) settled this run; {len([r for r in ledger if r['table'] == 'shadow'])} logged in all")
     for r in crows:
+        if r["kind"] == "judgement":
+            print(f"    JUDGEMENT TEST {r['name'].ljust(30)} {r['text']}")
+    for r in crows:
         if r["days"] and r["kind"] in ("live", "backtest", "backtest-summary"):
             if r["kind"] == "backtest-summary": print("    BACKTEST (stocks picked with hindsight) " + r["text"])
             else: print(f"    {r['kind'].upper().ljust(9)} {r['name'].ljust(20)} {r['days']:>5} cases, beat the index {r['percentile']:.0f}% of the time, average gap {r['value']:+.2f} points")
@@ -2040,6 +2338,8 @@ def cmd_run(a):
         if drift_done: print(f"    {drift_done} drift window(s) settled this run")
         if drift_wait: print("    DRIFT WAITING for prices (give closes from the reaction date under extra_history): "
                              + ", ".join(f"{n_} ({t_}, from {d_})" for n_, t_, d_ in drift_wait))
+        if drift_open_need: print("    DRIFT NEEDS the full row (open, high, low, close, volume) from the history page for the session after the reaction day: "
+                                  + ", ".join(f"{n_} ({t_}, {d_})" for n_, t_, d_ in drift_open_need))
     if closed: print("POST-MORTEMS added for: " + ", ".join(closed))
     for w_ in WARN:
         print("WARNING: " + w_)
@@ -2268,6 +2568,18 @@ def cmd_template(a):
         print(f"Panel: {len(panel.get('members') or [])} stocks fixed on {panel.get('frozen')}. "
               + ("Short of a two-year history: " + ", ".join(short_) + ". " if short_ else "")
               + (f"Behind {lb_}: " + ", ".join(behind_) + "." if behind_ else ("Every panel stock is up to date." if not short_ else "")))
+    if a.get("ledger") and a.get("history"):
+        led_ = json.load(open(a["ledger"]))
+        hrows_ = json.load(open(a["history"]))
+        spy_ = sorted({r["date"] for r in hrows_ if r["ticker"] == "SPY"})[-5:]
+        names_ = {x["ticker"] for x in out["stocks"]}
+        sold_ = sorted({(r["name"], r["ticker"]) for r in led_ if r["table"] == "trade" and r["effective"] in spy_
+                        and (num(r["to_w"]) or 0) < (num(r["from_w"]) or 0) and r["ticker"] and r["ticker"] not in names_})
+        if sold_:
+            print("Sold in the last five sessions and no longer on the list (the standstill test needs each one's row for the session under "
+                  "extra_history, from its history page): " + ", ".join(f"{n_} ({t_})" for n_, t_ in sold_))
+            for n_, t_ in sold_:
+                out["extra_history"].setdefault(t_, [])
     if a.get("ledger"):
         led_ = json.load(open(a["ledger"]))
         dw_ = sorted({(r["ticker"], r["date"]) for r in led_ if r["table"] == "drift" and r["beat"] is None})
@@ -2379,6 +2691,23 @@ def cmd_report(a):
         pc = rep_rows[-1]["percentile"]
         print("RANK STANCE: " + ("inside the top 2% target: protect it, cut volatility from 13 Nov" if pc <= 2 else
               f"outside the target (top {pc:g}% against 2%): keep risk on within the guardrails; position {int(rep_rows[-1]['players'] * 0.02)} or better is needed"))
+    for r in rep_rows:
+        if r["value_est"] is not None and r["value_reported"] is not None:
+            gap = r["value_reported"] - r["value_est"]
+            early = (r["time_uk"] or "") and len(r["time_uk"]) == 5 and r["time_uk"] < us_close_uk(r["date"]) and any(
+                p["date"] == r["date"] for p in perf)
+            print(f"RECONCILE {r['date']} {r['time_uk'] or ''}: FT {r['value_reported']:.0f} against the estimate {r['value_est']:.0f}, "
+                  f"gap {gap:+.0f} credits ({gap / r['value_est'] * 100:+.2f}%)" + (" (read before the US close: not comparable)" if early else ""))
+    for r in sorted(T("standstill"), key=lambda r: (r["kind"], r["date"])):
+        if (r["window_end"] or "") >= since:
+            if r["value"] is None:
+                print(f"STANDSTILL {r['name']}: not priced ({r['confirmed']}); {r['text']}")
+            else:
+                print(f"STANDSTILL {r['name']}: {r['value']:+.3f} points over {r['days']} session(s) "
+                      f"({r['ret_pct']:+.3f}% against {r['spx_ret_pct']:+.3f}% for the order kept), {r['confirmed']}; {r['text']}")
+    for r in T("calib"):
+        if r["kind"] == "judgement":
+            print(f"JUDGEMENT TEST {r['name']}: {r['text']}")
     rk_ = sorted((r for r in T("risk") if r["risk_share_pct"] is not None), key=lambda r: -r["risk_share_pct"])
     if rk_:
         print("RISK share by position: " + ", ".join(f"{r['name']} {r['risk_share_pct']:g}% (weight {r['weight']:g}%)" for r in rk_))
@@ -2423,7 +2752,9 @@ def cmd_report(a):
             print(f"DRIFT {r['name'][12:]}: {r['days']} settled" + (f", beat the index {r['percentile']:.0f}% of the time, average gap {r['value']:+.2f} points" if r["days"] else "") + f"; {r['text']}")
     for r in sorted(T("drift"), key=lambda r: r["date"] or ""):
         if (r["date"] or "") >= since:
-            res = f"{r['ret_pct']:+.2f}% vs S&P {r['spx_ret_pct']:+.2f}%: {r['beat']}" if r["beat"] in ("yes", "no") else (r["beat"] or "open")
+            res = (f"{r['ret_pct']:+.2f}% vs S&P {r['spx_ret_pct']:+.2f}% {r['unit'] or 'from the reaction close'}: {r['beat']}"
+                   + (f" (from the reaction close {r['cum_pct']:+.2f}% vs {r['spx_cum_pct']:+.2f}%)" if r["cum_pct"] is not None and r["unit"] == "from the next open" else "")
+                   ) if r["beat"] in ("yes", "no") else (r["beat"] or "open")
             print(f"    DRIFT {r['date']} {r['name'][:22].ljust(23)} {r['kind']}, {r['score']} of 6 tests; {res}")
     sh = T("shadow")
     print(f"SHADOW RATINGS: {len([r for r in sh if r['beat'] in ('yes', 'no')])} of {len(sh)} settled")

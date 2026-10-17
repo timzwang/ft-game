@@ -2,14 +2,17 @@ name: broad-scan
 
 # Broad scan for the FT Stock Picking Game (roadmap item 43; rules in scan/README.md).
 # Runs after the US close on weekdays. Two slots cover both sides of the US clock
-# change (1 Nov): 20:10 UTC is 16:10 New York until 30 Oct, 21:05 UTC is 16:05
-# New York from 2 Nov. The script skips a session it has already scanned.
+# change (1 Nov): 20:20 UTC is 16:20 New York until 30 Oct, 21:20 UTC is 16:20
+# New York from 2 Nov (changed 17 Oct from 20:10 and 21:05, so Yahoo's daily bar
+# has 15 minutes to settle; the script treats a bar as final from 16:15 New York).
+# The other slot finds nothing new and stops. The script skips a session it has
+# already scanned.
 # A push that changes scan/request.txt forces a run (the evening review uses this
 # when the scheduled run is late).
 on:
   schedule:
-    - cron: "10 20 * * 1-5"
-    - cron: "5 21 * * 1-5"
+    - cron: "20 20 * * 1-5"
+    - cron: "20 21 * * 1-5"
   push:
     branches: [main]
     paths: ["scan/request.txt"]

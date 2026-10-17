@@ -483,7 +483,7 @@ def us_session_final(spy):
     """The latest US session whose daily bar is final, as a date string."""
     now = datetime.now(NY)
     last = spy.index[-1].date()
-    if last == now.date() and (now.hour, now.minute) < (16, 5):
+    if last == now.date() and (now.hour, now.minute) < (16, 15):
         return spy.index[-2].strftime("%Y-%m-%d"), True
     return last.strftime("%Y-%m-%d"), False
 
@@ -596,7 +596,7 @@ def main():
             log(f"stooq: {len(got)} returned, {fixed} complete")
         holes = [t for t in uni["ticker"] if gaps(t) == "hole"]
 
-        rows, stale, missing = [], [], []
+        rows, stale, missing, unmeasured = [], [], [], []
         info = uni.set_index("ticker")
         for t in uni["ticker"]:
             df = data.get(t)
@@ -617,6 +617,7 @@ def main():
                 log(f"measure failed for {t}: {e}")
                 continue
             if m is None:
+                unmeasured.append(t)
                 continue
             m.update({"ticker": t, "name": info.at[t, "name"], "sector": info.at[t, "sector"],
                       "market": market, "index": info.at[t, "index"], "source": src.get(t, "")})
@@ -624,7 +625,8 @@ def main():
             m["event"] = is_event(m, market) and t not in holes
             rows.append(m)
         allm = pd.DataFrame(rows)
-        log(f"measured {len(allm)}; missing {len(missing)}; stale or not traded {len(stale)}")
+        log(f"measured {len(allm)}; missing {len(missing)}; stale or not traded {len(stale)}; too little history or unmeasurable {len(unmeasured)}"
+            + (f" ({', '.join(unmeasured[:10])})" if unmeasured else ""))
         for t in ["SPY", "^FTSE"] + stale[:3]:
             if t in data:
                 log(f"last bars {t}: {[d.strftime('%Y-%m-%d') for d in data[t].index[-3:]]}")

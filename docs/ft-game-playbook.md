@@ -1,6 +1,6 @@
 # FT Stock Picking Game: playbook (core)
 
-Playbook version 6.3, 16 Oct 2026: the broad scan (roadmap item 43; data doc G7; evening review step 4; weekly review). Version 6.2, 16 Oct 2026: two rule changes in part E (the day call never moves cash; "overbought" is a warning, not a 5% cap), agreed by Tim after an outside review; the roadmap's phase 6 sets out what comes next. Version 6.1, 16 Oct 2026: the evening and weekly runs now mirror the data and the state doc to a private GitHub repository (G6), and the state doc is always written from a local file (part J). Version 6, 15 Oct 2026: the playbook used to be one long doc; at Tim's request it is now split so that each run reads only what it needs. This core doc holds the parts every run needs (A to D, I to K) and the routing table below. Version 6 also adds, at Tim's request, the panel test (a fair test of the score on 30 stocks fixed in advance) and the earnings-drift scan. Earlier versions: 5 (9 Oct) yields, oil, the day call, nightly watchlist intake, strength bands, moving averages, release tracker, calibration log; 5.1 weekend news check; 5.2 quiet-day rule; 5.3 crypto tracking; 5.4 the market data service.
+Playbook version 6.4, 17 Oct 2026: after an outside audit of the system (ChatGPT, 17 Oct) and Claude's assessment of it, Tim agreed fourteen changes: pipeline version 7 (part B; the standstill test, drift settled from the next open, the results total, FT reconciliation and the judgement test, all in part E and G4); a cut-off of 07:00 UK until the FT confirms what it is after the clock change, with the morning check moved to 06:36 UK (part C); the score frozen for the rest of the game; stocks sold in the last five sessions kept on the watchlist; confidence ratings labelled "not calibrated". Version 6.3, 16 Oct 2026: the broad scan (roadmap item 43; data doc G7; evening review step 4; weekly review). Version 6.2, 16 Oct 2026: two rule changes in part E (the day call never moves cash; "overbought" is a warning, not a 5% cap), agreed by Tim after an outside review; the roadmap's phase 6 sets out what comes next. Version 6.1, 16 Oct 2026: the evening and weekly runs now mirror the data and the state doc to a private GitHub repository (G6), and the state doc is always written from a local file (part J). Version 6, 15 Oct 2026: the playbook used to be one long doc; at Tim's request it is now split so that each run reads only what it needs. This core doc holds the parts every run needs (A to D, I to K) and the routing table below. Version 6 also adds, at Tim's request, the panel test (a fair test of the score on 30 stocks fixed in advance) and the earnings-drift scan. Earlier versions: 5 (9 Oct) yields, oil, the day call, nightly watchlist intake, strength bands, moving averages, release tracker, calibration log; 5.1 weekend news check; 5.2 quiet-day rule; 5.3 crypto tracking; 5.4 the market data service.
 
 This is the single procedure for every scheduled run and every hand-run review of Tim's entry ("Seeking Beta") in the FT Stock Picking Game. Each scheduled task tells its run to read this doc and carry out one section of part H. Runs read these docs; they do not edit them. Changes are made in a conversation with Tim.
 
@@ -11,7 +11,7 @@ Read this doc first, then the docs listed for the part your instructions name, i
 | Part | Run | Also read |
 |---|---|---|
 | H1 Evening review | 21:30 UK, Sun to Thu | `claude/ft-game-run-evening.md`, `claude/ft-game-rules.md`, `claude/ft-game-data.md`, `claude/ft-game-state.md` |
-| H2 Morning check, H6 Midday check | 07:26 UK, Mon to Fri; 12:40 (off) | `claude/ft-game-run-morning.md`, `claude/ft-game-rules.md`, `claude/ft-game-data.md`, `claude/ft-game-state.md` |
+| H2 Morning check, H6 Midday check | 06:36 UK, Mon to Fri (07:26 before 18 Oct); 12:40 (off) | `claude/ft-game-run-morning.md`, `claude/ft-game-rules.md`, `claude/ft-game-data.md`, `claude/ft-game-state.md` |
 | H3 Price refresh, H4 Results-day refresh | 16:45 and 19:22 UK; 14:50 UK | `claude/ft-game-run-refresh.md`, `claude/ft-game-data.md` |
 | H5 Weekly performance review | Sat 09:12 UK | `claude/ft-game-run-weekly.md`, `claude/ft-game-rules.md`, `claude/ft-game-data.md`, `claude/ft-game-state.md` |
 | H7 Weekend news check | Sat and Sun 20:20 UK | `claude/ft-game-run-weekend.md`, `claude/ft-game-rules.md`, `claude/ft-game-data.md`, `claude/ft-game-state.md` |
@@ -41,13 +41,13 @@ Where each part lives: A to D and I to K in this doc; E (decision rules, the pan
 | Tim's page | Dashboard artifact https://claude.ai/artifact/8P8UwQsb4QsbZMsKNYKrUJ (he uses it on his phone) |
 | Page data | Four JSON files attached to that artifact, each named by a dataset document: `datasets/stocks`, `datasets/ledger`, `datasets/history`, `datasets/macro` |
 | Panel data | One JSON file on the same artifact, named by the document `store/panel` (kept outside `datasets` so the page never loads it): the 30 panel stocks fixed on 15 Oct 2026 and their closes |
-| Pipeline script | Asset `bf3dd68e375408d013bacf83ec5db3ce` on the same artifact (ft_pipeline.txt, Python, 154,244 bytes, sha256 `ea0433f27ea347d065699e0ad297c231287aa533e79f745e46d77f03b7c43414`), version 6 |
+| Pipeline script | Asset `fdfb8e108f26b962b62a9ca0a9909846` on the same artifact (ft_pipeline.txt, Python, 172,862 bytes, sha256 `23e9c9fe7645ed4df2b66d5b8263378c983ed7c9c47e1bf0ef07531dca1867b1`), version 7 |
 | Screening script | Asset `29ed200d0a429a3b8b91547f81b39187` on the same artifact (ft_score.txt, Python, sha256 `c6ed0b4914e10af6b1d5ee6193567daa33a4a7b79a5dd3458d4bd186ece1e4e6`) |
 | GitHub mirror | Private repository `timzwang/ft-game`: a copy of the data files and the state doc (written by G6 in the evening and weekly runs), and of these docs, the scripts and the page (updated only in sessions with Tim), for ChatGPT and Tim to read. Runs never read from it, except the `scan/` folder for finding candidates once the broad scan is built (roadmap item 43, agreed 16 Oct), and a change merged there reaches the live system only when Tim has it applied here. The market data key never goes there |
 
 Versions: the version number changes only in a session with Tim, never in a scheduled run. Each new version gets, in the same session, an entry in the repository's `CHANGELOG.md` (version, UK date and time, title, changes), the README's "Current version" line, and text for Tim to paste on GitHub: a release `vX.Y` and a new repository description naming the current version, its changes in a few words, the version before it and the changelog (Claude cannot create tags or change repository settings from its sessions). The steps are at the end of `CHANGELOG.md`.
 
-Never delete the script assets. If the state doc or any other note gives a different id or hash for a script, this table wins. The artifact also holds files that are kept but not in use: the previous pipeline scripts (asset `f50a1a4197f0dd4136b51b4d76b80513`, version 5.4, replaced on 15 Oct; asset `7d77ccefc0a91641c364da3cc53b235f`, replaced on 11 Oct) and data files superseded in hand-run sessions. Leave them alone. Never edit the page's own documents (`files/index.html`, `dash/meta`) and never render, open or screenshot the page.
+Never delete the script assets. If the state doc or any other note gives a different id or hash for a script, this table wins. The artifact also holds files that are kept but not in use: the previous pipeline scripts (asset `bf3dd68e375408d013bacf83ec5db3ce`, version 6, replaced on 17 Oct; asset `f50a1a4197f0dd4136b51b4d76b80513`, version 5.4, replaced on 15 Oct; asset `7d77ccefc0a91641c364da3cc53b235f`, replaced on 11 Oct) and data files superseded in hand-run sessions. Leave them alone. Never edit the page's own documents (`files/index.html`, `dash/meta`) and never render, open or screenshot the page.
 
 What each data file holds:
 
@@ -57,7 +57,7 @@ What each data file holds:
 - `macro.json`: one row per series per day (`date`, `series`, `value`): `us2y`, `us10y`, `us30y`, `uk10y`, `de10y`, `fr10y`, `it10y`, `jp10y` in percent, `brent`, `wti`, `natgas`, `gold` in dollars, and `btc`, `eth`, `sol`, `xrp`, the coin prices in dollars at the US close.
 - `panel.json`: `frozen` (2026-10-15), `rule` (how the members were chosen, and any swap), `test` (the measure and the verdict rule, fixed in advance), `members` (rank, ticker, name) and `closes` (for each member, a list of [date, close]).
 
-Scheduled tasks: evening review (21:30 UK, Sun to Thu), morning check (07:26 UK, Mon to Fri), price refresh (16:45 UK, Mon to Fri), late price refresh (19:22 UK, Mon to Fri), results-day refresh (14:50 UK, Mon to Fri, acts only on results days), weekly performance review (Sat 09:12 UK), weekend news check (Sat and Sun 20:20 UK). A midday check (12:40 UK) exists but is switched off: the game's rules rule out same-day changes (part C).
+Scheduled tasks: evening review (21:30 UK, Sun to Thu), morning check (06:36 UK, Mon to Fri; 07:26 until 17 Oct), price refresh (16:45 UK, Mon to Fri), late price refresh (19:22 UK, Mon to Fri), results-day refresh (14:50 UK, Mon to Fri, acts only on results days), weekly performance review (Sat 09:12 UK), weekend news check (Sat and Sun 20:20 UK). A midday check (12:40 UK) exists but is switched off: the game's rules rule out same-day changes (part C).
 
 ## C. The game
 
@@ -69,13 +69,14 @@ Scheduled tasks: evening review (21:30 UK, Sun to Thu), morning check (07:26 UK,
 
 Timing: an order never fills before a gap, so a position must be in place, or gone, before the event.
 
-- US results after the close on day D: the order must be entered before 08:00 UK on day D.
-- US results before the open on day D: the stock must be held (or sold) by the open of D-1, so the order goes in before 08:00 UK on D-1, which means the evening review of D-2.
+- US results after the close on day D: the order must be entered before the cut-off (07:00 UK, below) on day D.
+- US results before the open on day D: the stock must be held (or sold) by the open of D-1, so the order goes in before the cut-off on D-1, which means the evening review of D-2.
 - UK and European results at 07:00 UK: held from the previous day.
 - After any report the earliest exit is the next open, after the gap. Likewise the earliest entry after a report is the next open after its reaction session, which is what the earnings-drift rule uses.
 - Weekends work the same way. A holding is valued from Friday's close, so a Monday gap in something already held cannot be dodged: selling at Monday's open still takes the gap. What a weekend order can do is avoid, or catch, the move after the open.
 - US session: 14:30 to 21:00 UK, except 13:30 to 20:00 UK in the week of 26 Oct (UK clocks go back on 25 Oct, US clocks on 1 Nov). US markets are closed on 26 Nov and close early (18:00 UK) on 27 Nov.
-- Cut-off. An order entered before 08:00 UK counts for that day (Tim's first order, entered at about midnight UK, filled the same day). An order entered once the trading day has begun waits for the next trading day, US stocks included. Treat 08:00 UK as the daily cut-off for everything; there is no same-day midday change.
+- Cut-off. Up to 23 Oct an order entered before 08:00 UK counted for that day (Tim's first order, entered at about midnight UK, filled the same day). The FT's 2026 terms state times in BST even for November, so after the clocks go back on 25 Oct the cut-off may be 08:00 BST, which is 07:00 UK. Until the FT or the test below settles it, treat **07:00 UK** as the daily cut-off for everything: every message, alert and deadline says "before 07:00 UK". It costs nothing, since Tim normally enters orders the evening before. An order entered once the trading day has begun waits for the next trading day, US stocks included; there is no same-day midday change.
+- Cut-off test (agreed 17 Oct). At about 07:15 UK on Mon 26 Oct Tim moves one point of weight between two highly correlated holdings (Exxon Mobil 15 to 14 and Chevron 15 to 16, or the same between whichever oil majors are held). If the game fills it on Mon 26 Oct, the cut-off is 08:00 UK; if on Tue 27 Oct, it is 07:00 UK. Tim says which in the project chat; the next evening review records the change through `order` (with `effective` set to the fill date he reports, or 27 Oct if he has not said) and notes the answer in section 8 of the state doc. Until then the 07:00 UK rule stands.
 - The game's "Today" figure for a London or European stock can read 0.00% in the evening even when the stock moved, so do not read a zero there as proof that a position was not held.
 
 ## D. Objective, guardrails and rank
@@ -105,6 +106,7 @@ Rank-aware stance (use the latest `reported` row in the ledger; the pipeline pri
 - Inside the target before 13 Nov: no change of approach.
 - Inside the target from 13 Nov: protect it. Cash 15% to 25%, eight to ten holdings, nothing above 15%, no holding through results, prefer stocks with a small daily range.
 - A rank read in the first few sessions means little, since most players are bunched near zero.
+- From 13 Nov the evening review states the stance in its first lines from the latest reported rank. If that rank is more than a week old, ask Tim for his value and rank (and the return of a player near the line, which he can see by opening other players' portfolios) in that evening's message.
 
 ## I. Output style
 
@@ -123,7 +125,8 @@ Every message starts with "Tim,", with one exception: a quiet reply starts with 
 - On every other occasion the run sends nothing through SendUserMessage and ends with the short fixed reply its run doc gives. Do not pad that reply with a market read, tables or sources: anything that reads as news may reach Tim's phone as a notification.
 - The work is the same either way. A quiet evening still carries out all of H1, publishes the page and writes the state doc. The watchlist changes, the alerts and the day call are on the page; none of them makes a message by itself.
 - A fault is never a quiet day. If a run cannot get as far as checking the order (the state doc or a playbook doc it needs cannot be read, the script's hash does not match, the pipeline ends in an error that cannot be fixed), say so in the first line, say that the order in force stands until Tim hears otherwise, and send it through SendUserMessage.
-- A change message must be enough to act on by itself: the full order, what changed, and the cut-off. Its last line is "If you cannot enter this before 08:00 UK, say so in the project chat so the log can be corrected."
+- A change message must be enough to act on by itself: the full order, what changed, and the cut-off. Its last line is "If you cannot enter this before 07:00 UK, say so in the project chat so the log can be corrected."
+- Every order table headed for Tim labels the rating column "Confidence (not calibrated)" until about 150 shadow ratings have settled and the panel test or the judgement test (part E) supports reading the ratings as probabilities. The page already marks them uncalibrated.
 - The order is assumed entered once its message has gone (H1 step 1). The check on that assumption is the weekly comparison of the estimated value with the figure Tim reads off the FT site.
 
 ## J. The state doc
@@ -134,7 +137,7 @@ How the doc is written, by every run that writes it: compose the complete doc in
 
 ## K. What only Tim can supply
 
-- Portfolio value, leaderboard position and number of players, ideally after Friday's close each week, and the return of the player on the top 2% line if shown.
+- Portfolio value, leaderboard position and number of players, ideally after Friday's close each week, and the return of the player on the top 2% line if shown. A value is comparable with the estimate only if it was read after the US close (after 21:15 UK; 20:15 UK in the week of 26 Oct) or taken from the closing point of the game's own value chart: figures read during the US session differed from the estimate by up to 181 credits, closing ones by under 40 (17 Oct check). The pipeline's RECONCILE lines set each figure beside the estimate.
 - Whether an order was entered, when, and any stock missing from the game's list. With messages going out only on change days, the one thing he must report is a change he could not enter before the cut-off.
 - What the game shows as the fill date and price of a new position.
 - Agreement before any change to the score's weights or the confidence anchor, and before any swap in the panel.
