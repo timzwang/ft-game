@@ -1,6 +1,6 @@
 # FT Stock Picking Game: weekly performance review (H5)
 
-Part H5 of the playbook (version 6.4, 17 Oct 2026: reconciliation with the FT figure, the standstill and judgement tests, the panel swap Tim agreed; version 6.3, 16 Oct 2026: the broad scan's record in the review). Runs on Saturday at 09:12 UK. Read with the core playbook (`claude/ft-game-playbook.md`), the rules (`claude/ft-game-rules.md`), the data doc (`claude/ft-game-data.md`) and the state doc.
+Part H5 of the playbook (version 6.5, 18 Oct 2026: the standstill section leads with the inception rows, and the run supplies the first order's missing sessions; version 6.4, 17 Oct 2026: reconciliation with the FT figure, the standstill and judgement tests, the panel swap Tim agreed; version 6.3, 16 Oct 2026: the broad scan's record in the review). Runs on Saturday at 09:12 UK. Read with the core playbook (`claude/ft-game-playbook.md`), the rules (`claude/ft-game-rules.md`), the data doc (`claude/ft-game-data.md`) and the state doc.
 
 This run also keeps the panel test and the drift record supplied with prices. Both need the market data key in this run's instructions; without it, say so and skip those two steps.
 
@@ -22,7 +22,7 @@ This run also keeps the panel test and the drift record supplied with prices. Bo
    - The week and the game to date: estimated return against the S&P 500, and the value and rank Tim last reported with its date.
    - What each position contributed, in points (weight times return), best to worst, and what that says about sizing: was the weight in the right places?
    - Reconciliation: the RECONCILE lines, Tim's latest FT figure against the estimate for the same close. Say plainly whether the estimate is verified (a closing figure within about 0.2%) or not, and why.
-   - The standstill test (part E): what the week's changes added against standing still, and each change's five-session verdict. Say when a row is not priced, and which prices it needs.
+   - The standstill test (part E): first the inception rows (what all changes since the start added against the first order never changed, as entered and fully invested), then the week's row (against the order before the week) and each change's five-session verdict. Before the run, give every missing session for the first order's stocks that the template names (data doc G3). Say when a row is not priced, and which prices it needs. Never present one change or one week as evidence that changing the order adds value.
    - The judgement test (part E): the JUDGEMENT TEST lines once any dates have settled; until then one line saying how many ratings store both halves.
    - Confidence ratings: windows that closed, hit rate by band, and whether higher ratings beat the index more often. Say plainly when the sample is too small to judge.
    - The panel test: the history and live verdicts with their figures, how many members are loaded, each part's correlation, and a plain sentence on whether the score is earning its place. If the history verdict is settled on all 30 members, set out for Tim any change to the score that the parts point to, with the figures; never make the change in this run.

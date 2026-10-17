@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7 (17 Oct 2026).
+"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.1 (18 Oct 2026).
+
+Version 7.1 (18 Oct 2026, approved by Tim after the second audit review) changes only the STANDSTILL test:
+  - week rows: the standstill is now the order in force at the close of the session BEFORE the week, priced from
+    the week's first session, so a change that fills on a Monday (a weekend rebuild) is judged too; before, the
+    standstill was the order after Monday's fill, which left those changes out by construction;
+  - inception rows: the first order, never changed, held from the first fill to the latest session, "as entered"
+    (with its cash) and "fully invested" (the same stocks scaled to 100%), against the actual estimate over the same
+    sessions; priced up to the last session with every price, never filled with a guess;
+  - STANDSTILL NEEDS and the template also name the stocks of the first order that are no longer on the list.
 
 Version 7 adds, at Tim's request after the outside audit of 17 Oct 2026:
   - drift trades settled from the next session's open (the price an order can actually get), with the old
@@ -141,7 +150,7 @@ import math
 import os
 import sys
 
-PIPELINE_VERSION = "7"
+PIPELINE_VERSION = "7.1"
 
 LEDGER_KEYS = ["id", "table", "date", "time_uk", "effective", "name", "ticker", "stock", "kind", "bank", "action", "theme",
                "weight", "from_w", "to_w", "score", "confidence", "ret_pct", "spx_ret_pct", "beat", "contrib_pts",
@@ -1647,13 +1656,18 @@ def standstill_rows(ledger, hist, bench, date, horizon=5):
         weeks.setdefault((y, wk), []).append(d)
     for key in sorted(weeks):
         ds = weeks[key]
-        if len(ds) < 2:
+        i0 = dates.index(ds[0])
+        if i0 > 0:                                      # v7.1: the order in force before the week, so a Monday fill is judged
+            base_d, priced = dates[i0 - 1], ds
+        elif len(ds) >= 2:                              # the first week: nothing before the first order, so start after its fill
+            base_d, priced = ds[0], ds[1:]
+        else:
             continue
-        w0 = _weights(ledger, ds[0])
+        w0 = _weights(ledger, base_d)
         v_act = v_st = 1.0
         miss = set()
-        prev_d = ds[0]
-        for d in ds[1:]:
+        prev_d = base_d
+        for d in priced:
             if d not in perf:
                 miss.add("estimate for " + d)
                 continue
@@ -1662,14 +1676,58 @@ def standstill_rows(ledger, hist, bench, date, horizon=5):
             miss |= m
             v_st *= 1 + b / 100.0
             prev_d = d
-        n_changes = len([e for e in effs if ds[0] < e <= ds[-1]])
-        rows.append(lrow("standstill", date=ds[0], kind="week", days=len(ds) - 1, window_end=ds[-1],
+        n_changes = len([e for e in effs if priced[0] <= e <= ds[-1]])
+        rows.append(lrow("standstill", date=ds[0], kind="week", days=len(priced), window_end=ds[-1],
                          ret_pct=None if miss else r2((v_act - 1) * 100.0, 3), spx_ret_pct=None if miss else r2((v_st - 1) * 100.0, 3),
                          value=None if miss else r2((v_act - v_st) * 100.0, 3), name=f"Week from {ds[0]}",
                          confirmed="incomplete" if miss else "complete",
-                         text=f"{n_changes} change(s) after the first session; standstill = the order in force at the close of {ds[0]}"
+                         text=f"{n_changes} change(s) in the week; standstill = the order in force at the close of {base_d}"
                               + (f". Missing prices: {', '.join(sorted(miss))}" if miss else "")))
+    all_b = [r["date"] for r in series(hist, bench) if r["date"] < (dates[0] if dates else "")]
+    rows += inception_rows(ledger, hist, dates, tick_of, fills, perf, all_b[-1] if all_b else None)
     return rows
+
+
+def inception_rows(ledger, hist, dates, tick_of, fills, perf, before=None):
+    """v7.1: the first order never changed, from its fill at the open of the first session to the latest session with
+    every price, as entered (with its cash) and fully invested (the same stocks scaled to 100%), against the actual
+    estimate over the same sessions. Never filled with a guess: the row stops at the last fully priced session."""
+    if not dates:
+        return []
+    w_first = _weights(ledger, dates[0])
+    tot = sum(w_first.values())
+    if not w_first or tot <= 0:
+        return []
+    out = []
+    for label, w in (("as entered", w_first), ("fully invested", {n: v * 100.0 / tot for n, v in w_first.items()})):
+        v_act = v_st = 1.0
+        last, n, miss_at = None, 0, None
+        prev_d = None
+        for k, d in enumerate(dates):
+            if d not in perf:
+                miss_at = (d, {"estimate for " + d})
+                break
+            if k == 0:                                  # the first order fills at this session's open
+                b, m = port_day({}, w, d, before or d, hist, tick_of, fills)
+            else:
+                b, m = port_day(w, w, d, prev_d, hist, tick_of, fills)
+            if m:
+                miss_at = (d, m)
+                break
+            v_act *= 1 + perf[d] / 100.0
+            v_st *= 1 + b / 100.0
+            last, n, prev_d = d, n + 1, d
+        if last is None:
+            continue
+        done = last == dates[-1]
+        what = ", ".join(f"{nm} {wt:.4g}" for nm, wt in sorted(w.items(), key=lambda x: (-x[1], x[0])))
+        out.append(lrow("standstill", date=dates[0], kind="inception", days=n, window_end=last,
+                        ret_pct=r2((v_act - 1) * 100.0, 3), spx_ret_pct=r2((v_st - 1) * 100.0, 3),
+                        value=r2((v_act - v_st) * 100.0, 3), name=f"Inception, {label}",
+                        confirmed="complete" if done else f"priced to {last}",
+                        text=(f"first order never changed ({what}" + (f", cash {100 - tot:g}" if label == "as entered" and tot < 100 else "") + ")"
+                              + ("" if done else f". Not priced from {miss_at[0]}: missing {', '.join(sorted(miss_at[1]))}"))))
+    return out
 
 
 def standstill_needs(ledger, hist, bench, date, listed, horizon=5):
@@ -1682,7 +1740,18 @@ def standstill_needs(ledger, hist, bench, date, listed, horizon=5):
             t = r["ticker"]
             if t and t not in listed and not hist.get((t, date)):
                 out.append((r["name"], t))
+    out += [(n, t) for n, t in inception_tickers(ledger) if t not in listed and not hist.get((t, date))]   # v7.1
     return sorted(set(out))
+
+
+def inception_tickers(ledger):
+    """v7.1: (name, ticker) of every stock in the first order, which the inception standstill keeps pricing."""
+    meta = {r["name"]: r for r in ledger if r["table"] == "meta"}
+    start = (meta.get("start_date") or {}).get("text")
+    if not start:
+        return []
+    tick_of = _tick_map(ledger)
+    return sorted((n, tick_of.get(n)) for n in live_weights(ledger, start) if tick_of.get(n))
 
 
 def _sessions_ahead(date, n):
@@ -1910,7 +1979,15 @@ def cmd_run(a):
     kept_notes = {}
     done_perf = {r["date"] for r in ledger if r["table"] == "perf"}
     ever_held = {r["ticker"] for r in ledger if r["table"] == "position"} | {bench}
-    revised = {d_: [t_ for t_ in ts_ if t_ in ever_held] for d_, ts_ in revised.items()}
+    bdates_ = [r["date"] for r in series(hist, bench)]
+    def _held_near(d_):                           # v7.1: a row for day d moves the estimate only if the stock was held on d or the session before
+        i_ = bdates_.index(d_) if d_ in bdates_ else None
+        days_ = [d_] + ([bdates_[i_ - 1]] if i_ else [])
+        out_ = {bench}
+        for x_ in days_:
+            out_ |= {t for n, (w, t) in live_weights(ledger, x_).items()}
+        return out_
+    revised = {d_: [t_ for t_ in ts_ if t_ in ever_held and t_ in _held_near(d_)] for d_, ts_ in revised.items()}
     revised = {d_: ts_ for d_, ts_ in revised.items() if ts_}
     stale = sorted(d_ for d_ in revised if d_ in done_perf)
     if stale:                       # a stored price was corrected after that session was logged: redo from there
@@ -2232,12 +2309,15 @@ def cmd_run(a):
               f"gap {gap_:+.0f} credits ({gap_ / est_ * 100:+.2f}%)" + (" (read before the US close: not comparable)" if early_ else ""))
     ss_ = [r for r in ledger if r["table"] == "standstill"]
     if ss_:
-        print("STANDSTILL (what each change added against keeping the order before it, both held fixed; points):")
-        for r in sorted(ss_, key=lambda r: (r["kind"], r["date"]))[-8:]:
+        print("STANDSTILL (what changing the order added against not changing it; points of the portfolio):")
+        sel_ = (sorted((r for r in ss_ if r["kind"] == "change"), key=lambda r: r["date"])[-5:]
+                + sorted((r for r in ss_ if r["kind"] == "week"), key=lambda r: r["date"])[-3:]
+                + [r for r in ss_ if r["kind"] == "inception"])
+        for r in sel_:
             v_ = "not priced" if r["value"] is None else f"{r['value']:+.3f}"
-            print(f"    {r['name'][:22].ljust(23)} {v_} over {r['days']} session(s), {r['confirmed']}; {r['text']}")
-    if still_need: print("STANDSTILL NEEDS today's row under extra_history for stocks sold in the last five sessions: "
-                         + ", ".join(f"{n_} ({t_})" for n_, t_ in still_need))
+            print(f"    {r['name'][:26].ljust(27)} {v_} over {r['days']} session(s), {r['confirmed']}; {r['text']}")
+    if still_need: print("STANDSTILL NEEDS today's row under extra_history for stocks sold in the last five sessions or in the first order "
+                         "and no longer on the list: " + ", ".join(f"{n_} ({t_})" for n_, t_ in still_need))
     if resolved: print(f"CONFIDENCE: {resolved} rating(s) resolved")
     src_n = {}
     for x in sc.values():
@@ -2579,6 +2659,17 @@ def cmd_template(a):
             print("Sold in the last five sessions and no longer on the list (the standstill test needs each one's row for the session under "
                   "extra_history, from its history page): " + ", ".join(f"{n_} ({t_})" for n_, t_ in sold_))
             for n_, t_ in sold_:
+                out["extra_history"].setdefault(t_, [])
+        inc_ = [(n_, t_) for n_, t_ in inception_tickers([{k: r.get(k) for k in LEDGER_KEYS} for r in led_]) if t_ not in names_]
+        if inc_:                                      # v7.1: the inception standstill keeps pricing the first order
+            have_ = {}
+            for r in hrows_:
+                if r["ticker"] in {t_ for _, t_ in inc_}:
+                    have_[r["ticker"]] = max(have_.get(r["ticker"], ""), r["date"])
+            print("First order, no longer on the list (the inception standstill needs every session's row under extra_history, "
+                  "one history page each; give every session after the last stored one): "
+                  + ", ".join(f"{n_} ({t_}, stored to {have_.get(t_, 'none')})" for n_, t_ in inc_))
+            for n_, t_ in inc_:
                 out["extra_history"].setdefault(t_, [])
     if a.get("ledger"):
         led_ = json.load(open(a["ledger"]))

@@ -6,6 +6,17 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.5 (Sun 18 Oct 2026, about 01:00)
+
+The standstill test corrected, after Claude's second, read-only review of the outside audit (a handover report for ChatGPT). Tim approved this one change. Pipeline version 7.1 (asset `3e3904212ba88da023d24d244d6b1a15`, sha256 `367d303f0101eb48a8957e06d52d00b8f97f4ea0ff9b614c171149bbea8c2201`).
+
+- Pipeline 7.1, STANDSTILL only: each week is judged against the order in force before it, so a change that fills on a Monday (a weekend rebuild) counts; version 7 used the order after Monday's fill, which left those changes out. New inception rows: the first order (9 Oct) never changed, as entered (with its 25% cash) and fully invested, against the actual estimate, priced to the last session with every price. STANDSTILL NEEDS and the template also name the first order's stocks that have left the list. A price row for a stock not held that day or the day before no longer makes the log recalculate.
+- Price store (history dataset version 12): the missing rows for RTX, Lockheed Martin and Nvidia (14 to 16 Oct) and Goldman Sachs (15 and 16 Oct), from stockanalysis.com. No existing row changed. They also let four stuck confidence ratings settle.
+- Corrected record to 16 Oct: +0.12 points against never changing the first order as entered, -0.32 against it fully invested, -0.75 for the 12 Oct rebuild alone; no evidence either way. The +0.86 points quoted on 17 Oct (rules doc, state doc, roadmap) measured only the week after the rebuild and is withdrawn.
+- Docs: core playbook (version line, part B), rules (the standstill test), data doc (G3, G4), weekly run doc, roadmap (items 38 and 51), state doc.
+- Tested by re-running the 16 Oct session with versions 7 and 7.1 on the same files: stocks, history, macro, panel and scores byte for byte the same; every ledger row the same except the standstill rows, whose figures match an independent reconstruction.
+- No change to the order, the page, the scheduled tasks or any other data file.
+
 ## 6.4 (Sun 18 Oct 2026, about 00:30)
 
 After an outside audit (ChatGPT, 17 Oct) that Claude checked against the live Project, artifact, scheduled tasks and code. Tim approved fourteen changes. Pipeline version 7 (uploaded 17 Oct, asset `fdfb8e108f26b962b62a9ca0a9909846`, sha256 `23e9c9fe7645ed4df2b66d5b8263378c983ed7c9c47e1bf0ef07531dca1867b1`).
