@@ -1,0 +1,55 @@
+common sessions 31 2026-09-03 2026-10-16
+KO close-only rows in last 120: 0
+XOM close-only rows in last 120: 0
+CVX close-only rows in last 120: 0
+SHEL close-only rows in last 120: 2
+MSFT close-only rows in last 120: 0
+LLY close-only rows in last 120: 25
+PLTR close-only rows in last 120: 0
+
+N=40 (2026-09-03..2026-10-16): port daily vol 0.69% (ann 11.0%), SPY 0.66%, beta -0.09, tracking error daily 1.00% (5-day ~2.23%)
+  risk shares {'KO': 19.6, 'XOM': 22.6, 'CVX': 22.5, 'SHEL': 18.6, 'MSFT': 5.2, 'LLY': 7.5, 'PLTR': 4.0} energy 63.8
+  worst non-overlapping 5-session sum -0.42 best 4.12
+
+N=60 (2026-09-03..2026-10-16): port daily vol 0.69% (ann 11.0%), SPY 0.66%, beta -0.09, tracking error daily 1.00% (5-day ~2.23%)
+  risk shares {'KO': 19.6, 'XOM': 22.6, 'CVX': 22.5, 'SHEL': 18.6, 'MSFT': 5.2, 'LLY': 7.5, 'PLTR': 4.0} energy 63.8
+  worst non-overlapping 5-session sum -0.42 best 4.12
+  corr XOM/CVX 0.94 XOM/SHEL 0.75 CVX/SHEL 0.76 KO/SPY -0.20
+  oil beta (portfolio on OIL daily) 0.097 over 31 sessions; corr 0.35
+
+N=120 (2026-09-03..2026-10-16): port daily vol 0.69% (ann 11.0%), SPY 0.66%, beta -0.09, tracking error daily 1.00% (5-day ~2.23%)
+  risk shares {'KO': 19.6, 'XOM': 22.6, 'CVX': 22.5, 'SHEL': 18.6, 'MSFT': 5.2, 'LLY': 7.5, 'PLTR': 4.0} energy 63.8
+  worst non-overlapping 5-session sum -0.42 best 4.12
+  corr XOM/CVX 0.94 XOM/SHEL 0.75 CVX/SHEL 0.76 KO/SPY -0.20
+  oil beta (portfolio on OIL daily) 0.097 over 31 sessions; corr 0.35
+
+N=31 (2026-09-03..2026-10-16): port daily vol 0.69% (ann 11.0%), SPY 0.66%, beta -0.09, tracking error daily 1.00% (5-day ~2.23%)
+  risk shares {'KO': 19.6, 'XOM': 22.6, 'CVX': 22.5, 'SHEL': 18.6, 'MSFT': 5.2, 'LLY': 7.5, 'PLTR': 4.0} energy 63.8
+  worst non-overlapping 5-session sum -0.42 best 4.12
+
+sum of daily contributions (pts, uncompounded): {'Coca-Cola': 1.093, 'Exxon Mobil': 0.973, 'Chevron': 0.971, 'Shell': 0.616, 'Eli Lilly': 0.181, 'RTX': 0.082, 'Lockheed Martin': 0.079, 'Goldman Sachs': -0.095, 'Meta Platforms': -0.227, 'Microsoft': -0.306, 'Nvidia': -0.411, 'Palantir': -0.564, 'TSMC': -0.96} total 1.432
+EVENT 2026-10-13 before US open Goldman Sachs yes 4.6 Before 08:00 UK Mon 12 Oct
+EVENT 2026-10-13 before US open JPMorgan yes 3.6 Passed
+EVENT 2026-10-14 before US open ASML yes 6.1 Before 08:00 UK Tue 13 Oct
+EVENT 2026-10-15 before US open TSMC yes 4.0 08:00 UK Wed 14 Oct
+EVENT 2026-10-20 before US open RTX yes 5.8 Before 08:00 Mon 19 Oct
+EVENT 2026-10-21 21:05 Meta Platforms yes None 08:00 UK Wed 21 Oct
+EVENT 2026-10-22 12:00 Procter & Gamble est. None 
+EVENT 2026-10-22 before US open Lockheed Martin yes None Before 08:00 Wed 21 Oct
+EVENT 2026-10-22 before US open (est.) Valero Energy est. None 
+EVENT 2026-10-27 before US open (est.) Coca-Cola est. None 
+EVENT 2026-10-28 after US close (est.) Microsoft est. None 
+EVENT 2026-10-28 before US open (est.) Phillips 66 est. None 
+EVENT 2026-10-29 07:00 Shell yes None Before 08:00 Wed 28 Oct
+EVENT 2026-10-29 11:30 Eli Lilly est. None 
+EVENT 2026-10-29 after US close Coinbase yes None Before 08:00 Thu 29 Oct
+EVENT 2026-10-29 after US close (est.) Strategy est. None Before 08:00 Thu 29 Oct
+EVENT 2026-10-30 07:00 BP est. None Before 08:00 Thu 29 Oct
+EVENT 2026-10-30 before US open Exxon Mobil est. None Before 08:00 Thu 29 Oct
+EVENT 2026-10-30 before US open Chevron yes None Before 08:00 Thu 29 Oct
+EVENT 2026-11-02 after US close Palantir est. None Before 08:00 Mon 2 Nov
+EVENT 2026-11-03 after US close Amgen yes None 
+EVENT 2026-11-03 before US open Marathon Petroleum yes None Before 08:00 Mon 2 Nov
+EVENT 2026-11-05 after US close (est.) Lumentum est. None 
+EVENT 2026-11-06 before US open Humana yes None Before 08:00 Thu 5 Nov
+EVENT 2026-11-18 after US close Nvidia est. None Before 08:00 Wed 18 Nov

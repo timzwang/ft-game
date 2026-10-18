@@ -1,0 +1,38 @@
+ACTUAL
+2026-10-09 -0.0678 99932.16 -0.0678 SPY 0.3002 0.3002 excess -0.368 missing none
+2026-10-12 0.6635 100595.22 0.5952 SPY -0.0604 0.2396 excess 0.3556 missing none
+2026-10-13 0.4769 101074.95 1.075 SPY -0.0116 0.228 excess 0.8469 missing none
+2026-10-14 0.0932 101169.19 1.1692 SPY -1.081 -0.8554 excess 2.0246 missing none
+2026-10-15 -0.3746 100790.21 0.7902 SPY 0.2846 -0.5733 excess 1.3635 missing none
+2026-10-16 0.6415 101436.82 1.4368 SPY -1.1065 -1.6735 excess 3.1103 missing none
+
+ONE-DAY: change vs keeping the previous order on its fill day
+2026-10-12 actual +0.6635  prev-order +0.3382  effect +0.3253  missing []
+2026-10-13 actual +0.4769  prev-order +0.6480  effect -0.1711  missing []
+2026-10-14 actual +0.0932  prev-order +0.2310  effect -0.1378  missing []
+2026-10-15 actual -0.3746  prev-order -0.3826  effect +0.0080  missing []
+2026-10-16 actual +0.6415  prev-order +0.5468  effect +0.0948  missing []
+sum 13-15 Oct: -0.3009
+sum 12-16 Oct: 0.1191
+
+FIVE-SESSION: each change vs the order it replaced, held fixed from the fill, to 16 Oct (max 5 sessions)
+2026-10-12 sessions 5  new +0.640%  replaced +1.388%  effect -0.748 pts  missing []
+2026-10-13 sessions 4  new +0.754%  replaced -0.023%  effect +0.777 pts  missing []
+2026-10-14 sessions 3  new -0.069%  replaced +0.276%  effect -0.345 pts  missing []
+2026-10-15 sessions 2  new +0.170%  replaced -0.162%  effect +0.332 pts  missing []
+2026-10-16 sessions 1  new +0.642%  replaced +0.547%  effect +0.095 pts  missing []
+
+Inception order held (9 Oct order, 25% cash), 9-16 Oct: final 101319.71 (+1.320%) missing []
+    [('10-09', -0.068), ('10-12', 0.338), ('10-13', 0.278), ('10-14', 0.382), ('10-15', -0.629), ('10-16', 1.018)]
+
+Inception order, cash spread pro rata (fully invested), 9-16 Oct: final 101759.50 (+1.759%) missing []
+    [('10-09', -0.09), ('10-12', 0.451), ('10-13', 0.371), ('10-14', 0.509), ('10-15', -0.839), ('10-16', 1.358)]
+
+12 Oct order held from 12 Oct (actual 9 Oct before): final 100572.02 (+0.572%) missing []
+    [('10-09', -0.068), ('10-12', 0.664), ('10-13', 0.648), ('10-14', -0.237), ('10-15', -0.497), ('10-16', 0.067)]
+
+13 Oct order held from 13 Oct: final 101353.42 (+1.353%) missing []
+    [('10-09', -0.068), ('10-12', 0.664), ('10-13', 0.477), ('10-14', 0.231), ('10-15', -0.306), ('10-16', 0.351)]
+
+Actual final 101436.82 (+1.437%)
+SPY from 9 Oct open: -1.673%

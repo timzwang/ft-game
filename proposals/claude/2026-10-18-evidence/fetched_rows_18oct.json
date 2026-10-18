@@ -1,0 +1,13 @@
+[
+{"ticker":"NVDA","date":"2026-10-14","open":225.53,"high":226.00,"low":219.64,"close":221.30,"volume":116192386,"source":"stockanalysis.com/stocks/nvda/history, read 18 Oct 2026 00:3x UK"},
+{"ticker":"NVDA","date":"2026-10-15","open":215.30,"high":218.47,"low":212.85,"close":217.23,"volume":125446183,"source":"stockanalysis.com"},
+{"ticker":"NVDA","date":"2026-10-16","open":216.56,"high":218.68,"low":213.32,"close":214.13,"volume":120746313,"source":"stockanalysis.com"},
+{"ticker":"GS","date":"2026-10-15","open":879.00,"high":891.83,"low":859.03,"close":891.28,"volume":2390122,"source":"stockanalysis.com/stocks/gs/history"},
+{"ticker":"GS","date":"2026-10-16","open":895.89,"high":909.87,"low":876.81,"close":881.26,"volume":2360897,"source":"stockanalysis.com"},
+{"ticker":"RTX","date":"2026-10-14","open":184.12,"high":186.79,"low":183.67,"close":186.47,"volume":4036409,"source":"stockanalysis.com/stocks/rtx/history"},
+{"ticker":"RTX","date":"2026-10-15","open":189.96,"high":189.96,"low":185.31,"close":186.95,"volume":4668932,"source":"stockanalysis.com"},
+{"ticker":"RTX","date":"2026-10-16","open":188.76,"high":194.32,"low":188.00,"close":193.92,"volume":7686581,"source":"stockanalysis.com"},
+{"ticker":"LMT","date":"2026-10-14","open":508.01,"high":523.08,"low":508.01,"close":522.23,"volume":1466755,"source":"stockanalysis.com/stocks/lmt/history"},
+{"ticker":"LMT","date":"2026-10-15","open":531.00,"high":534.25,"low":526.07,"close":532.64,"volume":1424456,"source":"stockanalysis.com"},
+{"ticker":"LMT","date":"2026-10-16","open":539.11,"high":553.14,"low":536.69,"close":552.09,"volume":1585578,"source":"stockanalysis.com"}
+]

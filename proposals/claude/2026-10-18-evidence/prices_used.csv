@@ -1,0 +1,99 @@
+ticker,date,open,high,low,close,volume,source,quality
+CVX,2026-10-08,209.32,212.36,208.96,211.55,7571562.0,live history.json sha256 956a71bf...,stored
+CVX,2026-10-09,211.05,213.72,210.71,211.98,6030713.0,live history.json sha256 956a71bf...,stored
+CVX,2026-10-12,214.54,216.67,213.75,215.0,7696129.0,live history.json sha256 956a71bf...,stored
+CVX,2026-10-13,217.0,218.79,215.95,217.73,7304152.0,live history.json sha256 956a71bf...,stored
+CVX,2026-10-14,218.89,222.55,218.54,222.04,9463195.0,live history.json sha256 956a71bf...,stored
+CVX,2026-10-15,222.82,223.46,218.05,219.32,5208853.0,live history.json sha256 956a71bf...,stored
+CVX,2026-10-16,221.85,225.31,220.41,224.99,8715280.0,live history.json sha256 956a71bf...,stored
+GS,2026-10-08,880.57,887.49,876.77,882.59,1740014.0,live history.json sha256 956a71bf...,stored
+GS,2026-10-09,887.68,899.67,878.86,895.32,1862041.0,live history.json sha256 956a71bf...,stored
+GS,2026-10-12,898.39,902.29,887.78,893.95,2058643.0,live history.json sha256 956a71bf...,stored
+GS,2026-10-13,923.0,931.0,891.01,891.91,4875242.0,live history.json sha256 956a71bf...,stored
+GS,2026-10-14,881.35,898.43,866.0033,878.72,3336936.0,live history.json sha256 956a71bf...,stored
+GS,2026-10-15,879.0,891.83,859.03,891.28,2390122,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+GS,2026-10-16,895.89,909.87,876.81,881.26,2360897,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+KO,2026-10-08,86.26,88.04,86.08,87.77,14457889.0,live history.json sha256 956a71bf...,stored
+KO,2026-10-09,87.6,88.48,87.39,88.05,10431934.0,live history.json sha256 956a71bf...,stored
+KO,2026-10-12,88.42,89.8,88.42,89.79,13752304.0,live history.json sha256 956a71bf...,stored
+KO,2026-10-13,90.56,90.56,89.67,90.11,12700678.0,live history.json sha256 956a71bf...,stored
+KO,2026-10-14,90.98,91.93,90.55,91.78,13867980.0,live history.json sha256 956a71bf...,stored
+KO,2026-10-15,93.15,94.1,91.72,92.0,19637218.0,live history.json sha256 956a71bf...,stored
+KO,2026-10-16,92.99,93.9,92.81,93.9,22614153.0,live history.json sha256 956a71bf...,stored
+LLY,2026-10-08,1169.6,1169.6,1169.6,1169.6,,live history.json sha256 956a71bf...,"placeholder bar (open=high=low=close, no volume)"
+LLY,2026-10-09,1153.56,1179.82,1151.67,1179.27,1392930.0,live history.json sha256 956a71bf...,stored
+LLY,2026-10-12,1181.24,1188.7,1172.805,1182.62,1252583.0,live history.json sha256 956a71bf...,stored
+LLY,2026-10-13,1190.7,1193.3,1158.405,1166.51,1843739.0,live history.json sha256 956a71bf...,stored
+LLY,2026-10-14,1180.7,1216.714,1174.24,1208.74,3127775.0,live history.json sha256 956a71bf...,stored
+LLY,2026-10-15,1235.04,1275.88,1230.66,1251.61,3729356.0,live history.json sha256 956a71bf...,stored
+LLY,2026-10-16,1256.0,1274.56,1251.25,1257.03,2385226.0,live history.json sha256 956a71bf...,stored
+LMT,2026-10-08,500.02,509.08,497.0,507.89,1112923.0,live history.json sha256 956a71bf...,stored
+LMT,2026-10-09,505.0,511.43,502.65,509.59,804349.0,live history.json sha256 956a71bf...,stored
+LMT,2026-10-12,513.05,515.77,510.75,511.88,819757.0,live history.json sha256 956a71bf...,stored
+LMT,2026-10-13,513.62,513.62,502.17,504.02,859201.0,live history.json sha256 956a71bf...,stored
+LMT,2026-10-14,508.01,523.08,508.01,522.23,1466755,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+LMT,2026-10-15,531.0,534.25,526.07,532.64,1424456,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+LMT,2026-10-16,539.11,553.14,536.69,552.09,1585578,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+META,2026-10-08,724.54,724.95,711.68,720.89,14762222.0,live history.json sha256 956a71bf...,stored
+META,2026-10-09,726.51,728.07,716.2,718.67,12541096.0,live history.json sha256 956a71bf...,stored
+META,2026-10-12,728.5,752.24,727.64,742.96,24724339.0,live history.json sha256 956a71bf...,stored
+META,2026-10-13,735.99,771.27,734.84,762.5,22600350.0,live history.json sha256 956a71bf...,stored
+META,2026-10-14,760.75,761.5,734.29,737.54,15888865.0,live history.json sha256 956a71bf...,stored
+META,2026-10-15,726.56,743.97,715.58,736.72,15439613.0,live history.json sha256 956a71bf...,stored
+META,2026-10-16,736.7,738.49,702.71,709.33,20599048.0,live history.json sha256 956a71bf...,stored
+MSFT,2026-10-08,529.81,533.51,518.79,522.61,19575828.0,live history.json sha256 956a71bf...,stored
+MSFT,2026-10-09,528.24,537.22,526.24,535.07,18500622.0,live history.json sha256 956a71bf...,stored
+MSFT,2026-10-12,537.53,542.74,535.7,541.15,18005723.0,live history.json sha256 956a71bf...,stored
+MSFT,2026-10-13,544.64,551.15,543.06,543.45,23650788.0,live history.json sha256 956a71bf...,stored
+MSFT,2026-10-14,544.65,545.75,532.54,533.69,15579773.0,live history.json sha256 956a71bf...,stored
+MSFT,2026-10-15,533.32,541.13,531.22,539.44,22489037.0,live history.json sha256 956a71bf...,stored
+MSFT,2026-10-16,541.31,543.82,524.43,529.05,24644640.0,live history.json sha256 956a71bf...,stored
+NVDA,2026-10-08,234.92,237.07,229.85,230.48,114193236.0,live history.json sha256 956a71bf...,stored
+NVDA,2026-10-09,233.84,233.92,229.11,229.28,84422554.0,live history.json sha256 956a71bf...,stored
+NVDA,2026-10-12,228.73,228.86,224.9,226.32,69670812.0,live history.json sha256 956a71bf...,stored
+NVDA,2026-10-13,224.34,228.64,223.06,228.52,83512371.0,live history.json sha256 956a71bf...,stored
+NVDA,2026-10-14,225.53,226.0,219.64,221.3,116192386,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+NVDA,2026-10-15,215.3,218.47,212.85,217.23,125446183,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+NVDA,2026-10-16,216.56,218.68,213.32,214.13,120746313,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+PLTR,2026-10-08,199.0,204.44,195.65,198.78,41710157.0,live history.json sha256 956a71bf...,stored
+PLTR,2026-10-09,201.48,209.58,198.3,209.05,37438329.0,live history.json sha256 956a71bf...,stored
+PLTR,2026-10-12,208.9,212.94,206.05,209.0,23873830.0,live history.json sha256 956a71bf...,stored
+PLTR,2026-10-13,208.08,210.88,205.97,208.67,18327322.0,live history.json sha256 956a71bf...,stored
+PLTR,2026-10-14,207.02,209.29,199.74,200.97,23873115.0,live history.json sha256 956a71bf...,stored
+PLTR,2026-10-15,196.85,200.91,192.6,200.5,24644547.0,live history.json sha256 956a71bf...,stored
+PLTR,2026-10-16,201.79,203.55,184.45,186.03,33230915.0,live history.json sha256 956a71bf...,stored
+RTX,2026-10-08,180.25,184.74,179.02,184.32,4359091.0,live history.json sha256 956a71bf...,stored
+RTX,2026-10-09,185.2,186.46,183.03,185.97,3358085.0,live history.json sha256 956a71bf...,stored
+RTX,2026-10-12,186.71,187.41,185.95,186.66,3585891.0,live history.json sha256 956a71bf...,stored
+RTX,2026-10-13,185.3,185.8,181.15,183.02,4537156.0,live history.json sha256 956a71bf...,stored
+RTX,2026-10-14,184.12,186.79,183.67,186.47,4036409,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+RTX,2026-10-15,189.96,189.96,185.31,186.95,4668932,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+RTX,2026-10-16,188.76,194.32,188.0,193.92,7686581,stockanalysis.com history page read 18 Oct 2026 ~00:35 BST (not in stored data),fetched for counterfactuals only
+SHEL,2026-10-08,3680.5,3784.0,3676.5,3780.5,7560556.0,live history.json sha256 956a71bf...,stored
+SHEL,2026-10-09,3753.0,3806.0,3714.0,3795.5,,live history.json sha256 956a71bf...,stored
+SHEL,2026-10-12,3836.0,3836.0,3836.0,3836.0,,live history.json sha256 956a71bf...,"placeholder bar (open=high=low=close, no volume)"
+SHEL,2026-10-13,3836.0,3869.0,3816.5,3865.5,7744601.0,live history.json sha256 956a71bf...,stored
+SHEL,2026-10-14,3864.0,3919.0,3862.0,3911.5,8778635.0,live history.json sha256 956a71bf...,stored
+SHEL,2026-10-15,3906.0,3937.0,3887.5,3908.0,11982999.0,live history.json sha256 956a71bf...,stored
+SHEL,2026-10-16,3874.0,3949.0,3874.0,3938.0,12005104.0,live history.json sha256 956a71bf...,stored
+SPY,2026-10-08,774.86,777.09,770.44,773.93,38430690.0,live history.json sha256 956a71bf...,stored
+SPY,2026-10-09,776.24,779.42,775.14,778.57,22552987.0,live history.json sha256 956a71bf...,stored
+SPY,2026-10-12,778.78,779.4,777.05,778.1,18227937.0,live history.json sha256 956a71bf...,stored
+SPY,2026-10-13,777.34,778.75,775.95,778.01,25306352.0,live history.json sha256 956a71bf...,stored
+SPY,2026-10-14,774.92,776.35,766.71,769.6,54539885.0,live history.json sha256 956a71bf...,stored
+SPY,2026-10-15,766.25,772.87,764.43,771.79,41665379.0,live history.json sha256 956a71bf...,stored
+SPY,2026-10-16,773.24,773.25,760.64,763.25,63972571.0,live history.json sha256 956a71bf...,stored
+TSM,2026-10-08,466.32,471.19,452.88,457.99,12984026.0,live history.json sha256 956a71bf...,stored
+TSM,2026-10-09,464.21,464.83,449.75,453.31,8960754.0,live history.json sha256 956a71bf...,stored
+TSM,2026-10-12,453.55,454.4,444.35,444.35,8684952.0,live history.json sha256 956a71bf...,stored
+TSM,2026-10-13,439.52,445.5,437.4,445.12,8345365.0,live history.json sha256 956a71bf...,stored
+TSM,2026-10-14,436.25,440.39,428.06,430.0,14484022.0,live history.json sha256 956a71bf...,stored
+TSM,2026-10-15,415.17,423.66,407.13,422.25,22325837.0,live history.json sha256 956a71bf...,stored
+TSM,2026-10-16,421.22,421.5,410.58,412.61,16640200.0,live history.json sha256 956a71bf...,stored
+XOM,2026-10-08,167.11,169.19,166.71,168.5,13297531.0,live history.json sha256 956a71bf...,stored
+XOM,2026-10-09,167.87,170.29,167.82,168.94,8082776.0,live history.json sha256 956a71bf...,stored
+XOM,2026-10-12,171.01,172.55,171.01,172.15,8758512.0,live history.json sha256 956a71bf...,stored
+XOM,2026-10-13,173.45,174.89,172.65,174.08,11366119.0,live history.json sha256 956a71bf...,stored
+XOM,2026-10-14,175.07,177.43,174.53,177.01,13481186.0,live history.json sha256 956a71bf...,stored
+XOM,2026-10-15,178.63,178.69,173.6,174.68,11194965.0,live history.json sha256 956a71bf...,stored
+XOM,2026-10-16,176.49,179.16,175.15,178.98,13130411.0,live history.json sha256 956a71bf...,stored

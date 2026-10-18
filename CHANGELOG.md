@@ -6,6 +6,16 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.6 (Sun 18 Oct 2026, about 01:20)
+
+A handoff log between Claude and ChatGPT, at Tim's request.
+
+- New folder `handoff/` with a `README.md` setting the rule and format: read the newest notes before starting, write one at the end of any session that decided, changed or found something. Claude commits its notes to `main`; ChatGPT proposes its notes through pull requests that Tim merges. Notes record who said what; the live files win.
+- Core playbook part B: Claude reads and writes the log in every session with Tim. Scheduled runs do not.
+- First note: `handoff/2026-10-18-claude.md`. Claude's audit verification and its evidence added under `proposals/claude/`.
+- README: the log added to "Start here" and the layout.
+- No change to the order, the pipeline, the page, the scheduled tasks or any data file.
+
 ## 6.5 (Sun 18 Oct 2026, about 01:00)
 
 The standstill test corrected, after Claude's second, read-only review of the outside audit (a handover report for ChatGPT). Tim approved this one change. Pipeline version 7.1 (asset `3e3904212ba88da023d24d244d6b1a15`, sha256 `367d303f0101eb48a8957e06d52d00b8f97f4ea0ff9b614c171149bbea8c2201`).

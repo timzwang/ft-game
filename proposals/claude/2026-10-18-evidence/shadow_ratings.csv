@@ -1,0 +1,134 @@
+rated_close,ticker,score,confidence_anchor,band,beat,ret_5s_pct,spy_5s_pct,window_end,flags
+2026-10-08,ASML,57.0,56.0,,no,-6.35,-0.28,2026-10-15,heavy-volume down day
+2026-10-08,BA.,39.0,50.0,,yes,5.28,-0.28,2026-10-15,oversold: RSI below 35
+2026-10-08,BP.,71.0,61.0,,yes,4.39,-0.28,2026-10-15,
+2026-10-08,CVX,73.0,62.0,,yes,3.67,-0.28,2026-10-15,
+2026-10-08,GNRC,68.0,60.0,,no,-11.59,-0.28,2026-10-15,downtrend: 50-day below 200-day; faded gap
+2026-10-08,HUM,53.0,55.0,,yes,11.64,-0.28,2026-10-15,below 50-day average; heavy-volume down day
+2026-10-08,JPM,44.0,51.0,,yes,1.24,-0.28,2026-10-15,below 50-day average
+2026-10-08,LMT,30.0,46.0,,,,,,below 50-day average; downtrend: 50-day below 200-day
+2026-10-08,MPC,79.0,64.0,,yes,2.93,-0.28,2026-10-15,extended: more than 15% above 50-day; overbought: RSI above 75
+2026-10-08,MRVL,60.0,57.0,,no,-12.17,-0.28,2026-10-15,extended: more than 15% above 50-day; heavy-volume down day
+2026-10-08,MU,47.0,52.0,,no,-10.1,-0.28,2026-10-15,
+2026-10-08,NFLX,37.0,49.0,,yes,1.45,-0.28,2026-10-15,below 50-day average; downtrend: 50-day below 200-day
+2026-10-08,NVDA,50.0,54.0,,,,,,
+2026-10-08,PLTR,69.0,60.0,,yes,0.87,-0.28,2026-10-15,faded gap
+2026-10-08,RTX,41.0,50.0,,,,,,below 50-day average; oversold: RSI below 35
+2026-10-08,SHEL,81.0,64.0,,yes,3.37,-0.28,2026-10-15,at 52-week high
+2026-10-08,TSM,65.0,59.0,,no,-7.8,-0.28,2026-10-15,heavy-volume down day
+2026-10-08,VST,43.0,51.0,,no,-1.26,-0.28,2026-10-15,downtrend: 50-day below 200-day; heavy-volume down day
+2026-10-08,XOM,70.0,60.0,,yes,3.67,-0.28,2026-10-15,
+2026-10-09,ASML,64,58,strong,no,-7.8,-1.97,2026-10-16,faded gap
+2026-10-09,BA.,39,50,weak,yes,6.64,-1.97,2026-10-16,
+2026-10-09,BP.,70,60,strong,yes,4.67,-1.97,2026-10-16,
+2026-10-09,COIN,49,53,weak,no,-3.47,-1.97,2026-10-16,"downtrend: 50-day below 200-day; moves with Bitcoin, whose trend is up"
+2026-10-09,CRWD,65,59,strong,no,-17.32,-1.97,2026-10-16,extended: more than 15% above 50-day
+2026-10-09,CVX,74,62,strong,yes,6.14,-1.97,2026-10-16,
+2026-10-09,GNRC,63,58,weak,no,-14.34,-1.97,2026-10-16,downtrend: 50-day below 200-day; faded gap
+2026-10-09,GS,40,50,weak,,,,,below 50-day average; oversold: RSI below 35
+2026-10-09,HUM,81,64,strong,no,-4.33,-1.97,2026-10-16,faded gap
+2026-10-09,JPM,45,52,middling,yes,2.02,-1.97,2026-10-16,below 50-day average
+2026-10-09,KO,61,57,strong,yes,6.64,-1.97,2026-10-16,
+2026-10-09,LITE,61,57,strong,no,-25.31,-1.97,2026-10-16,extended: more than 15% above 50-day; faded gap
+2026-10-09,LMT,25,45,weak,,,,,below 50-day average; downtrend: 50-day below 200-day
+2026-10-09,MPC,69,60,strong,yes,5.06,-1.97,2026-10-16,extended: more than 15% above 50-day
+2026-10-09,MRVL,58,56,middling,no,-17.24,-1.97,2026-10-16,extended: more than 15% above 50-day; faded gap
+2026-10-09,MSFT,66,59,strong,yes,-1.13,-1.97,2026-10-16,
+2026-10-09,MSTR,43,51,weak,no,-11.35,-1.97,2026-10-16,"downtrend: 50-day below 200-day; extended: more than 15% above 50-day; moves with Bitcoin, whose trend is up"
+2026-10-09,MU,47,52,middling,no,-14.59,-1.97,2026-10-16,faded gap
+2026-10-09,NFLX,29,46,weak,yes,0.33,-1.97,2026-10-16,below 50-day average; downtrend: 50-day below 200-day
+2026-10-09,NVDA,49,53,middling,,,,,faded gap
+2026-10-09,PLTR,74,62,strong,no,-11.01,-1.97,2026-10-16,extended: more than 15% above 50-day; overbought: RSI above 75; at 52-week high
+2026-10-09,PSX,67,59,strong,yes,5.39,-1.97,2026-10-16,
+2026-10-09,RTX,41,50,weak,,,,,below 50-day average
+2026-10-09,SHEL,81,64,strong,yes,3.75,-1.97,2026-10-16,at 52-week high
+2026-10-09,TSM,67,59,strong,no,-8.98,-1.97,2026-10-16,faded gap
+2026-10-09,VLO,73,62,strong,yes,2.53,-1.97,2026-10-16,extended: more than 15% above 50-day
+2026-10-09,VST,53,55,weak,no,-5.86,-1.97,2026-10-16,downtrend: 50-day below 200-day
+2026-10-09,XOM,67,59,strong,yes,5.94,-1.97,2026-10-16,
+2026-10-13,BP.,73,62,strong,,,,,
+2026-10-13,COIN,49,53,weak,,,,,"downtrend: 50-day below 200-day; moves with Bitcoin, whose trend is up"
+2026-10-13,CVX,79,64,strong,,,,,at 52-week high
+2026-10-13,GS,22,44,weak,,,,,below 50-day average; oversold: RSI below 35; heavy-volume down day; faded gap
+2026-10-13,HUM,77,63,strong,,,,,faded gap
+2026-10-13,KO,66,59,strong,,,,,
+2026-10-13,LITE,62,58,strong,,,,,
+2026-10-13,META,74,62,strong,,,,,extended: more than 15% above 50-day; golden cross on 2026-10-06
+2026-10-13,MRVL,68,60,strong,,,,,
+2026-10-13,MSFT,61,57,strong,,,,,
+2026-10-13,NVDA,55,55,middling,,,,,
+2026-10-13,PLTR,71,61,strong,,,,,extended: more than 15% above 50-day; overbought: RSI above 75; at 52-week high
+2026-10-13,PSX,67,59,strong,,,,,extended: more than 15% above 50-day; overbought: RSI above 75; at 52-week high
+2026-10-13,SHEL,80,64,strong,,,,,at 52-week high
+2026-10-13,TSM,68,60,strong,,,,,
+2026-10-13,UNH,47,52,middling,,,,,below 50-day average; faded gap
+2026-10-13,VLO,80,64,strong,,,,,extended: more than 15% above 50-day; overbought: RSI above 75; at 52-week high
+2026-10-13,XOM,76,63,strong,,,,,
+2026-10-14,ABBV,72,61,strong,,,,,at 52-week high
+2026-10-14,BP.,68,60,strong,,,,,
+2026-10-14,CEG,25,45,weak,,,,,downtrend: 50-day below 200-day
+2026-10-14,COIN,32,47,weak,,,,,"below 50-day average; downtrend: 50-day below 200-day; moves with Bitcoin, whose trend is up"
+2026-10-14,CRWD,54,55,middling,,,,,
+2026-10-14,CVX,79,64,strong,,,,,at 52-week high
+2026-10-14,HUM,83,65,strong,,,,,
+2026-10-14,KO,73,62,strong,,,,,
+2026-10-14,LLY,77,63,strong,,,,,
+2026-10-14,META,68,60,strong,,,,,golden cross on 2026-10-06
+2026-10-14,MPC,78,63,strong,,,,,extended: more than 15% above 50-day; overbought: RSI above 75; at 52-week high
+2026-10-14,MRK,72,61,strong,,,,,
+2026-10-14,MRVL,56,56,middling,,,,,
+2026-10-14,MSFT,58,56,middling,,,,,
+2026-10-14,MSTR,39,50,weak,,,,,"downtrend: 50-day below 200-day; moves with Bitcoin, whose trend is up"
+2026-10-14,PG,64,58,weak,,,,,downtrend: 50-day below 200-day
+2026-10-14,PLTR,67,59,strong,,,,,
+2026-10-14,PSX,76,63,strong,,,,,extended: more than 15% above 50-day; overbought: RSI above 75; at 52-week high
+2026-10-14,SHEL,80,64,strong,,,,,overbought: RSI above 75; at 52-week high
+2026-10-14,TSM,49,53,middling,,,,,below 50-day average; heavy-volume down day
+2026-10-14,UNH,68,60,strong,,,,,
+2026-10-14,VLO,77,63,strong,,,,,extended: more than 15% above 50-day; overbought: RSI above 75; at 52-week high
+2026-10-14,XOM,76,63,strong,,,,,at 52-week high
+2026-10-15,ABBV,66,59,strong,,,,,faded gap; at 52-week high
+2026-10-15,AMGN,61,57,strong,,,,,faded gap
+2026-10-15,BP.,63,58,strong,,,,,
+2026-10-15,COIN,62,58,weak,,,,,"downtrend: 50-day below 200-day; moves with Bitcoin, whose trend is up"
+2026-10-15,CRWD,60,57,strong,,,,,
+2026-10-15,CVX,73,62,strong,,,,,
+2026-10-15,KO,74,62,strong,,,,,faded gap
+2026-10-15,LLY,80,64,strong,,,,,
+2026-10-15,META,67,59,strong,,,,,golden cross on 2026-10-06
+2026-10-15,MPC,75,62,strong,,,,,extended: more than 15% above 50-day
+2026-10-15,MRK,60,57,strong,,,,,faded gap
+2026-10-15,MRVL,57,56,middling,,,,,
+2026-10-15,MSFT,80,64,strong,,,,,
+2026-10-15,MSTR,53,55,weak,,,,,"downtrend: 50-day below 200-day; moves with Bitcoin, whose trend is up"
+2026-10-15,PLTR,71,61,strong,,,,,
+2026-10-15,PSX,75,62,strong,,,,,
+2026-10-15,SHEL,73,62,strong,,,,,overbought: RSI above 75; heavy-volume down day; at 52-week high
+2026-10-15,TSM,43,51,weak,,,,,below 50-day average; heavy-volume down day
+2026-10-15,UNH,69,60,strong,,,,,
+2026-10-15,VLO,69,60,strong,,,,,extended: more than 15% above 50-day
+2026-10-15,XOM,76,63,strong,,,,,
+2026-10-16,ABBV,72,61,strong,,,,,
+2026-10-16,AMGN,59,57,middling,,,,,
+2026-10-16,BP.,72,61,strong,,,,,
+2026-10-16,CEG,19,43,weak,,,,,below 50-day average; downtrend: 50-day below 200-day
+2026-10-16,COIN,34,48,weak,,,,,"below 50-day average; downtrend: 50-day below 200-day; moves with Bitcoin, whose trend is up"
+2026-10-16,CRWD,39,50,weak,,,,,below 50-day average; heavy-volume down day
+2026-10-16,CVX,80,64,strong,,,,,at 52-week high
+2026-10-16,HUM,66,59,strong,,,,,
+2026-10-16,KO,80,64,strong,,,,,at 52-week high
+2026-10-16,LLY,76,63,strong,,,,,
+2026-10-16,META,56,56,middling,,,,,golden cross on 2026-10-06
+2026-10-16,MPC,75,62,strong,,,,,extended: more than 15% above 50-day
+2026-10-16,MRK,60,57,strong,,,,,faded gap
+2026-10-16,MRVL,42,51,weak,,,,,below 50-day average
+2026-10-16,MSFT,65,59,strong,,,,,
+2026-10-16,MSTR,33,48,weak,,,,,"downtrend: 50-day below 200-day; heavy-volume down day; moves with Bitcoin, whose trend is up"
+2026-10-16,PG,64,58,weak,,,,,downtrend: 50-day below 200-day; overbought: RSI above 75
+2026-10-16,PLTR,48,53,middling,,,,,heavy-volume down day
+2026-10-16,PSX,83,65,strong,,,,,
+2026-10-16,SHEL,81,64,strong,,,,,overbought: RSI above 75; at 52-week high
+2026-10-16,TSM,33,48,weak,,,,,below 50-day average; oversold: RSI below 35; heavy-volume down day
+2026-10-16,UNH,63,58,strong,,,,,
+2026-10-16,VLO,73,62,strong,,,,,extended: more than 15% above 50-day
+2026-10-16,XOM,82,65,strong,,,,,at 52-week high

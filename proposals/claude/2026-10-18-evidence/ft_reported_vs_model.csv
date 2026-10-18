@@ -1,0 +1,10 @@
+session,read_time_uk,ft_value,model_close_value,gap_credits,gap_pct,rank,players,read_before_us_close,source
+2026-10-09,18:12,99838.0,99932.16,-94.16,-0.094,5166.0,11967.0,True,ledger reported row; Tim screenshot
+2026-10-09,21:58,99920.0,99932.16,-12.16,-0.012,6807.0,12798.0,False,ledger reported row; Tim screenshot
+2026-10-12,20:54,100414.0,100595.22,-181.22,-0.18,4178.0,13212.0,True,ledger reported row; Tim screenshot
+2026-10-13,20:59,100931.0,101074.95,-143.95,-0.142,3579.0,13436.0,True,ledger reported row; Tim screenshot
+2026-10-16,after close (screenshot sent 17 Oct),101402,101436.82,-34.82,-0.034,3269,13918,False,state doc section 1; not yet in ledger
+2026-10-12,"FT chart close, read by eye +/-10 by Claude on 17 Oct",100565,100595.22,-30.22,-0.03,,,False,state doc section 1; screenshot not in repo
+2026-10-13,"FT chart close, read by eye +/-10 by Claude on 17 Oct",101060,101074.95,-14.95,-0.015,,,False,state doc section 1; screenshot not in repo
+2026-10-14,"FT chart close, read by eye +/-10 by Claude on 17 Oct",101190,101169.19,20.81,0.021,,,False,state doc section 1; screenshot not in repo
+2026-10-15,"FT chart close, read by eye +/-10 by Claude on 17 Oct",100775,100790.21,-15.21,-0.015,,,False,state doc section 1; screenshot not in repo

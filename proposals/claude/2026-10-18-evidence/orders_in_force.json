@@ -1,0 +1,80 @@
+{
+ "note": "Target weights (percent) in force from the open of each session. Source: ledger position rows (live ledger.json sha256 0e52db72...) and state doc section 5.",
+ "orders": {
+  "2026-10-09": {
+   "XOM": 15,
+   "CVX": 15,
+   "SHEL": 10,
+   "RTX": 10,
+   "LMT": 5,
+   "TSM": 10,
+   "NVDA": 10,
+   "CASH": 25
+  },
+  "2026-10-12": {
+   "XOM": 15,
+   "CVX": 15,
+   "SHEL": 10,
+   "TSM": 10,
+   "NVDA": 10,
+   "MSFT": 15,
+   "KO": 15,
+   "PLTR": 5,
+   "GS": 5,
+   "CASH": 0
+  },
+  "2026-10-13": {
+   "XOM": 15,
+   "CVX": 15,
+   "SHEL": 15,
+   "TSM": 10,
+   "MSFT": 15,
+   "KO": 20,
+   "PLTR": 5,
+   "GS": 5,
+   "CASH": 0
+  },
+  "2026-10-14": {
+   "XOM": 15,
+   "CVX": 15,
+   "SHEL": 15,
+   "TSM": 10,
+   "MSFT": 15,
+   "KO": 20,
+   "PLTR": 5,
+   "META": 5,
+   "CASH": 0
+  },
+  "2026-10-15": {
+   "XOM": 15,
+   "CVX": 15,
+   "SHEL": 15,
+   "TSM": 10,
+   "MSFT": 10,
+   "KO": 20,
+   "PLTR": 5,
+   "LLY": 10,
+   "CASH": 0
+  },
+  "2026-10-16": {
+   "XOM": 15,
+   "CVX": 15,
+   "SHEL": 15,
+   "MSFT": 15,
+   "KO": 20,
+   "PLTR": 5,
+   "LLY": 15,
+   "CASH": 0
+  },
+  "2026-10-19 (in force, unchanged)": {
+   "XOM": 15,
+   "CVX": 15,
+   "SHEL": 15,
+   "MSFT": 15,
+   "KO": 20,
+   "PLTR": 5,
+   "LLY": 15,
+   "CASH": 0
+  }
+ }
+}

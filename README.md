@@ -2,7 +2,7 @@
 
 Tim's entry ("Seeking Beta") in the FT Stock Picking Game, 5 Oct to 27 Nov 2026: a virtual 100,000-credit portfolio of 5 to 20 stocks. The aim is a finish in roughly the top 2% of players. No real money is involved.
 
-**Current version: 6.5 (18 Oct 2026): the standstill test corrected (pipeline 7.1): each week judged against the order before it, the first order kept as a never-changed baseline, missing prices added, the +0.86 claim withdrawn. Previous: 6.4, after the outside audit.** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
+**Current version: 6.6 (18 Oct 2026): a handoff log between Claude and ChatGPT (`handoff/`). Before that, 6.5 (18 Oct 2026): the standstill test corrected (pipeline 7.1): each week judged against the order before it, the first order kept as a never-changed baseline, missing prices added, the +0.86 claim withdrawn. Previous: 6.4, after the outside audit.** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
 
 This repository is a **mirror and a place to propose changes**. The live system runs in Claude (scheduled tasks, a Claude Project and a dashboard artifact). Claude writes snapshots here; ChatGPT and Tim read them and propose changes through pull requests.
 
@@ -10,6 +10,7 @@ This repository is a **mirror and a place to propose changes**. The live system 
 
 | To understand | Read |
 |---|---|
+| What Claude and ChatGPT last told each other | `handoff/` (newest notes; read `handoff/README.md` first) |
 | What is held now, why, and what happened recently | `state/ft-game-state.md` (sections 1 to 5) |
 | The rules every decision follows | `docs/ft-game-rules.md` (part E) |
 | The game's rules, guardrails, timing and output style | `docs/ft-game-playbook.md` (parts A to D, I to K) |
@@ -32,6 +33,7 @@ data/        stocks, ledger, history, macro, panel (JSON), written only by the p
 page/        the dashboard: index.html, app.js, fonts.css, logos.json
 skills/      the two saved Claude skills (ft-game-playbook, stock-score)
 ops/         the scheduled tasks, key redacted
+handoff/     notes between Claude and ChatGPT, one per session (format in handoff/README.md)
 proposals/   chatgpt/ and claude/: proposals for Tim to review
 sync-test/   the 16 Oct connection test (kept as a record)
 SYNC.md      sync manifest

@@ -1,0 +1,7 @@
+ticker,date,field,stored,check,source
+SHEL,2026-10-09,open,3753,3752.5,stockanalysis.com/quote/lon/SHEL/history
+SHEL,2026-10-09,close,3795.5,3793.5,same
+SHEL,2026-10-12,open,3836,3768,same (stored row is a placeholder)
+SHEL,2026-10-12,high/low/volume,3836/3836/None,3855/3759.5/5002093,same
+SHEL,2026-10-14,low,3862,3836,same
+GS,2026-10-14,open,881.35,880.93,stockanalysis.com/stocks/gs/history
