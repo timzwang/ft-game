@@ -1,15 +1,17 @@
 # Last sync
 
-Run: hand-run session with Tim (playbook 6.6), 2026-10-18T00:10:29Z. Prices as of: Fri 16 Oct close.
+Run: hand-run session with Tim (playbook 6.8), 2026-10-18T22:29:05Z, catching up after the Sun 18 Oct evening review, whose G6 step could not reach this repository. Prices as of: Fri 16 Oct close (order for Mon 19 Oct).
 
-sha256 of each file as published to the artifact and the Project:
+The data files are byte for byte the artifact's assets published at 21:47 UK on 18 Oct. The state doc is a text copy of the Project doc as last updated about 22:05 UK; it is not byte-identical to the Project copy, and the next evening run that reaches the repository replaces it.
+
+sha256 of each file:
 
 ~~~
-2db319744a8a57d96b93f0136f6c6dcffb6cdb092b51020f5b34815c8a4c60f4  data/history.json
-0e52db728fdbd038715c3212a129c6cd770191c5f1e914e0a6f2bc1f5f1d574f  data/ledger.json
+73a1b2f2f60bfb7d5e54251360e5cd74737b62d0dd638da062465e18d7b58a07  data/history.json
+6ecafe0d33904a4b96f6be3335c213f6dd53922c674f6593e4a61fbaec2a0df8  data/ledger.json
 26edccc3dc4e92c8883819252d4216b925fd11ece91c316d171ba5ad1429604c  data/macro.json
-aec1ef88a0af760413a9b9288c70b60e6aa48b38e2d30f48d3faff89d437046c  data/panel.json
-a993e62a9c6eb93c089afd92cbaa69e0b32985a24cbb6dc0f71b499511a131cf  data/stocks.json
-0856ae5851ec8aeb529ee18dcd2f7b0cdb9add800bd9a713ba99887bc83edaa4  state/ft-game-state.md
-367d303f0101eb48a8957e06d52d00b8f97f4ea0ff9b614c171149bbea8c2201  scripts/ft_pipeline.py
+1fbc2833c84b4332af1e7f0398f0b098d9683dc27ce6214686955b0e550cffb0  data/panel.json
+4521eb9da8a615e3f4897420bab1ee20c4bbc92d791cca993514794761e5174a  data/stocks.json
+b975f2b9db84d4b2e74c67b80e81c886d9d547d4fb48d76394d6f61f533870f6  state/ft-game-state.md
+1a46ea6fa8f406257b98ae02c78c84d4bb8adb621754733b5c1fc555ca8f36e4  scripts/ft_pipeline.py
 ~~~
