@@ -2,7 +2,7 @@
 
 Run: hand-run session with Tim (playbook 6.8), 2026-10-18T22:29:05Z, catching up after the Sun 18 Oct evening review, whose G6 step could not reach this repository. Prices as of: Fri 16 Oct close (order for Mon 19 Oct).
 
-The data files are byte for byte the artifact's assets published at 21:47 UK on 18 Oct. The state doc is a text copy of the Project doc as last updated about 22:05 UK; it is not byte-identical to the Project copy, and the next evening run that reaches the repository replaces it.
+The data files are byte for byte the artifact's assets published at 21:47 UK on 18 Oct. The state doc was then revised for playbook 6.9 (about 23:50 UK) and uploaded to the Project from this file, so the two copies are identical: sha256 e0c744b57b83c8d4b7c9d40b6578cea8d9497c5209b9591b575304bdc2f99f8f (the hash in the list below is the earlier text copy).
 
 sha256 of each file:
 
