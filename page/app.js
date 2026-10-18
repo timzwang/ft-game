@@ -87,9 +87,14 @@ dash.calc('standing', {
     fn: (ledger, stocks) => {
       const w = {};
       stocks.filter((r) => r.group === 'Portfolio').forEach((r) => { w[r.name] = Number(r.weight); });
+      // The budget per report: 0.6 points unless the pipeline's results_budget row sets another (pipeline 7.3).
+      const rb = ledger.find((r) => r.table === 'meta' && r.name === 'results_budget');
+      let rule = {default: 0.6, windows: []};
+      try { if (rb && rb.text) rule = Object.assign(rule, JSON.parse(rb.text)); } catch (e) { /* keep 0.6 */ }
+      const budgetFor = (d) => (rule.windows || []).reduce((b, x) => (String(d) >= x.from && String(d) <= x.to ? Math.max(b, Number(x.budget)) : b), Number(rule.default) || 0.6);
       return ledger.filter((r) => r.table === 'event' && r.kind === 'results' && w[r.stock] !== undefined)
         .sort((a, b) => String(a.date).localeCompare(String(b.date)))
-        .map((r) => ({id: r.id, stock: r.stock, date: r.date, weight: w[r.stock], implied_pct: r.implied_pct === null || r.implied_pct === '' ? null : Number(r.implied_pct), risk_pts: r.implied_pct === null || r.implied_pct === '' ? null : Math.round(w[r.stock] * Number(r.implied_pct)) / 100}));
+        .map((r) => ({id: r.id, stock: r.stock, date: r.date, weight: w[r.stock], budget: budgetFor(r.date), implied_pct: r.implied_pct === null || r.implied_pct === '' ? null : Number(r.implied_pct), risk_pts: r.implied_pct === null || r.implied_pct === '' ? null : Math.round(w[r.stock] * Number(r.implied_pct)) / 100}));
     },
   });
 
@@ -135,14 +140,19 @@ dash.calc('standing', {
   const daysAway = (s) => { const a = asDate(s); const b = asDate(today()); return a && b ? Math.round((a - b) / 86400000) : null; };
   const relDay = (s) => { const n = daysAway(s); return n === null ? '' : n === 0 ? 'today' : n === 1 ? 'tomorrow' : n === -1 ? 'yesterday' : n > 1 ? 'in ' + n + ' days' : -n + ' days ago'; };
   const isWeekday = (s) => { const d = asDate(s).getUTCDay(); return d > 0 && d < 6; };
-  // The last US session that should be complete now: today after 21:15 UK on a weekday, else the weekday before.
+  // US calendar for the rest of the game (pipeline 7.3): shut on 26 Nov, early close 13:00 New York (18:00 UK) on 27 Nov.
+  const US_CLOSED = ['2026-11-26'];
+  const isUsSession = (s) => isWeekday(s) && !US_CLOSED.includes(s);
+  // UK time from which a US session's daily bar is final: 15 minutes after the close.
+  const usFinalUk = (s) => (s === '2026-11-27' ? '18:15' : s >= '2026-10-26' && s <= '2026-10-30' ? '20:15' : '21:15');
+  // The last US session that should be complete now: today once its bar is final, else the session before.
   const expectedSession = () => {
     const p = ukParts();
     let d = p.date;
-    if (!(isWeekday(d) && p.time >= '21:15')) { d = addDays(d, -1); while (!isWeekday(d)) d = addDays(d, -1); }
+    if (!(isUsSession(d) && p.time >= usFinalUk(d))) { d = addDays(d, -1); while (!isUsSession(d)) d = addDays(d, -1); }
     return d;
   };
-  const sessionsBetween = (a, b) => { let n = 0; let d = a; while (d < b) { d = addDays(d, 1); if (isWeekday(d)) n += 1; } return n; };
+  const sessionsBetween = (a, b) => { let n = 0; let d = a; while (d < b) { d = addDays(d, 1); if (isUsSession(d)) n += 1; } return n; };
   const usOpenUk = (s) => (s >= '2026-10-26' && s <= '2026-10-30' ? '13:30' : '14:30');
   const CUTOFF = '07:00';   // order cut-off, UK time: 07:00 until the FT confirms it after the clock change (playbook 6.4, part C)
   const whenKey = (r) => String(r.date) + String(r.time_uk || '');
@@ -504,7 +514,7 @@ dash.calc('standing', {
       kp('Against the S&P 500', has ? pts(s.gap_pts) + ' pts' : '—', has ? dir(s.gap_pts) : '', has ? 'Portfolio ' + pct(s.cum_pct) + ', S&P 500 ' + pct(s.spx_cum_pct) + ' since the start' : 'After the first session'),
       kp(perf.length > 5 ? 'Last 5 sessions' : 'Since the start', r5 === null ? '—' : pct(r5), dir(r5), r5 === null ? '' : 'S&P 500 ' + pct(s5) + (perf.length <= 5 ? '. ' + n5 + ' sessions so far' : '')),
       kp('Competition rank', rv, '', rn, rflag),
-      kp('Next session call', cv, '', cn, st('Uncalibrated', 'warn', 'A similar-days model with ' + settled.length + ' settled calls. It nudges cash at most and never sets the order on its own.')),
+      kp('Next session call', cv, '', cn, st('Uncalibrated', 'warn', 'A similar-days model with ' + settled.length + ' settled calls. A research record only: it never changes the order or the cash level.')),
     );
   };
 
@@ -1127,8 +1137,8 @@ dash.calc('standing', {
     table(q('#rrisk'), [
       {h: 'Stock', cell: (r) => r.stock}, {h: 'Results', cell: (r) => shortDate(r.date)}, {h: 'Weight', num: true, only: ['m', 'l'], cell: (r) => wt(r.weight)},
       {h: 'Expected move', num: true, cell: (r) => (r.implied_pct === null ? 'Not priced yet' : '±' + r.implied_pct + '%')},
-      {h: 'At risk', num: true, cls: 'b', cell: (r) => [r.risk_pts === null ? '—' : r.risk_pts.toFixed(2) + ' pts', r.risk_pts !== null && r.risk_pts > 0.6 ? 'down' : '']},
-      {h: 'Budget', only: ['m', 'l'], cell: (r) => (r.risk_pts === null ? '' : r.risk_pts > 0.6 ? st('Over 0.6', 'bad') : st('Within', 'plain'))},
+      {h: 'At risk', num: true, cls: 'b', cell: (r) => [r.risk_pts === null ? '—' : r.risk_pts.toFixed(2) + ' pts', r.risk_pts !== null && r.risk_pts > r.budget + 1e-9 ? 'down' : '']},
+      {h: 'Budget', only: ['m', 'l'], cell: (r) => (r.risk_pts === null ? '' : r.risk_pts > r.budget + 1e-9 ? st('Over ' + r.budget.toFixed(1), 'bad') : st('Within ' + r.budget.toFixed(1), 'plain'))},
     ], (rr.status === 'ok' ? rr.data : []).filter((r) => String(r.date) >= t0), {empty: 'No holding has results ahead.'});
   };
 

@@ -1,0 +1,32 @@
+{
+ "old_version": "7.2",
+ "new_version": "7.3",
+ "session": "2026-10-16",
+ "files": {
+  "history.json": "identical",
+  "ledger.json": {
+   "rows_old": 541,
+   "rows_new": 542,
+   "only_in_new": [
+    [
+     "meta",
+     "results_budget"
+    ]
+   ],
+   "only_in_old": []
+  },
+  "macro.json": "identical",
+  "panel.json": "identical",
+  "scores.json": "identical",
+  "stocks.json": "identical"
+ },
+ "printout_lines_only_in_new": [
+  "Pipeline version 7.3. Session 2026-10-16; order effective None; regime mixed; 10000 history rows",
+  "  RESULTS MISSING AbbVie: results 2026-10-30 per its stock data, but no results event; it is not in RESULTS TOTAL",
+  "WARNING: AbbVie is held and its stock data says results on 2026-10-30 (\"30 Oct\"), but no results event is stored, so RESULTS TOTAL and the page leave it out: add it under events (kind \"results\") with its time and implied move"
+ ],
+ "printout_lines_only_in_old": [
+  "Pipeline version 7.2. Session 2026-10-16; order effective None; regime mixed; 10000 history rows"
+ ]
+}
+RESULT: same figures (only the new meta rows differ)

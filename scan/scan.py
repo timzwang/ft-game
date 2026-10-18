@@ -48,6 +48,8 @@ LEADERS_TOP = 30
 EVENTS_TOP = 30
 RECORD_TOP = 10
 SETTLE_AFTER = 5
+SETTLE_TIMEOUT = 15        # benchmark sessions after which a row still missing a stock row settles with no figures
+US_EARLY_CLOSE = {"2026-11-27": (13, 0)}   # New York early close (the day after Thanksgiving, the game's last day)
 UNIVERSE_MAX_AGE_DAYS = 7
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) ft-game-scan/1.0 (private research; github.com/timzwang/ft-game)"}
 
@@ -433,6 +435,11 @@ RECORD_COLS = ["session", "list", "rank", "ticker", "market", "new", "close",
 
 
 def settle(record, data):
+    """Each row is settled over the benchmark's own sessions: entry at the next session's open (or the session's
+    close for the close-basis figure) and exit at the close SETTLE_AFTER benchmark sessions later. The stock must have
+    rows on exactly those dates; a missing one waits, and after SETTLE_TIMEOUT sessions the row is closed with no
+    figures (so it counts in neither direction). Before 19 Oct 2026 the stock's own rows were counted, so a missing
+    day moved its window away from the benchmark's."""
     for i, r in record.iterrows():
         if isinstance(r.get("settled_on"), str) and r["settled_on"]:
             continue
@@ -440,17 +447,18 @@ def settle(record, data):
         if df is None or bdf is None:
             continue
         d = pd.Timestamp(r["session"])
-        if d not in df.index or d not in bdf.index:
+        if d not in bdf.index:
             continue
-        p, bp = df.index.get_loc(d), bdf.index.get_loc(d)
-        if p + SETTLE_AFTER >= len(df) or bp + SETTLE_AFTER >= len(bdf):
+        bp = bdf.index.get_loc(d)
+        if bp + SETTLE_AFTER >= len(bdf):
             continue
-        end = df.index[p + SETTLE_AFTER]
-        if end not in bdf.index:
+        nxt, end = bdf.index[bp + 1], bdf.index[bp + SETTLE_AFTER]
+        if not all(x in df.index for x in (d, nxt, end)):
+            if bp + SETTLE_TIMEOUT < len(bdf):
+                record.at[i, "settled_on"] = end.strftime("%Y-%m-%d")      # closed with no figures: missing stock rows
             continue
-        be = bdf.index.get_loc(end)
-        c0, c5, o1 = df["Close"].iloc[p], df["Close"].iloc[p + SETTLE_AFTER], df["Open"].iloc[p + 1]
-        b0, b5, bo1 = bdf["Close"].iloc[bp], bdf["Close"].iloc[be], bdf["Open"].iloc[bp + 1]
+        c0, c5, o1 = df.at[d, "Close"], df.at[end, "Close"], df.at[nxt, "Open"]
+        b0, b5, bo1 = bdf["Close"].iloc[bp], bdf["Close"].iloc[bp + SETTLE_AFTER], bdf["Open"].iloc[bp + 1]
         record.at[i, "settled_on"] = end.strftime("%Y-%m-%d")
         record.at[i, "ret_5"] = c5 / c0 - 1
         record.at[i, "bench_5"] = b5 / b0 - 1
@@ -471,8 +479,12 @@ def record_summary(record):
             if n == 0:
                 lines.append(f"| {lst} | {label} | 0 | | | |")
                 continue
-            ex = sub["excess_5"].astype(float)
-            exo = sub["excess_5_open"].astype(float)
+            ex = sub["excess_5"].astype(float).dropna()          # rows closed with no figures count in neither direction
+            exo = sub["excess_5_open"].astype(float).dropna()
+            n = len(ex)
+            if n == 0:
+                lines.append(f"| {lst} | {label} | 0 | | | |")
+                continue
             lines.append(f"| {lst} | {label} | {n} | {(ex > 0).mean():.0%} | {ex.mean() * 100:+.2f} | {exo.mean() * 100:+.2f} |")
     return lines
 
@@ -483,7 +495,8 @@ def us_session_final(spy):
     """The latest US session whose daily bar is final, as a date string."""
     now = datetime.now(NY)
     last = spy.index[-1].date()
-    if last == now.date() and (now.hour, now.minute) < (16, 15):
+    close_h, close_m = US_EARLY_CLOSE.get(now.date().isoformat(), (16, 0))
+    if last == now.date() and (now.hour, now.minute) < (close_h, close_m + 15):
         return spy.index[-2].strftime("%Y-%m-%d"), True
     return last.strftime("%Y-%m-%d"), False
 

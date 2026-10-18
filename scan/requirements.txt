@@ -1,5 +1,8 @@
-pandas>=2.2
-numpy>=1.26
-yfinance>=1.0
-requests>=2.31
-lxml>=5.0
+# Pinned 19 Oct 2026 (playbook 6.10) to the versions the regression tests passed with, so a library release
+# cannot change the scan mid-game. yfinance is left free above the tested version: Yahoo changes its pages often
+# and the fixes arrive as new yfinance releases.
+pandas==3.0.6
+numpy==2.5.4
+yfinance>=1.7.0
+requests==2.34.2
+lxml==6.1.3

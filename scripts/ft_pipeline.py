@@ -1,5 +1,23 @@
 #!/usr/bin/env python3
-"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.2 (18 Oct 2026).
+"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.3 (19 Oct 2026).
+
+Version 7.3 (19 Oct 2026, approved by Tim after ChatGPT's repository review of 18 Oct) fixes settlement and the calendar:
+  - confidence ratings settle over one window of five benchmark sessions starting at the fill date, and only with the
+    stock's own row on the fill date (with a traded open) and on the window's last date; a missing or estimated row
+    waits, and after 15 sessions the rating settles as "n/a" with the reason in `unit` (before, the first five rows the
+    stock happened to have were used, so a missing day shifted the stock's window away from the index's);
+  - shadow ratings need the stock's close on the exact end date; a missing one waits, then "n/a" (before, an earlier
+    close could be used under the end date's label);
+  - an FT reading already stored takes fields given later for it (`top2_return_pct`, `players`, `note`); before, the
+    repeat was dropped;
+  - US calendar: 26 Nov 2026 is not a US session and 27 Nov closes at 13:00 New York (18:00 UK), for the next-session
+    date, the sessions-ahead count and RECONCILE's "read before the close" test;
+  - a stored row marked as having no traded open keeps that mark when it is given back, and a change of mark alone
+    counts as a correction; market_closed entries are kept in the ledger (a "meta" row) so a later rebuild still
+    knows the market was shut;
+  - results budget: reports dated 27 to 30 Oct 2026 are judged against 1.0 points instead of 0.6 (agreed by Tim on
+    19 Oct for the October results cluster); the budgets in force are written to a "meta" row for the page;
+  - with complete prices every figure is identical to version 7.2.
 
 Version 7.2 (18 Oct 2026, approved by Tim after ChatGPT's challenge of the audit verification) changes data integrity only:
   - open provenance: a price row given without an open stores the close as its open, marked open_obs = false, and is
@@ -131,7 +149,9 @@ today.json for `run` (null or omit anything unknown):
                                        A "Bitcoin" entry is not a theme: it is an assumed move in Bitcoin, applied to every
                                        crypto-linked holding through its measured link, on top of the theme moves
                                        ({"name": "Bitcoin falls 15%", "shocks": {"Bitcoin": -15, "Other": 0}})
- "results_budget": 0.6,                optional: the points of the portfolio allowed per results report (default 0.6)
+ "results_budget": 0.6,                optional: the points of the portfolio allowed per results report (default 0.6);
+                                       reports inside RESULTS_BUDGET_WINDOWS (27 to 30 Oct 2026: 1.0) use the higher figure
+ "market_closed": [{"ticker","date"}], optional: a market that was shut that day (kept in the ledger from version 7.3)
  "reported": {"date","time_uk","value","rank","players","top2_return_pct","note"},
  "postmortems": [{"name","text","lesson"}],
  "fixes": [{"name": "Shell", "old_effective": "2026-10-12", "new_effective": "2026-10-09", "fill_price": 3795.5}]
@@ -161,7 +181,25 @@ import math
 import os
 import sys
 
-PIPELINE_VERSION = "7.2"
+PIPELINE_VERSION = "7.3"
+
+# Version 7.3: the US calendar for the rest of the game (NYSE and Nasdaq), and the results budget windows Tim agreed.
+US_CLOSED = {"2026-11-26"}                        # Thanksgiving: US markets shut (London trades)
+US_EARLY_CLOSE_NY = {"2026-11-27": "13:00"}       # the day after Thanksgiving, the game's last day: 13:00 New York
+RESULTS_BUDGET_WINDOWS = [                        # (first report date, last report date, points, why)
+    ("2026-10-27", "2026-10-30", 1.0, "October results cluster: Tim agreed 1.0 points per report on 19 Oct"),
+]
+SETTLE_TIMEOUT = 15                               # sessions after which an unsettled rating with missing rows is "n/a"
+
+
+def results_budget_for(date, default=0.6):
+    """The points allowed per results report dated `date`: the default (0.6, or what part D's stance sets) unless the
+    date falls in an agreed window, whose budget then applies if it is higher."""
+    out = default
+    for lo, hi, pts, _why in RESULTS_BUDGET_WINDOWS:
+        if lo <= (date or "") <= hi:
+            out = max(out, pts)
+    return out
 
 LEDGER_KEYS = ["id", "table", "date", "time_uk", "effective", "name", "ticker", "stock", "kind", "bank", "action", "theme",
                "weight", "from_w", "to_w", "score", "confidence", "ret_pct", "spx_ret_pct", "beat", "contrib_pts",
@@ -243,7 +281,7 @@ def merge_history(hist, ticker, rows):
         if len(d) != 10 or c is None or c <= 0:
             warn(f"{ticker} {d}: row skipped (no date or close)")
             continue
-        imputed = o is None                  # no open supplied: stored as the close, marked so it is never used as a fill
+        imputed = o is None or r.get("open_obs") is False   # no open supplied, or a stored row given back still marked
         if o is None:
             o = c
         if h is None:
@@ -254,8 +292,9 @@ def merge_history(hist, ticker, rows):
             warn(f"{ticker} {d}: row skipped (open/high/low/close inconsistent: {o}, {h}, {l}, {c})")
             continue
         old = hist.get((ticker, d))
-        if old is None or abs(old["close"] / c - 1) > 1e-4 or abs(old["open"] / o - 1) > 1e-4:
-            changed.append(d)             # new for that day, or corrected
+        if (old is None or abs(old["close"] / c - 1) > 1e-4 or abs(old["open"] / o - 1) > 1e-4
+                or (old.get("open_obs") is False) != imputed):
+            changed.append(d)             # new for that day, or corrected (a change of open provenance alone counts)
         row = {"ticker": ticker, "date": d, "open": o, "high": h, "low": l, "close": c, "volume": v}
         if imputed:
             row["open_obs"] = False
@@ -642,25 +681,43 @@ def update_performance(ledger, hist, bench, today_date, closed=None):
     return added
 
 
-def resolve_confidence(ledger, hist, bench):
+def resolve_confidence(ledger, hist, bench, timeout=SETTLE_TIMEOUT):
+    """Version 7.3: a rating settles over one window, the first five benchmark sessions on or after its fill date
+    (`effective`). The stock is bought at its own open on the fill date and valued at its close on the window's last
+    date; the index from its open on the window's first session to its close on the last. Both stock rows must be
+    there and the opening one must carry a traded open (real_open), and the index's opening row too; otherwise the
+    rating waits, and once `timeout` sessions have passed it settles as "n/a" with the reason in `unit`."""
     bser = series(hist, bench)
-    bdates = [r["date"] for r in bser]
     n = 0
     for r in ledger:
         if r["table"] != "confidence" or r["beat"] not in (None, "") or not r["effective"]:
             continue
-        ser = series(hist, r["ticker"])
-        after = [x for x in ser if x["date"] >= r["effective"]]
         bafter = [x for x in bser if x["date"] >= r["effective"]]
-        if len(bafter) >= 5 and not r["window_end"]:
-            r["window_end"] = bafter[4]["date"]
-        if len(after) < 5 or len(bafter) < 5:
+        if len(bafter) < 5:
             continue
-        s_ret = pct(after[4]["close"], after[0]["open"])
+        end = bafter[4]["date"]
+        r["window_end"] = end
+        ser = {x["date"]: x for x in series(hist, r["ticker"])}
+        start, fin = ser.get(r["effective"]), ser.get(end)
+        why = None
+        if not start:
+            why = f"no row for {r['effective']}"
+        elif not real_open(start):
+            why = f"no traded open for {r['effective']}"
+        elif not fin:
+            why = f"no close for {end}"
+        elif not real_open(bafter[0]):
+            why = f"no traded open for the index on {bafter[0]['date']}"
+        if why:
+            if len(bafter) > timeout:
+                r["beat"], r["unit"] = "n/a", "not scored: " + why
+                n += 1
+            continue
+        s_ret = pct(fin["close"], start["open"])
         b_ret = pct(bafter[4]["close"], bafter[0]["open"])
         r["ret_pct"], r["spx_ret_pct"] = r2(s_ret), r2(b_ret)
         r["beat"] = "yes" if s_ret > b_ret else "no"
-        r["window_end"] = bafter[4]["date"]
+        r["unit"] = None
         n += 1
     return n
 
@@ -1138,9 +1195,10 @@ def day_call(hist, mac, bench, oil_proxy, weights, tick_of, date, k=40, shrink=4
 
 
 def next_weekday(d):
+    """The next US session after d: the next weekday, skipping US_CLOSED (version 7.3)."""
     import datetime
     x = datetime.date(int(d[:4]), int(d[5:7]), int(d[8:10])) + datetime.timedelta(days=1)
-    while x.weekday() >= 5:
+    while x.weekday() >= 5 or x.isoformat() in US_CLOSED:
         x += datetime.timedelta(days=1)
     return x.isoformat()
 
@@ -1235,12 +1293,12 @@ def resolve_shadow(ledger, hist, bench):
         end = bser[i + 5]["date"]
         ser = series(hist, r["ticker"])
         start = next((x for x in ser if x["date"] == r["date"]), None)
-        upto = [x for x in ser if x["date"] <= end]
-        if not start or not upto or ser[-1]["date"] < end or upto[-1]["date"] <= r["date"]:
-            if i + 15 < len(bser):
+        fin = next((x for x in ser if x["date"] == end), None)       # version 7.3: the exact end date, never an earlier close
+        if not start or not fin:
+            if i + SETTLE_TIMEOUT < len(bser):
                 r["beat"], r["window_end"] = "n/a", end        # no prices arrived for three weeks: leave it out of the count
             continue                                   # the stock's prices do not reach the end of the window yet
-        s_ret, b_ret = pct(upto[-1]["close"], start["close"]), pct(bser[i + 5]["close"], bser[i]["close"])
+        s_ret, b_ret = pct(fin["close"], start["close"]), pct(bser[i + 5]["close"], bser[i]["close"])
         r["window_end"], r["ret_pct"], r["spx_ret_pct"] = end, r2(s_ret), r2(b_ret)
         r["beat"] = "yes" if s_ret > b_ret else "no"
         n += 1
@@ -1801,7 +1859,7 @@ def _sessions_ahead(date, n):
     out = []
     while len(out) < n:
         d += _dt.timedelta(days=1)
-        if d.weekday() < 5 and d.isoformat() != "2026-11-26":
+        if d.weekday() < 5 and d.isoformat() not in US_CLOSED:
             out.append(d.isoformat())
     return out
 
@@ -1825,12 +1883,44 @@ def results_total(ledger, weights, date, default_move=6.0):
     return out
 
 
+_MONTHS = {m: i + 1 for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"])}
+
+
+def results_date_from_text(text):
+    """The date in a stock's free-text next_results ("30 Oct, before US open", "28 Oct (time est.)") as YYYY-MM-DD, or
+    None when it names no day ("mid Jan 2027 (est.)" has none). October to December are 2026, other months 2027."""
+    import re
+    m = re.search(r"\b(\d{1,2})\s+([A-Za-z]{3})[a-z]*\b(?:\s+(20\d\d))?", text or "")
+    if not m or m.group(2).lower() not in _MONTHS:
+        return None
+    mon = _MONTHS[m.group(2).lower()]
+    year = int(m.group(3)) if m.group(3) else (2026 if mon >= 10 else 2027)
+    try:
+        import datetime as _dt
+        return _dt.date(year, mon, int(m.group(1))).isoformat()
+    except ValueError:
+        return None
+
+
+def missing_results_events(ledger, holdings, date, last="2026-11-27"):
+    """Version 7.3 (ChatGPT review, finding 1): holdings whose own next-results text names a date after `date` and up to
+    the game's end, with no results event stored for that stock on or after `date`. `holdings` maps name -> text.
+    The results total and the page read events only, so such a holding would be left out of both."""
+    have = {r["stock"] for r in ledger if r["table"] == "event" and r["kind"] == "results" and (r["date"] or "") > date}
+    out = []
+    for name, text in sorted(holdings.items()):
+        d = results_date_from_text(text)
+        if d and date < d <= last and name not in have:
+            out.append((name, d, text))
+    return out
+
+
 def us_close_uk(d):
-    """The US close (16:00 New York) in UK time on date d, as HH:MM."""
+    """The US close (16:00 New York, or the early close in US_EARLY_CLOSE_NY) in UK time on date d, as HH:MM."""
     try:
         import datetime as _dt
         from zoneinfo import ZoneInfo
-        ny = _dt.datetime.fromisoformat(d + "T16:00").replace(tzinfo=ZoneInfo("America/New_York"))
+        ny = _dt.datetime.fromisoformat(d + "T" + US_EARLY_CLOSE_NY.get(d, "16:00")).replace(tzinfo=ZoneInfo("America/New_York"))
         return ny.astimezone(ZoneInfo("Europe/London")).strftime("%H:%M")
     except Exception:  # noqa: BLE001
         return "21:00"
@@ -2087,8 +2177,27 @@ def cmd_run(a):
 
     if not hist.get((bench, date)):
         warn(f"no {bench} row for {date} in the history store, so performance for that session cannot be added")
-    added = update_performance(ledger, hist, bench, date,
-                               {(c_.get("ticker"), c_.get("date")) for c_ in (today.get("market_closed") or [])})
+    closed_now = {(c_.get("ticker"), c_.get("date")) for c_ in (today.get("market_closed") or []) if c_.get("ticker") and c_.get("date")}
+    mc_row = next((r for r in ledger if r["table"] == "meta" and r["name"] == "market_closed"), None)
+    try:
+        closed_all = {tuple(x) for x in json.loads(mc_row["text"])} if mc_row and mc_row["text"] else set()
+    except (ValueError, TypeError):
+        closed_all = set()
+    if closed_now - closed_all:           # version 7.3: kept, so a later rebuild still knows the market was shut
+        closed_all |= closed_now
+        if mc_row is None:
+            mc_row = lrow("meta", name="market_closed")
+            ledger.append(mc_row)
+        mc_row["text"] = json.dumps(sorted(list(x) for x in closed_all))
+    added = update_performance(ledger, hist, bench, date, closed_all)
+    bud0_ = num(today.get("results_budget")) or 0.6
+    rb_row = next((r for r in ledger if r["table"] == "meta" and r["name"] == "results_budget"), None)
+    if rb_row is None:
+        rb_row = lrow("meta", name="results_budget")
+        ledger.append(rb_row)
+    rb_row["value"] = bud0_               # version 7.3: the budgets in force, for the page
+    rb_row["text"] = json.dumps({"default": bud0_, "windows": [{"from": lo, "to": hi, "budget": pts, "why": why}
+                                                               for lo, hi, pts, why in RESULTS_BUDGET_WINDOWS]})
     resolved = resolve_confidence(ledger, hist, bench)
 
     # macro panel, day-ahead call, shadow ratings and calibration
@@ -2144,7 +2253,16 @@ def cmd_run(a):
     if num(rep.get("value")) is not None or num(rep.get("rank")) is not None:
         rk, pl = num(rep.get("rank")), num(rep.get("players"))
         key = (rep.get("date") or date, num(rep.get("value")), rk)
-        if not any(r["table"] == "reported" and (r["date"], r["value_reported"], r["rank"]) == key for r in ledger):
+        same = [r for r in ledger if r["table"] == "reported" and (r["date"], r["value_reported"], r["rank"]) == key]
+        for r in same:                       # version 7.3: a repeat of a stored reading fills in what it adds
+            if num(rep.get("top2_return_pct")) is not None:
+                r["value"] = num(rep.get("top2_return_pct"))
+            if num(rep.get("players")) is not None:
+                r["players"] = num(rep.get("players"))
+                r["percentile"] = r2(rk / r["players"] * 100.0, 1) if (rk and r["players"]) else r["percentile"]
+            if rep.get("note") and rep.get("note") not in (r["text"] or ""):
+                r["text"] = ((r["text"] + " ") if r["text"] else "") + rep.get("note")
+        if not same:
             ledger.append(lrow("reported", date=rep.get("date") or date, time_uk=rep.get("time_uk"),
                                value_reported=num(rep.get("value")), rank=rk, players=pl,
                                percentile=r2(rk / pl * 100.0, 1) if (rk and pl) else None,
@@ -2305,10 +2423,11 @@ def cmd_run(a):
         if w > 20: print(f"  NOTE {n}: weight {w:g}% is above the usual 20% maximum")
     for r in themes:
         if r["name"] != "Cash" and r["weight"] > 45: print(f"  NOTE theme {r['name']}: {r['weight']:g}% is above the 45% guide")
+    bud0 = num(today.get("results_budget")) or 0.6
     for e in (r for r in ledger if r["table"] == "event" and r["kind"] == "results" and r["stock"] in weights):
         if e["date"] > date and e["implied_pct"] is not None:
             risk_pts = weights[e["stock"]] * e["implied_pct"] / 100.0
-            bud = num(today.get("results_budget")) or 0.6
+            bud = results_budget_for(e["date"], bud0)
             tag = f"ABOVE the {bud:g} budget" if risk_pts > bud + 1e-9 else f"within the {bud:g} budget"
             print(f"  RESULTS {e['stock']} {e['date']}: weight {weights[e['stock']]:g}% x implied move {e['implied_pct']:g}% = {risk_pts:.2f} points, {tag}")
         elif e["date"] > date:
@@ -2317,6 +2436,11 @@ def cmd_run(a):
         if k_:
             print(f"  RESULTS TOTAL next {n_} sessions: {pts_:.2f} points across {k_} report(s)"
                   + (f"; no implied move yet for {', '.join(miss_)} (counted at 6%)" if miss_ else ""))
+    held_text = {n_: ((by_name.get(n_) or {}).get("quote") or {}).get("next_results") or "" for n_, w_ in weights.items() if w_ > 0}
+    for n_, d_, t_ in missing_results_events(ledger, held_text, date):
+        warn(f"{n_} is held and its stock data says results on {d_} (\"{t_}\"), but no results event is stored, so RESULTS TOTAL "
+             f"and the page leave it out: add it under events (kind \"results\") with its time and implied move")
+        print(f"  RESULTS MISSING {n_}: results {d_} per its stock data, but no results event; it is not in RESULTS TOTAL")
     evs = sorted((r for r in ledger if r["table"] == "event"), key=lambda r: (r["date"] or "", r["time_uk"] or ""))
     print("\nEVENTS ahead (use these exact names to update one):")
     for r in [r for r in evs if (r["date"] or "") > date][:10]:

@@ -27,6 +27,13 @@ Written Mon 12 Oct 2026, 01:40 UK, after the third design pass on Tim's page (ht
 
 - The order cut-off on the page moved from 08:00 to 07:00 UK (playbook 6.4): one constant, `CUTOFF`, next to `usOpenUk` in `files/app.js`, sets the Order panel's "Proposed" state, its countdown, its call to action and the step label; the help text in `files/index.html` says the same. If the FT confirms 08:00, change that one constant and the help sentence back. Only the two page documents changed (app.js version 2, index.html version 13).
 
+## What changed on 19 Oct (playbook 6.10, pipeline 7.3)
+
+- Risk tab, results table: the budget per report now comes from the ledger's `meta` row `results_budget`, which pipeline 7.3 writes on every run (`{"default", "windows": [{"from", "to", "budget", "why"}]}`). Reports dated 27 to 30 Oct show "Within 1.0" or "Over 1.0"; others 0.6. Until the first 7.3 run publishes that row, every report shows 0.6, as before.
+- Stale-price marker and FT reading age: a US session counts as complete 15 minutes after its close (21:15 UK, 20:15 UK in the week of 26 Oct, 18:15 UK on 27 Nov), and 26 Nov is not counted as a session (`US_CLOSED`, `usFinalUk`, `isUsSession` in `files/app.js`). Before, every weekday counted and the 21:15 rule applied all year, so 26 Nov would have shown the page a session behind.
+- The day call's help text no longer says it "nudges cash": it reads "A research record only: it never changes the order or the cash level" (part E since 16 Oct).
+- Only `files/app.js` changed (version 3). Checked with `node --check` and by running the changed functions in Node on sample data; the page was not rendered.
+
 ## Things a later chat must keep
 
 - The Order panel reads the latest alert whose `stock` is "Order", exactly as the old banner did: text starting "Changed" or "Revised" shows the blue "Enter before <cut-off>" bar until the cut-off on the effective day (the cut-off is the constant `CUTOFF` in `files/app.js`, 07:00 UK from 18 Oct, playbook part C; London fills still show 08:00, the LSE open); "No change" shows "Nothing to enter". The "New" marks and the Sell line come from the `trade` rows with the latest `effective` date, while that date is today or later.

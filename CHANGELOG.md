@@ -6,6 +6,24 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.10 (Mon 19 Oct 2026, about 00:40)
+
+Settlement, the calendar and a results budget for the October cluster, after ChatGPT's repository review of 18 Oct (`proposals/chatgpt/2026-10-18-repository-review.md`, on its branch and PR #2). Claude checked the findings against the same commit (`25e8a93`) first; Tim approved the fixes and one rule change. Pipeline version 7.3 (asset `f8ce759cc09d110095a10bbf712ae582`, sha256 `ca39efd22325da4c8ddb1158fe72ea64e39436d7b76434d4e8cd41727f9921b3`).
+
+- Rule (part E): reports dated 27 to 30 Oct are judged against a results budget of 1.0 points instead of 0.6, because the entry is about 5 points behind the top 2% line and a results day is close to a fair bet. A ceiling, not a target: a holding that has weakened is still cut or exited before its report.
+- Pipeline 7.3, review finding 1: `RESULTS MISSING` and a WARNING for a holding whose own next-results text names a date with no results event (AbbVie, 30 Oct, had none; the results total read 5.40 points instead of 6.00). The budget is applied by report date and written to a `meta` row for the page.
+- Finding 2: a confidence rating settles over one window of five index sessions from its fill date, needing the stock's traded open on the fill date and its close on the fifth session; otherwise it waits and, after 15 sessions, settles as "n/a" with the reason. In 7.2 the stock's first five rows were used, so a missing day moved its window away from the index's, and an estimated open could be scored.
+- Finding 3: shadow ratings need the stock's close on the exact end date. The broad scan settles on the benchmark's sessions and needs the stock's rows on them; a row closed with no figures counts in neither direction.
+- Finding 5: an FT reading given again (same date, value and rank) fills in `top2_return_pct`, `players` and `note`; in 7.2 the repeat was dropped.
+- Finding 6: 26 Nov is not a US session and 27 Nov closes at 13:00 New York (18:00 UK), in the pipeline (next session, sessions ahead, RECONCILE), the scan (bar finality) and the page (stale-price marker).
+- Finding 7: a stored row marked as having no traded open keeps the mark when given back, and a change of mark alone counts as a correction; `market_closed` entries are kept in the ledger.
+- Finding 8: the scan workflow runs only from `main` (a manual run on another branch could have pushed that branch to main).
+- Finding 9: roadmap items 39 and 42 corrected (the top-five panel test and the overbought split were never built; deferred to after the game) and item 45 marked superseded; the page's day-call help text no longer says it nudges cash.
+- Tests: `tests/`, 40 regression tests with real assertions, and `.github/workflows/tests.yml` running them on every change to the scripts, the page or the tests. Run against 7.2, 19 fail. Evidence: `proposals/claude/2026-10-19-evidence/` (7.2 against 7.3 on the 16 Oct session: identical files apart from one new `meta` row).
+- Scan libraries pinned (`scan/requirements.txt`) except yfinance, which follows Yahoo's changes.
+- Page: `files/app.js` version 3 (Risk tab budget by date, US calendar, day-call wording). Docs: core playbook (version line, part B, part D), rules (part E), data (G3, G4), evening run doc (step 10), roadmap (39, 42, 45, 53 to 55, the final week), page notes, state doc.
+- Not changed: the order (Mon 19 Oct's, entered by Tim), the data files, the score, the scheduled tasks.
+
 ## 6.9 (Sun 18 Oct 2026, about 23:50)
 
 Scheduled runs reach the repository, for real this time. Tim asked whether everything implemented was in the repository; the check found the 18 Oct evening review had not mirrored anything.
@@ -175,6 +193,8 @@ Not versioned with the playbook; its changes are listed here by date.
 - Sat 10 Oct: two design rounds in the style of Trading 212 and TradingView.
 - Mon 12 Oct, 01:40: denser rebuild, three-column layout on wide screens, company logos.
 - Mon 12 Oct, about 18:30: one row per stock on phones, a one-column Order panel, shorter statuses.
+- Sun 18 Oct: order cut-off shown as 07:00 UK (`app.js` version 2).
+- Mon 19 Oct, about 00:30: results budget read from the ledger (1.0 for 27 to 30 Oct), US calendar for 26 and 27 Nov, day-call help text (`app.js` version 3).
 
 ## Recording a new version
 

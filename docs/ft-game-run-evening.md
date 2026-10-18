@@ -1,6 +1,6 @@
 # FT Stock Picking Game: evening review (H1)
 
-Part H1 of the playbook (version 6.4, 17 Oct 2026: the 07:00 UK cut-off, the results total, rows for sold stocks; version 6.3, 16 Oct 2026: the broad scan, G7). Runs at 21:30 UK, Sunday to Thursday. Read with the core playbook (`claude/ft-game-playbook.md`, parts A to D and I to K), the rules (`claude/ft-game-rules.md`, part E), the data doc (`claude/ft-game-data.md`, parts F and G) and the state doc.
+Part H1 of the playbook (version 6.10, 19 Oct 2026: the results budget by date and `RESULTS MISSING`, step 10; version 6.4, 17 Oct 2026: the 07:00 UK cut-off, the results total, rows for sold stocks; version 6.3, 16 Oct 2026: the broad scan, G7). Runs at 21:30 UK, Sunday to Thursday. Read with the core playbook (`claude/ft-game-playbook.md`, parts A to D and I to K), the rules (`claude/ft-game-rules.md`, part E), the data doc (`claude/ft-game-data.md`, parts F and G) and the state doc.
 
 This review runs every evening and may change the order on any of them. Tim is sent a message only when there is something for him to enter (part I, "When Tim is told"). On a change evening he enters the order before 07:00 UK on the next trading day (part C); on a quiet evening the page and the state doc are updated and he hears nothing.
 
@@ -64,7 +64,7 @@ Change evening, in this order:
 7. Holdings table: move, score, band and flags, news, next results, consensus target, rating changes.
 8. Watchlist: the additions and removals table (stock, added or removed, score, band, reason), then the list by band with scores, each promotion with a confidence rating.
 9. Earnings drift: each reporter scanned with its verdict and the tests it failed, and the record so far.
-10. Results ahead: implied move, past reactions, weight times implied move, and the hold, trim or exit call with the last order time; the RESULTS TOTAL lines and whether that concentration is deliberate.
+10. Results ahead: implied move, past reactions, weight times implied move against the budget for its date (1.0 for 27 to 30 Oct, otherwise 0.6; part E), and the hold, trim or exit call with the last order time; any `RESULTS MISSING` line fixed by adding the event; the RESULTS TOTAL lines and whether that concentration is deliberate.
 11. News momentum: qualifying events, gap versus open-to-close, and whether each passes the entry test.
 12. Risk check: theme weights, the largest shares of risk, the worst scenario, and any NOTE lines from the pipeline with what was done about them.
 13. Coming up: the next three trading days in UK time, with the forecast for each economic release.

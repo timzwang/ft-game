@@ -1,8 +1,6 @@
 # Last sync
 
-Run: hand-run session with Tim (playbook 6.8), 2026-10-18T22:29:05Z, catching up after the Sun 18 Oct evening review, whose G6 step could not reach this repository. Prices as of: Fri 16 Oct close (order for Mon 19 Oct).
-
-The data files are byte for byte the artifact's assets published at 21:47 UK on 18 Oct. The state doc was then revised for playbook 6.9 (about 23:50 UK) and uploaded to the Project from this file, so the two copies are identical: sha256 e0c744b57b83c8d4b7c9d40b6578cea8d9497c5209b9591b575304bdc2f99f8f (the hash in the list below is the earlier text copy).
+Run: hand-run session with Tim (playbook 6.10), 2026-10-18T23:24:26Z. Prices as of: Fri 16 Oct close (order for Mon 19 Oct). The data files are unchanged since the 18 Oct catch-up; the state doc was revised for 6.10 and uploaded to the Project from this file, and the pipeline is version 7.3 (asset and hash in part B of docs/ft-game-playbook.md).
 
 sha256 of each file:
 
@@ -12,6 +10,6 @@ sha256 of each file:
 26edccc3dc4e92c8883819252d4216b925fd11ece91c316d171ba5ad1429604c  data/macro.json
 1fbc2833c84b4332af1e7f0398f0b098d9683dc27ce6214686955b0e550cffb0  data/panel.json
 4521eb9da8a615e3f4897420bab1ee20c4bbc92d791cca993514794761e5174a  data/stocks.json
-b975f2b9db84d4b2e74c67b80e81c886d9d547d4fb48d76394d6f61f533870f6  state/ft-game-state.md
-1a46ea6fa8f406257b98ae02c78c84d4bb8adb621754733b5c1fc555ca8f36e4  scripts/ft_pipeline.py
+dc3a8dc8f53ddaa2b74cf77c59902b961d4549acf41b31bd33ccffd4fa693367  state/ft-game-state.md
+ca39efd22325da4c8ddb1158fe72ea64e39436d7b76434d4e8cd41727f9921b3  scripts/ft_pipeline.py
 ~~~

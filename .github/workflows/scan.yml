@@ -27,10 +27,15 @@ concurrency:
 
 jobs:
   scan:
+    # Only ever from main (19 Oct 2026, playbook 6.10): a manual run started on another branch would otherwise
+    # push that branch's commits to main in the last step.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

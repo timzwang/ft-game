@@ -1,0 +1,32 @@
+name: tests
+
+# Regression tests for the pipeline, the broad scan and their stored data (added 19 Oct 2026, playbook 6.10,
+# after ChatGPT's repository review of 18 Oct). Runs on code changes and pull requests, not on the nightly data
+# commits. Offline: synthetic prices and the stored files only; nothing is written back.
+on:
+  push:
+    branches: [main]
+    paths: ["scripts/**", "scan/**/*.py", "scan/requirements.txt", "tests/**", "page/**", ".github/workflows/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scan/requirements.txt
+      - name: Install
+        run: pip install -q -r scan/requirements.txt pytest==9.1.1
+      - name: Python tests
+        run: python -m pytest -q tests
+      - name: Page syntax
+        run: node --check page/app.js
