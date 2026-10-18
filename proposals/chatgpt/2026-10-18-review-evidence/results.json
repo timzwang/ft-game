@@ -1,0 +1,184 @@
+{
+  "complete_performance_rebuild": {
+    "matches_stored": true,
+    "last": [
+      "2026-10-16",
+      101435.76,
+      0.642
+    ]
+  },
+  "missing_holding_and_backfill": {
+    "stops_at": "2026-10-13",
+    "repair_matches_stored": false,
+    "maximum_value_difference_credits": 0.01,
+    "last": [
+      "2026-10-16",
+      101435.76,
+      0.642
+    ]
+  },
+  "missing_open_is_rejected": {
+    "open_obs": false,
+    "real_open": false
+  },
+  "provenance_round_trip": {
+    "expected_real_open": false,
+    "actual_real_open": true,
+    "row_after_round_trip": {
+      "ticker": "TEST",
+      "date": "2026-10-19",
+      "open": 105,
+      "high": 110,
+      "low": 99,
+      "close": 105,
+      "volume": 1000000
+    }
+  },
+  "drift_missing_next_open": {
+    "beat": "n/a",
+    "ret_pct": null,
+    "cum_pct": 2.67,
+    "unit": "next open never supplied: close-basis figure kept, not scored"
+  },
+  "standstill": {
+    "Change for 2026-10-12": -0.748,
+    "Week from 2026-10-12": 0.115,
+    "Inception, as entered": 0.115,
+    "Inception, fully invested": -0.325
+  },
+  "confidence_missing_entry_session": {
+    "expected": "wait or n/a",
+    "actual_beat": "yes",
+    "actual_return": 3.96,
+    "labelled_window_end": "2026-10-23",
+    "actual_stock_start": "2026-10-20",
+    "actual_stock_end": "2026-10-26"
+  },
+  "confidence_imputed_entry_open": {
+    "expected": "wait or n/a",
+    "actual_beat": "yes",
+    "actual_return": 4
+  },
+  "shadow_missing_end_session": {
+    "expected": "wait or n/a",
+    "actual_beat": "yes",
+    "actual_return": 4,
+    "labelled_window_end": "2026-10-26",
+    "actual_stock_end": "2026-10-23"
+  },
+  "market_closed_unchanged_holding": {
+    "sessions": 3,
+    "closed_day_return": 0,
+    "incomplete": []
+  },
+  "market_closed_does_not_allow_trade": {
+    "sessions": 1,
+    "incomplete": [
+      "2026-10-20: Test (TEST): no price row"
+    ]
+  },
+  "missing_abbvie_event": {
+    "abbvie_weight": 10,
+    "stored_total_10": [
+      5.3999999999999995,
+      6,
+      [
+        "Coca-Cola",
+        "Microsoft",
+        "Shell",
+        "Eli Lilly",
+        "Exxon Mobil",
+        "Chevron"
+      ]
+    ],
+    "with_state_doc_date_10": [
+      5.999999999999999,
+      7,
+      [
+        "Coca-Cola",
+        "Microsoft",
+        "Shell",
+        "Eli Lilly",
+        "Exxon Mobil",
+        "Chevron",
+        "AbbVie"
+      ]
+    ]
+  },
+  "top2_record": {
+    "date": "2026-10-16",
+    "value_reported": 101402,
+    "value": null
+  },
+  "counts": {
+    "alert": 51,
+    "analog": 14,
+    "calib": 28,
+    "confidence": 14,
+    "contrib": 53,
+    "corr": 6,
+    "daycall": 10,
+    "event": 52,
+    "macro": 28,
+    "meta": 3,
+    "perf": 6,
+    "position": 27,
+    "postmortem": 6,
+    "reported": 5,
+    "revision": 48,
+    "risk": 7,
+    "scenario": 6,
+    "shadow": 137,
+    "standstill": 8,
+    "theme": 5,
+    "trade": 27
+  },
+  "us_close_27_nov": {
+    "expected_uk_time": "18:00",
+    "actual": "21:00"
+  },
+  "scan_missing_session": {
+    "expected_window_end": "2026-10-26",
+    "actual_window_end": "2026-10-27",
+    "expected_entry": "2026-10-20",
+    "actual_entry": "2026-10-21"
+  },
+  "scan_offline_smoke": {
+    "first_exit": 0,
+    "second_exit": 0,
+    "first_record_rows": 4,
+    "second_record_rows": 4,
+    "metadata": {
+      "rules_version": "1 (fixed 16 Oct 2026)",
+      "session_us": "2026-10-16",
+      "session_uk": "2026-10-16",
+      "generated_utc": "2026-10-18T22:50:03+00:00",
+      "universe": 2,
+      "measured": 2,
+      "missing": [],
+      "stale": [],
+      "holes": [],
+      "leaders": 2,
+      "events": 2,
+      "sources": {
+        "offline": 4
+      }
+    }
+  },
+  "pipeline_template_run_smoke": {
+    "files_written": [
+      "history.json",
+      "ledger.json",
+      "macro.json",
+      "panel.json",
+      "scores.json",
+      "stocks.json"
+    ],
+    "performance_unchanged": true,
+    "incomplete": []
+  },
+  "top2_existing_report_update": {
+    "expected": 6.5,
+    "actual": null
+  }
+}
