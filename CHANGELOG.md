@@ -6,6 +6,18 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.9 (Sun 18 Oct 2026, about 23:50)
+
+Scheduled runs reach the repository, for real this time. Tim asked whether everything implemented was in the repository; the check found the 18 Oct evening review had not mirrored anything.
+
+- Cause: the evening review run of 18 Oct (21:31 to 21:50 UK) found no clone at `/home/claude/ft-game`, and a plain HTTPS clone asked for credentials. A scheduled task's runs only start with the repository attached, and with git access, if the task was created from a chat that had the repository attached. The evening and weekly review tasks were created on 8 and 9 Oct, before the repository existed. The 6.8 test passed only because its own task was created on 17 Oct from such a chat. 6.8's conclusion was wrong.
+- Fix, approved by Tim: new evening review and weekly review tasks created from a repo-attached chat, with the same prompts, schedules, notifications and automatic approval. The old two are switched off, not deleted (run history kept; switch them back on to undo).
+- Test: a one-off task created the same way ran at 23:43 UK, found the clone, pushed commit `8d9ed20` (a line in `sync-test/hello.txt`) with plain git and reached the Project.
+- Catch-up: the 18 Oct evening data files (byte for byte from the artifact) and the state doc (a text copy) pushed by hand, commits `1a0259e` and `a1f5232`. `skills/ft-game-playbook/SKILL.md` updated to the saved skill (6.4 version, 17 Oct).
+- Docs: core playbook version line; state doc (status, section 8 item 5, section 12), uploaded to the Project from the repository file; README; `ops/scheduled-tasks.md`.
+- Rule from now on: any new scheduled task that needs the repository is created from a chat with the repository attached.
+- No change to the order, the pipeline, the page or any task prompt.
+
 ## 6.8 (Sun 18 Oct 2026, about 10:50)
 
 GitHub access from scheduled runs (item 2 of the fourteen changes Tim approved on 17 Oct).

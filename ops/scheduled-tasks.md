@@ -17,6 +17,8 @@ This file is a copy for reading. Changing it changes nothing: the live tasks are
 | FT game midday check | 12:40 Mon to Fri (exits at once: switched off by its own instructions) | `40 12 * * 1-5` | H6 |
 | FT game weekend news check | 20:20 Sat and Sun | `20 20 * * 6,0` | H7 |
 
+Changed 18 Oct 2026 (playbook 6.9): the evening review and weekly review tasks were recreated from a chat with this repository attached (new tasks, same prompts, schedules and automatic approval), so their runs start with the repository cloned. The old tasks of 8 and 9 Oct are kept, switched off. Any new task that needs the repository must be created the same way.
+
 ## Evening review
 
 ```
