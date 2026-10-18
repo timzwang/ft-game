@@ -6,6 +6,15 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.8 (Sun 18 Oct 2026, about 10:50)
+
+GitHub access from scheduled runs (item 2 of the fourteen changes Tim approved on 17 Oct).
+
+- A one-off scheduled test at 10:08 UK found `timzwang/ft-game` already cloned in the session at `/home/claude/ft-game`, cloned it again over HTTPS without credentials, read `scan/latest.json`, and passed a dry-run push. `add_repo` was not available to the scheduled run; the GitHub tools (`mcp__github__*`) were. Report: Project doc `claude/ft-game-diag-github.md` (deleted after this change; summary here).
+- Data doc G6 step 1 and G7 step 1: use the session's clone if present, else a plain HTTPS clone; `add_repo` and then the GitHub tools as fall-backs (the tools can read the scan for G7; G6 needs git). The weekly task prompt carries one line saying the same. The evening task prompt was left as it was: the update was stopped by a safety check because that prompt holds the market data key. The evening run follows the data doc, which is enough.
+- The first real push from a scheduled run will be tonight's evening review (G6, best effort).
+- No change to the order, the pipeline, the page or any data file.
+
 ## 6.7 (Sun 18 Oct 2026, about 01:40)
 
 Price integrity, after ChatGPT's challenge of Claude's audit verification (pasted into the project chat by Tim). Tim approved the three fixes Claude drafted and tested. Pipeline version 7.2 (asset `2726d826123a22d94290a175e5dab68e`, sha256 `1a46ea6fa8f406257b98ae02c78c84d4bb8adb621754733b5c1fc555ca8f36e4`).

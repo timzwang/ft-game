@@ -51,7 +51,7 @@ Any order: 5 to 20 stocks, 5% to 25% each, cash at most 25%, total 100%, a confi
 
 ## One-off: GitHub access test (Sun 18 Oct 2026, 10:07 UK)
 
-Created 17 Oct with Tim's approval: checks whether a scheduled run can attach, clone and dry-run push this repository, and writes the result to the Project doc `claude/ft-game-diag-github.md`. Read-only; it fires once.
+Created 17 Oct with Tim's approval; ran at 10:08 UK on 18 Oct and passed (read, dry-run push). Result in `CHANGELOG.md`, 6.8. The weekly review's prompt gained a GitHub line on 18 Oct.
 
 ## Price refresh (16:45)
 
@@ -89,6 +89,8 @@ FT Stock Picking Game, WEEKLY REVIEW (Saturday) for Tim. Unattended: never ask q
 Read `claude/ft-game-playbook.md` and `claude/ft-game-state.md` together and carry out part H5 in full using parts D, F and G. Check the script's sha256 against part B before running it; on a mismatch, review from the state doc and current prices. If Friday's session is already logged (H5 step 2), do not fetch prices again. Follow part F's freshness and pacing rules; never re-request a refused page.
 
 The review must: report weighted contributions (weight times return, points) for the week and the game, and what they say about sizing; give the estimated Friday-close value to the nearest credit against Tim's last FT figure; report confidence hit rates by band, calibration, the day-call record against always-green, and the week's yields, oil, Bitcoin and releases against forecast, each with a plain verdict and saying when samples are too small; name rules that helped or hurt with cases; give two or three changes for Sunday; state the gap to the top 2% honestly.
+
+GitHub (broad scan record and G6, best effort): find the repository as data doc G6 step 1 says: first the existing clone at /home/claude/ft-game (check its origin is timzwang/ft-game; never reset or clean it), else `git clone` over HTTPS; only if git is refused, ToolSearch "select:mcp__claude-code-remote__add_repo", then the mcp__github__* tools (ToolSearch "github") to read the scan.
 
 Output: start "Tim,". Sections: week and game to date (two lines); contribution table; what worked; confidence, calibration and day-call checks; macro and risk; rank stance and Sunday changes; what is needed from Tim (value, rank, players, a top-of-leaderboard return); unverified items; sources as links. Send a five-line summary through SendUserMessage. British English, no em-dashes, UK times.
 

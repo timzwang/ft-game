@@ -2,7 +2,7 @@
 
 Tim's entry ("Seeking Beta") in the FT Stock Picking Game, 5 Oct to 27 Nov 2026: a virtual 100,000-credit portfolio of 5 to 20 stocks. The aim is a finish in roughly the top 2% of players. No real money is involved.
 
-**Current version: 6.7 (18 Oct 2026): price integrity (pipeline 7.2): a row without an open is never used as a fill price, a session with an unpriced holding is not recorded until the row arrives, and a drift reporter without a tradable open is not scored. Previous: 6.6 (18 Oct 2026), a handoff log between Claude and ChatGPT (`handoff/`).** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
+**Current version: 6.8 (18 Oct 2026): scheduled runs reach this repository (access test passed), so the evening and weekly runs keep the mirror (G6) and the broad scan (G7), with a new step 1 for finding the repository. Previous: 6.7, price integrity (pipeline 7.2).** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
 
 This repository is a **mirror and a place to propose changes**. The live system runs in Claude (scheduled tasks, a Claude Project and a dashboard artifact). Claude writes snapshots here; ChatGPT and Tim read them and propose changes through pull requests.
 
