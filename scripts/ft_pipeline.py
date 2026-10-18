@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.1 (18 Oct 2026).
+"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.2 (18 Oct 2026).
+
+Version 7.2 (18 Oct 2026, approved by Tim after ChatGPT's challenge of the audit verification) changes data integrity only:
+  - open provenance: a price row given without an open stores the close as its open, marked open_obs = false, and is
+    never used as a fill price (before, any row with a volume counted as having a traded open);
+  - performance: a session is recorded only when every stock held or traded that day is priced and every buy or sale
+    has a traded open or a stated fill price; otherwise it and every later session wait (PERFORMANCE INCOMPLETE) and are
+    added by the next run that has the rows. A market that was shut goes under market_closed in today.json
+    ([{"ticker": ..., "date": ...}]) and the holding counts as unchanged. Before, the stock was skipped with a warning;
+  - drift: a reporter whose next-session open never arrives settles after 15 sessions as "n/a" (close-basis figure
+    kept in cum_pct), so it no longer counts as a win or loss in the calibration;
+  - with complete prices every figure is identical to version 7.1.
 
 Version 7.1 (18 Oct 2026, approved by Tim after the second audit review) changes only the STANDSTILL test:
   - week rows: the standstill is now the order in force at the close of the session BEFORE the week, priced from
@@ -150,7 +161,7 @@ import math
 import os
 import sys
 
-PIPELINE_VERSION = "7.1"
+PIPELINE_VERSION = "7.2"
 
 LEDGER_KEYS = ["id", "table", "date", "time_uk", "effective", "name", "ticker", "stock", "kind", "bank", "action", "theme",
                "weight", "from_w", "to_w", "score", "confidence", "ret_pct", "spx_ret_pct", "beat", "contrib_pts",
@@ -232,6 +243,7 @@ def merge_history(hist, ticker, rows):
         if len(d) != 10 or c is None or c <= 0:
             warn(f"{ticker} {d}: row skipped (no date or close)")
             continue
+        imputed = o is None                  # no open supplied: stored as the close, marked so it is never used as a fill
         if o is None:
             o = c
         if h is None:
@@ -244,7 +256,10 @@ def merge_history(hist, ticker, rows):
         old = hist.get((ticker, d))
         if old is None or abs(old["close"] / c - 1) > 1e-4 or abs(old["open"] / o - 1) > 1e-4:
             changed.append(d)             # new for that day, or corrected
-        hist[(ticker, d)] = {"ticker": ticker, "date": d, "open": o, "high": h, "low": l, "close": c, "volume": v}
+        row = {"ticker": ticker, "date": d, "open": o, "high": h, "low": l, "close": c, "volume": v}
+        if imputed:
+            row["open_obs"] = False
+        hist[(ticker, d)] = row
     return changed
 
 
@@ -551,7 +566,15 @@ def apply_order(ledger, order, eff, entered, reason, tickers, scores):
 
 
 # ---------------------------------------------------------------- performance
-def update_performance(ledger, hist, bench, today_date):
+INCOMPLETE = []
+
+
+def update_performance(ledger, hist, bench, today_date, closed=None):
+    """Version 7.2: a session is recorded only when every stock held or traded that day is priced (and every buy or
+    sell has a traded open or a stated fill price). Otherwise it and every later session wait, INCOMPLETE says why,
+    and the next run with the missing rows adds them. `closed` lists (ticker, date) pairs whose market was shut: the
+    holding counts as unchanged that day."""
+    closed = set(closed or [])
     meta = {r["name"]: r for r in ledger if r["table"] == "meta"}
     start_date = meta["start_date"]["text"]
     start_value = num(meta["start_value"]["value"])
@@ -571,7 +594,7 @@ def update_performance(ledger, hist, bench, today_date):
         dprev = all_dates[i - 1] if i > 0 else None
         w_new = live_weights(ledger, d)
         w_prev = live_weights(ledger, dprev) if (dprev and dprev >= start_date) else {}
-        day = 0.0
+        day, rows_d, gaps = 0.0, [], []
         for name in sorted(set(w_new) | set(w_prev)):
             wn, tick = w_new.get(name, (0.0, None))
             wp, tick2 = w_prev.get(name, (0.0, None))
@@ -582,23 +605,35 @@ def update_performance(ledger, hist, bench, today_date):
                 cutoff = dprev or ""
                 earlier = [r for r in series(hist, tick) if r["date"] <= cutoff]
                 prv = earlier[-1] if earlier else None
-            if not cur:
-                warn(f"{name} {d}: no price row for this session, so its move was not counted (fine if that market was closed)")
-                continue
             kept, added_w, sold = min(wp, wn), max(wn - wp, 0.0), max(wp - wn, 0.0)
+            if not cur:
+                if (tick, d) in closed and not added_w and not sold:
+                    cur = prv = {"open": 1.0, "close": 1.0}       # market shut: the holding is unchanged that day
+                else:
+                    gaps.append(f"{name} ({tick}): no price row")
+                    continue
+            if kept and not prv:
+                gaps.append(f"{name} ({tick}): no earlier close")
+                continue
+            if (added_w and not fills.get((name, d)) or sold) and not real_open(cur):
+                gaps.append(f"{name} ({tick}): no traded open for the {'buy' if added_w else 'sale'}")
+                continue
             contrib = 0.0
-            if kept and prv:
+            if kept:
                 contrib += kept * (cur["close"] / prv["close"] - 1.0)
             if added_w:
                 contrib += added_w * (cur["close"] / (fills.get((name, d)) or cur["open"]) - 1.0)   # bought at the open, or at a stated fill price
-            if sold and prv:
+            if sold:
                 contrib += sold * (cur["open"] / prv["close"] - 1.0)          # sold at the open
-            if kept and not prv:
-                warn(f"{name} {d}: no earlier close in the history store; move not counted")
             day += contrib
             if wn or wp:
-                ledger.append(lrow("contrib", date=d, name=name, ticker=tick, weight=wn,
+                rows_d.append(lrow("contrib", date=d, name=name, ticker=tick, weight=wn,
                                    ret_pct=r2(contrib / (wn or wp) * 100.0), contrib_pts=r2(contrib, 3)))
+        if gaps:
+            INCOMPLETE.append(f"{d}: " + "; ".join(gaps))
+            warn(f"performance stops before {d}: " + "; ".join(gaps) + ". Give the missing rows (or list a closed market) and re-run")
+            break                                         # later sessions wait too, so the value is never chained over a gap
+        ledger.extend(rows_d)
         value = value * (1.0 + day / 100.0)
         spx = pct(brow[d]["close"], spy_base)
         ledger.append(lrow("perf", date=d, value_est=r2(value), day_pct=r2(day, 3),
@@ -1506,6 +1541,8 @@ def real_open(row):
     close, no volume), so their open cannot be used as a fill price."""
     if not row:
         return False
+    if row.get("open_obs") is False:                     # version 7.2: the open was never supplied, whatever the volume
+        return False
     return not (row.get("volume") is None and row["open"] == row["close"] == row["high"] == row["low"])
 
 
@@ -1536,8 +1573,11 @@ def resolve_drift(ledger, hist, bench):
         if real_open(nxt):
             s_ret, b_ret = pct(fin["close"], nxt["open"]), pct(bser[i + 5]["close"], bser[i + 1]["open"])
             basis = "from the next open"
-        elif i + 15 < len(bser):
-            s_ret, b_ret, basis = c_ret, cb_ret, "from the reaction close (next open never supplied)"
+        elif i + 15 < len(bser):                         # version 7.2: no tradable open, so no win or loss
+            r["window_end"], r["cum_pct"], r["spx_cum_pct"] = end, r2(c_ret), r2(cb_ret)
+            r["unit"], r["beat"] = "next open never supplied: close-basis figure kept, not scored", "n/a"
+            n += 1
+            continue
         else:
             continue                                    # wait for the next session's full row
         r["window_end"], r["ret_pct"], r["spx_ret_pct"] = end, r2(s_ret), r2(b_ret)
@@ -2047,7 +2087,8 @@ def cmd_run(a):
 
     if not hist.get((bench, date)):
         warn(f"no {bench} row for {date} in the history store, so performance for that session cannot be added")
-    added = update_performance(ledger, hist, bench, date)
+    added = update_performance(ledger, hist, bench, date,
+                               {(c_.get("ticker"), c_.get("date")) for c_ in (today.get("market_closed") or [])})
     resolved = resolve_confidence(ledger, hist, bench)
 
     # macro panel, day-ahead call, shadow ratings and calibration
@@ -2299,6 +2340,8 @@ def cmd_run(a):
                 print(f"    {c['name'][:18].ljust(19)} weight {c['weight']:g}% x return {c['ret_pct'] if c['ret_pct'] is not None else 0:+.2f}% = {c['contrib_pts']:+.3f} points")
     else:
         print("PERFORMANCE: no new session to add")
+    for x_ in INCOMPLETE:
+        print(f"PERFORMANCE INCOMPLETE {x_}. This session and any later one are not recorded until the row is given (or the market listed under market_closed)")
     reps = sorted((r for r in ledger if r["table"] == "reported" and r["percentile"] is not None), key=lambda r: (r["date"], r["time_uk"] or ""))
     if reps:
         r_ = reps[-1]

@@ -6,6 +6,18 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.7 (Sun 18 Oct 2026, about 01:40)
+
+Price integrity, after ChatGPT's challenge of Claude's audit verification (pasted into the project chat by Tim). Tim approved the three fixes Claude drafted and tested. Pipeline version 7.2 (asset `2726d826123a22d94290a175e5dab68e`, sha256 `1a46ea6fa8f406257b98ae02c78c84d4bb8adb621754733b5c1fc555ca8f36e4`).
+
+- Open provenance (ChatGPT's H9): a price row given without an open is stored with the close in its place and marked `open_obs: false`, and is never used as a fill price. In 7.1 any row with a volume counted as having a traded open, so an invented open could be taken as a fill in the drift record and, a case ChatGPT did not raise, in the performance log's buys and sales.
+- Strict performance (ChatGPT's H6): a session is recorded only when every stock held or traded that day is priced and every buy or sale has a traded open or a stated fill price. Otherwise it and every later session wait (PERFORMANCE INCOMPLETE plus a WARNING) and the next run with the rows adds them. `market_closed` in today.json covers a genuine holiday. In 7.1 the stock was skipped with a warning; on Exxon's 14 Oct row removed as a test, 7.1 logged that day at -0.16% instead of +0.09% and caught up the next session.
+- Drift: a reporter whose next-session open never arrives is marked "n/a" after 15 sessions (close-basis figure kept) instead of a win or loss, so it stays out of the calibration.
+- Tests (`proposals/claude/2026-10-18-evidence/v72_tests.py`): the 16 Oct session re-run end to end with 7.1 and 7.2 on the same files gives byte-identical stocks, ledger, history, macro and scores; ChatGPT's example row is no longer read as a traded open; with Exxon's 14 Oct row removed 7.2 stops before 14 Oct and matches the stored log once the row is restored.
+- No stored row was affected. The one suspicious open in the game period (Shell, 13 Oct, 3,836, equal to the previous close) matches stockanalysis.com.
+- Docs: core playbook (version line, part B), data doc (G3, G4), rules doc (part E, drift record), roadmap (item 52).
+- No change to the order, the page, the scheduled tasks or any data file.
+
 ## 6.6 (Sun 18 Oct 2026, about 01:20)
 
 A handoff log between Claude and ChatGPT, at Tim's request.
