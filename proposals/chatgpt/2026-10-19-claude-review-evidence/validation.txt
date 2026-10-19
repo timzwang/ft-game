@@ -1,0 +1,50 @@
+Independent review pinned to d52dbcb6d7b8c4a336c37b7160b0902e3e934966
+19 October 2026, before the first recreated evening review was due.
+
+Downloaded source/data/tests: 72 local blobs verified against GitHub Git blob SHA-1.
+
+Local Windows / Python 3.13:
+python -m pytest -q tests
+94 passed in 14.17s
+node --check page/app.js
+exit 0
+
+GitHub merge workflow:
+https://github.com/timzwang/ft-game/actions/runs/39313136426
+Ubuntu / Python 3.12, 94 passed in 7.87s, page syntax success.
+
+Calendar tests against 7.4:
+3 failed, 14 passed in 0.27s
+Failures:
+test_6_uk_only_order_during_us_holiday
+test_6b_mixed_order_entered_for_26_nov
+test_6c_standstill_judges_a_26_nov_change
+
+Calendar tests against 7.5:
+17 passed in 0.13s
+
+compare_72_73.py --old <7.4 source> --repo <pinned checkout>:
+history, macro, panel, scores, stocks: identical
+ledger: 542 rows each, no rows only in either output
+Print additions: portfolio fit; assumed 6% labelled; version.
+
+check_data.py --now 2026-10-19T19:42:01Z:
+exit 1
+PASS files, ledger, history, order, performance, recalc, sync
+FAIL results: AbbVie (2026-10-30) missing
+WARN six implied moves missing; six deadlines missing or after 07:00.
+Matching GitHub log:
+https://github.com/timzwang/ft-game/actions/runs/39313136551
+
+Additional independent reproductions:
+review_checks.py --repo <pinned checkout> --out <temporary output path>
+See results.json. Zero failures in the control after adding AbbVie; synthetic mutations expose the reported gaps.
+The code imports the synthetic calendar fixture, so pytest must be available.
+All mutation probes and reorder outputs use temporary folders.
+No market-price request, workflow dispatch or live-system write.
+
+Claude evidence reruns:
+confidence_evidence.py: values reproduce (47 shadow ratings, Brier about 0.250, correlations -0.03/+0.01).
+portfolio_fit.py: printed correlations reproduce.
+change_attribution.py: numerical output reproduces; on Windows use --json because its default /dev/null output path is Unix-specific.
+No claim of cross-platform support was inferred from this small evidence-script issue.

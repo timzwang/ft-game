@@ -1,0 +1,169 @@
+{
+  "independent_accounting": [
+    {
+      "date": "2026-10-09",
+      "stored": 99928.18,
+      "independent": 99928.18,
+      "difference_credits": 0.0
+    },
+    {
+      "date": "2026-10-12",
+      "stored": 100596.54,
+      "independent": 100596.54,
+      "difference_credits": 0.0
+    },
+    {
+      "date": "2026-10-13",
+      "stored": 101076.27,
+      "independent": 101076.27,
+      "difference_credits": 0.0
+    },
+    {
+      "date": "2026-10-14",
+      "stored": 101168.13,
+      "independent": 101168.13,
+      "difference_credits": 0.0
+    },
+    {
+      "date": "2026-10-15",
+      "stored": 100789.16,
+      "independent": 100789.16,
+      "difference_credits": 0.0
+    },
+    {
+      "date": "2026-10-16",
+      "stored": 101435.76,
+      "independent": 101435.76,
+      "difference_credits": 0.0
+    }
+  ],
+  "holiday_baseline_value": 107318.25,
+  "missing_26_open": {
+    "expected": "stop before 27 Nov until the actual 26 Nov London fill is available",
+    "actual_value": 107964.31,
+    "correct_value_with_actual_fill": 107318.25,
+    "incomplete": [],
+    "warnings": [],
+    "silent_wrong_fill": true
+  },
+  "imputed_26_open": {
+    "expected": "stop before 27 Nov until the actual 26 Nov London fill is available",
+    "actual_value": 107964.31,
+    "correct_value_with_actual_fill": 107318.25,
+    "incomplete": [],
+    "warnings": [],
+    "silent_wrong_fill": true
+  },
+  "changes_on_both_26_and_27": {
+    "actual_value": 108359.2,
+    "expected_under_same_no_26_reset_assumption": 107104.45,
+    "difference_credits": 1254.75,
+    "standstill_rows": [
+      {
+        "effective": "2026-11-26",
+        "value": -0.614,
+        "text": "UK One 50 to 20, UK Two 0 to 30"
+      },
+      {
+        "effective": "2026-11-27",
+        "value": -0.614,
+        "text": "UK One 50 to 20, UK Two 0 to 30"
+      }
+    ]
+  },
+  "last_order_parser": {
+    "london_report_27_nov": {
+      "event": {
+        "date": "2026-11-27",
+        "time_uk": "07:00 UK",
+        "last_order": "Before 07:00 Thu 26 Nov"
+      },
+      "problem": "'Before 07:00 Thu 26 Nov' is later than the last possible order day, 2026-11-25"
+    },
+    "no_cutoff_time": {
+      "event": {
+        "date": "2026-10-28",
+        "time_uk": "after US close",
+        "last_order": "Any time Wed 28 Oct"
+      },
+      "problem": null
+    },
+    "after_cutoff": {
+      "event": {
+        "date": "2026-10-28",
+        "time_uk": "after US close",
+        "last_order": "After 07:00 Wed 28 Oct"
+      },
+      "problem": null
+    }
+  },
+  "baseline_with_abbvie_fixed": {
+    "failed": 0,
+    "lines": [
+      "PASS files: all five data files parse",
+      "PASS ledger: 542 rows, fields and ids in order",
+      "PASS history: 10000 rows, one per ticker and date, prices consistent",
+      "PASS order: 7 holdings, cash 0%, matching the latest order",
+      "PASS performance: 6 sessions to 2026-10-16, none missing, values compound, contributions add up",
+      "PASS recalc: 6 stored values match a recalculation from positions and prices (within 0.05 credits)",
+      "WARN results: no implied move yet for a report inside ten sessions: AbbVie (2026-10-30), Chevron (2026-10-30), Coca-Cola (2026-10-27), Eli Lilly (2026-10-29), Exxon Mobil (2026-10-30), Microsoft (2026-10-28), Shell (2026-10-29)",
+      "WARN results: last order for a report inside ten sessions is missing or later than the rule allows: AbbVie (2026-10-30): none recorded; Chevron (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Coca-Cola (2026-10-27): none recorded; Eli Lilly (2026-10-29): none recorded; Exxon Mobil (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Microsoft (2026-10-28): none recorded; Shell (2026-10-29): 'Before 08:00 Wed 28 Oct' names a time after the 07:00 UK cut-off",
+      "PASS results: every holding's results date has an event (as of 2026-10-16)",
+      "PASS sync: 6 files match state/last-sync.md (run 2026-10-19T18:58:17Z)"
+    ]
+  },
+  "manifest_only_lists_stocks": {
+    "failed": 0,
+    "sync_lines": [
+      "PASS sync: 1 files match state/last-sync.md (run 2026-10-19T18:58:17Z)"
+    ]
+  },
+  "all_contributions_deleted": {
+    "failed": 0,
+    "performance_lines": [
+      "PASS performance: 6 sessions to 2026-10-16, none missing, values compound, contributions add up"
+    ]
+  },
+  "held_event_on_wrong_date": {
+    "failed": 0,
+    "results_lines": [
+      "WARN results: no implied move yet for a report inside ten sessions: AbbVie (2026-10-30), Chevron (2026-10-30), Eli Lilly (2026-10-29), Exxon Mobil (2026-10-30), Microsoft (2026-10-28), Shell (2026-10-29)",
+      "WARN results: last order for a report inside ten sessions is missing or later than the rule allows: AbbVie (2026-10-30): none recorded; Chevron (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Eli Lilly (2026-10-29): none recorded; Exxon Mobil (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Microsoft (2026-10-28): none recorded; Shell (2026-10-29): 'Before 08:00 Wed 28 Oct' names a time after the 07:00 UK cut-off",
+      "WARN results: results event date differs from the stock's next-results text: Coca-Cola: event 2027-01-15, stock data 2026-10-27",
+      "PASS results: every holding's results date has an event (as of 2026-10-16)"
+    ],
+    "ten_session_total": [
+      4.8,
+      6,
+      [
+        "Microsoft",
+        "Shell",
+        "Eli Lilly",
+        "Exxon Mobil",
+        "Chevron",
+        "AbbVie"
+      ]
+    ]
+  },
+  "documented_absence_literal": {
+    "failed": 0,
+    "results_lines": [
+      "WARN results: no implied move yet for a report inside ten sessions: AbbVie (2026-10-30), Chevron (2026-10-30), Eli Lilly (2026-10-29), Exxon Mobil (2026-10-30), Microsoft (2026-10-28), Shell (2026-10-29)",
+      "WARN results: implied move recorded as unavailable (the 6% in RESULTS TOTAL is an assumption, not a market estimate): Coca-Cola (2026-10-21)",
+      "WARN results: last order for a report inside ten sessions is missing or later than the rule allows: AbbVie (2026-10-30): none recorded; Chevron (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Eli Lilly (2026-10-29): none recorded; Exxon Mobil (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Microsoft (2026-10-28): none recorded; Shell (2026-10-29): 'Before 08:00 Wed 28 Oct' names a time after the 07:00 UK cut-off",
+      "WARN results: results event date differs from the stock's next-results text: Coca-Cola: event 2026-10-21, stock data 2026-10-27",
+      "PASS results: every holding's results date has an event (as of 2026-10-16)"
+    ],
+    "source_condition": "substring only; does not require a reason",
+    "code_line": 329
+  },
+  "same_day_after_close_expectation": {
+    "latest_stored_performance_day": "2026-10-16",
+    "effective_and_entered": "2026-10-16",
+    "accepted_forecasts": [
+      9.99
+    ],
+    "warnings": []
+  },
+  "source_pipeline_sha256": "244a8af943f9efe36380ff4c3713a370b8358979b63e56ebcdd9aefbca29346f"
+}
