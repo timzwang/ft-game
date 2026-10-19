@@ -1,0 +1,39 @@
+{
+ "old_version": "7.4",
+ "new_version": "7.5",
+ "session": "2026-10-16",
+ "files": {
+  "history.json": "identical",
+  "ledger.json": {
+   "rows_old": 542,
+   "rows_new": 542,
+   "only_in_new": [],
+   "only_in_old": []
+  },
+  "macro.json": "identical",
+  "panel.json": "identical",
+  "scores.json": "identical",
+  "stocks.json": "identical"
+ },
+ "printout_lines_only_in_new": [
+  "Pipeline version 7.5. Session 2026-10-16; order effective None; regime mixed; 10000 history rows",
+  "  RESULTS TOTAL next 10 sessions: 5.40 points across 6 report(s); no implied move yet for Coca-Cola, Microsoft, Shell, Eli Lilly, Exxon Mobil, Chevron (counted at an assumed 6%, not a market estimate)",
+  "  PORTFOLIO FIT of the strong names (a high score is not a reason by itself: what does the stock add to this order?):",
+  "    Phillips 66             score  83  Energy (now 40% of the order)  correlation with the order +0.33, highest +0.68 with Chevron (60 sessions)",
+  "    ConocoPhillips          score  81  Energy (now 40% of the order)  correlation with the order +0.58, highest +0.84 with Chevron (60 sessions)  SAME RISK AS A HOLDING: a swap, not an addition",
+  "    Visa                    score  80  Payments (now 0% of the order)  correlation with the order +0.25, highest +0.38 with Coca-Cola (60 sessions)",
+  "    Marathon Petroleum      score  75  Energy (now 40% of the order)  correlation with the order +0.23, highest +0.59 with Chevron (60 sessions)",
+  "    Mastercard              score  74  Payments (now 0% of the order)  correlation with the order +0.39, highest +0.43 with Coca-Cola (60 sessions)",
+  "    Valero Energy           score  73  Energy (now 40% of the order)  correlation with the order +0.19, highest +0.56 with Chevron (60 sessions)",
+  "    BP                      score  72  Energy (now 40% of the order)  correlation with the order +0.53, highest +0.90 with Shell (60 sessions)  SAME RISK AS A HOLDING: a swap, not an addition",
+  "    Walmart                 score  71  Consumer staples (now 20% of the order)  correlation with the order +0.37, highest +0.42 with AbbVie (49 sessions)",
+  "    Humana                  score  66  Health care (now 25% of the order)  correlation with the order +0.04, highest +0.21 with Microsoft (60 sessions)",
+  "    UnitedHealth            score  63  Health care (now 25% of the order)  correlation with the order +0.09, highest +0.29 with Eli Lilly (60 sessions)",
+  "    Merck                   score  60  Health care (now 25% of the order)  correlation with the order +0.27, highest +0.50 with Eli Lilly (60 sessions)"
+ ],
+ "printout_lines_only_in_old": [
+  "Pipeline version 7.4. Session 2026-10-16; order effective None; regime mixed; 10000 history rows",
+  "  RESULTS TOTAL next 10 sessions: 5.40 points across 6 report(s); no implied move yet for Coca-Cola, Microsoft, Shell, Eli Lilly, Exxon Mobil, Chevron (counted at 6%)"
+ ]
+}
+RESULT: same figures (only the new meta rows differ)

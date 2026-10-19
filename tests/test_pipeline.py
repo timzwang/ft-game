@@ -29,7 +29,7 @@ def synthetic(dates, ticker="TEST", step=1.0):
 # ----------------------------------------------------------------- stored figures stay put
 
 def test_version(pl):
-    assert pl.PIPELINE_VERSION == "7.4"
+    assert pl.PIPELINE_VERSION == "7.5"
 
 
 def test_performance_rebuild_matches_stored(pl, data):
@@ -277,9 +277,31 @@ def test_missing_results_event_is_flagged(pl):
     assert pl.missing_results_events(L, held, "2026-10-16") == [("AbbVie", "2026-10-30", "30 Oct")]
 
 
-def test_stored_holdings_results_events(pl, data):
-    """On the stored files: AbbVie is the one holding without an event (until the 19 Oct evening review adds it)."""
+def test_snapshot_holdings_results_events(pl, data):
+    """On the frozen 16 Oct snapshot AbbVie, and only AbbVie, had a results date but no event: the detector must find
+    exactly that. (Before 19 Oct evening this test read the live files and allowed AbbVie as a standing exception; the
+    live invariant, no missing event at all, is now check_data.py's, with no exception.)"""
     held = {r["name"]: r["next_results"] for r in data["stocks"] if r["group"] == "Portfolio" and (r["weight"] or 0) > 0}
     date = max(r["date"] for r in data["ledger"] if r["table"] == "perf")
     missing = [m[0] for m in pl.missing_results_events(data["ledger"], held, date)]
-    assert set(missing) <= {"AbbVie"}, f"holdings with a results date but no event: {missing}"
+    assert missing == ["AbbVie"]
+
+
+# ----------------------------------------------------------------- portfolio fit (7.5, printed only)
+
+def test_portfolio_fit_separates_a_duplicate_from_a_diversifier(pl):
+    dates = weekdays("2026-08-03", 41)
+    h = {}
+    a = [100.0]
+    b = [100.0]
+    for i in range(1, 41):
+        a.append(a[-1] * (1 + (0.01 if i % 2 else -0.008)))
+        b.append(b[-1] * (1 + (0.006 if i % 3 == 0 else -0.004 if i % 3 == 1 else 0.001)))
+    for t, xs in (("HELD", a), ("TWIN", a), ("OTHER", b)):
+        for d, x in zip(dates, xs):
+            h[(t, d)] = bar(t, d, x)
+    pl._SERIES.clear()
+    fit = dict(pl.portfolio_fit({"Held": 100.0}, ["Twin", "Other"], {"Held": "HELD", "Twin": "TWIN", "Other": "OTHER"}, h,
+                                {"Held": "Energy", "Twin": "Energy", "Other": "Payments"}))
+    assert fit["Twin"]["best"] == pytest.approx(1.0) and fit["Twin"]["theme_w"] == 100.0
+    assert abs(fit["Other"]["corr"]) < 0.5 and fit["Other"]["theme_w"] == 0.0

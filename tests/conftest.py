@@ -1,17 +1,24 @@
-"""Shared fixtures for the regression tests (pipeline 7.3, 19 Oct 2026).
+"""Shared fixtures for the regression tests (pipeline 7.3, 19 Oct 2026; frozen snapshot from 19 Oct evening).
 
 Run from the repository root:  python -m pytest -q tests
-The tests read the stored data files and the scripts from this checkout only; they write nothing outside a
-temporary folder and fetch nothing from the network.
+The tests read the scripts from this checkout and the game data from a FROZEN snapshot of the Fri 16 Oct 2026 files
+(`tests/fixtures/snapshot-2026-10-16/`, the data as mirrored at main f9241ee), never from `data/`. So a nightly data
+commit can neither break nor silently pass a code test. Whether the live `data/` files are sound is a separate
+question, answered by `scripts/check_data.py` and its workflow. They write nothing outside a temporary folder and
+fetch nothing from the network.
 """
 import copy
+import gzip
 import importlib.util
 import json
+import shutil
 from pathlib import Path
 
 import pytest
 
 REPO = Path(__file__).resolve().parents[1]
+SNAPSHOT = REPO / "tests" / "fixtures" / "snapshot-2026-10-16"
+DATA_FILES = ("history", "ledger", "macro", "panel", "stocks")
 
 
 def _load(path, name):
@@ -22,8 +29,17 @@ def _load(path, name):
 
 
 @pytest.fixture(scope="session")
-def repo():
-    return REPO
+def repo(tmp_path_factory):
+    """A folder laid out like the repository's data side (data/*.json, state/last-sync.md), unpacked from the frozen
+    16 Oct snapshot. Tests that need the scripts use REPO."""
+    root = tmp_path_factory.mktemp("snapshot")
+    (root / "data").mkdir()
+    (root / "state").mkdir()
+    for n in DATA_FILES:
+        with gzip.open(SNAPSHOT / f"{n}.json.gz", "rb") as src, open(root / "data" / f"{n}.json", "wb") as dst:
+            shutil.copyfileobj(src, dst)
+    shutil.copy(SNAPSHOT / "last-sync.md", root / "state" / "last-sync.md")
+    return root
 
 
 @pytest.fixture()
@@ -43,11 +59,11 @@ def scan_mod():
 
 
 @pytest.fixture(scope="session")
-def stored():
-    """The stored ledger, history (keyed by (ticker, date)) and stocks, read once."""
-    ledger = json.loads((REPO / "data" / "ledger.json").read_text(encoding="utf-8"))
-    hist = {(r["ticker"], r["date"]): r for r in json.loads((REPO / "data" / "history.json").read_text(encoding="utf-8"))}
-    stocks = json.loads((REPO / "data" / "stocks.json").read_text(encoding="utf-8"))
+def stored(repo):
+    """The frozen 16 Oct ledger, history (keyed by (ticker, date)) and stocks, read once."""
+    ledger = json.loads((repo / "data" / "ledger.json").read_text(encoding="utf-8"))
+    hist = {(r["ticker"], r["date"]): r for r in json.loads((repo / "data" / "history.json").read_text(encoding="utf-8"))}
+    stocks = json.loads((repo / "data" / "stocks.json").read_text(encoding="utf-8"))
     return {"ledger": ledger, "hist": hist, "stocks": stocks}
 
 

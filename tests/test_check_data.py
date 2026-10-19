@@ -1,5 +1,8 @@
-"""Tests for scripts/check_data.py (19 Oct 2026, playbook 6.11). Each test copies the stored files into a temporary
-folder, breaks one thing and checks that the right check fails; nothing in the checkout is changed."""
+"""Tests for scripts/check_data.py (19 Oct 2026, playbook 6.11). Each test copies the frozen 16 Oct snapshot
+(tests/fixtures, see conftest) into a temporary folder, breaks one thing and checks that the right check fails; nothing
+in the checkout is changed. The snapshot really did lack AbbVie's results event, so on it the check must fail on that
+one item: a regression test of the detector. The live data/ files carry no such exception: the data-check workflow
+runs check_data.py on them and fails on any missing event."""
 import datetime as dt
 import importlib.util
 import json
@@ -24,9 +27,9 @@ def pl(cd):
 
 
 @pytest.fixture()
-def tmp_repo(tmp_path):
+def tmp_repo(tmp_path, repo):
     for d in ("data", "state"):
-        shutil.copytree(REPO / d, tmp_path / d)
+        shutil.copytree(repo / d, tmp_path / d)
     return tmp_path
 
 
@@ -55,8 +58,8 @@ def resync(cd, repo):
     p.write_text(text, encoding="utf-8")
 
 
-def test_stored_files_fail_only_on_abbvie(cd, pl, tmp_repo):
-    """The stored 16 Oct files: the one known gap is AbbVie's missing results event (the 19 Oct evening review adds it)."""
+def test_snapshot_fails_only_on_abbvie(cd, pl, tmp_repo):
+    """The frozen 16 Oct files: their one real gap was AbbVie's missing results event."""
     fails, _ = run(cd, pl, tmp_repo)
     assert len(fails) == 1 and "results" in fails[0] and "AbbVie" in fails[0]
 
@@ -151,4 +154,73 @@ def test_expected_session(cd, pl, now, expected):
 
 
 def test_cli_exit_code(cd, tmp_repo):
-    assert cd.main(["--repo", str(tmp_repo), "--now", "2026-10-17T12:00:00Z"]) == 1     # AbbVie, as above
+    assert cd.main(["--repo", str(tmp_repo), "--now", "2026-10-17T12:00:00Z"]) == 1     # AbbVie, as above (frozen snapshot)
+
+
+# ----------------------------------------------------------------- added 19 Oct evening (recalculation, deadlines, absence)
+
+def test_snapshot_recalculates_exactly(cd, pl, tmp_repo):
+    _, rep = run(cd, pl, tmp_repo)
+    assert any(l.startswith("PASS recalc: 6 stored values") for l in rep.lines)
+
+
+def test_changed_price_fails_recalculation(cd, pl, tmp_repo):
+    """A held stock's close quietly changed after the session was logged: the ranges still look fine, the compounding
+    and the contributions still add up, but the stored values no longer follow from the prices."""
+    def f(h):
+        r = next(r for r in h if r["ticker"] == "XOM" and r["date"] == "2026-10-15")
+        r["close"] = round((r["high"] + r["low"]) / 2 + 0.01, 2)
+    edit(tmp_repo, "history", f)
+    resync(cd, tmp_repo)
+    fails, _ = run(cd, pl, tmp_repo)
+    assert [f for f in fails if f.startswith("FAIL recalc")] and not [f for f in fails if f.startswith("FAIL history")]
+
+
+def move_ko(L, **kw):
+    for r in L:
+        if r["table"] == "event" and r["kind"] == "results" and r["stock"] == "Coca-Cola":
+            r.update({"date": "2026-10-21", "time_uk": "before US open"}, **kw)
+
+
+def test_documented_absence_of_implied_move_is_a_warning(cd, pl, tmp_repo):
+    edit(tmp_repo, "ledger", lambda L: move_ko(L, text="Implied move unavailable: no options page readable on 20 Oct",
+                                               last_order="Before 07:00 Tue 20 Oct"))
+    resync(cd, tmp_repo)
+    fails, rep = run(cd, pl, tmp_repo)
+    assert not any("implied move for a report inside five sessions" in f for f in fails)
+    assert any(l.startswith("WARN results: implied move recorded as unavailable") and "Coca-Cola" in l for l in rep.lines)
+
+
+@pytest.mark.parametrize("last_order,bad", [("Before 07:00 Tue 20 Oct", None),
+                                            ("Before 07:00 Wed 21 Oct", "later than the last possible order day, 2026-10-20"),
+                                            ("Before 08:00 Tue 20 Oct", "after the 07:00 UK cut-off"),
+                                            ("", "none recorded")])
+def test_last_order_inside_five_sessions(cd, pl, tmp_repo, last_order, bad):
+    """Coca-Cola reporting before the US open on Wed 21 Oct: the last order is before 07:00 UK on Tue 20 Oct."""
+    edit(tmp_repo, "ledger", lambda L: move_ko(L, implied_pct=3.0, last_order=last_order))
+    resync(cd, tmp_repo)
+    fails, _ = run(cd, pl, tmp_repo)
+    hit = [f for f in fails if f.startswith("FAIL results: last order")]
+    assert (not hit) if bad is None else (hit and bad in hit[0])
+
+
+def test_after_close_report_allows_an_order_that_morning(cd, pl):
+    ev = {"date": "2026-10-28", "time_uk": "after US close (est.)", "last_order": "Before 07:00 Wed 28 Oct"}
+    assert cd.last_order_problem(ev, pl) is None
+    ev = {"date": "2026-10-29", "time_uk": "11:30", "last_order": "Before 07:00 Wed 28 Oct"}     # Lilly: before the open
+    assert cd.last_order_problem(ev, pl) is None
+    ev = {"date": "2026-10-29", "time_uk": "11:30", "last_order": "Before 07:00 Thu 29 Oct"}
+    assert "later than" in cd.last_order_problem(ev, pl)
+    ev = {"date": "2026-11-27", "time_uk": "before US open", "last_order": "Before 07:00 Wed 25 Nov"}   # 26 Nov: no US session
+    assert cd.last_order_problem(ev, pl) is None
+
+
+def test_event_date_differing_from_stock_text_warns(cd, pl, tmp_repo):
+    def f(s):
+        for r in s:
+            if r["name"] == "Coca-Cola":
+                r["next_results"] = "28 Oct, before US open"
+    edit(tmp_repo, "stocks", f)
+    resync(cd, tmp_repo)
+    _, rep = run(cd, pl, tmp_repo)
+    assert any(l.startswith("WARN results: results event date differs") and "Coca-Cola" in l for l in rep.lines)

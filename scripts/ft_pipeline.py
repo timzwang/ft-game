@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.4 (19 Oct 2026).
+"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.5 (prepared 19 Oct 2026, not deployed).
+
+Version 7.5 (prepared by Claude on 19 Oct 2026 after Tim's review brief, priority A; needs Tim's approval to deploy)
+prices a change that fills on a day that is not a US session. The game's one such day is Thu 26 Nov 2026: London
+trades, the US is shut. An order entered before that morning's cut-off fills its London legs at the 26 Nov London open:
+  - the performance log and the STANDSTILL test price a buy or sale at the stock's own open on its fill date when that
+    date is not a benchmark session and the stock traded then (fill_days, fill_row); a US leg given the same date has
+    no 26 Nov row and fills at the 27 Nov open, as before. In 7.4 every leg was priced at the 27 Nov open;
+  - a change filling on such a date gets its STANDSTILL change row (7.4 left it out);
+  - a corrected row on such a date recalculates the following session;
+  - the session list is still the benchmark's: 26 and 27 Nov are one performance line, measured from the 25 Nov close;
+  - with every fill on a benchmark session, as in every change to date, every figure is identical to version 7.4.
 
 Version 7.4 (19 Oct 2026, approved by Tim after ChatGPT's follow-up review) records what each order change is expected
 to add before it fills, so the STANDSTILL test can later say whether the expectation was right:
@@ -197,7 +208,7 @@ import math
 import os
 import sys
 
-PIPELINE_VERSION = "7.4"
+PIPELINE_VERSION = "7.5"
 
 # Version 7.3: the US calendar for the rest of the game (NYSE and Nasdaq), and the results budget windows Tim agreed.
 US_CLOSED = {"2026-11-26"}                        # Thanksgiving: US markets shut (London trades)
@@ -678,6 +689,29 @@ def expectation_lines(ledger):
 INCOMPLETE = []
 
 
+def fill_days(ledger, dprev, d):
+    """Version 7.5: name -> the effective date of the latest position row taking effect after `dprev` and on or before
+    the benchmark session `d`. It differs from `d` only when a change filled on a day that is not a benchmark session:
+    in this game, a London leg filling on 26 Nov 2026, when London trades and the US is shut."""
+    out = {}
+    for r in ledger:
+        if r["table"] == "position" and r["effective"] and (dprev or "") < r["effective"] <= d:
+            if r["effective"] > out.get(r["name"], ""):
+                out[r["name"]] = r["effective"]
+    return out
+
+
+def fill_row(hist, tick, fd, d, cur):
+    """Version 7.5: the row whose open a buy or sale filled at, and its date. The stock's own row on the fill day `fd`
+    when that is not the session `d` and the stock traded then with a recorded open (a London stock on 26 Nov);
+    otherwise the session's own row `cur`, exactly as before (a US stock ordered for 26 Nov fills at the 27 Nov open)."""
+    if fd and fd != d and tick:
+        row = hist.get((tick, fd))
+        if row and real_open(row):
+            return row, fd
+    return cur, d
+
+
 def update_performance(ledger, hist, bench, today_date, closed=None):
     """Version 7.2: a session is recorded only when every stock held or traded that day is priced (and every buy or
     sell has a traded open or a stated fill price). Otherwise it and every later session wait, INCOMPLETE says why,
@@ -703,6 +737,7 @@ def update_performance(ledger, hist, bench, today_date, closed=None):
         dprev = all_dates[i - 1] if i > 0 else None
         w_new = live_weights(ledger, d)
         w_prev = live_weights(ledger, dprev) if (dprev and dprev >= start_date) else {}
+        fdays = fill_days(ledger, dprev, d)               # v7.5: a London leg may have filled on 26 Nov (US shut)
         day, rows_d, gaps = 0.0, [], []
         for name in sorted(set(w_new) | set(w_prev)):
             wn, tick = w_new.get(name, (0.0, None))
@@ -724,16 +759,17 @@ def update_performance(ledger, hist, bench, today_date, closed=None):
             if kept and not prv:
                 gaps.append(f"{name} ({tick}): no earlier close")
                 continue
-            if (added_w and not fills.get((name, d)) or sold) and not real_open(cur):
+            frow, fd = fill_row(hist, tick, fdays.get(name), d, cur) if (added_w or sold) else (cur, d)
+            if (added_w and not fills.get((name, fd)) or sold) and not real_open(frow):
                 gaps.append(f"{name} ({tick}): no traded open for the {'buy' if added_w else 'sale'}")
                 continue
             contrib = 0.0
             if kept:
                 contrib += kept * (cur["close"] / prv["close"] - 1.0)
             if added_w:
-                contrib += added_w * (cur["close"] / (fills.get((name, d)) or cur["open"]) - 1.0)   # bought at the open, or at a stated fill price
+                contrib += added_w * (cur["close"] / (fills.get((name, fd)) or frow["open"]) - 1.0)   # bought at the open, or at a stated fill price
             if sold:
-                contrib += sold * (cur["open"] / prv["close"] - 1.0)          # sold at the open
+                contrib += sold * (frow["open"] / prv["close"] - 1.0)         # sold at the open
             day += contrib
             if wn or wp:
                 rows_d.append(lrow("contrib", date=d, name=name, ticker=tick, weight=wn,
@@ -892,6 +928,42 @@ def risk_tables(order, stocks_by_name, hist, scenarios, links=None):
                 bits.append("no crypto-linked holding, so a Bitcoin move adds nothing")
         scen_rows.append(lrow("scenario", name=sc["name"], impact_pct=r2(impact), text="; ".join(bits), plan=json.dumps(shocks, sort_keys=True)))
     return rows, corr_rows[:6], theme_rows, scen_rows, port_vol
+
+
+def portfolio_fit(weights, names, tick_of, hist, themes, n=60):
+    """Version 7.5, printed only: for each candidate, the correlation of its daily returns with the order's (weights
+    fixed) and its highest correlation with one holding, over the latest `n` sessions all of them share, plus its theme's
+    weight in the order now. Answers "does it add anything, or is it more of what is held?" beside the standalone score.
+    `tick_of` maps a name to the ticker to measure (a London stock's US-listed line where the pipeline uses one)."""
+    if not weights or not names:
+        return []
+    rets = {k: daily_returns(series(hist, tick_of.get(k))) for k in set(weights) | set(names) if tick_of.get(k)}
+    if not all(k in rets for k in weights):
+        return []
+    common = set.intersection(*(set(rets[k]) for k in weights))
+    theme_w = {}
+    for k, w in weights.items():
+        theme_w[themes.get(k, "Other")] = theme_w.get(themes.get(k, "Other"), 0.0) + w
+
+    def corr(a, b):
+        ma, mb = sum(a) / len(a), sum(b) / len(b)
+        sa = math.sqrt(sum((x - ma) ** 2 for x in a))
+        sb = math.sqrt(sum((y - mb) ** 2 for y in b))
+        return sum((x - ma) * (y - mb) for x, y in zip(a, b)) / (sa * sb) if sa and sb else 0.0
+
+    out = []
+    for c in names:
+        if c not in rets:
+            continue
+        ds = sorted(common & set(rets[c]))[-n:]
+        if len(ds) < 20:
+            continue
+        x = [rets[c][d] for d in ds]
+        port = [sum(w / 100.0 * rets[k][d] for k, w in weights.items()) for d in ds]
+        best = max(((corr(x, [rets[k][d] for d in ds]), k) for k in weights), key=lambda z: z[0])
+        out.append((c, {"corr": corr(x, port), "best": best[0], "best_name": best[1], "n": len(ds),
+                        "theme": themes.get(c, "Other"), "theme_w": theme_w.get(themes.get(c, "Other"), 0.0)}))
+    return out
 
 
 # ---------------------------------------------------------------- moving averages
@@ -1742,10 +1814,11 @@ def _row_on_or_before(hist, tick, d):
     return rows[-1] if rows else None
 
 
-def port_day(w_prev, w_new, d, dprev, hist, tick_of, fills):
+def port_day(w_prev, w_new, d, dprev, hist, tick_of, fills, fdays=None):
     """Weighted return (points) of moving from weights w_prev (held at dprev's close) to w_new on session d, with the
     game's rules: kept weight close over previous close, added weight close over the open (or a stated fill price),
-    sold weight open over previous close. Returns (points, missing tickers)."""
+    sold weight open over previous close. `fdays` (version 7.5, from fill_days): a leg that filled on a day that is not
+    a benchmark session (a London leg on 26 Nov) is priced at that day's open. Returns (points, missing tickers)."""
     pts, missing = 0.0, set()
     for name in set(w_prev) | set(w_new):
         wp, wn = w_prev.get(name, 0.0), w_new.get(name, 0.0)
@@ -1758,18 +1831,19 @@ def port_day(w_prev, w_new, d, dprev, hist, tick_of, fills):
             missing.add(tick or name)
             continue
         kept, add_w, sold = min(wp, wn), max(wn - wp, 0.0), max(wp - wn, 0.0)
+        frow, fd = fill_row(hist, tick, (fdays or {}).get(name), d, cur) if (add_w or sold) else (cur, d)
         if kept:
             pts += kept * (cur["close"] / prv["close"] - 1.0)
         if add_w:
-            if not real_open(cur) and not fills.get((name, d)):
+            if not real_open(frow) and not fills.get((name, fd)):
                 missing.add(tick)
                 continue
-            pts += add_w * (cur["close"] / (fills.get((name, d)) or cur["open"]) - 1.0)
+            pts += add_w * (cur["close"] / (fills.get((name, fd)) or frow["open"]) - 1.0)
         if sold:
-            if not real_open(cur):
+            if not real_open(frow):
                 missing.add(tick)
                 continue
-            pts += sold * (cur["open"] / prv["close"] - 1.0)
+            pts += sold * (frow["open"] / prv["close"] - 1.0)
     return pts, missing
 
 
@@ -1788,21 +1862,29 @@ def standstill_rows(ledger, hist, bench, date, horizon=5):
     tick_of = _tick_map(ledger)
     fills = {(r["name"], r["effective"]): num(r["value"]) for r in ledger if r["table"] == "position" and num(r["value"])}
     rows = []
-    effs = sorted({r["effective"] for r in ledger if r["table"] == "trade" and r["effective"] in dates})
+    # v7.5: a change whose fill date is not a benchmark session (a London leg on 26 Nov) is judged from the next
+    # session, with its legs priced at their own fill-day opens; before, it was left out. Any other date is unchanged.
+    sess_of = {}
+    for e_raw in {r["effective"] for r in ledger if r["table"] == "trade" and r["effective"]}:
+        s_ = e_raw if e_raw in dates else next((x for x in dates if x > e_raw), None)
+        if s_ is not None:
+            sess_of[e_raw] = s_
+    effs = sorted(sess_of)
     for e in effs:
-        i = dates.index(e)
+        i = dates.index(sess_of[e])
         if i == 0:
             continue                                    # the first order replaced cash: nothing to compare
         dprev = dates[i - 1]
-        w_old, w_new = _weights(ledger, dprev), _weights(ledger, e)
+        w_old, w_new = _weights(ledger, dprev), _weights(ledger, dates[i])
         if not w_old:
             continue
         span = dates[i:i + horizon]
+        fd_ = fill_days(ledger, dprev, dates[i])
         v_new = v_old = 1.0
         miss = set()
         prev_d = dprev
         for k, d in enumerate(span):
-            a, m1 = port_day(w_old if k == 0 else w_new, w_new, d, prev_d, hist, tick_of, fills)
+            a, m1 = port_day(w_old if k == 0 else w_new, w_new, d, prev_d, hist, tick_of, fills, fd_ if k == 0 else None)
             b, m2 = port_day(w_old, w_old, d, prev_d, hist, tick_of, fills)
             miss |= m1 | m2
             v_new *= 1 + a / 100.0
@@ -2194,7 +2276,14 @@ def cmd_run(a):
         return out_
     revised = {d_: [t_ for t_ in ts_ if t_ in ever_held and t_ in _held_near(d_)] for d_, ts_ in revised.items()}
     revised = {d_: ts_ for d_, ts_ in revised.items() if ts_}
-    stale = sorted(d_ for d_ in revised if d_ in done_perf)
+    # v7.5: a corrected row on a day that is not a benchmark session (London on 26 Nov) can change the next session's
+    # line, whose fills may use its open, so it counts as a correction to that session. Benchmark dates are unchanged.
+    sess_ = lambda d_: d_ if d_ in bdates_ else next((x_ for x_ in bdates_ if x_ > d_), None)
+    revised_s = {}
+    for d_, ts_ in revised.items():
+        if sess_(d_):
+            revised_s.setdefault(sess_(d_), []).extend(ts_)
+    stale = sorted(d_ for d_ in revised_s if d_ in done_perf)
     if stale:                       # a stored price was corrected after that session was logged: redo from there
         cut = stale[0]
         for r in ledger:
@@ -2203,7 +2292,7 @@ def cmd_run(a):
             if r["table"] == "confidence" and r["window_end"] and r["window_end"] >= cut:
                 r["window_end"] = r["beat"] = r["ret_pct"] = r["spx_ret_pct"] = None
         ledger = [r for r in ledger if not (r["table"] in ("perf", "contrib", "postmortem") and r["date"] and r["date"] >= cut)]
-        print(f"RECALCULATED from {cut}: prices arrived late or were corrected for " + ", ".join(f"{d_} ({', '.join(sorted(set(t_)))})" for d_, t_ in sorted(revised.items()) if d_ in done_perf))
+        print(f"RECALCULATED from {cut}: prices arrived late or were corrected for " + ", ".join(f"{d_} ({', '.join(sorted(set(t_)))})" for d_, t_ in sorted(revised_s.items()) if d_ in done_perf))
     for fx in today.get("fixes") or []:
         n, old, new = fx.get("name"), fx.get("old_effective"), fx.get("new_effective")
         hit = 0
@@ -2513,7 +2602,7 @@ def cmd_run(a):
     for n_, (pts_, k_, miss_) in results_total(ledger, weights, date).items():
         if k_:
             print(f"  RESULTS TOTAL next {n_} sessions: {pts_:.2f} points across {k_} report(s)"
-                  + (f"; no implied move yet for {', '.join(miss_)} (counted at 6%)" if miss_ else ""))
+                  + (f"; no implied move yet for {', '.join(miss_)} (counted at an assumed 6%, not a market estimate)" if miss_ else ""))
     held_text = {n_: ((by_name.get(n_) or {}).get("quote") or {}).get("next_results") or "" for n_, w_ in weights.items() if w_ > 0}
     for n_, d_, t_ in missing_results_events(ledger, held_text, date):
         warn(f"{n_} is held and its stock data says results on {d_} (\"{t_}\"), but no results event is stored, so RESULTS TOTAL "
@@ -2580,6 +2669,14 @@ def cmd_run(a):
     out_ = [n for n, x in wl if tier_of(x["score"], x["flags"]) == "weak" and n not in soon and n not in keep_]
     if out_: print("  ROTATE OUT candidates (weak, no results inside five sessions): " + ", ".join(out_))
     if keep_: print("  KEPT whatever they score (their notes start \"Crypto tracker:\"): " + ", ".join(keep_))
+    fit_ = portfolio_fit({n_: w_ for n_, w_ in weights.items() if w_ > 0}, [n for n, x in wl if tier_of(x["score"], x["flags"]) == "strong"],
+                         ana_tick, hist, {s_["name"]: s_.get("theme") or "Other" for s_ in today["stocks"]})
+    if fit_:                                          # v7.5: printed only; it changes no file
+        print("  PORTFOLIO FIT of the strong names (a high score is not a reason by itself: what does the stock add to this order?):")
+        for n_, f_ in fit_:
+            print(f"    {n_[:22].ljust(23)} score {sc[n_]['score']:>3}  {f_['theme']} (now {f_['theme_w']:g}% of the order)  "
+                  f"correlation with the order {f_['corr']:+.2f}, highest {f_['best']:+.2f} with {f_['best_name']} ({f_['n']} sessions)"
+                  + ("  SAME RISK AS A HOLDING: a swap, not an addition" if f_["best"] >= 0.8 else ""))
     print(f"\nMACRO ({mnew} new figures): backdrop for shares is {backdrop.upper()}")
     for r in mrows:
         if r["kind"] in ("yield", "commodity", "spread", "crypto"):

@@ -1,0 +1,29 @@
+Order in force (Mon 19 Oct): themes Energy 40%, Health care 25%, Consumer staples 20%, Software 15%; 60 common sessions to 2026-10-16
+
+Holdings, correlation with the rest of the portfolio:
+    Coca-Cola            20%  Consumer staples   +0.28
+    Exxon Mobil          15%  Energy             +0.44
+    Shell                15%  Energy             +0.42
+    Microsoft            15%  Software           -0.25
+    Eli Lilly            15%  Health care        +0.06
+    Chevron              10%  Energy             +0.46
+    AbbVie               10%  Health care        +0.32
+
+Watchlist, by score: correlation with the portfolio, highest with one holding
+    Phillips 66          score  83  Energy            (theme now 40%)  with portfolio +0.33, highest +0.68 (Chevron)
+    ConocoPhillips       score  81  Energy            (theme now 40%)  with portfolio +0.58, highest +0.84 (Chevron)
+    Visa                 score  80  Payments          (theme now 0%)  with portfolio +0.25, highest +0.38 (Coca-Cola)
+    Marathon Petroleum   score  75  Energy            (theme now 40%)  with portfolio +0.23, highest +0.59 (Chevron)
+    Mastercard           score  74  Payments          (theme now 0%)  with portfolio +0.39, highest +0.43 (Coca-Cola)
+    Valero Energy        score  73  Energy            (theme now 40%)  with portfolio +0.19, highest +0.56 (Chevron)
+    BP                   score  72  Energy            (theme now 40%)  with portfolio +0.53, highest +0.90 (Shell)
+    Humana               score  66  Health care       (theme now 25%)  with portfolio +0.04, highest +0.21 (Microsoft)
+    Procter & Gamble     score  64  Consumer staples  (theme now 20%)  with portfolio +0.28, highest +0.35 (Coca-Cola)
+    UnitedHealth         score  63  Health care       (theme now 25%)  with portfolio +0.09, highest +0.29 (Eli Lilly)
+    Merck                score  60  Health care       (theme now 25%)  with portfolio +0.27, highest +0.50 (Eli Lilly)
+    Amgen                score  59  Health care       (theme now 25%)  with portfolio +0.20, highest +0.59 (Eli Lilly)
+    Meta Platforms       score  56  AI and chips      (theme now 0%)  with portfolio -0.28, highest +0.02 (Eli Lilly)
+    Palantir             score  48  Software          (theme now 15%)  with portfolio -0.20, highest +0.17 (Microsoft)
+    Coinbase             score  34  Crypto            (theme now 0%)  with portfolio -0.12, highest +0.18 (Microsoft)
+    TSMC                 score  33  AI and chips      (theme now 0%)  with portfolio -0.36, highest +0.41 (Microsoft)
+    Strategy             score  33  Crypto            (theme now 0%)  with portfolio -0.22, highest +0.23 (Microsoft)
