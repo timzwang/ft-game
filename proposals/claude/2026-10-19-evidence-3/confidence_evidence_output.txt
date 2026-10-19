@@ -1,0 +1,16 @@
+CONFIDENCE: 11 settled, from 2 rating date(s) ['2026-10-09', '2026-10-12'] and 2 window end(s) ['2026-10-15', '2026-10-16']
+    beat the index 8 of 11 (73%), mean rating 56.5, Brier 0.211 (a constant 50 scores 0.250)
+    2026-10-09: 7 ratings, rank correlation of rating with excess return +0.36
+    rated 50 to 54: 3, beat 1
+    rated 55 to 59: 6, beat 5
+    rated 60 to 64: 2, beat 2
+SHADOW: 47 settled, from 2 rating date(s) ['2026-10-08', '2026-10-09'] and 2 window end(s) ['2026-10-15', '2026-10-16']
+    beat the index 27 of 47 (57%), mean rating 56.0, Brier 0.250 (a constant 50 scores 0.250)
+    2026-10-08: 19 ratings, rank correlation of rating with excess return -0.03
+    2026-10-09: 28 ratings, rank correlation of rating with excess return +0.01
+    rated 0 to 49: 4, beat 4
+    rated 50 to 54: 14, beat 7
+    rated 55 to 59: 15, beat 5
+    rated 60 to 64: 14, beat 11
+
+Independent forecasts needed to tell 60% from 50% (5% level, 80% power): about 194. Ratings made on the same date share one market move, and windows five sessions apart are the only non-overlapping ones: about six remain before 27 Nov.

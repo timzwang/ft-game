@@ -53,7 +53,7 @@ def test_full_run_keeps_figures_and_applies_73(pl, repo, tmp_path, stored):
     today["market_closed"] = [{"ticker": "TEST", "date": "2026-11-26"}]
     led, out, _ = run(pl, repo, tmp_path, today)
 
-    assert out.startswith("Pipeline version 7.4")
+    assert out.startswith("Pipeline version 7.5")
     assert perf_rows(led) == perf_rows(stored["ledger"])
     assert not pl.INCOMPLETE
 
@@ -91,3 +91,13 @@ def test_results_lines_use_the_window_budget(pl, repo, tmp_path, stored):
     led, out, _ = run(pl, repo, tmp_path, today)
     line = next(l for l in out.splitlines() if "RESULTS Coca-Cola 2026-10-27" in l)
     assert "0.80 points" in line and "within the 1 budget" in line   # 20% x 4% = 0.8, inside the cluster's 1.0
+
+
+def test_run_prints_portfolio_fit_and_changes_no_file(pl, repo, tmp_path, stored):
+    """7.5: the strong watchlist names get a fit line; BP moves with Shell (0.90 on the snapshot), so it is a swap."""
+    today, _ = build_today(pl, repo, tmp_path, stored)
+    led, out, _ = run(pl, repo, tmp_path, today)
+    assert "PORTFOLIO FIT of the strong names" in out
+    bp = next(l for l in out.splitlines() if l.strip().startswith("BP ") and "correlation with the order" in l)
+    assert "highest +0.90 with Shell" in bp and "a swap, not an addition" in bp
+    assert perf_rows(led) == perf_rows(stored["ledger"])

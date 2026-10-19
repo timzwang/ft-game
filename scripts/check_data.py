@@ -20,8 +20,13 @@ What is checked (FAIL unless marked WARN):
               each 5% to 25%, cash 0% to 25%, weights adding to 100
   performance one row per benchmark session from the first fill, none missing in between; each day's value
               compounds from the one before; contributions add up to the day's return (weight x return)
-  results     every holding whose next-results text names a date has a results event on that date;
-              an implied move is missing for a report inside five sessions (FAIL) or inside ten (WARN)
+  recalc      (19 Oct evening) every stored value matches the pipeline's own recalculation from the stored positions
+              and prices, within RECALC_CREDITS; this also catches a fill priced from an estimated open
+  results     every holding whose next-results text names a date has a results event (WARN if the dates differ);
+              an implied move is missing for a report inside five sessions (FAIL) or inside ten (WARN), unless the
+              event's text or plan says "implied move unavailable" with the reason (WARN: the 6% then used in RESULTS
+              TOTAL is an assumption, never a market estimate); the event's last order is missing, unreadable, later
+              than part C allows or after the CUTOFF_UK time (FAIL inside five sessions, WARN inside ten)
   sync        each data/ and state/ file listed in state/last-sync.md has the sha256 recorded there
   --fresh     the last mirror ran within FRESH_HOURS; the benchmark's latest stored session is the latest US session
               that has closed; performance is recorded up to that session
@@ -42,6 +47,50 @@ SETTLE_MINUTES = 30          # a US session counts as available this long after 
 KNOWN_TABLES = {"alert", "analog", "calib", "confidence", "contrib", "corr", "daycall", "drift", "event", "expect", "macro",
                 "meta", "perf", "position", "postmortem", "reported", "revision", "risk", "scenario", "shadow", "standstill",
                 "theme", "trade"}
+RECALC_CREDITS = 0.05        # stored against recalculated value; the pipeline rounds each day to the cent
+GAME_END = "2026-11-27"
+CUTOFF_UK = "07:00"          # playbook part C: the order cut-off until the FT confirms otherwise (change it there and here)
+_MONTH = {m: i + 1 for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"])}
+
+
+def _day_in(text):
+    """The first 'D Mon' in free text ("Before 07:00 Mon 26 Oct" -> 2026-10-26), October to December as 2026."""
+    for d, m in re.findall(r"\b(\d{1,2})\s+([A-Za-z]{3})[a-z]*\b", text or ""):
+        mon = _MONTH.get(m.lower())
+        if mon:
+            try:
+                return dt.date(2026 if mon >= 10 else 2027, mon, int(d)).isoformat()
+            except ValueError:
+                return None
+    return None
+
+
+def _prev_session(day, pl):
+    d = dt.date.fromisoformat(day) - dt.timedelta(days=1)
+    while d.weekday() >= 5 or d.isoformat() in pl.US_CLOSED:
+        d -= dt.timedelta(days=1)
+    return d.isoformat()
+
+
+def last_order_problem(ev, pl):
+    """Why a held stock's results event has no usable last order, or None. Playbook part C: results after the US close on
+    day D need the order before the cut-off on D; anything else (before the open, a London 07:00 release, a time during
+    the session or no time) needs it before the cut-off on the session before D."""
+    lo = (ev.get("last_order") or "").strip()
+    if not lo or lo.lower() == "passed":
+        return "none recorded"
+    day, t = ev["date"], (ev.get("time_uk") or "").lower()
+    hm = re.search(r"\b(\d\d):(\d\d)\b", t)
+    after = "after" in t or bool(hm and hm.group(0) >= pl.us_close_uk(day))
+    latest = day if after else _prev_session(day, pl)
+    when = _day_in(lo)
+    if when is None:
+        return f"no date readable in '{lo}'"
+    if when > latest:
+        return f"'{lo}' is later than the last possible order day, {latest}"
+    if any(x > CUTOFF_UK for x in re.findall(r"\b\d\d:\d\d\b", lo)):
+        return f"'{lo}' names a time after the {CUTOFF_UK} UK cut-off"
+    return None
 
 
 def load_pipeline():
@@ -235,7 +284,29 @@ def check(repo, now, fresh, pl):
     if bench_dates and last_perf and bench_dates[-1] > last_perf:
         r.warn("performance", f"benchmark prices run to {bench_dates[-1]} but performance only to {last_perf} (PERFORMANCE INCOMPLETE)")
 
-    # results events and implied moves
+    # recalculation (19 Oct evening): the stored log against the pipeline's own valuation of the stored positions and
+    # prices. Catches a corrupted price or position row, and a fill priced from an estimated open (the pipeline refuses
+    # one, so the recalculated log would stop short).
+    if perf:
+        try:
+            redo = [dict(x) for x in ledger if x["table"] not in ("perf", "contrib")]
+            mc = next((x for x in ledger if x["table"] == "meta" and x["name"] == "market_closed"), None)
+            closed = {tuple(c) for c in json.loads(mc["text"])} if mc and mc.get("text") else set()
+            pl._SERIES.clear()
+            pl.INCOMPLETE.clear()
+            pl.update_performance(redo, hist, BENCH, last_perf, closed)
+            got = {x["date"]: pl.num(x["value_est"]) for x in redo if x["table"] == "perf"}
+            bad = [f"{x['date']} stored {pl.num(x['value_est']):.2f}, recalculated {got.get(x['date']) if got.get(x['date']) is None else round(got[x['date']], 2)}"
+                   for x in perf if got.get(x["date"]) is None or abs(got[x["date"]] - pl.num(x["value_est"])) > RECALC_CREDITS]
+            if bad:
+                r.fail("recalc", f"stored values differ from a recalculation from positions and prices: {'; '.join(bad[:4])}"
+                       + (f" ({pl.INCOMPLETE[0]})" if pl.INCOMPLETE else ""))
+            else:
+                r.ok("recalc", f"{len(perf)} stored values match a recalculation from positions and prices (within {RECALC_CREDITS} credits)")
+        except Exception as e:  # noqa: BLE001  a check must report, not crash the workflow
+            r.fail("recalc", f"could not recalculate: {type(e).__name__}: {e}")
+
+    # results events, implied moves and last order deadlines
     asof = last_perf or (bench_dates[-1] if bench_dates else today_utc)
     nexts = {x["name"]: x.get("next_results") for x in stocks if x["name"] in held}
     missing_ev = pl.missing_results_events(ledger, nexts, asof)
@@ -243,18 +314,41 @@ def check(repo, now, fresh, pl):
         r.fail("results", "holding(s) with a results date but no results event: "
                + ", ".join(f"{n} ({d})" for n, d, _ in missing_ev))
     ahead5, ahead10 = set(pl._sessions_ahead(asof, 5)), set(pl._sessions_ahead(asof, 10))
-    no_move5, no_move10 = [], []
+    no_move5, no_move10, documented, mismatch, late5, late10 = [], [], [], [], [], []
     for x in ledger:
-        if x["table"] == "event" and x["kind"] == "results" and x["stock"] in held and pl.num(x["implied_pct"]) is None:
-            if x["date"] in ahead5:
-                no_move5.append(f"{x['stock']} ({x['date']})")
-            elif x["date"] in ahead10:
-                no_move10.append(f"{x['stock']} ({x['date']})")
+        if not (x["table"] == "event" and x["kind"] == "results" and x["stock"] in held and (x["date"] or "") > asof):
+            continue
+        tag = f"{x['stock']} ({x['date']})"
+        text_d = pl.results_date_from_text(nexts.get(x["stock"]))
+        if text_d and text_d != x["date"] and text_d <= GAME_END:
+            mismatch.append(f"{x['stock']}: event {x['date']}, stock data {text_d}")
+        if x["date"] not in ahead10:
+            continue
+        if pl.num(x["implied_pct"]) is None:
+            note = f"{x.get('text') or ''} {x.get('plan') or ''}".lower()
+            if "implied move unavailable" in note:          # an absence recorded with its reason: not invented, not a gap
+                documented.append(tag)
+            elif x["date"] in ahead5:
+                no_move5.append(tag)
+            else:
+                no_move10.append(tag)
+        problem = last_order_problem(x, pl)
+        if problem:
+            (late5 if x["date"] in ahead5 else late10).append(f"{x['stock']} ({x['date']}): {problem}")
     if no_move5:
         r.fail("results", "no implied move for a report inside five sessions: " + ", ".join(sorted(no_move5)))
     if no_move10:
         r.warn("results", "no implied move yet for a report inside ten sessions: " + ", ".join(sorted(no_move10)))
-    if not (missing_ev or no_move5):
+    if documented:
+        r.warn("results", "implied move recorded as unavailable (the 6% in RESULTS TOTAL is an assumption, not a market "
+               "estimate): " + ", ".join(sorted(documented)))
+    if late5:
+        r.fail("results", "last order for a report inside five sessions is missing or later than the rule allows: " + "; ".join(sorted(late5)))
+    if late10:
+        r.warn("results", "last order for a report inside ten sessions is missing or later than the rule allows: " + "; ".join(sorted(late10)))
+    if mismatch:
+        r.warn("results", "results event date differs from the stock's next-results text: " + "; ".join(sorted(mismatch)))
+    if not (missing_ev or no_move5 or late5):
         r.ok("results", f"every holding's results date has an event (as of {asof})")
 
     # sync record

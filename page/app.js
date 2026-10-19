@@ -702,7 +702,7 @@ dash.calc('standing', {
       {h: 'Price', num: true, only: ['l'], cell: (r) => money(r, num(r.price))},
       {h: 'Results', key: 'res', cell: resCell},
       {h: 'Exp. move', key: 'imp', num: true, only: ['l'], tip: 'Options-implied move on results day, where priced. Size, not direction.', cell: (r) => (r.implied === null ? '—' : '±' + r.implied + '%')},
-      {h: 'Conviction', key: 'conv', num: true, tip: 'Confidence anchor from the latest nightly rating: estimated chance of beating the S&P 500 over 5 sessions. Uncalibrated; use as a ranking.', cell: (r) => (r.conv === null ? '—' : String(r.conv))},
+      {h: 'Conviction', key: 'conv', num: true, tip: 'Confidence anchor: the score rescaled (50 + 0.35 x (score - 40), held between 40 and 68). A ranking that adds nothing to the score, not a measured chance of beating the S&P 500.', cell: (r) => (r.conv === null ? '—' : String(r.conv))},
       {h: '20 sessions', only: ['l'], cell: (r) => sparkOf(r) || '—'},
     ], list, {sort: w, onSort: (k) => { S.wl.dir = S.wl.sort === k ? -S.wl.dir : (k === 'res' || k === 'name' ? 1 : -1); S.wl.sort = k; draw(); }, onRow: open, label: rowLabel, rowCls: (r) => (S.sel === r.name ? 'on' : ''), empty: 'No stocks match these filters.', caption: 'Research watchlist'});
   };
@@ -915,8 +915,10 @@ dash.calc('standing', {
   const calBanner = (box, settled, what) => {
     box.replaceChildren();
     const b = el('b', '', 'Uncalibrated. ');
-    box.append(b, document.createTextNode(settled + ' of the ' + CALIB_TARGET + ' settled ' + what + ' needed before the figures can be read as probabilities. Treat them as a ranking.'));
-    box.hidden = settled >= CALIB_TARGET;
+    // 19 Oct evening: the banner no longer hides itself at CALIB_TARGET. A count of ratings is not evidence: ratings
+    // made on the same few dates share one market move. It stays until Tim agrees the ratings may be read as probabilities.
+    box.append(b, document.createTextNode(settled + ' settled ' + what + ' so far (' + CALIB_TARGET + ' is the minimum before a calibration test, not proof of one). A ranking from the score and the review\'s judgement, not a measured probability.'));
+    box.hidden = false;
   };
   const drawMacro = (L) => {
     const M = L.filter((r) => r.table === 'macro');

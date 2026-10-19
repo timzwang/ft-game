@@ -128,7 +128,7 @@ Every message starts with "Tim,", with one exception: a quiet reply starts with 
 - The work is the same either way. A quiet evening still carries out all of H1, publishes the page and writes the state doc. The watchlist changes, the alerts and the day call are on the page; none of them makes a message by itself.
 - A fault is never a quiet day. If a run cannot get as far as checking the order (the state doc or a playbook doc it needs cannot be read, the script's hash does not match, the pipeline ends in an error that cannot be fixed), say so in the first line, say that the order in force stands until Tim hears otherwise, and send it through SendUserMessage.
 - A change message must be enough to act on by itself: the full order, what changed, and the cut-off. Its last line is "If you cannot enter this before 07:00 UK, say so in the project chat so the log can be corrected."
-- Every order table headed for Tim labels the rating column "Confidence (not calibrated)" until about 150 shadow ratings have settled and the panel test or the judgement test (part E) supports reading the ratings as probabilities. The page already marks them uncalibrated.
+- Every order table headed for Tim labels the rating column "Confidence (not calibrated)", and no message calls a rating a chance or a probability (part E, Confidence ratings). The label stays for the rest of the game unless Tim agrees otherwise with evidence: a count of settled ratings alone does not lift it. The page marks them uncalibrated.
 - The order is assumed entered once its message has gone (H1 step 1). The check on that assumption is the weekly comparison of the estimated value with the figure Tim reads off the FT site.
 
 ## J. The state doc

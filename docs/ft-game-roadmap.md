@@ -119,7 +119,7 @@ ChatGPT audited the system from the GitHub mirror on 17 Oct; Claude checked each
 
 ## Still open
 
-- **The final week.** 26 Nov: US closed, London open; 27 Nov: US closes at 18:00 UK, the game ends 23:59 UK. Avoid order changes that fill London stocks on 26 Nov (the log treats a London buy or sale on 26 Nov as filling at 27 Nov's open, since 26 Nov is not a US session). The weekly review of Sat 28 Nov is the final one: it records the 27 Nov closes and Tim's final FT value and rank.
+- **The final week.** 26 Nov: US closed, London open; 27 Nov: US closes at 18:00 UK, the game ends 23:59 UK. Pipeline 7.4 treats a London buy or sale on 26 Nov as filling at 27 Nov's open, since 26 Nov is not a US session; 7.5 (prepared 19 Oct evening, awaiting Tim's approval) prices it at the 26 Nov London open, US legs at the 27 Nov open. What the FT itself does with a mixed order entered before the 26 Nov cut-off is not documented: ask FT help, and until it answers prefer final-week changes that fill on 25 or 27 Nov. The weekly review of Sat 28 Nov is the final one: it records the 27 Nov closes and Tim's final FT value and rank.
 
 - **The broad scan's London data.** Yahoo skipped 15 Oct for London stocks on the morning of 16 Oct. If the gap persists, London names are kept out of Events (by rule) until it passes out of the last three sessions. Check `scan/latest.json` (`stale`, `holes`) after the first few evening runs.
 

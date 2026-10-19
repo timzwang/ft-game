@@ -1,0 +1,26 @@
+Change for 2026-10-12 (window 2026-10-12 to 2026-10-16, 5 session(s)): effect -0.716 points = cash deployed -0.499 (net weight +25 x SPY -1.99%) + selection -0.218
+    RTX              Defence             -10  return  +3.86%  effect -0.386  vs SPY -0.586
+    Lockheed Martin  Defence              -5  return  +7.61%  effect -0.380  vs SPY -0.480
+    Palantir         Software             +5  return -10.95%  effect -0.547  vs SPY -0.448
+    Goldman Sachs    Banks                +5  return  -1.91%  effect -0.095  vs SPY +0.004
+    Coca-Cola        Consumer staples    +15  return  +6.20%  effect +0.930  vs SPY +1.229
+    Microsoft        Software            +15  return  -1.58%  effect -0.237  vs SPY +0.062
+Change for 2026-10-13 (window 2026-10-13 to 2026-10-16, 4 session(s), running): effect +0.772 points = cash deployed -0.000 (net weight +0 x SPY -1.81%) + selection +0.772
+    Nvidia           AI and chips        -10  return  -4.55%  effect +0.455  vs SPY +0.274
+    Coca-Cola        Consumer staples     +5  return  +3.69%  effect +0.184  vs SPY +0.275
+    Shell            Energy               +5  return  +2.66%  effect +0.133  vs SPY +0.224
+Change for 2026-10-14 (window 2026-10-14 to 2026-10-16, 3 session(s), running): effect -0.340 points = cash deployed -0.000 (net weight +0 x SPY -1.51%) + selection -0.340
+    Goldman Sachs    Banks                -5  return  +0.04%  effect -0.002  vs SPY -0.077
+    Meta Platforms   AI and chips         +5  return  -6.76%  effect -0.338  vs SPY -0.263
+Change for 2026-10-15 (window 2026-10-15 to 2026-10-16, 2 session(s), running): effect +0.337 points = cash deployed -0.000 (net weight +0 x SPY -0.39%) + selection +0.337
+    Meta Platforms   AI and chips         -5  return  -2.37%  effect +0.119  vs SPY +0.099
+    Microsoft        Software             -5  return  -0.80%  effect +0.040  vs SPY +0.020
+    Eli Lilly        Health care         +10  return  +1.78%  effect +0.178  vs SPY +0.217
+Change for 2026-10-16 (window 2026-10-16 to 2026-10-16, 1 session(s), running): effect +0.095 points = cash deployed -0.000 (net weight +0 x SPY -1.29%) + selection +0.095
+    TSMC             AI and chips        -10  return  -2.04%  effect +0.204  vs SPY +0.075
+    Microsoft        Software             +5  return  -2.26%  effect -0.113  vs SPY -0.049
+    Eli Lilly        Health care          +5  return  +0.08%  effect +0.004  vs SPY +0.069
+Change for 2026-10-19: not filled in the stored data (prices end 2026-10-16)
+
+First order held (buy and hold from 2026-10-09 open to 2026-10-16 close): as entered +1.460%, fully invested +1.947%; actual estimate +1.436%; SPY -1.673%
+Changes against the first order: as entered -0.024 points, fully invested -0.511 points
