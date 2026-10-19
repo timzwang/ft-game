@@ -1,0 +1,19 @@
+{
+ "data_last_session": "2026-10-19",
+ "versions": [
+  "7.5",
+  "7.6"
+ ],
+ "identical": {
+  "perf": true,
+  "contrib": true,
+  "standstill": true,
+  "incomplete": true
+ },
+ "rebuild_equals_stored_perf": true,
+ "final": [
+  "2026-10-19",
+  101096.51,
+  -0.334
+ ]
+}

@@ -16,7 +16,7 @@ def test_recorded_before_the_fill(pl):
                               "2026-10-19", "2026-10-18", True, False)
     x = [r for r in L if r["table"] == "expect"]
     assert len(x) == 1 and x[0]["forecast"] == 0.25 and x[0]["text"] == "t" and x[0]["plan"] == "i" and x[0]["days"] == 5
-    L = pl.record_expectation(L, {"pts": 0.1}, "2026-10-19", "2026-10-19", False, False)     # restated before the fill
+    L = pl.record_expectation(L, {"pts": 0.1}, "2026-10-19", "2026-10-19", False, False, "06:40")   # restated before the fill
     x = [r for r in L if r["table"] == "expect"]
     assert len(x) == 1 and x[0]["forecast"] == 0.1 and x[0]["date"] == "2026-10-19"
     assert not pl.WARN

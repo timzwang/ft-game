@@ -19,6 +19,7 @@ import pytest
 REPO = Path(__file__).resolve().parents[1]
 SNAPSHOT = REPO / "tests" / "fixtures" / "snapshot-2026-10-16"
 DATA_FILES = ("history", "ledger", "macro", "panel", "stocks")
+STATE_DOC_LINE = "a9cde88a299142e44096fa7ab69490429d2f05d3aa456652ba04bda275cc9a4a  state/ft-game-state.md"   # as at f9241ee
 
 
 def _load(path, name):
@@ -39,6 +40,16 @@ def repo(tmp_path_factory):
         with gzip.open(SNAPSHOT / f"{n}.json.gz", "rb") as src, open(root / "data" / f"{n}.json", "wb") as dst:
             shutil.copyfileobj(src, dst)
     shutil.copy(SNAPSHOT / "last-sync.md", root / "state" / "last-sync.md")
+    # 7.6: every mirror must record the state doc too. The frozen last-sync.md (unchanged) left that line out, though the
+    # real mirror at f9241ee recorded it; the state doc of that commit is frozen beside it, and its line is restored in
+    # this temporary copy only. tests/test_check_data.py checks that the frozen record on its own now fails.
+    shutil.copy(SNAPSHOT / "ft-game-state.md", root / "state" / "ft-game-state.md")
+    with open(root / "state" / "last-sync.md", "r+", encoding="utf-8") as f:
+        text = f.read().rstrip("\n")
+        assert text.endswith("~~~")
+        f.seek(0)
+        f.write(text[:-3] + STATE_DOC_LINE + "\n~~~\n")
+        f.truncate()
     return root
 
 

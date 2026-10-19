@@ -19,15 +19,22 @@ What is checked (FAIL unless marked WARN):
   order       stocks.json's holdings match the latest order in the ledger; game rules: 5 to 20 holdings,
               each 5% to 25%, cash 0% to 25%, weights adding to 100
   performance one row per benchmark session from the first fill, none missing in between; each day's value
-              compounds from the one before; contributions add up to the day's return (weight x return)
+              compounds from the one before; contributions add up to the day's return (weight x return), and
+              (7.6) every stock held or traded that session has its own contribution row
   recalc      (19 Oct evening) every stored value matches the pipeline's own recalculation from the stored positions
               and prices, within RECALC_CREDITS; this also catches a fill priced from an estimated open
-  results     every holding whose next-results text names a date has a results event (WARN if the dates differ);
-              an implied move is missing for a report inside five sessions (FAIL) or inside ten (WARN), unless the
-              event's text or plan says "implied move unavailable" with the reason (WARN: the 6% then used in RESULTS
-              TOTAL is an assumption, never a market estimate); the event's last order is missing, unreadable, later
-              than part C allows or after the CUTOFF_UK time (FAIL inside five sessions, WARN inside ten)
-  sync        each data/ and state/ file listed in state/last-sync.md has the sha256 recorded there
+  results     every holding whose next-results text names a date has a results event ON that date (7.6: an event on
+              another date is a FAIL unless marked confirmed "uncertain" with its reason, a WARN; two future events
+              for one holding are a FAIL); an implied move is missing for a report inside five sessions (FAIL) or
+              inside ten (WARN), unless the event's text or plan says "implied move unavailable" (or "not available")
+              with the source tried and the date (WARN: the 6% then used in RESULTS TOTAL is an assumption, never a
+              market estimate; 7.6: without the source and date, FAIL inside five sessions); a stored implied move
+              that names no source (WARN, 7.6); the event's last order is missing, unreadable, not a deadline
+              "before"/"by" a time at or before CUTOFF_UK, names the wrong weekday, or is later than part C allows on
+              the stock's own market calendar (7.6: London's for a London stock) (FAIL inside five sessions, WARN
+              inside ten)
+  sync        each data/ and state/ file listed in state/last-sync.md has the sha256 recorded there, and (7.6) the
+              list holds all six files a mirror records (REQUIRED_SYNC)
   --fresh     the last mirror ran within FRESH_HOURS; the benchmark's latest stored session is the latest US session
               that has closed; performance is recorded up to that session
 """
@@ -49,7 +56,7 @@ KNOWN_TABLES = {"alert", "analog", "calib", "confidence", "contrib", "corr", "da
                 "theme", "trade"}
 RECALC_CREDITS = 0.05        # stored against recalculated value; the pipeline rounds each day to the cent
 GAME_END = "2026-11-27"
-CUTOFF_UK = "07:00"          # playbook part C: the order cut-off until the FT confirms otherwise (change it there and here)
+CUTOFF_UK = "07:00"          # playbook part C: the order cut-off until the FT confirms otherwise (change it there, here and in ft_pipeline.py)
 _MONTH = {m: i + 1 for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"])}
 
 
@@ -65,32 +72,72 @@ def _day_in(text):
     return None
 
 
-def _prev_session(day, pl):
+_WEEKDAY = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
+REQUIRED_SYNC = ("data/history.json", "data/ledger.json", "data/macro.json", "data/panel.json", "data/stocks.json",
+                 "state/ft-game-state.md")                       # 7.6: what every nightly and weekly mirror (G6) records
+
+
+def _prev_session(day, pl, market=None):
+    """The session before `day` on the listing's market (7.6: London's calendar for a London stock; the US calendar
+    otherwise, which is also the conservative choice when the market is not known)."""
+    shut = getattr(pl, "LONDON_CLOSED", set()) if market == "UK" else pl.US_CLOSED
     d = dt.date.fromisoformat(day) - dt.timedelta(days=1)
-    while d.weekday() >= 5 or d.isoformat() in pl.US_CLOSED:
+    while d.weekday() >= 5 or d.isoformat() in shut:
         d -= dt.timedelta(days=1)
     return d.isoformat()
 
 
-def last_order_problem(ev, pl):
+def last_order_problem(ev, pl, market=None):
     """Why a held stock's results event has no usable last order, or None. Playbook part C: results after the US close on
     day D need the order before the cut-off on D; anything else (before the open, a London 07:00 release, a time during
-    the session or no time) needs it before the cut-off on the session before D."""
+    the session or no time) needs it before the cut-off on the session before D, on the stock's own market (7.6).
+    7.6: the last order must say plainly that it is a deadline at or before the cut-off ("Before 07:00 Wed 28 Oct",
+    "by 06:30 ..."): a missing time, "any time" or "after" wording is a problem, and a weekday that does not match the
+    date is unreadable."""
     lo = (ev.get("last_order") or "").strip()
     if not lo or lo.lower() == "passed":
         return "none recorded"
     day, t = ev["date"], (ev.get("time_uk") or "").lower()
     hm = re.search(r"\b(\d\d):(\d\d)\b", t)
     after = "after" in t or bool(hm and hm.group(0) >= pl.us_close_uk(day))
-    latest = day if after else _prev_session(day, pl)
+    latest = day if after else _prev_session(day, pl, market)
     when = _day_in(lo)
     if when is None:
         return f"no date readable in '{lo}'"
+    wd = re.search(r"\b(mon|tue|wed|thu|fri|sat|sun)[a-z]*\b\.?\s+\d{1,2}\s+[A-Za-z]{3}", lo, flags=re.I)
+    if wd and _WEEKDAY[wd.group(1).lower()] != dt.date.fromisoformat(when).weekday():
+        return f"'{lo}' names a weekday that is not {when}'s"
     if when > latest:
         return f"'{lo}' is later than the last possible order day, {latest}"
-    if any(x > CUTOFF_UK for x in re.findall(r"\b\d\d:\d\d\b", lo)):
+    times = re.findall(r"\b\d\d:\d\d\b", lo)
+    if not times:
+        return f"'{lo}' gives no time; it must say before {CUTOFF_UK} UK (or earlier)"
+    if any(x > CUTOFF_UK for x in times):
         return f"'{lo}' names a time after the {CUTOFF_UK} UK cut-off"
+    if re.search(r"\b(after|from|any ?time|anytime|until|till)\b", lo, flags=re.I) or not re.search(
+            r"\b(before|by|no later than|latest)\b", lo, flags=re.I):
+        return f"'{lo}' does not read as a deadline at or before the cut-off (write \"Before {CUTOFF_UK} <Day D Mon>\")"
     return None
+
+
+_SOURCE = re.compile(r"(\b[a-z0-9-]+\.(?:com|co\.uk|net|org|io)\b|earnings-watcher|barchart|market ?chameleon|option|nasdaq|cboe|"
+                     r"yahoo|investing|zacks|marketbeat|stockanalysis|tradingview|straddle)", re.I)
+_DATE_IN = re.compile(r"\b(\d{1,2}\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*|\d{4}-\d\d-\d\d)\b", re.I)
+
+
+def unavailable_reason_problem(note):
+    """7.6: a recorded absence of an implied move must say which source was tried and when: "Implied move unavailable:
+    earnings-watcher page has no figure for KO, checked 19 Oct". Returns why it is not enough, or None."""
+    m = re.search(r"implied move (?:unavailable|not available)\s*[:,;(-]?\s*(.*)", note or "", flags=re.I | re.S)
+    rest = (m.group(1) if m else "").strip()
+    missing = []
+    if not _SOURCE.search(rest):
+        missing.append("the source tried")
+    if not _DATE_IN.search(rest):
+        missing.append("the date checked")
+    if len(re.findall(r"[A-Za-z]{2,}", rest)) < 4:
+        missing.append("what happened")
+    return ("it does not give " + ", ".join(missing)) if missing else None
 
 
 def load_pipeline():
@@ -267,13 +314,25 @@ def check(repo, now, fresh, pl):
             if abs(prev * (1 + d_ / 100.0) - v) > max(1.5, prev * 2e-5):
                 errs.append(f"{x['date']}: value {v:.2f} does not follow from {prev:.2f} and {d_:+.3f}%")
             prev = v
-        contrib = {}
+        contrib, named = {}, {}
         for x in ledger:
             if x["table"] == "contrib" and pl.num(x["contrib_pts"]) is not None:
                 contrib[x["date"]] = contrib.get(x["date"], 0.0) + pl.num(x["contrib_pts"])
+                named.setdefault(x["date"], set()).add(x["name"])
+        start_d = (meta.get("start_date") or {}).get("text") or ""
         for x in perf:
-            if x["date"] in contrib and abs(contrib[x["date"]] - (pl.num(x["day_pct"]) or 0)) > 0.01:
-                errs.append(f"{x['date']}: contributions add to {contrib[x['date']]:+.3f} points against a day's return of {x['day_pct']:+.3f}%")
+            d = x["date"]
+            i = bench_dates.index(d) if d in bench_dates else -1
+            dprev = bench_dates[i - 1] if i > 0 else None
+            # 7.6: every stock held or traded that session needs its own contribution row; before, a session with no rows
+            # at all passed as "contributions add up"
+            want = set(pl.live_weights(ledger, d)) | (set(pl.live_weights(ledger, dprev)) if dprev and dprev >= start_d else set())
+            want |= {r_["name"] for r_ in ledger if r_["table"] == "position" and (dprev or "") < (r_["effective"] or "") <= d}
+            lack = sorted(want - named.get(d, set()))
+            if lack:
+                errs.append(f"{d}: no contribution row for {', '.join(lack[:6])}")
+            elif abs(contrib.get(d, 0.0) - (pl.num(x["day_pct"]) or 0)) > 0.01:
+                errs.append(f"{d}: contributions add to {contrib.get(d, 0.0):+.3f} points against a day's return of {x['day_pct']:+.3f}%")
     if errs:
         r.fail("performance", "; ".join(errs[:6]))
     elif perf:
@@ -309,47 +368,67 @@ def check(repo, now, fresh, pl):
     # results events, implied moves and last order deadlines
     asof = last_perf or (bench_dates[-1] if bench_dates else today_utc)
     nexts = {x["name"]: x.get("next_results") for x in stocks if x["name"] in held}
-    missing_ev = pl.missing_results_events(ledger, nexts, asof)
+    mkt = {x["name"]: x.get("market") for x in stocks}
+    cov = pl.results_coverage(ledger, nexts, asof, GAME_END) if hasattr(pl, "results_coverage") else None
+    missing_ev = cov["missing"] if cov else pl.missing_results_events(ledger, nexts, asof)
     if missing_ev:
         r.fail("results", "holding(s) with a results date but no results event: "
                + ", ".join(f"{n} ({d})" for n, d, _ in missing_ev))
+    wrong = cov["wrong_date"] if cov else []
+    if wrong:                                               # 7.6: an event on another date does not cover the report
+        r.fail("results", "holding(s) whose results event is not on the date their stock data gives (correct it, or mark "
+               "the event confirmed \"uncertain\" with the reason): " + "; ".join(f"{n}: stock data {d}, event(s) {', '.join(ds)}"
+                                                                      for n, d, ds in wrong))
+    dups = cov["duplicate"] if cov else []
+    if dups:
+        r.fail("results", "more than one future results event for a holding: " + "; ".join(f"{n} ({', '.join(ds)})" for n, ds in dups))
+    if cov and cov["uncertain"]:
+        r.warn("results", "results date marked uncertain: " + "; ".join(f"{n}: stock data {d}, event {de} ({why})"
+                                                                     for n, d, de, why in cov["uncertain"]))
     ahead5, ahead10 = set(pl._sessions_ahead(asof, 5)), set(pl._sessions_ahead(asof, 10))
-    no_move5, no_move10, documented, mismatch, late5, late10 = [], [], [], [], [], []
+    no_move5, no_move10, documented, thin5, thin10, unsourced, late5, late10 = [], [], [], [], [], [], [], []
     for x in ledger:
         if not (x["table"] == "event" and x["kind"] == "results" and x["stock"] in held and (x["date"] or "") > asof):
             continue
         tag = f"{x['stock']} ({x['date']})"
-        text_d = pl.results_date_from_text(nexts.get(x["stock"]))
-        if text_d and text_d != x["date"] and text_d <= GAME_END:
-            mismatch.append(f"{x['stock']}: event {x['date']}, stock data {text_d}")
         if x["date"] not in ahead10:
             continue
+        note = f"{x.get('text') or ''} {x.get('plan') or ''}"
         if pl.num(x["implied_pct"]) is None:
-            note = f"{x.get('text') or ''} {x.get('plan') or ''}".lower()
-            if "implied move unavailable" in note:          # an absence recorded with its reason: not invented, not a gap
-                documented.append(tag)
+            if re.search(r"implied move (unavailable|not available)", note, flags=re.I):   # an absence: what was tried, when
+                why = unavailable_reason_problem(note)
+                if why:
+                    (thin5 if x["date"] in ahead5 else thin10).append(f"{tag}: {why}")
+                else:
+                    documented.append(tag)
             elif x["date"] in ahead5:
                 no_move5.append(tag)
             else:
                 no_move10.append(tag)
-        problem = last_order_problem(x, pl)
+        elif not _SOURCE.search(note):
+            unsourced.append(tag)
+        problem = last_order_problem(x, pl, mkt.get(x["stock"]))
         if problem:
             (late5 if x["date"] in ahead5 else late10).append(f"{x['stock']} ({x['date']}): {problem}")
     if no_move5:
         r.fail("results", "no implied move for a report inside five sessions: " + ", ".join(sorted(no_move5)))
+    if thin5:
+        r.fail("results", "implied move recorded as unavailable without a usable reason, report inside five sessions: " + "; ".join(sorted(thin5)))
     if no_move10:
         r.warn("results", "no implied move yet for a report inside ten sessions: " + ", ".join(sorted(no_move10)))
+    if thin10:
+        r.warn("results", "implied move recorded as unavailable without a usable reason: " + "; ".join(sorted(thin10)))
     if documented:
         r.warn("results", "implied move recorded as unavailable (the 6% in RESULTS TOTAL is an assumption, not a market "
                "estimate): " + ", ".join(sorted(documented)))
+    if unsourced:
+        r.warn("results", "implied move stored without naming its source in the event's text: " + ", ".join(sorted(unsourced)))
     if late5:
         r.fail("results", "last order for a report inside five sessions is missing or later than the rule allows: " + "; ".join(sorted(late5)))
     if late10:
         r.warn("results", "last order for a report inside ten sessions is missing or later than the rule allows: " + "; ".join(sorted(late10)))
-    if mismatch:
-        r.warn("results", "results event date differs from the stock's next-results text: " + "; ".join(sorted(mismatch)))
-    if not (missing_ev or no_move5 or late5):
-        r.ok("results", f"every holding's results date has an event (as of {asof})")
+    if not (missing_ev or wrong or dups or no_move5 or thin5 or late5):
+        r.ok("results", f"every holding's results date has an event on that date (as of {asof})")
 
     # sync record
     sync = repo / "state" / "last-sync.md"
@@ -369,12 +448,15 @@ def check(repo, now, fresh, pl):
                 bad.append(f"{f} missing")
             elif sha256(p) != h:
                 bad.append(f"{f} differs")
+        absent = [f for f in REQUIRED_SYNC if f not in {f_ for _h, f_ in listed}]       # 7.6: the whole manifest
         if not listed:
             r.fail("sync", "no file hashes found in state/last-sync.md")
-        elif bad:
+        if absent:
+            r.fail("sync", f"state/last-sync.md does not record {', '.join(absent)}: every mirror records all {len(REQUIRED_SYNC)} files")
+        if bad:
             r.fail("sync", "files changed since the last sync record: " + ", ".join(bad))
-        else:
-            r.ok("sync", f"{len(listed)} files match state/last-sync.md" + (f" (run {m.group(1)})" if m else ""))
+        if listed and not absent and not bad:
+            r.ok("sync", f"all {len(listed)} files match state/last-sync.md" + (f" (run {m.group(1)})" if m else ""))
 
     # freshness
     if fresh:

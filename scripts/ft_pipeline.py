@@ -1,5 +1,30 @@
 #!/usr/bin/env python3
-"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.5 (prepared 19 Oct 2026, not deployed).
+"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.6 (prepared 19 Oct 2026, not deployed).
+
+Version 7.6 (prepared by Claude on 19 Oct 2026 after ChatGPT's independent review of 7.5, PR #5; needs Tim's approval
+to deploy) closes the gaps that review reproduced. Nothing changes the score, the confidence anchor, sizing, the panel,
+the scan's rules or any order:
+  - listing calendars: a leg filling on a day that is not a benchmark session is priced at its own market's open that
+    day when that market traded (London on 26 Nov), and at the next session's open only when its market was shut (a US
+    leg on 26 Nov). A missing or estimated open on a day the stock's market traded, or an unknown market with no row,
+    is a gap (PERFORMANCE INCOMPLETE) unless a fill price is stated; 7.5 silently used the next session's open. The
+    listing market of every stock seen is kept in a "meta" row (listing_market) so a later rebuild still knows it;
+  - several fills of one stock between two benchmark sessions (London changes filling on 26 and 27 Nov) are each priced
+    at their own open, with later sales taken from the most recent purchase first; 7.5 kept only the last. Each
+    STANDSTILL change row compares the order it filled against the order it replaced (7.5 judged both against the
+    25 Nov order and gave them the same figure);
+  - results coverage: a held stock's results date needs an event on that date; an event on another date covers it only
+    if marked confirmed "uncertain" with the reason in its text. A wrong date is RESULTS MISSING (7.5: covered by any
+    later event). Two results events for one stock in the window are counted once and named (RESULTS DUPLICATE);
+  - expectations: one test for every entry path. An expected benefit is locked once its change has filled: entered
+    after the fill date, a performance line or a benchmark row already stored for the fill date, or an entry time
+    (`entered_time`, HH:MM UK) at or after the 07:00 UK cut-off on the fill date. A same-day entry with no time is
+    accepted with a WARNING. 7.5's reorder accepted one on the fill date after the session had closed;
+  - with every fill on a benchmark session, one fill per stock between sessions, one results event per stock and no
+    order_expected, every figure is identical to 7.5 (and so to 7.4), apart from the new listing_market meta row.
+Assumption, not established by FT documentation: how the FT itself fills a mixed London and US order on 26 Nov and
+whether it resets weights at the 26 Nov London close (tests/test_calendar.py, M1 to M3). Passing synthetic tests
+cannot establish the FT's rules.
 
 Version 7.5 (prepared by Claude on 19 Oct 2026 after Tim's review brief, priority A; needs Tim's approval to deploy)
 prices a change that fills on a day that is not a US session. The game's one such day is Thu 26 Nov 2026: London
@@ -78,7 +103,7 @@ Version 7 adds, at Tim's request after the outside audit of 17 Oct 2026:
 Commands
   python3 ft_pipeline.py run     --stocks stocks.json --ledger ledger.json --history history.json --macro macro.json --today today.json --out OUTDIR
   python3 ft_pipeline.py refresh --stocks stocks.json --quotes quotes.json [--ledger ledger.json] --out OUTDIR
-  python3 ft_pipeline.py reorder --stocks stocks.json --ledger ledger.json --order order.json --out OUTDIR
+  python3 ft_pipeline.py reorder --stocks stocks.json --ledger ledger.json --order order.json --out OUTDIR [--history history.json]
   python3 ft_pipeline.py report  --ledger ledger.json [--since 2026-10-05]
   python3 ft_pipeline.py template --stocks stocks.json [--ledger ledger.json] [--history history.json] --out today.json
   python3 ft_pipeline.py closes  --history history.json --today today.json --ticker MSFT --first F --last L --closes "c1,c2,..." [--panel panel.json]
@@ -190,7 +215,7 @@ stock replaces that stock's future results date, and {"date","name","remove": tr
 replaced only when supplied. Revisions and alerts are added to a running log.
 
 order.json for `reorder` (a morning change to the order, between evening runs; every stock must already be in stocks.json):
-{"effective": "2026-10-12", "entered": "2026-10-12", "order_for": "Mon 12 Oct open", "order_reason": "why",
+{"effective": "2026-10-12", "entered": "2026-10-12", "entered_time": "06:41", "order_for": "Mon 12 Oct open", "order_reason": "why",
  "order_expected": {"pts": 0.2, "thesis": "...", "invalidation": "..."},
  "order": [{"name": "Exxon Mobil", "weight": 15, "confidence": 60}]}
 
@@ -208,10 +233,12 @@ import math
 import os
 import sys
 
-PIPELINE_VERSION = "7.5"
+PIPELINE_VERSION = "7.6"
 
 # Version 7.3: the US calendar for the rest of the game (NYSE and Nasdaq), and the results budget windows Tim agreed.
 US_CLOSED = {"2026-11-26"}                        # Thanksgiving: US markets shut (London trades)
+LONDON_CLOSED = set()                             # 7.6: no UK bank holiday falls between 5 Oct and 27 Nov 2026
+CUTOFF_UK = "07:00"                               # 7.6: playbook part C, the order cut-off until the FT confirms otherwise
 US_EARLY_CLOSE_NY = {"2026-11-27": "13:00"}       # the day after Thanksgiving, the game's last day: 13:00 New York
 RESULTS_BUDGET_WINDOWS = [                        # (first report date, last report date, points, why)
     ("2026-10-27", "2026-10-30", 1.0, "October results cluster: Tim agreed 1.0 points per report on 19 Oct"),
@@ -227,6 +254,67 @@ def results_budget_for(date, default=0.6):
         if lo <= (date or "") <= hi:
             out = max(out, pts)
     return out
+
+
+def market_open(market, day):
+    """Version 7.6: whether a listing's market trades on `day` (YYYY-MM-DD). `market` is "UK" (London) or "US", as in
+    stocks.json; None when the market is not known, so the caller can tell a shut market from a missing quote."""
+    if market not in ("UK", "US") or not day:
+        return None
+    import datetime as _dt
+    if _dt.date.fromisoformat(day).weekday() >= 5:
+        return False
+    return day not in (LONDON_CLOSED if market == "UK" else US_CLOSED)
+
+
+def listing_markets(ledger, stocks=()):
+    """Version 7.6: ticker -> "UK" or "US", from the ledger's listing_market meta row and then any stock rows given."""
+    out = {}
+    row = next((r for r in ledger if r["table"] == "meta" and r["name"] == "listing_market"), None)
+    if row and row.get("text"):
+        try:
+            out.update(json.loads(row["text"]))
+        except (ValueError, TypeError):
+            pass
+    for s in stocks or ():
+        if s.get("ticker") and s.get("market") in ("UK", "US"):
+            out[s["ticker"]] = s["market"]
+    return out
+
+
+def keep_listing_markets(ledger, markets):
+    """Version 7.6: store `markets` in the listing_market meta row (added only when something new is known)."""
+    row = next((r for r in ledger if r["table"] == "meta" and r["name"] == "listing_market"), None)
+    old = listing_markets([row] if row else [])
+    if {**old, **markets} == old and row is not None:
+        return ledger
+    if row is None:
+        row = lrow("meta", name="listing_market")
+        ledger.append(row)
+    row["text"] = json.dumps(dict(sorted({**old, **markets}.items())))
+    return ledger
+
+
+def expectation_lock(ledger, eff, entered, entered_time=None, hist=None, bench=None, run_date=None):
+    """Version 7.6: why an expected benefit for the change filling at `eff` would be hindsight, or None. The same test
+    for `run` and `reorder`: entered after the fill date; the run's own session on or after it; a performance line or a
+    benchmark price row already stored for the fill date (the session has closed); or an entry time on the fill date at
+    or after the 07:00 UK cut-off."""
+    if entered and entered > eff:
+        return f"entered on {entered}, after the fill date {eff}"
+    if run_date and run_date >= eff:
+        return f"the run's session {run_date} is on or after the fill date {eff}"
+    done = [r["date"] for r in ledger if r["table"] == "perf" and r["value_est"] is not None and (r["date"] or "") >= eff]
+    if done:
+        return f"performance is already recorded for {min(done)}, on or after the fill date {eff}"
+    if hist is not None and bench and hist.get((bench, eff)):
+        return f"the {bench} row for {eff} is already stored, so that session has closed"
+    t = str(entered_time or "").strip()
+    if t and not (len(t) >= 5 and t[:2].isdigit() and t[2] == ":" and t[3:5].isdigit()):
+        return f"the entry time '{t}' is not HH:MM UK, so it cannot show the expectation came before the cut-off"
+    if entered == eff and t and t[:5] >= CUTOFF_UK:
+        return f"entered at {t[:5]} UK on the fill date, at or after the {CUTOFF_UK} UK cut-off"
+    return None
 
 LEDGER_KEYS = ["id", "table", "date", "time_uk", "effective", "name", "ticker", "stock", "kind", "bank", "action", "theme",
                "weight", "from_w", "to_w", "score", "confidence", "ret_pct", "spx_ret_pct", "beat", "contrib_pts",
@@ -631,12 +719,15 @@ def apply_order(ledger, order, eff, entered, reason, tickers, scores):
     return ledger
 
 
-def record_expectation(ledger, exp, eff, entered, changed, started):
+def record_expectation(ledger, exp, eff, entered, changed, started, entered_time=None):
     """Version 7.4: store the expected benefit of the change filling at `eff` as an "expect" row. `changed`: this run
     logged new trades for `eff`. `started`: the change has already filled, so its five-session window has begun and
-    the expectation is locked (a first one given now would be hindsight and is refused)."""
+    the expectation is locked (a first one given now would be hindsight and is refused). Version 7.6: `started` may be
+    the reason from expectation_lock, and `entered_time` (HH:MM UK) is stored in time_uk; a first expectation given on
+    the fill date itself with no entry time is kept with a WARNING, since only the time shows it came before the open."""
     exp = exp or {}
     pts = num(exp.get("pts"))
+    why = started if isinstance(started, str) else "it has already filled"
     old = next((r for r in ledger if r["table"] == "expect" and r["effective"] == eff), None)
     if pts is None:
         if changed and old is None:
@@ -651,14 +742,18 @@ def record_expectation(ledger, exp, eff, entered, changed, started):
         return ledger
     if started:
         if old is None:
-            warn(f"the change at {eff} has already filled: an expected benefit given now would be hindsight, so it is not recorded")
+            warn(f"the change at {eff} has already filled ({why}): an expected benefit given now would be hindsight, so it is not recorded")
         elif abs((num(old["forecast"]) or 0.0) - pts) > 1e-9:
-            warn(f"the expected benefit for the change at {eff} is locked since it filled: kept {num(old['forecast']):+.2f} "
+            warn(f"the expected benefit for the change at {eff} is locked since it filled ({why}): kept {num(old['forecast']):+.2f} "
                  f"points (given on {old['date']}), not {pts:+.2f}")
         return ledger
+    t = str(entered_time or "").strip()[:5]
+    if entered == eff and not t:
+        warn(f"the expected benefit for the change at {eff} was given on the fill date with no entry time: it is kept, but "
+             f"only an entered_time before {CUTOFF_UK} UK shows it came before the open")
     ledger = [r for r in ledger if r is not old]
-    ledger.append(lrow("expect", date=entered, effective=eff, name=f"Change for {eff}", forecast=r2(pts, 3), days=5,
-                       text=str(exp.get("thesis") or ""), plan=str(exp.get("invalidation") or "")))
+    ledger.append(lrow("expect", date=entered, time_uk=t or None, effective=eff, name=f"Change for {eff}",
+                       forecast=r2(pts, 3), days=5, text=str(exp.get("thesis") or ""), plan=str(exp.get("invalidation") or "")))
     return ledger
 
 
@@ -701,23 +796,89 @@ def fill_days(ledger, dprev, d):
     return out
 
 
-def fill_row(hist, tick, fd, d, cur):
-    """Version 7.5: the row whose open a buy or sale filled at, and its date. The stock's own row on the fill day `fd`
-    when that is not the session `d` and the stock traded then with a recorded open (a London stock on 26 Nov);
-    otherwise the session's own row `cur`, exactly as before (a US stock ordered for 26 Nov fills at the 27 Nov open)."""
-    if fd and fd != d and tick:
-        row = hist.get((tick, fd))
-        if row and real_open(row):
-            return row, fd
-    return cur, d
+def fill_steps(ledger, dprev, d, upto=None):
+    """Version 7.6: name -> [(fill date, weight after that fill)] for every fill after `dprev` and on or before `d`
+    (and on or before `upto` if given), oldest first. More than one entry only when a stock's weight changed on a day
+    that is not a benchmark session and again before the next one (London changes filling on 26 and 27 Nov)."""
+    last = min(d, upto) if upto else d
+    eff = {}
+    for r in ledger:
+        if r["table"] == "position" and r["effective"] and (dprev or "") < r["effective"] <= last:
+            eff.setdefault(r["name"], set()).add(r["effective"])
+    out = {}
+    for n, ds in eff.items():
+        out[n] = [(fd, (live_weights(ledger, fd).get(n) or (0.0, None))[0]) for fd in sorted(ds)]
+    return out
 
 
-def update_performance(ledger, hist, bench, today_date, closed=None):
+def fill_row(hist, tick, fd, d, cur, market=None):
+    """The row whose open a buy or sale filled at, its date, and why it cannot be priced (None if it can).
+    Version 7.5 took the stock's own row on a fill day `fd` that is not the session `d` when it had a traded open, and
+    otherwise, silently, the session's row. Version 7.6 asks the listing's calendar first: if its market traded on
+    `fd` (London on 26 Nov) the fill is that day's open, and a missing or estimated open there is a gap, never the
+    next session's open; if its market was shut on `fd` (a US stock on 26 Nov) the fill is the next session's open,
+    `cur`, as before (assumption M2 in tests/test_calendar.py); with no known market, a traded open on `fd` is used and
+    its absence is a gap, since a shut market cannot be told from a missing quote."""
+    if not fd or fd == d or not tick:
+        return cur, d, None
+    is_open = market_open(market, fd)
+    if is_open is False:
+        return cur, d, None
+    row = hist.get((tick, fd))
+    if row and real_open(row):
+        return row, fd, None
+    if is_open:
+        return row, fd, (f"no traded open on {fd}, when its market ({market}) was open: the fill cannot be priced from "
+                         f"another day's open")
+    return row, fd, (f"no traded open on {fd} and its listing market is not known, so a shut market cannot be told "
+                     f"from a missing quote")
+
+
+def legs_points(name, tick, wp, steps, cur, prv, d, hist, fills, market):
+    """Version 7.6: the points from one stock over one benchmark interval with several fills (`steps`, from fill_steps).
+    The weight held at the previous close is one lot costing that close; each buy adds a lot at its fill (its own
+    day's open, or a stated fill price); each sale is taken from the most recent lot first, at its own day's open;
+    what is left is valued at the session's close. Returns (points, problem)."""
+    lots = [[wp, prv["close"]]] if wp else []
+    w, pts = wp, 0.0
+    for fd, w_to in steps:
+        delta = w_to - w
+        if abs(delta) <= 1e-9:
+            continue
+        frow, fd2, why = fill_row(hist, tick, fd, d, cur, market)
+        stated = fills.get((name, fd)) if delta > 0 else None
+        if why and not stated:
+            return None, why
+        if delta > 0:
+            px = stated or (frow["open"] if frow and real_open(frow) else None)
+            if not px:
+                return None, f"no traded open for the buy on {fd2}"
+            lots.append([delta, px])
+        else:
+            if not (frow and real_open(frow)):
+                return None, f"no traded open for the sale on {fd2}"
+            left = -delta
+            while left > 1e-9 and lots:
+                take = min(left, lots[-1][0])
+                pts += take * (frow["open"] / lots[-1][1] - 1.0)
+                lots[-1][0] -= take
+                left -= take
+                if lots[-1][0] <= 1e-9:
+                    lots.pop()
+        w = w_to
+    pts += sum(x * (cur["close"] / p - 1.0) for x, p in lots)
+    return pts, None
+
+
+def update_performance(ledger, hist, bench, today_date, closed=None, markets=None):
     """Version 7.2: a session is recorded only when every stock held or traded that day is priced (and every buy or
     sell has a traded open or a stated fill price). Otherwise it and every later session wait, INCOMPLETE says why,
     and the next run with the missing rows adds them. `closed` lists (ticker, date) pairs whose market was shut: the
-    holding counts as unchanged that day."""
+    holding counts as unchanged that day. Version 7.6: `markets` (ticker -> "UK" or "US"; by default the ledger's
+    listing_market row) decides whether a leg filling on a day that is not a benchmark session waits for that day's
+    open (fill_row), and several fills of one stock in one interval are each priced (legs_points)."""
     closed = set(closed or [])
+    markets = listing_markets(ledger) if markets is None else markets
     meta = {r["name"]: r for r in ledger if r["table"] == "meta"}
     start_date = meta["start_date"]["text"]
     start_value = num(meta["start_value"]["value"])
@@ -730,6 +891,7 @@ def update_performance(ledger, hist, bench, today_date, closed=None):
     added = []
     fills = {(r["name"], r["effective"]): num(r["value"]) for r in ledger if r["table"] == "position" and num(r["value"])}
     all_dates = sorted(brow)
+    tick_any = _tick_map(ledger)
     for d in sessions:
         if d in done:
             continue
@@ -738,11 +900,13 @@ def update_performance(ledger, hist, bench, today_date, closed=None):
         w_new = live_weights(ledger, d)
         w_prev = live_weights(ledger, dprev) if (dprev and dprev >= start_date) else {}
         fdays = fill_days(ledger, dprev, d)               # v7.5: a London leg may have filled on 26 Nov (US shut)
+        steps = fill_steps(ledger, dprev, d)              # v7.6: and more than once before the next session
+        multi = {n for n, s_ in steps.items() if len(s_) > 1}
         day, rows_d, gaps = 0.0, [], []
-        for name in sorted(set(w_new) | set(w_prev)):
+        for name in sorted(set(w_new) | set(w_prev) | multi):
             wn, tick = w_new.get(name, (0.0, None))
             wp, tick2 = w_prev.get(name, (0.0, None))
-            tick = tick or tick2
+            tick = tick or tick2 or tick_any.get(name)
             cur = hist.get((tick, d))
             prv = None
             if cur:
@@ -751,29 +915,40 @@ def update_performance(ledger, hist, bench, today_date, closed=None):
                 prv = earlier[-1] if earlier else None
             kept, added_w, sold = min(wp, wn), max(wn - wp, 0.0), max(wp - wn, 0.0)
             if not cur:
-                if (tick, d) in closed and not added_w and not sold:
+                if (tick, d) in closed and not added_w and not sold and name not in multi:
                     cur = prv = {"open": 1.0, "close": 1.0}       # market shut: the holding is unchanged that day
                 else:
                     gaps.append(f"{name} ({tick}): no price row")
                     continue
-            if kept and not prv:
+            if (kept or (name in multi and wp)) and not prv:
                 gaps.append(f"{name} ({tick}): no earlier close")
                 continue
-            frow, fd = fill_row(hist, tick, fdays.get(name), d, cur) if (added_w or sold) else (cur, d)
-            if (added_w and not fills.get((name, fd)) or sold) and not real_open(frow):
-                gaps.append(f"{name} ({tick}): no traded open for the {'buy' if added_w else 'sale'}")
-                continue
-            contrib = 0.0
-            if kept:
-                contrib += kept * (cur["close"] / prv["close"] - 1.0)
-            if added_w:
-                contrib += added_w * (cur["close"] / (fills.get((name, fd)) or frow["open"]) - 1.0)   # bought at the open, or at a stated fill price
-            if sold:
-                contrib += sold * (frow["open"] / prv["close"] - 1.0)         # sold at the open
+            if name in multi:                             # v7.6: several fills between two sessions, each priced
+                contrib, why = legs_points(name, tick, wp, steps[name], cur, prv, d, hist, fills, markets.get(tick))
+                if why:
+                    gaps.append(f"{name} ({tick}): {why}")
+                    continue
+            else:
+                frow, fd, why = (fill_row(hist, tick, fdays.get(name), d, cur, markets.get(tick)) if (added_w or sold)
+                                 else (cur, d, None))
+                if why and not (added_w and fills.get((name, fd))):
+                    gaps.append(f"{name} ({tick}): {why}; give the row or a stated fill price")
+                    continue
+                if (added_w and not fills.get((name, fd)) or sold) and not (frow and real_open(frow)):
+                    gaps.append(f"{name} ({tick}): no traded open for the {'buy' if added_w else 'sale'}")
+                    continue
+                contrib = 0.0
+                if kept:
+                    contrib += kept * (cur["close"] / prv["close"] - 1.0)
+                if added_w:
+                    contrib += added_w * (cur["close"] / (fills.get((name, fd)) or frow["open"]) - 1.0)   # bought at the open, or at a stated fill price
+                if sold:
+                    contrib += sold * (frow["open"] / prv["close"] - 1.0)         # sold at the open
             day += contrib
-            if wn or wp:
+            if wn or wp or name in multi:
+                base_w = wn or wp or max(w_ for _fd, w_ in steps[name])
                 rows_d.append(lrow("contrib", date=d, name=name, ticker=tick, weight=wn,
-                                   ret_pct=r2(contrib / (wn or wp) * 100.0), contrib_pts=r2(contrib, 3)))
+                                   ret_pct=r2(contrib / base_w * 100.0) if base_w else None, contrib_pts=r2(contrib, 3)))
         if gaps:
             INCOMPLETE.append(f"{d}: " + "; ".join(gaps))
             warn(f"performance stops before {d}: " + "; ".join(gaps) + ". Give the missing rows (or list a closed market) and re-run")
@@ -1814,15 +1989,19 @@ def _row_on_or_before(hist, tick, d):
     return rows[-1] if rows else None
 
 
-def port_day(w_prev, w_new, d, dprev, hist, tick_of, fills, fdays=None):
+def port_day(w_prev, w_new, d, dprev, hist, tick_of, fills, fdays=None, markets=None, steps=None):
     """Weighted return (points) of moving from weights w_prev (held at dprev's close) to w_new on session d, with the
     game's rules: kept weight close over previous close, added weight close over the open (or a stated fill price),
     sold weight open over previous close. `fdays` (version 7.5, from fill_days): a leg that filled on a day that is not
-    a benchmark session (a London leg on 26 Nov) is priced at that day's open. Returns (points, missing tickers)."""
+    a benchmark session (a London leg on 26 Nov) is priced at that day's open. Version 7.6: `markets` decides whether
+    such a leg may fall back to the session's open (fill_row), and `steps` (from fill_steps) prices a stock with
+    several fills in the interval leg by leg (legs_points). Returns (points, missing tickers)."""
     pts, missing = 0.0, set()
-    for name in set(w_prev) | set(w_new):
+    markets = markets or {}
+    multi = {n for n, s_ in (steps or {}).items() if len(s_) > 1}
+    for name in set(w_prev) | set(w_new) | multi:
         wp, wn = w_prev.get(name, 0.0), w_new.get(name, 0.0)
-        if not wp and not wn:
+        if not wp and not wn and name not in multi:
             continue
         tick = tick_of.get(name)
         cur = hist.get((tick, d)) if tick else None
@@ -1830,17 +2009,28 @@ def port_day(w_prev, w_new, d, dprev, hist, tick_of, fills, fdays=None):
         if not cur or not prv:
             missing.add(tick or name)
             continue
+        if name in multi:
+            p_, why = legs_points(name, tick, wp, steps[name], cur, prv, d, hist, fills, markets.get(tick))
+            if why:
+                missing.add(tick)
+                continue
+            pts += p_
+            continue
         kept, add_w, sold = min(wp, wn), max(wn - wp, 0.0), max(wp - wn, 0.0)
-        frow, fd = fill_row(hist, tick, (fdays or {}).get(name), d, cur) if (add_w or sold) else (cur, d)
+        frow, fd, why = (fill_row(hist, tick, (fdays or {}).get(name), d, cur, markets.get(tick)) if (add_w or sold)
+                         else (cur, d, None))
+        if why and not (add_w and not sold and fills.get((name, fd))):
+            missing.add(tick)
+            continue
         if kept:
             pts += kept * (cur["close"] / prv["close"] - 1.0)
         if add_w:
-            if not real_open(frow) and not fills.get((name, fd)):
+            if not (frow and real_open(frow)) and not fills.get((name, fd)):
                 missing.add(tick)
                 continue
             pts += add_w * (cur["close"] / (fills.get((name, fd)) or frow["open"]) - 1.0)
         if sold:
-            if not real_open(frow):
+            if not (frow and real_open(frow)):
                 missing.add(tick)
                 continue
             pts += sold * (frow["open"] / prv["close"] - 1.0)
@@ -1870,22 +2060,37 @@ def standstill_rows(ledger, hist, bench, date, horizon=5):
         if s_ is not None:
             sess_of[e_raw] = s_
     effs = sorted(sess_of)
+    markets = listing_markets(ledger)
     for e in effs:
         i = dates.index(sess_of[e])
         if i == 0:
             continue                                    # the first order replaced cash: nothing to compare
         dprev = dates[i - 1]
-        w_old, w_new = _weights(ledger, dprev), _weights(ledger, dates[i])
+        # v7.6: the order this change replaced is the one in force just before its fill date, which differs from the
+        # order at the previous session's close only when another change filled in between (London changes filling
+        # on 26 and 27 Nov). The new order is the one in force on its own fill date, not after later changes.
+        before = sorted({fd for st_ in fill_steps(ledger, dprev, dates[i]).values() for fd, _w in st_ if fd < e})
+        w_start = _weights(ledger, dprev)
+        w_old = _weights(ledger, before[-1]) if before else w_start
+        w_new = _weights(ledger, e) if e != dates[i] else _weights(ledger, dates[i])
         if not w_old:
             continue
         span = dates[i:i + horizon]
-        fd_ = fill_days(ledger, dprev, dates[i])
+        st_new = fill_steps(ledger, dprev, dates[i], upto=e)
+        st_old = fill_steps(ledger, dprev, dates[i], upto=before[-1]) if before else {}
+        fd_ = {n: x[-1][0] for n, x in st_new.items()}
+        fo_ = {n: x[-1][0] for n, x in st_old.items()}
         v_new = v_old = 1.0
         miss = set()
         prev_d = dprev
         for k, d in enumerate(span):
-            a, m1 = port_day(w_old if k == 0 else w_new, w_new, d, prev_d, hist, tick_of, fills, fd_ if k == 0 else None)
-            b, m2 = port_day(w_old, w_old, d, prev_d, hist, tick_of, fills)
+            if k == 0:
+                a, m1 = port_day(w_start, w_new, d, prev_d, hist, tick_of, fills, fd_, markets, st_new)
+                b, m2 = (port_day(w_start, w_old, d, prev_d, hist, tick_of, fills, fo_, markets, st_old) if before
+                         else port_day(w_old, w_old, d, prev_d, hist, tick_of, fills))
+            else:
+                a, m1 = port_day(w_new, w_new, d, prev_d, hist, tick_of, fills)
+                b, m2 = port_day(w_old, w_old, d, prev_d, hist, tick_of, fills)
             miss |= m1 | m2
             v_new *= 1 + a / 100.0
             v_old *= 1 + b / 100.0
@@ -2023,13 +2228,18 @@ def _sessions_ahead(date, n):
 
 def results_total(ledger, weights, date, default_move=6.0):
     """Holdings reporting inside the next 5 and 10 sessions: weight x implied move added up (a missing implied move
-    counts at default_move). Returns {5: (points, reports, missing), 10: (...)}."""
+    counts at default_move). Returns {5: (points, reports, missing), 10: (...)}. Version 7.6: a stock with more than
+    one results event in the window is counted once, at its earliest (results_coverage names the duplicate)."""
     out = {}
     for n in (5, 10):
         ahead = set(_sessions_ahead(date, n))
-        pts, k, missing = 0.0, 0, []
+        pts, k, missing, first = 0.0, 0, [], {}
+        for e in ledger:                              # v7.6: the earliest event per stock is the one counted
+            if e["table"] == "event" and e["kind"] == "results" and (e["date"] or "") in ahead:
+                if e["stock"] not in first or (e["date"], e["time_uk"] or "") < (first[e["stock"]]["date"], first[e["stock"]]["time_uk"] or ""):
+                    first[e["stock"]] = e
         for e in ledger:
-            if e["table"] == "event" and e["kind"] == "results" and e["stock"] in weights and (e["date"] or "") in ahead and weights[e["stock"]] > 0:
+            if e["table"] == "event" and e["kind"] == "results" and e["stock"] in weights and (e["date"] or "") in ahead and weights[e["stock"]] > 0 and first.get(e["stock"]) is e:
                 mv = num(e["implied_pct"])
                 if mv is None:
                     missing.append(e["stock"])
@@ -2059,17 +2269,46 @@ def results_date_from_text(text):
         return None
 
 
-def missing_results_events(ledger, holdings, date, last="2026-11-27"):
-    """Version 7.3 (ChatGPT review, finding 1): holdings whose own next-results text names a date after `date` and up to
-    the game's end, with no results event stored for that stock on or after `date`. `holdings` maps name -> text.
-    The results total and the page read events only, so such a holding would be left out of both."""
-    have = {r["stock"] for r in ledger if r["table"] == "event" and r["kind"] == "results" and (r["date"] or "") > date}
-    out = []
+def results_coverage(ledger, holdings, date, last="2026-11-27"):
+    """Version 7.6 (ChatGPT's review of 7.5, finding 2): for each holding whose own next-results text names a date after
+    `date` and up to the game's end, how its results events cover that date. `holdings` maps name -> text. Returns
+    {"missing": [(name, date, text)] with no future results event at all, "wrong_date": [(name, date, event dates)]
+    whose events are all on other dates and none is marked uncertain, "uncertain": [(name, date, event date, reason)]
+    covered by an event marked confirmed "uncertain" with its reason in the text, "duplicate": [(name, dates)] with more
+    than one future results event up to the game's end}. In 7.3 to 7.5 any later event covered the holding."""
+    evs = {}
+    for r in ledger:
+        if r["table"] == "event" and r["kind"] == "results" and date < (r["date"] or "") <= last:
+            evs.setdefault(r["stock"], []).append(r)
+    out = {"missing": [], "wrong_date": [], "uncertain": [], "duplicate": []}
     for name, text in sorted(holdings.items()):
+        mine = sorted(evs.get(name, []), key=lambda r: r["date"])
+        if len(mine) > 1:
+            out["duplicate"].append((name, [r["date"] for r in mine]))
         d = results_date_from_text(text)
-        if d and date < d <= last and name not in have:
-            out.append((name, d, text))
+        if not d or not (date < d <= last):
+            continue
+        if not mine:
+            out["missing"].append((name, d, text))
+        elif any(r["date"] == d for r in mine):
+            continue
+        else:
+            unc = [r for r in mine if str(r["confirmed"] or "").strip().lower() == "uncertain" and len((r["text"] or "").strip()) >= 15]
+            if unc:
+                out["uncertain"].append((name, d, unc[0]["date"], unc[0]["text"]))
+            else:
+                out["wrong_date"].append((name, d, [r["date"] for r in mine]))
     return out
+
+
+def missing_results_events(ledger, holdings, date, last="2026-11-27"):
+    """Version 7.3, tightened in 7.6: holdings whose own next-results text names a date after `date` and up to the
+    game's end with no results event on that date (and none marked uncertain). `holdings` maps name -> text. The
+    results total and the page read events only, so such a holding is left out of both, or counted on the wrong day."""
+    cov = results_coverage(ledger, holdings, date, last)
+    out = list(cov["missing"])
+    out += [(n, d, (holdings.get(n) or "") + f" (events stored only for {', '.join(ds)})") for n, d, ds in cov["wrong_date"]]
+    return sorted(out)
 
 
 def us_close_uk(d):
@@ -2339,8 +2578,10 @@ def cmd_run(a):
         n_tr_ = len([r for r in ledger if r["table"] == "trade"])
         ledger = apply_order(ledger, order, eff, today.get("entered") or date, today.get("order_reason") or "",
                              {n: s_["ticker"] for n, s_ in by_name.items()}, {n: x["score"] for n, x in sc.items()})
+        lock_ = expectation_lock(ledger, eff, today.get("entered") or date, today.get("entered_time"), hist, bench, date)
         ledger = record_expectation(ledger, today.get("order_expected"), eff, today.get("entered") or date,
-                                    len([r for r in ledger if r["table"] == "trade"]) > n_tr_, date >= eff)
+                                    len([r for r in ledger if r["table"] == "trade"]) > n_tr_, lock_ or False,
+                                    today.get("entered_time"))
 
     if not hist.get((bench, date)):
         warn(f"no {bench} row for {date} in the history store, so performance for that session cannot be added")
@@ -2356,7 +2597,9 @@ def cmd_run(a):
             mc_row = lrow("meta", name="market_closed")
             ledger.append(mc_row)
         mc_row["text"] = json.dumps(sorted(list(x) for x in closed_all))
-    added = update_performance(ledger, hist, bench, date, closed_all)
+    ledger = keep_listing_markets(ledger, listing_markets([], today["stocks"]))     # version 7.6
+    markets = listing_markets(ledger)
+    added = update_performance(ledger, hist, bench, date, closed_all, markets)
     bud0_ = num(today.get("results_budget")) or 0.6
     rb_row = next((r for r in ledger if r["table"] == "meta" and r["name"] == "results_budget"), None)
     if rb_row is None:
@@ -2604,10 +2847,20 @@ def cmd_run(a):
             print(f"  RESULTS TOTAL next {n_} sessions: {pts_:.2f} points across {k_} report(s)"
                   + (f"; no implied move yet for {', '.join(miss_)} (counted at an assumed 6%, not a market estimate)" if miss_ else ""))
     held_text = {n_: ((by_name.get(n_) or {}).get("quote") or {}).get("next_results") or "" for n_, w_ in weights.items() if w_ > 0}
-    for n_, d_, t_ in missing_results_events(ledger, held_text, date):
+    cov_ = results_coverage(ledger, held_text, date)                  # version 7.6: dated coverage
+    for n_, d_, t_ in cov_["missing"]:
         warn(f"{n_} is held and its stock data says results on {d_} (\"{t_}\"), but no results event is stored, so RESULTS TOTAL "
              f"and the page leave it out: add it under events (kind \"results\") with its time and implied move")
         print(f"  RESULTS MISSING {n_}: results {d_} per its stock data, but no results event; it is not in RESULTS TOTAL")
+    for n_, d_, ds_ in cov_["wrong_date"]:
+        warn(f"{n_} is held and its stock data says results on {d_}, but its results event(s) are dated {', '.join(ds_)}: correct "
+             f"the date, or if the date is genuinely unsettled set the event's confirmed to \"uncertain\" and say why in its text")
+        print(f"  RESULTS MISSING {n_}: results {d_} per its stock data, but the event is dated {', '.join(ds_)}; RESULTS TOTAL uses the event's date")
+    for n_, d_, de_, why_ in cov_["uncertain"]:
+        print(f"  RESULTS UNCERTAIN {n_}: stock data {d_}, event {de_}, marked uncertain: {why_}")
+    for n_, ds_ in cov_["duplicate"]:
+        warn(f"{n_} has {len(ds_)} future results events ({', '.join(ds_)}): remove the wrong one; RESULTS TOTAL counts it once")
+        print(f"  RESULTS DUPLICATE {n_}: events on {', '.join(ds_)}; counted once, at the earliest")
     evs = sorted((r for r in ledger if r["table"] == "event"), key=lambda r: (r["date"] or "", r["time_uk"] or ""))
     print("\nEVENTS ahead (use these exact names to update one):")
     for r in [r for r in evs if (r["date"] or "") > date][:10]:
@@ -2897,8 +3150,11 @@ def cmd_reorder(a):
     n_before = len([r for r in ledger if r["table"] == "trade"])
     ledger = apply_order(ledger, order, eff, o.get("entered") or eff, o.get("order_reason") or "",
                          {r["name"]: r["ticker"] for r in rows}, {r["name"]: r.get("score") for r in rows})
+    hist_ = ({(r["ticker"], r["date"]): r for r in load(a.get("history"), [])} if a.get("history") else None)
+    lock_ = expectation_lock(ledger, eff, o.get("entered") or eff, o.get("entered_time"), hist_, a.get("bench") or "SPY")
     ledger = record_expectation(ledger, o.get("order_expected"), eff, o.get("entered") or eff,
-                                len([r for r in ledger if r["table"] == "trade"]) > n_before, (o.get("entered") or eff) > eff)
+                                len([r for r in ledger if r["table"] == "trade"]) > n_before, lock_ or False,
+                                o.get("entered_time"))
     if len([r for r in ledger if r["table"] == "trade"]) < n_before:
         sys.exit("ERROR: the new ledger would lose rows; nothing written")
     w = {x["name"]: num(x["weight"]) or 0.0 for x in order}
