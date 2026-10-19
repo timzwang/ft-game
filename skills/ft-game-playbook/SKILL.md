@@ -53,7 +53,7 @@ Scheduled tasks (UK times): evening review 21:30 Sun to Thu; morning check 06:36
 - 5 to 20 stocks, each 5% to 25%. Up to 25% cash, earning nothing. No shorting, no leverage, no trading costs, unlimited changes.
 - About 1,610 eligible stocks from the LSE, Nasdaq, NYSE and main European listings. The list cannot be seen from here: prefer large listings and name a substitute for each new stock.
 - An order is a set of target weights. Changes fill at the next trading day's opening price: London at 08:00 UK, US stocks at the US open. Weights reset to target at each close.
-- **Cut-off: enter every order before 07:00 UK** until the FT confirms the cut-off after the clock change on 25 Oct (the terms quote BST even for November). Before that change 08:00 UK worked. A test on Mon 26 Oct settles it; part C of the core doc has the current rule.
+- **Cut-off: enter every order before 07:00 UK** until the FT confirms the cut-off after the clock change on 25 Oct (the terms quote BST even for November). Before that change 08:00 UK worked. No test order is made (the 26 Oct test was removed on 19 Oct); part C of the core doc has the current rule.
 - **Performance is weighted**: the portfolio's return is the sum of each holding's weight times its return. A 15% position rising 2% adds 0.30 points; a 5% position rising 5% adds 0.25. Size and explain positions on that basis.
 - An order never fills before a gap. For US results after the close on day D, order before the cut-off on D. For US results before the open on D, the stock must be held or sold by the open of D-1. After any report the earliest exit is the next open.
 - US session is 14:30 to 21:00 UK, except 13:30 to 20:00 in the week of 26 Oct. US markets are closed on 26 Nov and close early on 27 Nov.

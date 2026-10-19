@@ -6,6 +6,16 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.11.1 (Mon 19 Oct 2026, about 22:25)
+
+The Mon 26 Oct cut-off experiment removed, at Tim's request (decided before this session; applied here). An operational change only: no pipeline, page, score, order or scheduled task changed, and it does not wait for the 7.5 review below.
+
+- Removed: the one-point Exxon and Chevron test order planned for about 07:15 UK on Mon 26 Oct (playbook part C, agreed 17 Oct in 6.4). It would have fallen on Coca-Cola's last-order morning and could gain at most an hour that the 06:36 morning check does not need.
+- Kept: the 06:36 UK morning check, the precautionary 07:00 UK cut-off until the FT confirms the cut-off after the clock change, and every order.
+- Live (Claude Project, written from local files in the session): `claude/ft-game-playbook.md` (version line; part C: the test bullet replaced by a line saying no test order is made, and "Until the FT or the test below settles it" now "Until the FT confirms it"), `claude/ft-game-roadmap.md` (item 44 and "Still open"), `claude/ft-game-state.md` (sections 1, 2, 6, 7, 8 item 4 and 12; one review-log line added and the oldest dropped to keep 15). The saved `ft-game-playbook` skill names the test once ("A test on Mon 26 Oct settles it"); Claude cannot edit saved skills, so an updated copy is offered to Tim to save, and the Project docs win where they differ.
+- Mirror: `docs/ft-game-playbook.md`, `docs/ft-game-roadmap.md`, `skills/ft-game-playbook/SKILL.md`, with the same wording. `state/ft-game-state.md` here is left as the 19 Oct evening review mirrored it (commit `0d3c4e8`), so that commit stays the untouched evidence for its acceptance check; the next evening review mirrors the Project copy, which carries the change. Note: `docs/` on `main` also carries the 7.5 wording merged in PR #4, which is prepared but not deployed; the Project docs do not.
+- Script: `proposals/claude/2026-10-19-evidence-4/remove_cutoff_test.py` (on the 7.6 branch), each replacement matched exactly once.
+
 ## 6.11 (Mon 19 Oct 2026, about 20:40)
 
 Expected benefit before every change, and a data check on every mirror, after ChatGPT's follow-up review of 19 Oct (`proposals/chatgpt/2026-10-19-follow-up-review.md`, branch `chatgpt/handoff-2026-10-19`, PR #3). Tim approved both. No rule, score, order or scheduled task changed. Pipeline version 7.4 (asset `30bd733ca18434b8f577f2d57c3813e3`, sha256 `5adc3093a10b57ead4c229d6d900c765967ba505a0578cf8262ac91f88b4055e`).

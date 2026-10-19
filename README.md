@@ -4,7 +4,7 @@
 
 Tim's entry ("Seeking Beta") in the FT Stock Picking Game, 5 Oct to 27 Nov 2026: a virtual 100,000-credit portfolio of 5 to 20 stocks. The aim is a finish in roughly the top 2% of players. No real money is involved.
 
-**Current version: 6.11 (19 Oct 2026, evening): pipeline 7.4 (every change of order records its expected benefit before it fills, scored by the STANDSTILL test) and a data check on every mirror (`scripts/check_data.py`, workflow `data-check`). Previous: 6.10, pipeline 7.3, the 1.0 results budget for 27 to 30 Oct and regression tests.** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
+**Current version: 6.11.1 (19 Oct 2026, late evening): the Mon 26 Oct 07:15 UK cut-off test removed at Tim's request; the 07:00 UK cut-off, the 06:36 morning check and every order unchanged. Previous: 6.11 (19 Oct 2026, evening): pipeline 7.4 (every change of order records its expected benefit before it fills, scored by the STANDSTILL test) and a data check on every mirror (`scripts/check_data.py`, workflow `data-check`); before that 6.10, pipeline 7.3, the 1.0 results budget for 27 to 30 Oct and regression tests.** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
 
 This repository is a **mirror and a place to propose changes**. The live system runs in Claude (scheduled tasks, a Claude Project and a dashboard artifact). Claude writes snapshots here; ChatGPT and Tim read them and propose changes through pull requests.
 
