@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.3 (19 Oct 2026).
+"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.4 (19 Oct 2026).
+
+Version 7.4 (19 Oct 2026, approved by Tim after ChatGPT's follow-up review) records what each order change is expected
+to add before it fills, so the STANDSTILL test can later say whether the expectation was right:
+  - "order_expected" in today.json (and order.json for `reorder`): {"pts": expected points over the five sessions from
+    the fill, the new order held fixed against the order before it held fixed (the same measure as a STANDSTILL change
+    row), "thesis": why, "invalidation": what would show it wrong}. Stored as an "expect" row (forecast, text, plan);
+  - an expectation can be restated until the change fills; after that it is locked and a new one is refused, so the
+    forecast is never adjusted after the fact. A change with no expectation gets a WARNING;
+  - STANDSTILL change rows carry the expectation (forecast) and, once complete, actual minus expected (surprise);
+    EXPECTED BENEFIT sums them up in `run` and `report`;
+  - with no order_expected given every figure is identical to version 7.3.
 
 Version 7.3 (19 Oct 2026, approved by Tim after ChatGPT's repository review of 18 Oct) fixes settlement and the calendar:
   - confidence ratings settle over one window of five benchmark sessions starting at the fill date, and only with the
@@ -132,6 +143,10 @@ today.json for `run` (null or omit anything unknown):
                                        "effective" only for a stock that fills on a different day from the rest, and
                                        "fill_price" only when the game filled it at a price other than that day's open
  "order_reason": "why the order changed, one or two sentences",
+ "order_expected": {"pts": 0.2, "thesis": "...", "invalidation": "..."},   version 7.4, with every change of order: the
+                                       points the new order is expected to add over the five sessions from its fill
+                                       against keeping the order before it (both held fixed, as STANDSTILL measures it),
+                                       why, and what would show it wrong. Locked once the change has filled
  "stocks": [{"name","ticker","market":"US|UK","currency":"USD|GBX","theme","status","note","link",
              "quote": {"price","prev_close","open","high","low","volume","week52_high","week52_low","target","next_results"},
              "stats": {"ma50","ma200","rsi","change_52w_pct","avg_vol_20d","trend_price","trend_ticker"},
@@ -165,6 +180,7 @@ replaced only when supplied. Revisions and alerts are added to a running log.
 
 order.json for `reorder` (a morning change to the order, between evening runs; every stock must already be in stocks.json):
 {"effective": "2026-10-12", "entered": "2026-10-12", "order_for": "Mon 12 Oct open", "order_reason": "why",
+ "order_expected": {"pts": 0.2, "thesis": "...", "invalidation": "..."},
  "order": [{"name": "Exxon Mobil", "weight": 15, "confidence": 60}]}
 
 quotes.json for `refresh`:
@@ -181,7 +197,7 @@ import math
 import os
 import sys
 
-PIPELINE_VERSION = "7.3"
+PIPELINE_VERSION = "7.4"
 
 # Version 7.3: the US calendar for the rest of the game (NYSE and Nasdaq), and the results budget windows Tim agreed.
 US_CLOSED = {"2026-11-26"}                        # Thanksgiving: US markets shut (London trades)
@@ -602,6 +618,60 @@ def apply_order(ledger, order, eff, entered, reason, tickers, scores):
             ledger = [r for r in ledger if not (r["table"] == "confidence" and r["name"] == n and r["effective"] == e
                                                 and r["beat"] in (None, ""))]
     return ledger
+
+
+def record_expectation(ledger, exp, eff, entered, changed, started):
+    """Version 7.4: store the expected benefit of the change filling at `eff` as an "expect" row. `changed`: this run
+    logged new trades for `eff`. `started`: the change has already filled, so its five-session window has begun and
+    the expectation is locked (a first one given now would be hindsight and is refused)."""
+    exp = exp or {}
+    pts = num(exp.get("pts"))
+    old = next((r for r in ledger if r["table"] == "expect" and r["effective"] == eff), None)
+    if pts is None:
+        if changed and old is None:
+            warn(f"the order changes at the open of {eff} but no expected benefit was given (order_expected.pts); "
+                 "it can be added until the change fills, never after")
+        elif changed:
+            warn(f"the order for {eff} changed again: the expected benefit given on {old['date']} "
+                 f"({num(old['forecast']):+.2f} points) still stands unless order_expected is given again")
+        return ledger
+    if not any(r["table"] == "trade" and r["effective"] == eff for r in ledger):
+        warn(f"order_expected was given but the order for {eff} does not change anything: not recorded")
+        return ledger
+    if started:
+        if old is None:
+            warn(f"the change at {eff} has already filled: an expected benefit given now would be hindsight, so it is not recorded")
+        elif abs((num(old["forecast"]) or 0.0) - pts) > 1e-9:
+            warn(f"the expected benefit for the change at {eff} is locked since it filled: kept {num(old['forecast']):+.2f} "
+                 f"points (given on {old['date']}), not {pts:+.2f}")
+        return ledger
+    ledger = [r for r in ledger if r is not old]
+    ledger.append(lrow("expect", date=entered, effective=eff, name=f"Change for {eff}", forecast=r2(pts, 3), days=5,
+                       text=str(exp.get("thesis") or ""), plan=str(exp.get("invalidation") or "")))
+    return ledger
+
+
+def expectation_lines(ledger):
+    """Version 7.4: the EXPECTED BENEFIT summary, from the STANDSTILL change rows that carry an expectation."""
+    recorded = [r for r in ledger if r["table"] == "expect"]
+    if not recorded:
+        return []
+    rows = sorted((r for r in ledger if r["table"] == "standstill" and r["kind"] == "change" and r["forecast"] is not None),
+                  key=lambda r: r["date"])
+    done = [r for r in rows if r["confirmed"] == "complete" and r["value"] is not None]
+    out = [f"EXPECTED BENEFIT: {len(recorded)} change(s) with an expectation, {len(done)} settled over five sessions"]
+    if done:
+        exp_t, act_t = sum(num(r["forecast"]) for r in done), sum(r["value"] for r in done)
+        right = sum(1 for r in done if (r["value"] > 0) == (num(r["forecast"]) > 0))
+        out[0] += f": expected {exp_t:+.3f} points in all, actual {act_t:+.3f}; the right direction in {right} of {len(done)}"
+    for r in rows[-5:]:
+        act = "not priced" if r["value"] is None else f"{r['value']:+.3f}"
+        out.append(f"    {r['name'][:26].ljust(27)} expected {num(r['forecast']):+.3f}, actual {act} ({r['confirmed']})"
+                   + (f", actual minus expected {r['surprise']:+.3f}" if r["surprise"] is not None else ""))
+    waiting = sorted(r["effective"] for r in recorded if not any(x["effective"] == r["effective"] for x in rows))
+    if waiting:
+        out.append("    waiting to fill: " + ", ".join(f"Change for {w}" for w in waiting))
+    return out
 
 
 # ---------------------------------------------------------------- performance
@@ -1747,6 +1817,11 @@ def standstill_rows(ledger, hist, bench, date, horizon=5):
                          confirmed="incomplete" if miss else ("complete" if len(span) == horizon else "running"),
                          window_end=span[-1], name=f"Change for {e}",
                          text=what + (f". Missing prices: {', '.join(sorted(miss))}" if miss else "")))
+        x_ = next((r for r in ledger if r["table"] == "expect" and r["effective"] == e), None)    # version 7.4
+        if x_ is not None and num(x_["forecast"]) is not None:
+            rows[-1]["forecast"] = num(x_["forecast"])
+            if rows[-1]["confirmed"] == "complete" and rows[-1]["value"] is not None:
+                rows[-1]["surprise"] = r2(rows[-1]["value"] - num(x_["forecast"]), 3)
     perf = {r["date"]: num(r["day_pct"]) for r in ledger if r["table"] == "perf" and r["day_pct"] is not None}
     weeks = {}
     for d in dates:
@@ -2172,8 +2247,11 @@ def cmd_run(a):
     # positions and trades (only when the order differs from what is already recorded for its effective date)
     eff = today.get("effective")
     if order and eff:
+        n_tr_ = len([r for r in ledger if r["table"] == "trade"])
         ledger = apply_order(ledger, order, eff, today.get("entered") or date, today.get("order_reason") or "",
                              {n: s_["ticker"] for n, s_ in by_name.items()}, {n: x["score"] for n, x in sc.items()})
+        ledger = record_expectation(ledger, today.get("order_expected"), eff, today.get("entered") or date,
+                                    len([r for r in ledger if r["table"] == "trade"]) > n_tr_, date >= eff)
 
     if not hist.get((bench, date)):
         warn(f"no {bench} row for {date} in the history store, so performance for that session cannot be added")
@@ -2482,7 +2560,10 @@ def cmd_run(a):
                 + [r for r in ss_ if r["kind"] == "inception"])
         for r in sel_:
             v_ = "not priced" if r["value"] is None else f"{r['value']:+.3f}"
-            print(f"    {r['name'][:26].ljust(27)} {v_} over {r['days']} session(s), {r['confirmed']}; {r['text']}")
+            print(f"    {r['name'][:26].ljust(27)} {v_} over {r['days']} session(s), {r['confirmed']}; {r['text']}"
+                  + (f"; expected {r['forecast']:+.3f}" if r["forecast"] is not None else ""))
+    for l_ in expectation_lines(ledger):
+        print(l_)
     if still_need: print("STANDSTILL NEEDS today's row under extra_history for stocks sold in the last five sessions or in the first order "
                          "and no longer on the list: " + ", ".join(f"{n_} ({t_})" for n_, t_ in still_need))
     if resolved: print(f"CONFIDENCE: {resolved} rating(s) resolved")
@@ -2719,6 +2800,8 @@ def cmd_reorder(a):
     n_before = len([r for r in ledger if r["table"] == "trade"])
     ledger = apply_order(ledger, order, eff, o.get("entered") or eff, o.get("order_reason") or "",
                          {r["name"]: r["ticker"] for r in rows}, {r["name"]: r.get("score") for r in rows})
+    ledger = record_expectation(ledger, o.get("order_expected"), eff, o.get("entered") or eff,
+                                len([r for r in ledger if r["table"] == "trade"]) > n_before, (o.get("entered") or eff) > eff)
     if len([r for r in ledger if r["table"] == "trade"]) < n_before:
         sys.exit("ERROR: the new ledger would lose rows; nothing written")
     w = {x["name"]: num(x["weight"]) or 0.0 for x in order}
@@ -2764,7 +2847,8 @@ def cmd_template(a):
         "regime": "mixed", "regime_label": first.get("regime") or "",
         "benchmark": {"ticker": "SPY", "change_52w_pct": None, "history": []},
         "order": [{"name": r["name"], "weight": r["weight"], "confidence": r["confidence"]} for r in rows if r["group"] == "Portfolio"],
-        "order_reason": "", "cash_note": cash.get("note") or "",
+        "order_reason": "", "order_expected": {"pts": None, "thesis": "", "invalidation": ""},
+        "cash_note": cash.get("note") or "",
         "stocks": [{"name": r["name"], "ticker": r["ticker"], "market": r["market"], "currency": r["currency"], "theme": r.get("theme"),
                     "status": r["status"], "note": r["note"], "link": r["link"], "added": r.get("added"),
                     "quote": {"price": None, "open": None, "high": None, "low": None, "volume": None, "prev_close": None,
@@ -2962,7 +3046,10 @@ def cmd_report(a):
                 print(f"STANDSTILL {r['name']}: not priced ({r['confirmed']}); {r['text']}")
             else:
                 print(f"STANDSTILL {r['name']}: {r['value']:+.3f} points over {r['days']} session(s) "
-                      f"({r['ret_pct']:+.3f}% against {r['spx_ret_pct']:+.3f}% for the order kept), {r['confirmed']}; {r['text']}")
+                      f"({r['ret_pct']:+.3f}% against {r['spx_ret_pct']:+.3f}% for the order kept), {r['confirmed']}; {r['text']}"
+                      + (f"; expected {r['forecast']:+.3f}" if r.get("forecast") is not None else ""))
+    for l_ in expectation_lines([{k: r.get(k) for k in LEDGER_KEYS} for r in ledger]):
+        print(l_)
     for r in T("calib"):
         if r["kind"] == "judgement":
             print(f"JUDGEMENT TEST {r['name']}: {r['text']}")

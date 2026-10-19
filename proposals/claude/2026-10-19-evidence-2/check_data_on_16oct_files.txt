@@ -1,0 +1,10 @@
+Data check at 2026-10-19T19:00:00Z (pipeline 7.4):
+  PASS files: all five data files parse
+  PASS ledger: 541 rows, fields and ids in order
+  PASS history: 10000 rows, one per ticker and date, prices consistent
+  PASS order: 7 holdings, cash 0%, matching the latest order
+  PASS performance: 6 sessions to 2026-10-16, none missing, values compound, contributions add up
+  FAIL results: holding(s) with a results date but no results event: AbbVie (2026-10-30)
+  WARN results: no implied move yet for a report inside ten sessions: Chevron (2026-10-30), Coca-Cola (2026-10-27), Eli Lilly (2026-10-29), Exxon Mobil (2026-10-30), Microsoft (2026-10-28), Shell (2026-10-29)
+  PASS sync: 6 files match state/last-sync.md (run 2026-10-18T23:24:26Z)
+FAILED: 1 failure(s), 1 warning(s)

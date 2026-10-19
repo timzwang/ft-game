@@ -1,0 +1,45 @@
+name: data-check
+
+# Integrity and freshness checks on the stored game data (added 19 Oct 2026, playbook 6.11, after ChatGPT's review of
+# 18 and 19 Oct: the tests workflow does not run on the nightly data commits). scripts/check_data.py says what is checked.
+#  - on every push to main that changes data/ or state/ (the evening and weekly mirrors, G6): integrity only;
+#  - on a schedule after each review's mirror, with --fresh: the mirror ran in the last six hours and the data run to the
+#    latest closed US session, so a review that never published, or published incomplete data, shows as a red run.
+#    Sun to Thu 23:15 UTC (00:15 UK in BST, 23:15 UK in GMT) after the 21:30 UK evening review;
+#    Sat 11:15 UTC (12:15 UK in BST, 11:15 UK in GMT) after the 09:12 UK weekly review.
+# Offline and read-only: it reads the checkout and writes nothing back.
+on:
+  push:
+    branches: [main]
+    paths: ["data/**", "state/**", "scripts/check_data.py", ".github/workflows/data-check.yml"]
+  schedule:
+    - cron: "15 23 * * 0-4"
+    - cron: "15 11 * * 6"
+  workflow_dispatch:
+    inputs:
+      fresh:
+        description: "Also check freshness (as the scheduled run does)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check the data
+        shell: bash
+        run: |
+          set -o pipefail
+          flag=""
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.fresh }}" = "true" ]; then flag="--fresh"; fi
+          { echo '```'; python3 -I scripts/check_data.py $flag; status=$?; echo '```'; exit $status; } | tee -a "$GITHUB_STEP_SUMMARY"
