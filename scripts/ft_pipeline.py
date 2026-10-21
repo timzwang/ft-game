@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
-"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.6 (prepared 19 Oct 2026, not deployed).
+"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.7 (21 Oct 2026).
 
-Version 7.6 (prepared by Claude on 19 Oct 2026 after ChatGPT's independent review of 7.5, PR #5; needs Tim's approval
-to deploy) closes the gaps that review reproduced. Nothing changes the score, the confidence anchor, sizing, the panel,
+Version 7.7 (21 Oct 2026, approved by Tim with release 6.12) adds one command, `feed`, and changes nothing else: `run`,
+`refresh`, `reorder`, `template`, `closes`, `report` and `panel` behave exactly as in 7.6. `feed` reads the price feed
+that a GitHub job writes into the repository (feed/latest.json after the US close, feed/live.json during the session;
+feed/README.md) and fills today.json, or writes quotes.json for `refresh`, so the scheduled runs no longer depend on
+fetching one price page per stock (on 20 Oct the fetch tool refused every address it had not first seen in a search
+result, and nine rows went missing). Every ticker's feed rows are checked again here against the stored rows for the
+same sessions before any is used: a close more than 0.5% away, or an open, high or low more than 1.5% away on a stored
+row with a traded open, refuses that ticker (FEED REFUSED), which catches the wrong listing, pence against pounds or a
+split. The feed adds only sessions the store does not have, never replaces a stored row, and never goes past `date`.
+
+Version 7.6 (19 Oct 2026, prepared by Claude after ChatGPT's independent review of 7.5, PR #5; approved by Tim on
+21 Oct 2026 and deployed with 7.7) closes the gaps that review reproduced. Nothing changes the score, the confidence anchor, sizing, the panel,
 the scan's rules or any order:
   - listing calendars: a leg filling on a day that is not a benchmark session is priced at its own market's open that
     day when that market traded (London on 26 Nov), and at the next session's open only when its market was shut (a US
@@ -107,6 +117,8 @@ Commands
   python3 ft_pipeline.py report  --ledger ledger.json [--since 2026-10-05]
   python3 ft_pipeline.py template --stocks stocks.json [--ledger ledger.json] [--history history.json] --out today.json
   python3 ft_pipeline.py closes  --history history.json --today today.json --ticker MSFT --first F --last L --closes "c1,c2,..." [--panel panel.json]
+  python3 ft_pipeline.py feed    --feed latest.json --today today.json --history history.json [--panel panel.json] [--futures yes]
+  python3 ft_pipeline.py feed    --live live.json --stocks stocks.json --out quotes.json [--max_age 90]
   python3 ft_pipeline.py panel   --panel panel.json [--history history.json]          (or --init members.json --out panel.json, once)
 
 `run` and `template` also take --panel panel.json. The panel is 30 stocks fixed on 15 Oct 2026 by a rule that does not
@@ -131,6 +143,23 @@ lines them up with the benchmark's stored sessions between those two dates, refu
 any close disagrees by more than 0.5% with one already stored for that stock, and appends close-only rows for the
 days the store does not have to that stock's `history` in today.json (or to `extra_history` for a ticker that is not
 a stock on the list). Either order works: if the first date is later than the last, the list is read as newest first.
+
+`feed` (version 7.7) with --feed reads feed/latest.json, written by the repository's price-feed job after the US close,
+and fills today.json after `template`: for every stock on the list, SPY (benchmark.history) and every other ticker in
+the price store (extra_history: OIL, SHEL-US, BP-US, IBIT, ETHA, the first order's stocks, stocks sold or still being
+settled), the daily rows for every session after the last stored one up to `date` (all of the feed's rows, about 15
+months, for a stock with fewer than 200 stored closes, so its averages are worked out from stored prices); the quote
+(price, open, high, low, volume) from the row dated `date`, filling only empty fields, and the 52-week high and low
+when the feed has a year of rows; the Treasury's 2, 10 and 30-year yields and Coinbase's four coin prices for `date`
+into empty macro values (with --futures yes, also Brent, WTI, natural gas and gold from the front-month futures, a
+fallback when tradingeconomics cannot be read); the price fields of any `drift` entry whose ticker is in the feed; and,
+with --panel, the closes the panel test's stocks are missing (to two years), into panel_history, checked against the
+panel's own closes.
+If `date` is empty it is set to the feed's US session. It prints what it added, what it refused and why, and what the
+feed lacks: those, and only those, still need part F's pages. It can be run again safely; rows already in today.json are
+not added twice. With --live it reads feed/live.json and writes quotes.json for `refresh` (every stock with a quote for
+today, the coin and futures readings under macro_now); it refuses a file read more than --max_age minutes ago
+(default 90).
 
 `template` writes a today.json skeleton from the last stocks.json: every stock with its ticker, theme, status, note,
 link, the current order with weights and ratings, and yesterday's averages, 52-week range, target and judgement points
@@ -233,7 +262,7 @@ import math
 import os
 import sys
 
-PIPELINE_VERSION = "7.6"
+PIPELINE_VERSION = "7.7"
 
 # Version 7.3: the US calendar for the rest of the game (NYSE and Nasdaq), and the results budget windows Tim agreed.
 US_CLOSED = {"2026-11-26"}                        # Thanksgiving: US markets shut (London trades)
@@ -3348,6 +3377,273 @@ def cmd_closes(a):
         print(f"  CHECK {tick} {d}: the close moved {c:+.1f}% in a day; a split or a typing slip is more likely than a real move")
 
 
+FEED_TOL_CLOSE = 0.5          # percent: the same limit as `closes`
+FEED_TOL_OHL = 1.5            # percent: open, high and low, on stored rows with a traded open
+FEED_CHECK_N = 25             # the latest stored sessions each ticker is checked on
+
+
+def _close_only(row):
+    """A stored row holding only a close: marked from 7.2 (open_obs false), or from an older closes feed with open,
+    high and low equal to the close and no volume."""
+    return row.get("open_obs") is False or (row.get("volume") is None and row.get("open") == row.get("high") == row.get("low") == row.get("close"))
+
+
+def feed_check(rows, stored, n=FEED_CHECK_N):
+    """Version 7.7: the feed's rows against the stored rows for the same sessions (the latest n that overlap).
+    Returns (number compared, list of disagreements beyond the limits)."""
+    over = [(r, stored[r["date"]]) for r in rows if r.get("date") in stored and num(r.get("close"))][-n:]
+    bad = []
+    for r, st in over:
+        c = pct(num(r["close"]), st["close"])
+        if c is None or abs(c) > FEED_TOL_CLOSE:
+            bad.append(f"{r['date']} close {num(r['close']):g} against stored {st['close']:g}")
+            continue
+        if _close_only(st):
+            continue
+        for k in ("open", "high", "low"):
+            fv, sv = num(r.get(k)), num(st.get(k))
+            if fv and sv and abs(pct(fv, sv)) > FEED_TOL_OHL:
+                bad.append(f"{r['date']} {k} {fv:g} against stored {sv:g}")
+    return len(over), bad
+
+
+def _feed_row(r):
+    return {"date": r["date"], "open": num(r.get("open")), "high": num(r.get("high")), "low": num(r.get("low")),
+            "close": num(r.get("close")), "volume": num(r.get("volume"))}
+
+
+def _feed_warn(msg):
+    """`feed` is not followed by `run`'s summary of warnings, so it prints each one as it is found."""
+    warn(msg)
+    print("WARNING: " + msg)
+
+
+def cmd_feed(a):
+    if a.get("live"):
+        return cmd_feed_live(a)
+    for k in ("feed", "today", "history"):
+        if not a.get(k):
+            sys.exit(f"ERROR: feed needs --{k}")
+    fd = json.load(open(a["feed"]))
+    meta, F, M = fd.get("meta") or {}, fd.get("tickers") or {}, fd.get("macro") or {}
+    if meta.get("mode") != "close":
+        sys.exit("ERROR: this is not a close feed (feed/latest.json); nothing written")
+    today = json.load(open(a["today"]))
+    stored = {}
+    for r in json.load(open(a["history"])):
+        stored.setdefault(r["ticker"], {})[r["date"]] = r
+    sess, date = meta.get("session_us"), today.get("date")
+    print(f"FEED version {meta.get('feed_version')}, generated {meta.get('generated_utc')}: US session {sess}, London {meta.get('session_uk')}")
+    if not date:
+        if not sess:
+            sys.exit("ERROR: today.json has no date and the feed names no session; nothing written")
+        today["date"] = date = sess
+        print(f"    date was empty: set to {date}, the feed's US session")
+    elif sess and sess < date:
+        _feed_warn(f"the feed runs to {sess}, before today.json's date {date}: it has no rows for {date}. Force a new feed run (feed/request.txt) or use part F's pages")
+    elif sess and sess > date:
+        print(f"    the feed runs to {sess}; nothing after {date} is used")
+    names = {x["ticker"]: x for x in today.get("stocks") or []}
+    bench = (today.get("benchmark") or {}).get("ticker") or "SPY"
+    extra = today.setdefault("extra_history", {})
+    asked = set(extra)
+    targets = [(t, "stock") for t in names] + [(bench, "bench")]
+    targets += [(t, "extra") for t in sorted(asked | set(stored)) if t not in names and t != bench]
+    added, refused, missing, uptodate, noq = [], [], [], [], []
+    qset = 0
+    for t, kind in targets:
+        e = F.get(t)
+        if not e:
+            if kind != "extra" or t in asked:
+                missing.append(t)
+            continue
+        rows = e.get("long") or e.get("rows") or []
+        st = stored.get(t, {})
+        n_chk, bad = feed_check(rows, st)
+        if bad:
+            refused.append(f"{t} ({len(bad)} of {n_chk} sessions disagree, for example {bad[0]})")
+            continue
+        if kind == "stock":
+            dest = names[t].setdefault("history", [])
+        elif kind == "bench":
+            dest = today.setdefault("benchmark", {"ticker": bench}).setdefault("history", [])
+        else:
+            dest = extra.get(t)
+        have = set(st) | {str(r.get("date"))[:10] for r in (dest or [])}
+        last_st = max(st) if st else ""
+        backfill = kind == "stock" and len(st) < 200 and e.get("long") is not None
+        new = [_feed_row(r) for r in rows if r.get("date") and r["date"] <= date and r["date"] not in have
+               and (backfill or r["date"] > last_st)]
+        if new:
+            if dest is None:
+                dest = extra.setdefault(t, [])
+            dest.extend(new)
+            dest.sort(key=lambda r: str(r.get("date")))
+            added.append(f"{t} {len(new)}" + (f" ({new[0]['date']})" if len(new) == 1 else f" ({new[0]['date']} to {new[-1]['date']})")
+                         + ("" if n_chk else " unchecked: nothing stored to compare"))
+        else:
+            uptodate.append(t)
+        if kind == "stock":
+            q = names[t].setdefault("quote", {})
+            row = next((r for r in rows if r.get("date") == date), None)
+            if row:
+                for k in ("price", "open", "high", "low", "volume"):
+                    if q.get(k) is None:
+                        q[k] = num(row.get("close" if k == "price" else k))
+                qset += 1
+            else:
+                noq.append(t)
+            if (e.get("sessions_available") or 0) >= 252 and num(e.get("week52_high")) and num(e.get("week52_low")):
+                q["week52_high"], q["week52_low"] = num(e["week52_high"]), num(e["week52_low"])
+    # the panel test's stocks (with --panel): closes only, into panel_history, checked against the panel's own closes
+    padded, prefused, pmissing = [], [], []
+    if a.get("panel"):
+        panel = json.load(open(a["panel"]))
+        ph = today.setdefault("panel_history", {})
+        for m in panel.get("members") or []:
+            t = m.get("ticker")
+            e = F.get(t)
+            if not e:
+                pmissing.append(t)
+                continue
+            have = {d_: c_ for d_, c_ in (panel.get("closes") or {}).get(t, [])}
+            st = {d_: {"open": c_, "high": c_, "low": c_, "close": c_, "volume": None} for d_, c_ in have.items()}
+            rows = e.get("long") or e.get("rows") or []
+            n_chk, bad = feed_check(rows, st)
+            if bad:
+                prefused.append(f"{t} ({bad[0]})")
+                continue
+            already = {str(r.get("date"))[:10] for r in ph.get(t) or []}
+            new = [{"date": r["date"], "close": num(r["close"])} for r in rows
+                   if r.get("date") and r["date"] <= date and r["date"] not in have and r["date"] not in already and num(r.get("close"))]
+            if new:
+                ph.setdefault(t, []).extend(new)
+                ph[t].sort(key=lambda r: r["date"])
+                padded.append(f"{t} {len(new)}")
+    # macro: only empty values are filled
+    mac = today.setdefault("macro", {})
+    mac["date"] = mac.get("date") or date
+    mv = mac.setdefault("values", {})
+    mfilled, mnote = [], []
+    tr = next((r for r in M.get("treasury") or [] if r.get("date") == date), None)
+    if tr:
+        for k in ("us2y", "us10y", "us30y"):
+            if mv.get(k) is None and num(tr.get(k)) is not None:
+                mv[k] = num(tr[k])
+                mfilled.append(k)
+    else:
+        mnote.append(f"no Treasury row for {date} in the feed" + (f" ({M['treasury_error']})" if M.get("treasury_error") else
+                                                                    " (it appears at about 21:00 UK; left empty, the script carries the last)"))
+    for k in ("btc", "eth", "sol", "xrp"):
+        c = (M.get("coins") or {}).get(k) or {}
+        if sess == date and num(c.get("price")) and mv.get(k) is None:
+            mv[k] = num(c["price"])
+            mfilled.append(k)
+    if a.get("futures") == "yes":
+        for k in ("brent", "wti", "natgas", "gold"):
+            f_ = (M.get("futures") or {}).get(k) or {}
+            if f_.get("date") == date and num(f_.get("close")) and mv.get(k) is None:
+                mv[k] = num(f_["close"])
+                mfilled.append(k + " (futures fallback)")
+    # drift entries: price fields only, and only empty ones
+    dfilled = []
+    for d in today.get("drift") or []:
+        e = F.get(d.get("ticker") or "")
+        dd = str(d.get("date") or "")[:10]
+        if not e or not dd:
+            continue
+        rows = e.get("long") or e.get("rows") or []
+        ix = next((i for i, r in enumerate(rows) if r.get("date") == dd), None)
+        if ix is None:
+            continue
+        r, got = rows[ix], []
+        for k, v in (("open", r.get("open")), ("high", r.get("high")), ("low", r.get("low")), ("close", r.get("close")),
+                     ("volume", r.get("volume")), ("prev_close", rows[ix - 1].get("close") if ix > 0 else None)):
+            if d.get(k) is None and num(v) is not None:
+                d[k] = num(v)
+                got.append(k)
+        vols = [num(x.get("volume")) for x in rows[max(0, ix - 20):ix] if num(x.get("volume"))]
+        if d.get("avg_vol_20d") is None and len(vols) == 20:
+            d["avg_vol_20d"] = round(sum(vols) / 20)
+            got.append("avg_vol_20d")
+        cl = [num(x.get("close")) for x in rows[:ix + 1] if num(x.get("close"))]
+        for k, n_ in (("ma50", 50), ("ma200", 200)):
+            if d.get(k) is None and len(cl) >= n_:
+                d[k] = r2(sum(cl[-n_:]) / n_)
+                got.append(k)
+        if got:
+            dfilled.append(f"{d.get('ticker')} ({', '.join(got)})")
+    json.dump(today, open(a["today"], "w"), indent=1)
+    print(f"FEED ADDED rows: " + (", ".join(added) or "none"))
+    print(f"FEED QUOTES for {date}: {qset} of {len(names)} list stocks" + (f"; no row for {date}: " + ", ".join(noq) if noq else ""))
+    if uptodate:
+        print("FEED UP TO DATE (nothing new): " + ", ".join(uptodate))
+    if refused:
+        _feed_warn("FEED REFUSED (rows disagree with the stored prices; take these from part F's pages): " + "; ".join(refused))
+    if missing:
+        print("FEED MISSING (not in the feed; take these from part F's pages, or add them to feed/request.txt): " + ", ".join(missing))
+    stale = [t for t in meta.get("stale") or [] if t in names]
+    if stale:
+        print("FEED STALE (last bar before the session in the feed): " + ", ".join(stale))
+    if a.get("panel"):
+        print("FEED PANEL closes added: " + (", ".join(padded) or "none") + (f"; not in the feed: {', '.join(pmissing)}" if pmissing else ""))
+        if prefused:
+            _feed_warn("FEED PANEL REFUSED (closes disagree with the panel's): " + "; ".join(prefused))
+    print("FEED MACRO: " + (", ".join(mfilled) or "nothing filled") + ("; " + "; ".join(mnote) if mnote else ""))
+    if dfilled:
+        print("FEED DRIFT price fields: " + "; ".join(dfilled))
+    print(f"today.json written: {a['today']}. Run `run` as usual; the FEED lines above say what still needs a page.")
+
+
+def cmd_feed_live(a):
+    import datetime
+    for k in ("live", "stocks", "out"):
+        if not a.get(k):
+            sys.exit(f"ERROR: feed --live needs --{k}")
+    lv = json.load(open(a["live"]))
+    meta, Q = lv.get("meta") or {}, lv.get("quotes") or {}
+    if meta.get("mode") != "live":
+        sys.exit("ERROR: this is not a live feed (feed/live.json); nothing written")
+    read = datetime.datetime.fromisoformat(str(meta.get("read_utc")))
+    now = datetime.datetime.now(datetime.timezone.utc)
+    age = (now - read).total_seconds() / 60.0
+    max_age = float(a.get("max_age") or 90)
+    if age > max_age:
+        sys.exit(f"ERROR: the live feed was read {age:.0f} minutes ago (limit {max_age:.0f}); nothing written. Use part F's pages")
+    rows = json.load(open(a["stocks"]))
+    dates = sorted({x.get("bar_date") for x in Q.values() if x.get("bar_date")})
+    us_day = (Q.get("SPY") or {}).get("bar_date") or (dates[-1] if dates else None)
+    quotes, missing = {}, []
+    for r in rows:
+        t = r.get("ticker")
+        if r.get("group") == "Cash" or not t:
+            continue
+        x = Q.get(t)
+        if not x or num(x.get("price")) is None:
+            missing.append(t)
+            continue
+        quotes[t] = {k: num(x.get(k)) for k in ("price", "prev_close", "open", "high", "low", "volume")}
+    mn = lv.get("macro_now") or {}
+    vals = {}
+    for k in ("btc", "eth"):
+        c = (mn.get("coins") or {}).get(k) or {}
+        if num(c.get("price")):
+            vals[k] = num(c["price"])
+    for k in ("brent", "wti", "gold"):
+        f_ = (mn.get("futures") or {}).get(k) or {}
+        if num(f_.get("price")):
+            vals[k] = num(f_["price"])
+    read_uk = meta.get("read_uk") or ""
+    day_txt = datetime.date.fromisoformat(us_day).strftime("%a %d %b").replace(" 0", " ") if us_day else ""
+    out = {"date": us_day, "prices_as_of": f"{day_txt}, {read_uk} UK (Yahoo through the feed, read {age:.0f} min before this run)",
+           "quotes": quotes, "macro_now": {"as_of": f"{read_uk} UK", "values": vals}}
+    path = a["out"] if str(a["out"]).endswith(".json") else os.path.join(a["out"], "quotes.json")
+    json.dump(out, open(path, "w"), indent=1)
+    print(f"FEED LIVE read at {read_uk} UK ({age:.0f} minutes ago): {len(quotes)} quotes for {us_day}"
+          + (f"; none for: {', '.join(missing)}" if missing else "") + f"; macro_now: {', '.join(vals) or 'none'}")
+    print(f"quotes.json written: {path}. Add any alerts and live yields to it, then run `refresh` as usual.")
+
+
 def cmd_report(a):
     ledger = json.load(open(a["ledger"]))
     since = a.get("since") or "0000-00-00"
@@ -3522,15 +3818,15 @@ def cmd_panel(a):
 
 
 def main():
-    if len(sys.argv) < 2 or sys.argv[1] not in ("run", "refresh", "reorder", "report", "template", "closes", "panel"):
+    if len(sys.argv) < 2 or sys.argv[1] not in ("run", "refresh", "reorder", "report", "template", "closes", "panel", "feed"):
         print(__doc__)
         sys.exit(1)
     args = sys.argv[2:]
     a = {args[i].lstrip("-"): args[i + 1] for i in range(0, len(args) - 1, 2)}
-    if sys.argv[1] not in ("template", "closes", "panel"):
+    if sys.argv[1] not in ("template", "closes", "panel", "feed"):
         a.setdefault("out", "out")
     {"run": cmd_run, "refresh": cmd_refresh, "reorder": cmd_reorder, "report": cmd_report, "template": cmd_template,
-     "closes": cmd_closes, "panel": cmd_panel}[sys.argv[1]](a)
+     "closes": cmd_closes, "panel": cmd_panel, "feed": cmd_feed}[sys.argv[1]](a)
 
 
 if __name__ == "__main__":

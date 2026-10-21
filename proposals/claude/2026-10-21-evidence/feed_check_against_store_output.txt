@@ -1,0 +1,11 @@
+price store (data/history.json): 41 tickers
+  closes compared: 984; within 0.01%: 973; largest gap 0.423%
+  opens compared (stored rows with a traded open): 858; within 0.05%: 837; beyond 0.2%: 6
+  closes beyond 0.01%: ABBV 2026-10-15 +0.039%; BP. 2026-10-09 -0.068%; BP. 2026-10-14 +0.130%; BP. 2026-10-19 +0.228%; BP. 2026-10-20 -0.148%; CRWD 2026-10-15 -0.041%; CVX 2026-10-20 +0.022%; IBIT 2026-10-20 +0.021%; MRK 2026-09-16 +0.423%; MRK 2026-10-15 -0.089%; XOM 2026-10-20 -0.017%
+  opens beyond 0.2%: BP-US 2026-10-19 +0.243%; BP. 2026-10-09 +0.242%; COP 2026-10-19 -0.205%; LLY 2026-10-14 -0.240%; LMT 2026-10-19 -0.509%; WMT 2026-10-19 +0.279%
+panel only (data/panel.json): 25 tickers
+  closes compared: 528; within 0.01%: 528; largest gap 0.002%
+  opens compared (stored rows with a traded open): 0; within 0.05%: 0; beyond 0.2%: 0
+  closes beyond 0.01%: none
+  opens beyond 0.2%: none
+disagreeing tickers (close beyond 0.5%, or open, high, low beyond 1.5%): none

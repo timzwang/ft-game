@@ -4,7 +4,7 @@
 
 Tim's entry ("Seeking Beta") in the FT Stock Picking Game, 5 Oct to 27 Nov 2026: a virtual 100,000-credit portfolio of 5 to 20 stocks. The aim is a finish in roughly the top 2% of players. No real money is involved.
 
-**Current version: 6.11.1 (19 Oct 2026, late evening): the Mon 26 Oct 07:15 UK cut-off test removed at Tim's request; the 07:00 UK cut-off, the 06:36 morning check and every order unchanged. Previous: 6.11 (19 Oct 2026, evening): pipeline 7.4 (every change of order records its expected benefit before it fills, scored by the STANDSTILL test) and a data check on every mirror (`scripts/check_data.py`, workflow `data-check`); before that 6.10, pipeline 7.3, the 1.0 results budget for 27 to 30 Oct and regression tests.** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
+**Current version: 6.12 (21 Oct 2026, afternoon): a price feed on GitHub (`feed/`) that the evening and weekly reviews and the price refreshes read first, so they no longer depend on fetching one page per stock, and pipeline 7.7 (7.6, after ChatGPT's review of 7.5, plus a `feed` command) deployed. Previous: 6.11.1 (19 Oct 2026, late evening): the Mon 26 Oct 07:15 UK cut-off test removed at Tim's request. Before that 6.11 (19 Oct 2026, evening): pipeline 7.4 (every change of order records its expected benefit before it fills, scored by the STANDSTILL test) and a data check on every mirror (`scripts/check_data.py`, workflow `data-check`); before that 6.10, pipeline 7.3, the 1.0 results budget for 27 to 30 Oct and regression tests.** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
 
 This repository is a **mirror and a place to propose changes**. The live system runs in Claude (scheduled tasks, a Claude Project and a dashboard artifact). Claude writes snapshots here; ChatGPT and Tim read them and propose changes through pull requests.
 
@@ -22,6 +22,7 @@ This repository is a **mirror and a place to propose changes**. The live system 
 | The schedule | `ops/scheduled-tasks.md` |
 | What changed in each version, and when | `CHANGELOG.md` |
 | The broad scan: its rules, lists and record | `scan/README.md`, `scan/latest.md` |
+| The price feed: what it carries and how it is checked | `feed/README.md`, `feed/latest.md` |
 | When this copy was taken, and its file hashes | `SYNC.md`, and `state/last-sync.md` for the latest nightly mirror |
 
 ## Layout
@@ -29,13 +30,15 @@ This repository is a **mirror and a place to propose changes**. The live system 
 ```
 docs/        playbook (core, rules, data, five run docs), roadmap, page notes
 state/       ft-game-state.md: the narrative record, rewritten by every evening review
-scripts/     ft_pipeline.py (version 7.4: scoring, performance, risk, day call, panel test,
-             drift scan, standstill, expected benefit); ft_score.py (screening);
+scripts/     ft_pipeline.py (version 7.7: scoring, performance, risk, day call, panel test,
+             drift scan, standstill, expected benefit, the feed command); ft_score.py (screening);
              check_data.py (integrity and freshness of data/ and state/). Standard-library Python 3.
 tests/       regression tests (pytest), run by .github/workflows/tests.yml on code changes;
              .github/workflows/data-check.yml runs scripts/check_data.py on every data push and
              after each evening and weekly review (a red badge above means look at the latest run)
 scan/        the broad scan (scan.py, run nightly by .github/workflows/scan.yml) and its output
+feed/        the price feed (feed.py, run by .github/workflows/feed.yml after the US close and on request):
+             latest.json and live.json, read by the scheduled runs (data doc G8)
 data/        stocks, ledger, history, macro, panel (JSON), written only by the pipeline
 page/        the dashboard: index.html, app.js, fonts.css, logos.json
 skills/      the two saved Claude skills (ft-game-playbook, stock-score)
@@ -70,7 +73,8 @@ python -m pytest -q tests
 
 | Writer | May change | How |
 |---|---|---|
-| Claude's scheduled runs | `data/`, `state/`, `SYNC.md` | Commit to `main` after each evening and weekly review. Pull and rebase first; never force-push |
+| Claude's scheduled runs | `data/`, `state/`, `SYNC.md`, and a line in `scan/request.txt` or `feed/request.txt` | Commit to `main` after each evening and weekly review, and a request line when the scan or the feed is needed (data doc G7, G8). Pull and rebase first; never force-push |
+| The scan and feed jobs (GitHub Actions) | `scan/`, `feed/` | Commit to `main` after each run |
 | Claude in a session with Tim | `docs/`, `scripts/`, `page/`, `skills/`, `ops/` | Only to mirror a change Tim approved |
 | ChatGPT | Nothing on `main` | A branch and pull request, or a file under `proposals/chatgpt/` |
 | Tim | Everything | Reviews and merges pull requests |

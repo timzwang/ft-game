@@ -6,6 +6,21 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.12 (Wed 21 Oct 2026, afternoon)
+
+A price feed that does not depend on fetching pages, and pipeline 7.7 (7.6 plus a `feed` command) deployed. Approved by Tim on 21 Oct, 12:29 UK. No rule, score, sizing, panel rule, scan rule or order changed. Pipeline 7.7: asset `97024e28a7cbb015b5fdc48c6d4b68cf`, sha256 `abbb29c46723461bb44f83e15db8a4317e19daf3168d078daa5c8615abd74bbd`; 7.4 (asset `30bd733ca18434b8f577f2d57c3813e3`) kept as the rollback.
+
+- Why: on Tue 20 Oct the scheduled evening review's fetch tool refused every address it had not first seen in a search result. Nine rows went missing (Marathon Petroleum, Humana, Valero, Phillips 66, the oil fund, the US lines of Shell and BP, the Ether fund, RTX), the Treasury row, the coin prices and the market data service could not be reached, and the inception standstill stopped at 19 Oct.
+- The price feed (`feed/`, `.github/workflows/feed.yml`, `feed/README.md`; roadmap item 59). A GitHub job reads Yahoo Finance's daily bars (dividend adjustment off) for every list stock, SPY, every stored ticker and the 30 panel stocks (two years for any with a short store), the Treasury's 2, 10 and 30-year yields from its own file, Coinbase's Bitcoin, Ether, Solana and XRP at the hour before the US close, and front-month futures as a commodity fallback. It checks each ticker's last 25 sessions against the stored prices and writes `feed/latest.json` after the US close (20:16 and 21:16 UTC, and at once on a request line pushed by a run, since GitHub often starts scheduled jobs 20 to 40 minutes late) and `feed/live.json` on request during the session. First run (984 overlapping sessions, 41 tickers): closes equal to the cent in 973, largest gap 0.42% (one close-only row from September); 837 of 858 opens within 0.05%.
+- Pipeline 7.7: `feed --feed latest.json --today today.json --history history.json --panel panel.json [--futures yes]` fills today.json after `template` (every missing row up to `date` for the list, SPY and stored tickers; two years for a stock short of 200 closes; empty quote fields and the 52-week range; empty Treasury and coin values; drift entries' price fields; the panel's missing closes). It re-checks each ticker against the live store and refuses one that disagrees (close beyond 0.5%, or open, high or low beyond 1.5%: the wrong listing, pence against pounds, a split), never replaces a stored row, never passes `date`, and is safe to repeat. `feed --live live.json --stocks stocks.json --out quotes.json` writes quotes.json for `refresh` and refuses a file read more than 90 minutes ago. Every other command is unchanged: `run` on the 16 Oct snapshot and on the 20 Oct mirror gives byte-identical files with 7.6 and 7.7 (`proposals/claude/2026-10-21-evidence/`).
+- Pipeline 7.6 deployed (prepared 19 Oct after ChatGPT's review of 7.5, PR #6, merged now): listing calendars for 26 Nov fills, several fills between sessions priced leg by leg, results coverage by date, one hindsight lock for `run` and `reorder`, stricter data check. Re-checked before merging: 148 tests pass; the data check passes on the 20 Oct mirror.
+- A dry run on the 20 Oct mirror: `feed` filled all nine missing rows, two years for Walmart, Hasbro, Shell and BP (so "Averages still needed" empties), RTX's row for the inception standstill, and the panel's missing closes (including HPE's two years).
+- Docs: data doc part F (the feed first; in a scheduled run reach every page through a search), G2, G3, G4 and a new G8 (how runs read the feed); evening run doc (steps 2 to 4 and the quiet-evening line); weekly (steps 1 to 5: Friday's rows, the panel top-up and drift settlement from the feed; the Marsh & McLennan question); refresh (step 2: live quotes from the feed); morning (search first); core playbook (version line, part B); roadmap (items 58 to 60, phase 8, still open, limits); page notes. Uploaded to the Project from these files. The state doc (status, section 8 item 5, tools, one review-log line) was updated in the Project only: `state/` here stays as the 20 Oct evening review mirrored it (`323663b`), so `state/last-sync.md` stays true, until tonight's review mirrors the Project copy (as in 6.11.1).
+- Page: the conviction tooltip and calibration banner wording merged with 7.5 on 19 Oct, now live (`files/app.js` version 4, equal to `page/app.js`).
+- Scheduled tasks: the 16:45, 19:22 and 14:50 UK refresh tasks recreated from a chat with the repository attached (they dated from 9 Oct and could not reach it), same schedule, notifications and prompts apart from the feed; the old ones switched off, not deleted. Evening, weekly, morning and weekend tasks unchanged.
+- Tests: 10 more (`tests/test_feed.py`), 158 in all; the tests workflow now also runs on changes to `feed/`.
+- Open, for Tim: Marsh & McLennan. The panel swap agreed on 17 Oct rested on a 190-session feed; Yahoo has two years for it.
+
 ## 6.11.1 (Mon 19 Oct 2026, about 22:25)
 
 The Mon 26 Oct cut-off experiment removed, at Tim's request (decided before this session; applied here). An operational change only: no pipeline, page, score, order or scheduled task changed, and it does not wait for the 7.5 review below.
@@ -215,6 +230,7 @@ Not versioned with the playbook; its changes are listed here by date.
 - Mon 12 Oct, about 18:30: one row per stock on phones, a one-column Order panel, shorter statuses.
 - Sun 18 Oct: order cut-off shown as 07:00 UK (`app.js` version 2).
 - Mon 19 Oct, about 00:30: results budget read from the ledger (1.0 for 27 to 30 Oct), US calendar for 26 and 27 Nov, day-call help text (`app.js` version 3).
+- Wed 21 Oct, afternoon: conviction tooltip and calibration banner wording from 19 Oct deployed (`app.js` version 4).
 
 ## Recording a new version
 

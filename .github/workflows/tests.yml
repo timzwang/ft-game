@@ -6,7 +6,7 @@ name: tests
 on:
   push:
     branches: [main]
-    paths: ["scripts/**", "scan/**/*.py", "scan/requirements.txt", "tests/**", "page/**", ".github/workflows/**"]
+    paths: ["scripts/**", "scan/**/*.py", "feed/**/*.py", "scan/requirements.txt", "tests/**", "page/**", ".github/workflows/**"]
   pull_request:
   workflow_dispatch:
 

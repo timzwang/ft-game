@@ -1,0 +1,8 @@
+FEED version 1 (21 Oct 2026), generated 2026-10-21T11:48:25+00:00: US session 2026-10-20, London 2026-10-20
+    date was empty: set to 2026-10-20, the feed's US session
+FEED ADDED rows: SHEL 520 (2024-08-12 to 2026-09-01), MPC 1 (2026-10-20), HUM 1 (2026-10-20), BP. 519 (2024-08-12 to 2026-09-01), VLO 1 (2026-10-20), PSX 1 (2026-10-20), WMT 498 (2024-08-12 to 2026-08-06), HAS 500 (2024-08-12 to 2026-08-10), BP-US 1 (2026-10-20), CEG 2 (2026-10-19 to 2026-10-20), CRWD 2 (2026-10-19 to 2026-10-20), ETHA 1 (2026-10-20), LITE 2 (2026-10-19 to 2026-10-20), MRVL 2 (2026-10-19 to 2026-10-20), OIL 1 (2026-10-20), RTX 1 (2026-10-20), SHEL-US 1 (2026-10-20)
+FEED QUOTES for 2026-10-20: 26 of 26 list stocks
+FEED UP TO DATE (nothing new): XOM, CVX, TSM, PLTR, KO, MSFT, MSTR, COIN, META, UNH, LLY, MRK, ABBV, PG, AMGN, V, MA, COP, SPY, EFX, GS, IBIT, LMT, NVDA
+FEED PANEL closes added: AVGO 3, AMD 3, WMT 46, COST 3, BAC 3, PANW 3, WFC 3, LIN 3, C 3, ADI 3, ABT 3, PFE 3, T 3, NOW 3, DHR 3, VLO 1, WDC 3, NEM 3, MCK 3, GLW 3, ADBE 3, PWR 3, CEG 2, SNPS 3, PNC 3, MRSH 360, VRT 3, HPE 550
+FEED MACRO: us2y, us10y, us30y, btc, eth, sol, xrp
+today.json written: today2.json. Run `run` as usual; the FEED lines above say what still needs a page.

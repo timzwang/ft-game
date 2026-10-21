@@ -34,6 +34,10 @@ Written Mon 12 Oct 2026, 01:40 UK, after the third design pass on Tim's page (ht
 - The day call's help text no longer says it "nudges cash": it reads "A research record only: it never changes the order or the cash level" (part E since 16 Oct).
 - Only `files/app.js` changed (version 3). Checked with `node --check` and by running the changed functions in Node on sample data; the page was not rendered.
 
+## What changed on 21 Oct (playbook 6.12)
+
+- Deployed the wording merged with pipeline 7.5 on 19 Oct (PR #4, approved by Tim) but never published: the watchlist's "Conviction" tooltip now says the anchor is the score rescaled (50 + 0.35 x (score - 40), held between 40 and 68), a ranking and not a measured chance of beating the S&P 500; the calibration banner no longer hides itself at 150 settled ratings and says the count is a minimum before a test, not proof. Only `files/app.js` changed (version 4, equal to the repository's `page/app.js`, sha256 `1583ef5d...1cc3`). Checked with `node --check`; the page was not rendered.
+
 ## Things a later chat must keep
 
 - The Order panel reads the latest alert whose `stock` is "Order", exactly as the old banner did: text starting "Changed" or "Revised" shows the blue "Enter before <cut-off>" bar until the cut-off on the effective day (the cut-off is the constant `CUTOFF` in `files/app.js`, 07:00 UK from 18 Oct, playbook part C; London fills still show 08:00, the LSE open); "No change" shows "Nothing to enter". The "New" marks and the Sell line come from the `trade` rows with the latest `effective` date, while that date is today or later.

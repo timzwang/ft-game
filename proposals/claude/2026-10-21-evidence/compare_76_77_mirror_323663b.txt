@@ -1,0 +1,18 @@
+{
+ "data": ".",
+ "session": "2026-10-20",
+ "files": {
+  "history.json": "identical",
+  "ledger.json": "identical",
+  "macro.json": "identical",
+  "panel.json": "identical",
+  "scores.json": "identical",
+  "stocks.json": "identical"
+ },
+ "printout_only_in_new": [
+  "Pipeline version 7.7. Session 2026-10-20; order effective None; regime mixed; 10112 history rows"
+ ],
+ "printout_only_in_old": [
+  "Pipeline version 7.6. Session 2026-10-20; order effective None; regime mixed; 10112 history rows"
+ ]
+}
