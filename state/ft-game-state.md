@@ -14,7 +14,7 @@ Scheduled runs: evening review 21:30 UK Sun to Thu; morning check 06:36 UK Mon t
 
 - **Playbook version 6.13** (6.13, 21 Oct late evening: the endgame stance in core part D, approved by Tim at 22:38 UK: the score floor, trend tests, downtrend replacement, 10% caps on results, momentum and drift positions, results budget, volatility caps and theme guide suspended for the rest of the game; the book switches to high-beta technology at the 22 Oct evening review, order A or B by Western Digital's after-hours reaction; 6.12.1, 21 Oct late evening: feed 1.1 sends two years to every list or requested stock outside the price store, panel members included, and names any still short; the evening run re-requests a short candidate once before leaving it out; 6.12, 21 Oct afternoon: the price feed, a GitHub job whose `feed/latest.json` and `feed/live.json` the evening and weekly reviews and the price refreshes read first (data doc G8), pipeline 7.7 (7.6 plus the `feed` command) deployed, every page in a scheduled run reached through a search, the refresh tasks recreated with the repository; 6.11.1, 19 Oct late evening: the 26 Oct cut-off test removed at Tim's request; 6.11, 19 Oct evening: pipeline 7.4, `order_expected` with every change of order, and the repository's data check; 6.10, 19 Oct: pipeline 7.3 and a results budget of 1.0 points for reports dated 27 to 30 Oct; 6.9, 18 Oct: evening and weekly review tasks recreated with the repository attached; 6.8: G6 and G7 step 1; 6.7: pipeline 7.2, stricter price handling; 6.6: the handoff log; 6.5: the standstill test corrected; 6.4: after the outside audit, pipeline 7, 07:00 UK cut-off, score frozen; 6.3: the broad scan; 6.2: the day call never moves cash, "overbought" is a warning only; 6: split docs, panel test, earnings-drift scan). **Pipeline script version 7.7** (part B holds the asset id and hash).
 - **Estimated value at Wed 21 Oct close: 101,378, +1.38% since the start, against -0.41% for the S&P 500 fund (gap +1.78 points).** Wed 21 Oct -0.34% against SPY +0.53%: Coca-Cola -0.17 points, Eli Lilly -0.15, AbbVie -0.15; Chevron +0.05, Shell +0.04, Microsoft +0.03, Exxon +0.02. Tech led, defensives and health care lagged (Tuesday's rotation reversed). Tue 20 Oct: 101,725.
-- **Last FT figures: Fri 16 Oct after the close, 101,402 (+1.40%), rank 3,269 of 13,918 (top 23.5%).** RECONCILE -34 credits (-0.03%). Top 2% line about +6.5% (Tim's screenshots of 18 Oct; stored as `top2_return_pct` 6.5); gap to the line now roughly 5.1 points on the estimate.
+- **Last FT figures: Wed 21 Oct after the close, 101,342 (+1.34%), rank 3,948 of 14,357 (top 27.5%; the top 2% is rank 287 or better).** Day -386 (-0.38%). RECONCILE -36 credits (-0.04%). Previous: Fri 16 Oct 101,402, rank 3,269 of 13,918. Top 2% line about +6.5% (18 Oct, stored as `top2_return_pct` 6.5); a fresh reading of the line would firm up the gap maths.
 - **Standstill (21 Oct run):** change for 13 Oct +0.61 (complete); 14 Oct -0.48 (complete); 15 Oct +0.50 (complete); 16 Oct -0.27 (four sessions); 19 Oct -0.43 (three). Week of 12 Oct +0.12; week of 19 Oct -0.43 so far. Inception (now fully priced, nine sessions): -0.62 as entered, -1.30 fully invested: the first order, never changed, would have done better so far. Expected benefit: the change for 22 Oct carries +0.05 (waiting to fill).
 - **Panel test:** all 30 members now loaded (the feed added HPE's two years and MRSH's longer run, 21 Oct). History verdict "no evidence": average rank correlation +0.050 (t +1.3) over 49 dates; top third minus bottom third +0.46 points (t +0.8); one-year strength the strongest part (t +1.9). Live: no complete window yet. The score is frozen for the rest of the game.
 - **Order for Thu 22 Oct's open (endgame switch, order B; message sent about 22:50 UK, replacing the 21:39 order):** AMD 15, Palantir 15, Shopify 15, Sandisk 10, Arm Holdings 10, Datadog 10, ServiceNow 10, Robinhood 10, Strategy 5, cash 0. Order in force until then (filled Mon 19 Oct): Coca-Cola 20, Exxon Mobil 15, Shell 15, Microsoft 15, Eli Lilly 15, Chevron 10, AbbVie 10. The 21:39 order (Hasbro 5, Lilly 10) was replaced before it filled.
@@ -25,7 +25,7 @@ Scheduled runs: evening review 21:30 UK Sun to Thu; morning check 06:36 UK Mon t
 
 ## 2. Current portfolio
 
-The order for Thu 22 Oct's open (endgame switch, order B; assumed entered from the 22:50 UK message until Tim confirms). Scores and bands from the pipeline at the Wed 21 Oct close (hand-run re-run, 22:49 UK). Under the endgame stance (core playbook part D) the score floor, trend tests, volatility caps, theme guide and results budget do not apply; the NOTE lines for them are expected.
+The order for Thu 22 Oct's open (endgame switch, order B; entered, confirmed by Tim at 22:55 UK). Scores and bands from the pipeline at the Wed 21 Oct close (hand-run re-run, 22:49 UK). Under the endgame stance (core playbook part D) the score floor, trend tests, volatility caps, theme guide and results budget do not apply; the NOTE lines for them are expected.
 
 | Stock | Weight | Confidence (not calibrated) | Score | Band | Flags | Next results (implied move) | Swap if missing or broken |
 |---|---|---|---|---|---|---|---|
@@ -50,7 +50,7 @@ Points for the coming reviews:
 
 ## 3. Pending order
 
-**Changed for Thu 22 Oct's open (endgame switch, order B). Message sent about 22:50 UK on Wed 21 Oct, replacing the 21:39 UK order; taken as entered unless Tim says otherwise.**
+**Changed for Thu 22 Oct's open (endgame switch, order B). Message sent about 22:50 UK on Wed 21 Oct, replacing the 21:39 UK order; entered, confirmed by Tim at 22:55 UK.**
 
 AMD 15, Palantir 15, Shopify 15, Sandisk 10, Arm Holdings 10, Datadog 10, ServiceNow 10, Robinhood 10, Strategy 5, cash 0.
 
@@ -106,6 +106,7 @@ Intake tonight: five additions. Analog Devices was first left out because the fe
 
 ## 6. Review log (newest first, keep the latest 15)
 
+- Wed 21 Oct 2026 (about 22:58): Tim confirmed order B entered and gave the FT figures after the close (101,342, rank 3,948 of 14,357); stored with a re-run (ledger only changed; RECONCILE -36 credits) and the ledger republished.
 - Wed 21 Oct 2026 (about 22:55): Hand-run session with Tim ("get started on all of the data required now"). Ten new stocks added from the feed (two years each), results events with implied moves for every new holding, re-run of the 21 Oct session: order B for Thu 22 Oct (message 22:50 UK). Ledger checked against the 21:45 files: only the 22 Oct order, positions, expectation, day call cases, events, shadow ratings and recalculated tables changed. Stocks, ledger, history and panel republished; old assets kept.
 - Wed 21 Oct 2026 (about 22:50): Hand-run session with Tim. Playbook 6.13: Tim approved the endgame stance (core part D) after the gap maths gave the order in force about a 1% chance of the top 2%; rules suspended for the rest of the game as listed there; the switch to a high-beta book is set for Thursday's evening review (order A or B). Order for Thu 22 Oct unchanged.
 - Wed 21 Oct 2026 (about 22:30): Tim's answers recorded: Marsh & McLennan stays in the panel (no swap on 24 Oct); he deleted the `claude/feed-test` branch and merged PRs #3 and #5; he will ask FT help how a mixed London and US order fills on 26 Nov. Research checks (top-five panel test, overbought split) prepared on a branch, PR #7, not deployed. Order, rules and data unchanged.
@@ -120,7 +121,6 @@ Intake tonight: five additions. Analog Devices was first left out because the fe
 - Sun 18 Oct 2026 (about 22:05): Tim confirmed the Mon 19 Oct order is entered; the top 2% line is about +6.5%, about 5 points above Tim.
 - Sun 18 Oct 2026 (about 21:50): Evening review, a change evening for Mon 19 Oct (Palantir out; Chevron 15 to 10; AbbVie 10). Tim's 16 Oct FT figures stored (-34 credits against the estimate). Four watchlist additions; three removals.
 - Sun 18 Oct 2026 (about 20:25): Weekend news check (H7, Sunday). No A item. Order unchanged.
-- Sun 18 Oct 2026 (about 10:50): Follow-up approved by Tim. GitHub access test passed. Playbook 6.8.
 
 ## 7. Market regime notes
 
