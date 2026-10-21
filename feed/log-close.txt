@@ -1,0 +1,5 @@
+11:59:21Z tickers: 66 (64 US symbols, 2 London; 30 panel stocks)
+11:59:27Z session: US 2026-10-20, London 2026-10-20
+11:59:46Z treasury: 6 rows, last 2026-10-20
+11:59:48Z coins: btc 82503.62, eth 2434.8, sol 105.97, xrp 1.3273
+11:59:48Z written: 66 tickers; missing none; stale none; mismatched none
