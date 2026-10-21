@@ -104,6 +104,7 @@ Intake tonight: five additions. Analog Devices was first left out because the fe
 
 ## 6. Review log (newest first, keep the latest 15)
 
+- Wed 21 Oct 2026 (about 22:30): Tim's answers recorded: Marsh & McLennan stays in the panel (no swap on 24 Oct); he deleted the `claude/feed-test` branch and merged PRs #3 and #5; he will ask FT help how a mixed London and US order fills on 26 Nov. Research checks (top-five panel test, overbought split) prepared on a branch, PR #7, not deployed. Order, rules and data unchanged.
 - Wed 21 Oct 2026 (about 22:10): At Tim's request after the evening review: feed 1.1 (`2b276c4`; a panel member requested as a candidate had been sent only 10 rows), playbook 6.12.1 (evening run step 4, data doc G8), feed 1.1 also widens Yahoo bars whose open lies outside their range (UnitedHealth's 21 Oct high corrected to 421.80); two regression tests (160 pass). Review re-run with Analog Devices added (score 64, strong); AT&T's drift row completed (still FAIL); stocks, ledger, history and panel files republished. Order unchanged.
 - Wed 21 Oct 2026 (about 21:45): Evening review, a change evening for Thu 22 Oct (Hasbro 5 added as a drift position; Eli Lilly 15 to 10). Day -0.34% against SPY +0.53% (Coca-Cola, Lilly, AbbVie -0.15 to -0.17 points each as tech led and defensives lagged). Drift scan: Elevance, AT&T, Netflix all FAIL. Watchlist: added Charles River Laboratories, Centene, Targa Resources, NetApp; removed Walmart. Price feed: forced (request pushed 21:32 UK, close run at 21:32 UK, second run for nine new tickers at 21:36 UK); broad scan: forced. Charles River's 21 Oct row from the feed had its open below its low (Yahoo); the low was set to the open (313.83, which matches the range StocksToTrade reported). Files published.
 - Wed 21 Oct 2026 (about 14:30): Hand-run session with Tim. Playbook 6.12: the price feed on GitHub (`feed/`, data doc G8) after the 20 Oct fetch refusals; pipeline 7.7 (7.6 from PR #6 plus the `feed` command) deployed, byte-identical to 7.6 on the snapshot and the 20 Oct mirror; page wording from 19 Oct deployed; refresh tasks recreated with the repository. Order, watchlist, score and rules unchanged.
@@ -118,7 +119,6 @@ Intake tonight: five additions. Analog Devices was first left out because the fe
 - Sun 18 Oct 2026 (about 10:50): Follow-up approved by Tim. GitHub access test passed. Playbook 6.8.
 - Sun 18 Oct 2026 (about 01:20): Hand-run session with Tim. Playbook 6.6: the handoff log.
 - Sun 18 Oct 2026 (about 01:00): Hand-run session with Tim. Playbook 6.5 and pipeline 7.1, the corrected standstill test.
-- Sun 18 Oct 2026 (about 00:30): Hand-run session with Tim after the outside audit by ChatGPT. Playbook 6.4 and pipeline 7; morning check 06:36 UK and a 07:00 UK cut-off; score frozen.
 
 ## 7. Market regime notes
 
@@ -143,15 +143,14 @@ Near calendar (the full calendar to 27 Nov is on the page and in the ledger):
 
 ## 8. Open questions for Tim
 
-Answered: an order entered before 08:00 UK counted for that day up to 23 Oct (from 17 Oct treat 07:00 UK as the cut-off); the midday check stays off; the leaderboard shows only the top 10; Shell filled at its 08:00 open on 9 Oct; Microsoft, Coca-Cola, Palantir, Goldman Sachs, Meta Platforms and Eli Lilly are in the game's list; the orders for 13 to 16 Oct were entered; value, rank and players after Fri 16 Oct's close; the Marsh & McLennan panel swap; GitHub access from scheduled runs; the top 2% line (about +6.5%, 18 Oct); the evening run's repository (tasks recreated 18 Oct); the fetch tool refusing built addresses in scheduled runs (answered 21 Oct by the price feed, playbook 6.12).
+Answered: an order entered before 08:00 UK counted for that day up to 23 Oct (from 17 Oct treat 07:00 UK as the cut-off); the midday check stays off; the leaderboard shows only the top 10; Shell filled at its 08:00 open on 9 Oct; Microsoft, Coca-Cola, Palantir, Goldman Sachs, Meta Platforms and Eli Lilly are in the game's list; the orders for 13 to 16 Oct were entered; value, rank and players after Fri 16 Oct's close; the Marsh & McLennan panel swap; GitHub access from scheduled runs; the top 2% line (about +6.5%, 18 Oct); the evening run's repository (tasks recreated 18 Oct); the fetch tool refusing built addresses in scheduled runs (answered 21 Oct by the price feed, playbook 6.12); Marsh & McLennan stays in the panel (Tim, 21 Oct about 21:44 UK: the panel stays exactly as fixed on 15 Oct, so the weekly review of 24 Oct does not swap it).
 
 Still open:
 1. Is AbbVie in the game's list? Assumed yes (large NYSE listing); substitute Amgen. Tim to say if it was missing.
 2. New on 21 Oct: is Hasbro in the game's list? Assumed yes (large Nasdaq listing); if missing, leave the 5% with Eli Lilly (15%) for that day and say so.
 3. Are Strategy and Coinbase in the game's list? Not needed until one is close to being bought.
-4. The cut-off after the clock change: 07:00 or 08:00 UK. Tim asked FT help on 18 Oct. 07:00 UK stays until the FT answers.
+4. The cut-off after the clock change: 07:00 or 08:00 UK. Tim asked FT help on 18 Oct. 07:00 UK stays until the FT answers. Tim will also ask how a mixed London and US order entered for 26 Nov (US closed) fills (21 Oct).
 5. Does the game convert US stocks' returns into pounds? In the draft to FT help; the closing gap has stayed under 0.05%.
-6. Marsh & McLennan in the panel (from 21 Oct): the feed has two years for MRSH, and the run of 21 Oct loaded them. Keep MRSH (the panel stays as fixed on 15 Oct) or swap as agreed on 17 Oct? Until Tim answers, the weekly review of 24 Oct follows the 17 Oct agreement.
 
 ## 9. Game rules
 
