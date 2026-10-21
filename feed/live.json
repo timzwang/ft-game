@@ -1,0 +1,68 @@
+{
+ "meta": {
+  "feed_version": "1 (21 Oct 2026)",
+  "mode": "live",
+  "read_utc": "2026-10-21T12:08:02+00:00",
+  "read_uk": "13:08",
+  "quotes": 2,
+  "note": "Yahoo quotes can lag the market by up to about 15 minutes; read_utc is when the feed read them."
+ },
+ "quotes": {
+  "BP.": {
+   "price": 615.7,
+   "prev_close": 605.8,
+   "open": 618.0,
+   "high": 620.9,
+   "low": 614.3,
+   "volume": 6147217,
+   "bar_date": "2026-10-21",
+   "prev_date": "2026-10-20",
+   "yahoo": "BP.L"
+  },
+  "SHEL": {
+   "price": 3916.5,
+   "prev_close": 3900.0,
+   "open": 3919.0,
+   "high": 3934.5,
+   "low": 3900.0,
+   "volume": 1245472,
+   "bar_date": "2026-10-21",
+   "prev_date": "2026-10-20",
+   "yahoo": "SHEL.L"
+  }
+ },
+ "macro_now": {
+  "coins": {
+   "btc": {
+    "price": 83445.54,
+    "time_utc": "2026-10-21T12:08:01.953178550Z"
+   },
+   "eth": {
+    "price": 2467.0,
+    "time_utc": "2026-10-21T12:08:01.655134736Z"
+   }
+  },
+  "futures": {
+   "brent": {
+    "symbol": "BZ=F",
+    "price": 109.18,
+    "bar_date": "2026-10-21"
+   },
+   "wti": {
+    "symbol": "CL=F",
+    "price": 98.54,
+    "bar_date": "2026-10-21"
+   },
+   "natgas": {
+    "symbol": "NG=F",
+    "price": 2.866,
+    "bar_date": "2026-10-21"
+   },
+   "gold": {
+    "symbol": "GC=F",
+    "price": 4158.2002,
+    "bar_date": "2026-10-21"
+   }
+  }
+ }
+}
