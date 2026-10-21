@@ -1,6 +1,6 @@
 # FT Stock Picking Game: state and log
 
-Last updated: Tue 20 Oct 2026, about 22:05 UK (evening review, a quiet evening: no change for Wed 21 Oct; day +0.62% against SPY +0.34%, Eli Lilly +0.52 points at a record; Hasbro passed all six drift tests and joined the watchlist, not bought; WebFetch refused every page address it had not first seen in a search result, so pages were reached through searches and several watchlist rows are missing). Before that, Mon 19 Oct about 22:25 UK (hand-run session with Tim: playbook 6.11.1, the 26 Oct 07:15 UK cut-off test removed; pipeline 7.6 prepared for review, not deployed, 7.4 stays live). Before that, about 22:15 UK (evening review, quiet; AbbVie's results event added; implied moves stored for five holdings). Earlier entries: see the review log (section 6).
+Last updated: Wed 21 Oct 2026, about 21:45 UK (evening review, a change evening: for Thu 22 Oct, Hasbro 5% added as a drift position and Eli Lilly cut from 15% to 10%, message sent about 21:39 UK; day -0.34% against SPY +0.53%; four watchlist additions, Walmart removed; price feed and broad scan both current after a forced run). Before that, Wed 21 Oct 2026, about 14:30 UK (hand-run session with Tim: playbook 6.12, the price feed on GitHub and pipeline 7.7). Earlier entries: see the review log (section 6).
 
 This doc is the narrative record for Tim's entry, "Seeking Beta". The procedure for every run is in `claude/ft-game-playbook.md` (the core doc) and the docs its routing table names. The numbers (prices, scores, daily performance, contributions, ratings and their outcomes, the full calendar, analyst changes, alerts, the panel test, the drift record) live in the data files behind Tim's page and the panel file, and are produced by the pipeline script; this doc carries the decisions and the reasons.
 
@@ -12,78 +12,80 @@ Scheduled runs: evening review 21:30 UK Sun to Thu; morning check 06:36 UK Mon t
 
 ## 1. Status
 
-- **Playbook version 6.11.1** (6.11.1, 19 Oct late evening: the 26 Oct cut-off test removed at Tim's request; 6.11, 19 Oct evening: pipeline 7.4, `order_expected` with every change of order, and the repository's data check; 6.10, 19 Oct: pipeline 7.3 and a results budget of 1.0 points for reports dated 27 to 30 Oct; 6.9, 18 Oct: evening and weekly review tasks recreated with the repository attached; 6.8: G6 and G7 step 1; 6.7: pipeline 7.2, stricter price handling; 6.6: the handoff log; 6.5: the standstill test corrected; 6.4: after the outside audit, pipeline 7, 07:00 UK cut-off, score frozen; 6.3: the broad scan; 6.2: the day call never moves cash, "overbought" is a warning only; 6: split docs, panel test, earnings-drift scan). **Pipeline script version 7.4** (part B holds the asset id and hash).
-- **Estimated value at Tue 20 Oct close: 101,725, +1.73% since the start, against -0.93% for the S&P 500 fund (gap +2.65 points).** Tue 20 Oct +0.62% against SPY +0.34%: Eli Lilly +0.52 points (+3.5% to a record), AbbVie +0.23, Chevron +0.06, Coca-Cola +0.02; Shell -0.12, Microsoft -0.05, Exxon -0.03. Health care made a record; energy was the weakest sector. Mon 19 Oct: 101,097.
-- **Last FT figures: Fri 16 Oct after the close, 101,402 (+1.40%), rank 3,269 of 13,918 (top 23.5%).** RECONCILE -34 credits (-0.03%). Top 2% line about +6.5% (Tim's screenshots of 18 Oct; stored as `top2_return_pct` 6.5); gap to the line now roughly 4.8 points on the estimate.
-- **Standstill (20 Oct run):** change for 13 Oct +0.61 (complete); 14 Oct -0.48 (complete); 15 Oct +0.63 (four sessions); 16 Oct -0.07 (three); 19 Oct -0.02 (two). Week of 12 Oct +0.12; week of 19 Oct -0.02 so far. Inception priced to 19 Oct only (RTX's 20 Oct row missing): -0.30 as entered, -0.77 fully invested. No evidence either way.
-- **Panel test (unchanged):** history verdict "no evidence": average rank correlation +0.042 (t +1.1) over 49 dates; top third minus bottom third +0.25 points (t +0.4). Live: no complete window yet. 24 members behind (15 Oct); MRSH and HPE swap at the weekly review of 24 Oct. The score is frozen for the rest of the game.
-- **Order in force (filled Mon 19 Oct's open; unchanged for Wed 21 Oct):** Coca-Cola 20, Exxon Mobil 15, Shell 15, Microsoft 15, Eli Lilly 15, Chevron 10, AbbVie 10, cash 0.
-- Day call for Wed 21 Oct: S&P 500 green 55% (usual 55%); portfolio green 55% (usual 56%); no adjustment: close to a coin flip. Record (S&P 500): 3 right of 6. Tue 20 Oct: both green calls right (S&P 500 +0.34%, portfolio +0.62%).
-- Macro at Tue 20 Oct: US yields carried from 19 Oct (2-year 4.77%, 10-year 5.15%, 30-year 5.48%: the Treasury had not published 20 Oct's row when the run read it; tradingeconomics showed the 10-year near 5.11% live). Gilt 5.42%, German 3.42%, French 4.92%, Italian 4.54%, Japanese 2.90%. Brent $108.91 (-0.3%; +2.2% over five; touched about $111, a five-month high, then fell on an unconfirmed Qatar and Pakistan framework for US-Iran talks), WTI $98.07 (the -5.6% day figure reflects the November contract's expiry, not a crash), gold $4,122. Backdrop label: neutral.
-- Crypto: no Coinbase rows tonight (addresses not reachable); Bitcoin carried at $81,772 (19 Oct). Trend up (IBIT 1.0% below its 20-day, 4.9% above its 50-day). Ether mixed, -5.0% over five sessions through ETHA (19 Oct). Reports put Bitcoin near $83,000 on 20 Oct (not stored). No holding is crypto-linked.
-- Regime: mixed. Tue 20 Oct: S&P 500 about +0.2% to +0.3% (SPY +0.34%), Dow about +1%, Nasdaq flat, Russell 2000 about +1.7%; rotation from tech into value, health care at a record, financials +1.2%, energy weakest. Advancers about 2.5 to 1 on the NYSE. Housing starts 1.221M against 1.30M forecast (-5.2%, a four-month low). Netflix fell about 4% after hours on a weaker advertising outlook. What would make it risk-off: the 10-year back above 5.25% with the S&P 500 below its 20-day, or a hike on 28 Oct priced above 70%.
+- **Playbook version 6.12** (6.12, 21 Oct afternoon: the price feed, a GitHub job whose `feed/latest.json` and `feed/live.json` the evening and weekly reviews and the price refreshes read first (data doc G8), pipeline 7.7 (7.6 plus the `feed` command) deployed, every page in a scheduled run reached through a search, the refresh tasks recreated with the repository; 6.11.1, 19 Oct late evening: the 26 Oct cut-off test removed at Tim's request; 6.11, 19 Oct evening: pipeline 7.4, `order_expected` with every change of order, and the repository's data check; 6.10, 19 Oct: pipeline 7.3 and a results budget of 1.0 points for reports dated 27 to 30 Oct; 6.9, 18 Oct: evening and weekly review tasks recreated with the repository attached; 6.8: G6 and G7 step 1; 6.7: pipeline 7.2, stricter price handling; 6.6: the handoff log; 6.5: the standstill test corrected; 6.4: after the outside audit, pipeline 7, 07:00 UK cut-off, score frozen; 6.3: the broad scan; 6.2: the day call never moves cash, "overbought" is a warning only; 6: split docs, panel test, earnings-drift scan). **Pipeline script version 7.7** (part B holds the asset id and hash).
+- **Estimated value at Wed 21 Oct close: 101,378, +1.38% since the start, against -0.41% for the S&P 500 fund (gap +1.78 points).** Wed 21 Oct -0.34% against SPY +0.53%: Coca-Cola -0.17 points, Eli Lilly -0.15, AbbVie -0.15; Chevron +0.05, Shell +0.04, Microsoft +0.03, Exxon +0.02. Tech led, defensives and health care lagged (Tuesday's rotation reversed). Tue 20 Oct: 101,725.
+- **Last FT figures: Fri 16 Oct after the close, 101,402 (+1.40%), rank 3,269 of 13,918 (top 23.5%).** RECONCILE -34 credits (-0.03%). Top 2% line about +6.5% (Tim's screenshots of 18 Oct; stored as `top2_return_pct` 6.5); gap to the line now roughly 5.1 points on the estimate.
+- **Standstill (21 Oct run):** change for 13 Oct +0.61 (complete); 14 Oct -0.48 (complete); 15 Oct +0.50 (complete); 16 Oct -0.27 (four sessions); 19 Oct -0.43 (three). Week of 12 Oct +0.12; week of 19 Oct -0.43 so far. Inception (now fully priced, nine sessions): -0.62 as entered, -1.30 fully invested: the first order, never changed, would have done better so far. Expected benefit: the change for 22 Oct carries +0.05 (waiting to fill).
+- **Panel test:** all 30 members now loaded (the feed added HPE's two years and MRSH's longer run, 21 Oct). History verdict "no evidence": average rank correlation +0.050 (t +1.3) over 49 dates; top third minus bottom third +0.46 points (t +0.8); one-year strength the strongest part (t +1.9). Live: no complete window yet. The score is frozen for the rest of the game.
+- **Order for Thu 22 Oct's open (changed 21 Oct, message sent about 21:39 UK):** Coca-Cola 20, Exxon Mobil 15, Shell 15, Microsoft 15, Eli Lilly 10, Chevron 10, AbbVie 10, Hasbro 5, cash 0. Order in force until then (filled Mon 19 Oct): the same with Eli Lilly 15 and no Hasbro.
+- Day call for Thu 22 Oct: S&P 500 red 46% (usual 55%); portfolio green 63% (usual 60%); no adjustment (Meta's after-hours reaction mixed). Record (S&P 500): 4 right of 7. Wed 21 Oct: S&P 500 green called and right (+0.53%); portfolio green called and wrong (-0.34%).
+- Macro at Wed 21 Oct: US 2-year 4.81%, 10-year 5.13% (-11bp over five sessions: a tailwind on the mechanical label), 30-year 5.42%. Gilt 5.38%, German 3.41%, French 4.97%, Italian 4.56%, Japanese 2.90%. Brent $109.60 (+0.6%), WTI $97.75, natural gas $2.77, gold $4,134. UK CPI 3.5% in September against 3.4% expected; a Bank of England hike in November is being priced. Backdrop label: tailwind.
+- Crypto: Bitcoin $84,436 at the US close (+3.3% on the day, +1.5% over five); trend up (IBIT 1.4% above its 20-day, 6.9% above its 50-day). Ether $2,493 (+4.2%), trend up. No holding is crypto-linked.
+- Regime: mixed. Wed 21 Oct: S&P 500 +0.5% (SPY +0.53% to 773.09), a fourth straight gain, Nasdaq about +0.9% (tech and SpaceX led), defensives trailed cyclicals. Earnings: Elevance beat and raised (shares only modestly up), AT&T beat and raised its EPS guide but fell, Netflix fell sharply on its tax hit and ad outlook. Meta beat on revenue after the close with strong guidance; shares reported lower after hours. What would make it risk-off: the 10-year back above 5.25% with the S&P 500 below its 20-day, or a hike on 28 Oct priced above 70%.
 
 ## 2. Current portfolio
 
-The order in force (filled Mon 19 Oct's open, unchanged for Wed 21 Oct). Scores and bands from the pipeline at the Tue 20 Oct close; confidence ratings as given on 18 Oct.
+The order for Thu 22 Oct's open (assumed entered from the 21 Oct message). Scores and bands from the pipeline at the Wed 21 Oct close; confidence ratings as given on 18 Oct, Hasbro's on 21 Oct.
 
-| Stock | Weight | Cap | Confidence (18 Oct, not calibrated) | Score | Band | Flags | Next results | Substitute if missing |
+| Stock | Weight | Cap | Confidence (not calibrated) | Score | Band | Flags | Next results | Substitute if missing |
 |---|---|---|---|---|---|---|---|---|
-| Coca-Cola | 20% | 20% | 59 | 74 | Strong | none | 27 Oct, before US open (implied 4.2%) | PepsiCo (downtrend: cash instead) |
-| Exxon Mobil | 15% | 15% | 60 | 84 | Strong | none; three target raises in a week | 30 Oct, before US open (implied n/a, 6% used) | ConocoPhillips |
-| Shell | 15% | 15% | 59 | 70 | Strong | none | 29 Oct, 07:00 UK (implied n/a, 6% used) | BP |
-| Microsoft | 15% | 15% | 57 | 66 | Strong | none; BMO target $600 from $515 (20 Oct) | 28 Oct, after US close (implied 6.0%) | Alphabet (not scored) |
-| Eli Lilly | 15% | 15% | 59 | 79 | Strong | record high 20 Oct; Goldman $1,413, BofA $1,397 | 29 Oct, before US open (implied 7.9%: above budget at 15%) | Merck |
-| Chevron | 10% | 15% | 59 | 75 | Strong | none | 30 Oct, before US open (implied 5.8%) | ConocoPhillips |
-| AbbVie | 10% | 15% | 60 | 82 | Strong | none | 30 Oct, before US open, confirmed (implied 6.4%) | Amgen |
+| Coca-Cola | 20% | 20% | 59 | 67 | Strong | none | 27 Oct, before US open (implied 4.2%) | PepsiCo (downtrend: cash instead) |
+| Exxon Mobil | 15% | 15% | 60 | 83 | Strong | none | 30 Oct, before US open (implied n/a, 6% used) | ConocoPhillips |
+| Shell | 15% | 15% | 59 | 66 | Strong | none | 29 Oct, 07:00 UK (implied n/a, 6% used) | BP |
+| Microsoft | 15% | 15% | 57 | 69 | Strong | none | 28 Oct, after US close (implied 6.0%) | Alphabet (not scored) |
+| Eli Lilly | 10% | 15% | 59 | 79 | Strong | none; Barclays $1,400 kept (21 Oct) | 29 Oct, before US open (implied 7.9%) | Merck |
+| Chevron | 10% | 15% | 59 | 78 | Strong | none | 30 Oct, before US open (implied 5.8%) | ConocoPhillips |
+| AbbVie | 10% | 15% | 60 | 72 | Strong | none | 30 Oct, before US open, confirmed (implied 6.4%) | Amgen |
+| Hasbro | 5% | 10% | 57 | 75 | Strong | Drift position; extended (23% above 50-day); overbought (RSI 86); at 52-week high | Feb 2027 (est.) | Mattel (not scored) |
 | Cash | 0% | | | | | | | |
 
-Ratings were moved down from the anchors (60 to 65) by up to 5 points each: the panel test finds no evidence that a high score is an edge, so ratings stay near 55 to 60.
+Ratings stay near 55 to 60: the panel test finds no evidence that a high score is an edge. Hasbro's 57 is its anchor (62) less 5 for the extension.
 
 Points for the coming reviews:
 
-- Themes: Energy 40%, Health care 25%, Consumer staples 20%, Software 15%. Risk shares: Exxon 21.6%, Coca-Cola 20.1%, Shell 16.9%, Chevron 13.8%, Eli Lilly 13.2%, AbbVie 12.1%, Microsoft 2.3% (oil names 52%). Worst scenario: ceasefire or Hormuz reopening -1.78%. Tuesday's peace report is a live version of that scenario: watch whether Qatar or either government confirms it.
-- **Results cluster:** weight times implied move against the 1.0 budget for 27 to 30 Oct: Coca-Cola 0.84, Microsoft 0.90, Shell 0.90 (6% used), **Eli Lilly 1.19 (above budget)**, Exxon 0.90 (6% used), Chevron 0.58, AbbVie 0.64. RESULTS TOTAL next 10 sessions 5.95 points across seven reports, deliberate (the entry needs variance), but all in one week with oil names 2.4 points of it. Implied moves are earnings-watcher's of 16 Oct, not refreshed tonight. **Eli Lilly: trim to 12% or less in the order before 07:00 UK Wed 28 Oct unless its implied move falls below about 6.7%**; decide by the Sunday 25 Oct review. Last orders: Coca-Cola before 07:00 UK Mon 26 Oct; Shell, Eli Lilly and Microsoft before 07:00 UK Wed 28 Oct; Exxon, Chevron and AbbVie before 07:00 UK Thu 29 Oct.
-- **Hasbro (drift ENTER, 20 Oct):** all six tests passed (EPS $2.90 against $1.86, revenue $1.59bn against $1.48bn, 2026 outlook raised; +11.2% on 3.5 times average volume, closed near the high, above a rising 50-day). Limit 5% (18% above its 50-day, RSI 83). Not bought tonight: expected benefit about +0.05 to +0.08 points, and funding it meant cutting Lilly at a record a week before its planned trim or Coca-Cola before its report. If Wed 21 Oct closes above its open in the upper half of its range, the Wednesday review may add it at 5%, funded from the Lilly trim. Exit rules from part E apply from any fill.
-- Keep TSMC on the list until Fri 23 Oct and Palantir until Mon 26 Oct (standstill test), then they may be removed. Walmart is a ROTATE OUT candidate (downtrend flag) from Wed 21 Oct, its third session on the list.
-- Walmart's statistics page now fetched (50-day 109.15, 200-day 118.33): its 200-day is below; score 60, band weak.
-- Shadow ratings still open for stocks off the list: Constellation Energy, CrowdStrike, Lumentum, Marvell (the weekly review gives their rows).
+- Themes: Energy 40%, Consumer staples 20%, Health care 20%, Software 15%, Media 5%. Risk shares: Exxon 22.4%, Coca-Cola 20.0%, Shell 17.7%, Chevron 13.2%, AbbVie 11.5%, Eli Lilly 9.7%, Hasbro 5.9%, Microsoft -0.3% (oil names 53%). Worst scenario: ceasefire or Hormuz reopening -1.75%.
+- **Results cluster:** weight times implied move against the 1.0 budget for 27 to 30 Oct: Coca-Cola 0.84, Microsoft 0.90, Shell 0.90 (6% used), Eli Lilly 0.79 (trimmed tonight, now within budget), Exxon 0.90 (6% used), Chevron 0.58, AbbVie 0.64. RESULTS TOTAL next 10 sessions 5.55 points across seven reports, deliberate (the entry needs variance), oil names 2.4 points of it. Implied moves are earnings-watcher's of 16 Oct; Exxon's and Shell's pages were not found by search tonight. Last orders: Coca-Cola before 07:00 UK Mon 26 Oct; Shell, Eli Lilly and Microsoft before 07:00 UK Wed 28 Oct; Exxon, Chevron and AbbVie before 07:00 UK Thu 29 Oct. The Sunday 25 Oct review should refresh every implied move.
+- **Hasbro (drift position from 22 Oct's open):** exit at the next open after a heavy-volume close below its open, a close below 104.01 (midpoint of 98.49 and 109.52), five sessions without a new high (high so far 114.05, 21 Oct), or after ten sessions (by the 3 Nov close). Never average up.
+- Keep TSMC on the list until Fri 23 Oct and Palantir until Mon 26 Oct (standstill test), then they may be removed.
+- Shadow ratings still open for stocks off the list: Constellation Energy, CrowdStrike, Marvell (the weekly review gives their rows).
 
 ## 3. Pending order
 
-**No change for Wed 21 Oct (20 Oct evening review, quiet; nothing sent).** Last change: for Mon 19 Oct's open, message sent about 21:47 UK on Sun 18 Oct; entered, confirmed by Tim about 22:00 UK; filled 19 Oct.
+**Changed for Thu 22 Oct's open (21 Oct evening review). Message sent about 21:39 UK on Wed 21 Oct; taken as entered unless Tim says otherwise.**
 
-Coca-Cola 20, Exxon Mobil 15, Shell 15, Microsoft 15, Eli Lilly 15, Chevron 10, AbbVie 10, cash 0.
+Coca-Cola 20, Exxon Mobil 15, Shell 15, Microsoft 15, Eli Lilly 10, Chevron 10, AbbVie 10, Hasbro 5, cash 0.
 
-Changes at the last change: sell Palantir 5 (momentum exit); Chevron 15 to 10 (oil concentration); add AbbVie 10.
+Changes: add Hasbro 5 (drift position, second-session test passed); Eli Lilly 15 to 10 (results-budget trim due before 28 Oct, done now). Expected benefit recorded: +0.05 points over five sessions (subjective). What would show it wrong: Hasbro closes below its open on heavy volume or below 104.01 within five sessions, or Lilly outruns Hasbro by more than 1.5 points into its report.
 
 ## 4. Watchlist
 
-Scores and bands at the Tue 20 Oct close. 19 names. Added Hasbro (drift ENTER). No removals. Rows missing tonight (scores use 19 Oct prices): Marathon Petroleum, Humana, Valero, Phillips 66 (their pages served 19 Oct copies).
+Scores and bands at the Wed 21 Oct close. 22 names. Added Charles River Laboratories, Centene, Targa Resources, NetApp. Removed Walmart (rotate out). Hasbro moved into the order.
 
 | Name | Band | Status | Score | Flags | Next results | Promote if |
 |---|---|---|---|---|---|---|
+| Charles River Laboratories | Strong | Needs follow-through (added 21 Oct) | 85 | extended; overbought | 4 Nov (est.) | 5% after a second session closing above its open in the upper half of its range |
 | Visa | Strong | Watching | 80 | overbought; at 52-week high | 27 Oct, after US close (est.) | Steady name if a holding weakens; not held through results above 10% |
-| ConocoPhillips | Strong | Watching | 78 | faded gap | 5 Nov (est.) | Swap for Exxon or Chevron before their 30 Oct results if a report needs dodging |
-| Phillips 66 | Strong | Watching | 77 | none (19 Oct prices) | 28 Oct, before US open | Only in place of an oil major |
-| Mastercard | Strong | Watching | 77 | overbought | 29 Oct (est.) | Alternative to Visa, not both |
-| Hasbro | Strong | Drift: day 1 (added 20 Oct) | 75 | extended; overbought; at 52-week high | Feb 2027 (est.) | 5% after a second session closing above its open in the upper half of its range |
-| Valero Energy | Strong | Results ahead | 73 | EMAs mixed (19 Oct prices) | 22 Oct (time est.) | Not before results; drift tests after |
-| Marathon Petroleum | Strong | Watching | 72 | extended (19 Oct prices) | 3 Nov | 5% at most while extended |
-| Humana | Strong | Ready | 71 | none (19 Oct prices) | 6 Nov | 5% (cap) if a holding weakens |
-| UnitedHealth | Strong | Ready | 69 | EMAs mixed | Jan 2027 (est.) | Up to 10% if a holding weakens |
-| Amgen | Strong | Watching | 68 | none | 3 Nov, after US close | Steady name (cap 15%) |
-| Merck | Strong | Watching | 66 | none | 29 Oct | Substitute for Lilly; back near its high |
-| BP | Strong | Watching | 65 | none | 30 Oct (est.) | Substitute for Shell |
-| Palantir | Middling | Watching (sold 19 Oct) | 59 | EMAs mixed | 2 Nov | Keep until 26 Oct (standstill test) |
-| Meta Platforms | Middling | Results ahead | 53 | golden cross 6 Oct | 21 Oct, after US close | Drift tests on 22 Oct's session; not held through the report |
-| Strategy (crypto tracker) | Middling | Watching | 52 | golden cross 19 Oct; moves with Bitcoin | 29 Oct (est.) | Kept whatever it scores |
-| TSMC | Middling | Watching | 50 | below 50-day | Jan 2027 | Keep until Fri 23 Oct (left the order 16 Oct), then remove |
-| Procter & Gamble | Weak | Results ahead | 64 | downtrend | 22 Oct (est.) | Not while in a downtrend |
-| Walmart | Weak | Watching | 60 | downtrend; faded gap | 19 Nov | ROTATE OUT from 21 Oct unless the trend repairs |
-| Coinbase (crypto tracker) | Weak | Watching | 35 | downtrend; below 50-day | 29 Oct, after US close | Kept whatever it scores |
+| Mastercard | Strong | Watching | 78 | overbought; at 52-week high | 29 Oct (est.) | Alternative to Visa, not both |
+| Valero Energy | Strong | Results ahead | 77 | none | 22 Oct (time est.) | Not before results; drift tests after |
+| ConocoPhillips | Strong | Watching | 74 | none; 0.83 with Exxon | 5 Nov (est.) | Swap for Exxon or Chevron before their 30 Oct results if a report needs dodging |
+| Phillips 66 | Strong | Watching | 72 | none | 28 Oct, before US open | Only in place of an oil major |
+| Humana | Strong | Ready | 70 | none | 6 Nov | 5% (cap) if a holding weakens |
+| Palantir | Strong | Watching (sold 19 Oct) | 69 | none | 2 Nov | Keep until 26 Oct (standstill test) |
+| BP | Strong | Watching | 69 | faded gap; 0.87 with Shell | 30 Oct (est.) | Substitute for Shell |
+| Merck | Strong | Watching | 68 | none | 29 Oct | Substitute for Lilly |
+| Targa Resources | Strong | Watching (added 21 Oct) | 67 | none | 5 Nov (est.) | Midstream alternative to an oil major |
+| Centene | Strong | Watching (added 21 Oct) | 65 | none (a -40% day in July 2025 is in its history) | 28 Oct (est.) | Not before results; managed care read from Elevance |
+| UnitedHealth | Strong | Ready | 64 | none | Jan 2027 (est.) | Up to 10% if a holding weakens |
+| Marathon Petroleum | Strong | Watching | 63 | extended | 3 Nov | 5% at most while extended |
+| NetApp | Strong | Watching (added 21 Oct) | 63 | none | 25 Nov (est.) | Tech exposure if the rebound holds; cap 5% |
+| Strategy (crypto tracker) | Strong | Watching | 62 | golden cross 19 Oct; moves with Bitcoin | 29 Oct (est.) | Kept whatever it scores |
+| Amgen | Strong | Watching | 62 | none | 3 Nov, after US close | Steady name (cap 20%) |
+| Procter & Gamble | Weak | Results ahead | 54 | downtrend | 22 Oct (est.) | Not while in a downtrend |
+| TSMC | Middling | Watching | 50 | below 50-day; faded gap | Jan 2027 | Keep until Fri 23 Oct, then remove |
+| Meta Platforms | Middling | Results ahead | 50 | golden cross 6 Oct | reported 21 Oct, after US close | Drift tests on 22 Oct's session |
+| Coinbase (crypto tracker) | Weak | Watching | 44 | downtrend; below 50-day | 29 Oct, after US close | Kept whatever it scores |
 
-Intake tonight: one addition (Hasbro), fewer than five, because only stock pages that had appeared in a search result could be fetched. Candidates from the 20 Oct broad scan not yet checked: Cardinal Health, Centene (its quote pages could not be reached tonight), Charles River Laboratories, Biogen, Viatris, Targa Resources, Ross Stores, Standard Life, Tate & Lyle. Equifax (drift FAIL: guidance lowered, 50-day below 200-day) not added.
+Intake tonight: four additions, fewer than five, because Analog Devices (a scan leader) had only 10 stored rows from the feed, so its score was not usable; it is left for another night. Consensus targets for the four came from Benzinga pages that were days or weeks old, so targets were left empty for Charles River, Centene and Targa. Candidates not yet checked: Viatris, Biogen, Illumina, Devon Energy, Ross Stores, Tate & Lyle, Rotork.
 
 ## 5. Trade log
 
@@ -97,55 +99,58 @@ Intake tonight: one addition (Hasbro), fewer than five, because only stock pages
 | Wed 14 Oct, about 21:44 UK (confirmed 15 Oct 22:00 UK) | Thu 15 Oct | Sell Meta 5; Microsoft 15 to 10; add Eli Lilly 10 | Meta's momentum exit; tech trimmed after the hot CPI; Lilly score 77, small range |
 | Thu 15 Oct, about 21:51 UK (correction message; confirmed 22:00 UK) | Fri 16 Oct | Sell TSMC 10; Microsoft 10 to 15; Eli Lilly 10 to 15 | TSMC score 43 after results; the two top scores with small ranges back to their caps |
 | Sun 18 Oct, about 21:47 UK (entered, confirmed by Tim about 22:00 UK) | Mon 19 Oct | Sell Palantir 5; Chevron 15 to 10; add AbbVie 10 | Palantir's heavy-volume exit signal; oil names carried 64% of risk with Exxon and Chevron correlated 0.94; AbbVie score 82 with six target raises |
+| Wed 21 Oct, about 21:39 UK (message sent; assumed entered) | Thu 22 Oct | Add Hasbro 5; Eli Lilly 15 to 10 | Hasbro's drift entry confirmed by a second session (+4.1% on 2.8 times volume, closed at the high); Lilly's results-budget trim (7.9% implied, 1.19 points at 15%) done now. Expected +0.05 points (subjective) |
 
 ## 6. Review log (newest first, keep the latest 15)
 
-- Tue 20 Oct 2026 (about 22:05): Evening review, quiet: no change for Wed 21 Oct. Day +0.62% against SPY +0.34% (Lilly +0.52 points at a record; health care led, energy lagged). Drift scan: Hasbro ENTER (not bought: expected benefit about +0.05 to +0.08 points, extended; watchlist "Drift: day 1"), Equifax FAIL. Meta's 13 Oct rating (57) settled: lagged. WebFetch refused every address that had not first appeared in a search result (permission requests withdrawn), so pages were found by searches without clock suffixes; holdings all priced from "At close" pages; MPC, HUM, VLO, PSX, SHEL-US, BP-US, OIL (BNO), ETHA, RTX rows and the Coinbase coin rows missing; US yields carried (Treasury row not yet out). Broad scan requested and read (20 Oct). Files published.
-- Mon 19 Oct 2026 (about 22:25): Hand-run session with Tim. The Mon 26 Oct 07:15 UK cut-off test removed (playbook 6.11.1, part C). ChatGPT's review of pipeline 7.5 (PR #5) checked; pipeline 7.6 prepared on a branch, not deployed; 7.4 stays live.
-- Mon 19 Oct 2026 (about 22:15): Evening review, quiet: no change for Tue 20 Oct. Day -0.33% against SPY +0.42%. AbbVie results event added; implied moves stored for five holdings. stockanalysis.com refused 8 pages; rows from Cboe's delayed quotes. Files published.
+- Wed 21 Oct 2026 (about 21:45): Evening review, a change evening for Thu 22 Oct (Hasbro 5 added as a drift position; Eli Lilly 15 to 10). Day -0.34% against SPY +0.53% (Coca-Cola, Lilly, AbbVie -0.15 to -0.17 points each as tech led and defensives lagged). Drift scan: Elevance, AT&T, Netflix all FAIL. Watchlist: added Charles River Laboratories, Centene, Targa Resources, NetApp; removed Walmart. Price feed: forced (request pushed 21:32 UK, close run at 21:32 UK, second run for nine new tickers at 21:36 UK); broad scan: forced. Charles River's 21 Oct row from the feed had its open below its low (Yahoo); the low was set to the open (313.83, which matches the range StocksToTrade reported). Files published.
+- Wed 21 Oct 2026 (about 14:30): Hand-run session with Tim. Playbook 6.12: the price feed on GitHub (`feed/`, data doc G8) after the 20 Oct fetch refusals; pipeline 7.7 (7.6 from PR #6 plus the `feed` command) deployed, byte-identical to 7.6 on the snapshot and the 20 Oct mirror; page wording from 19 Oct deployed; refresh tasks recreated with the repository. Order, watchlist, score and rules unchanged.
+- Tue 20 Oct 2026 (about 22:05): Evening review, quiet: no change for Wed 21 Oct. Day +0.62% against SPY +0.34% (Lilly +0.52 points at a record). Drift scan: Hasbro ENTER (not bought: watchlist "Drift: day 1"), Equifax FAIL. WebFetch refused every address that had not first appeared in a search result. Files published.
+- Mon 19 Oct 2026 (about 22:25): Hand-run session with Tim. The Mon 26 Oct 07:15 UK cut-off test removed (playbook 6.11.1, part C). Pipeline 7.6 prepared on a branch, not deployed.
+- Mon 19 Oct 2026 (about 22:15): Evening review, quiet: no change for Tue 20 Oct. Day -0.33% against SPY +0.42%. AbbVie results event added; implied moves stored for five holdings. Files published.
 - Mon 19 Oct 2026 (about 20:40): Hand-run session with Tim after ChatGPT's follow-up review (PR #3): pipeline 7.4 (`order_expected`) and the repository data check; playbook 6.11.
 - Mon 19 Oct 2026 (about 00:35): Hand-run session with Tim after ChatGPT's repository review of 18 Oct: pipeline 7.3 and a results budget of 1.0 points for 27 to 30 Oct; playbook 6.10.
 - Sun 18 Oct 2026 (about 22:05): Tim confirmed the Mon 19 Oct order is entered; the top 2% line is about +6.5%, about 5 points above Tim.
-- Sun 18 Oct 2026 (about 21:50): Evening review, a change evening for Mon 19 Oct (Palantir out; Chevron 15 to 10; AbbVie 10). Tim's 16 Oct FT figures stored (-34 credits against the estimate). Four watchlist additions (Visa, Mastercard, ConocoPhillips, Walmart); Marvell, CrowdStrike, Constellation Energy removed.
+- Sun 18 Oct 2026 (about 21:50): Evening review, a change evening for Mon 19 Oct (Palantir out; Chevron 15 to 10; AbbVie 10). Tim's 16 Oct FT figures stored (-34 credits against the estimate). Four watchlist additions; three removals.
 - Sun 18 Oct 2026 (about 20:25): Weekend news check (H7, Sunday). No A item. Order unchanged.
 - Sun 18 Oct 2026 (about 10:50): Follow-up approved by Tim. GitHub access test passed. Playbook 6.8.
 - Sun 18 Oct 2026 (about 01:20): Hand-run session with Tim. Playbook 6.6: the handoff log.
 - Sun 18 Oct 2026 (about 01:00): Hand-run session with Tim. Playbook 6.5 and pipeline 7.1, the corrected standstill test.
 - Sun 18 Oct 2026 (about 00:30): Hand-run session with Tim after the outside audit by ChatGPT. Playbook 6.4 and pipeline 7; morning check 06:36 UK and a 07:00 UK cut-off; score frozen.
 - Sat 17 Oct 2026 (about 20:25): Weekend news check (H7). No A item. Order unchanged.
-- Sat 17 Oct 2026 (about 09:50): Weekly review. Fri 16 Oct logged: +0.64%; week +1.51% against -1.97%. Panel topped up to 28 members.
-- Fri 16 Oct 2026 (about 09:10): Hand-run session with Tim. Broad scan built (playbook 6.3).
 
 ## 7. Market regime notes
 
-Label: Mixed (rotation out of tech into health care, staples, value and energy; yields above 5%; oil near five-month highs with a peace-talk tail risk).
+Label: Mixed (tech rebounding after its October sell-off while health care, staples and energy, the portfolio's core, paused; yields above 5% but falling over the week; oil near five-month highs with a peace-talk tail risk).
 
-Tue 20 Oct: S&P 500 up about 0.2% to 0.3% (SPY +0.34% to 769.05), Dow about +1% (+492 points), Nasdaq flat, Russell 2000 about +1.7%. Health care at a record (Lilly +3.5% to a record; Merck, Amgen, UnitedHealth +3%; Moderna +6%); financials +1.2%; energy the weakest sector; Meta -1.6% (policy chief Joel Kaplan leaving). Breadth strong. Earnings: RTX beat and raised (EPS $2.26 against $1.78; revenue $25.0bn against $24.09bn; record $340bn backlog), 3M raised its forecast (+4%), Equifax +11% (beat, 2026 revenue outlook cut), Hasbro +11% (beat and raise), GM -7% to -7.5% (commodity costs, truck sales), GE Aerospace -3.8%. Netflix after the close: EPS $0.87 against $0.82, revenue $12.87bn in line, ad outlook lowered, shares about -4% after hours; 6% job cuts. Housing starts 1.221M against 1.30M (a four-month low). Oil: Brent above $111 early (Houthi attacks on Saudi sites, at least 18 vessels attacked in the Gulf in two weeks), then down about 1% to 3% intraday on an unconfirmed report (Al-Araby Al-Jadeed) of a Qatar and Pakistan framework: interest on $6bn of frozen Iranian funds, a confidential IAEA visit; closed near $108.9. A third US aircraft carrier is heading to the region.
+Wed 21 Oct: S&P 500 about +0.5% (SPY +0.53% to 773.09), a fourth straight gain; Nasdaq about +0.9%; tech led (SpaceX about +8%, chips up), defensives trailed. Elevance beat and raised (EPS $6.99 against $4.70; 2026 guide at least $29); AT&T beat and raised its EPS guide to about $2.40 but fell; Netflix fell sharply (tax hit, ad outlook). Charles River Laboratories +9% on its investor day and a UBS upgrade. Meta after the close: revenue beat and strong guidance, shares reported lower after hours; Tesla and IBM also reported. Brent about $109.6 after trading either side of $108 to $110 (Hormuz flows against attack worries; a US crude stock draw). UK CPI 3.5% against 3.4% expected; gilts near 5.4%. 20-year bond auction in line (reported).
 
-Mon 19 Oct: S&P 500 +0.41% (about 7,690), Nasdaq +1.11%, Dow -0.07%; chips ended an eight-day losing streak; NAHB 29 (lowest since 2012); 10-year +6bp to 5.15%.
+Tue 20 Oct: S&P 500 about +0.3%, Dow about +1%, Nasdaq flat; health care at a record; Housing starts 1.221M against 1.30M. Brent touched about $111, then eased on an unconfirmed Qatar and Pakistan framework for US-Iran talks.
 
-Week to Fri 16 Oct: S&P 500 7,659.44 (-1.95% on the week), Nasdaq -4.48%, Dow +0.67%, Russell -3.05%; VIX 20.16; SOXX -12% on the week. Brent $109.86. Fed: September minutes backed a 25bp hike; December hike odds about 74%, October about 25% to 30% (19 Oct).
+Mon 19 Oct: S&P 500 +0.41%, Nasdaq +1.11%; NAHB 29 (lowest since 2012); 10-year +6bp to 5.15%.
 
-Weekend log (weekend of 17 and 18 Oct): confirmed by the Sunday evening review. No A item. B: Hormuz (Araghchi's offer "still on the table"; Trump could "soon finish the job"); Russia sanctions waiver. Earlier weekend (10 and 11 Oct): no A item.
+Week to Fri 16 Oct: S&P 500 -1.95% on the week, Nasdaq -4.48%; VIX 20.16. Fed: September minutes backed a 25bp hike; December hike odds about 74%, October about 25% to 30% (19 Oct).
+
+Weekend log (weekend of 17 and 18 Oct): confirmed by the Sunday evening review. No A item. B: Hormuz (Araghchi's offer "still on the table"); Russia sanctions waiver. Earlier weekend (10 and 11 Oct): no A item.
 
 Near calendar (the full calendar to 27 Nov is on the page and in the ledger):
-- Wed 21 Oct: Meta and Tesla results after the US close; EIA oil stocks 15:30 UK; 20-year bond auction 18:00 UK.
-- Thu 22 Oct: Valero, Procter & Gamble, Lockheed Martin; jobless claims 13:30 UK (forecast 200,000); Conference Board leading index.
-- Fri 23 Oct: flash PMIs; Michigan sentiment final.
-- Sun 25 Oct: UK clocks go back; the US session is 13:30 to 20:00 UK in the week of 26 Oct. The evening review sets the order for Coca-Cola's results and the Lilly trim call.
+- Thu 22 Oct: Valero, Procter & Gamble, Lockheed Martin before the open; Meta's reaction session (drift tests); jobless claims 13:30 UK (forecast about 200,000); Conference Board leading index. Hasbro fills at the open.
+- Fri 23 Oct: flash PMIs; Michigan sentiment final. TSMC may leave the list after this session.
+- Sun 25 Oct: UK clocks go back; the US session is 13:30 to 20:00 UK in the week of 26 Oct. The evening review sets the order for Coca-Cola's results and refreshes every implied move.
 - Mon 26 Oct: Coca-Cola's last order, before 07:00 UK.
-- Tue 27 Oct: Coca-Cola; Visa (after the close, est.). Wed 28 Oct: Fed decision 18:00 UK; Microsoft; Phillips 66. Thu 29 Oct: Shell; Eli Lilly; Merck; Mastercard; Coinbase. Fri 30 Oct: Exxon Mobil, Chevron, AbbVie. Tue 3 Nov: US midterms; Amgen. Thu 5 Nov: ConocoPhillips.
+- Tue 27 Oct: Coca-Cola; Visa (after the close, est.). Wed 28 Oct: Fed decision 18:00 UK; Microsoft; Phillips 66; Centene (est.). Thu 29 Oct: Shell; Eli Lilly; Merck; Mastercard; Coinbase. Fri 30 Oct: Exxon Mobil, Chevron, AbbVie. Tue 3 Nov: US midterms; Amgen. Wed 4 Nov: Charles River (est.). Thu 5 Nov: ConocoPhillips; Targa (est.).
 
 ## 8. Open questions for Tim
 
-Answered: an order entered before 08:00 UK counted for that day up to 23 Oct (from 17 Oct treat 07:00 UK as the cut-off); the midday check stays off; the leaderboard shows only the top 10; Shell filled at its 08:00 open on 9 Oct; Microsoft, Coca-Cola, Palantir, Goldman Sachs, Meta Platforms and Eli Lilly are in the game's list; the orders for 13 to 16 Oct were entered; value, rank and players after Fri 16 Oct's close; the Marsh & McLennan panel swap; GitHub access from scheduled runs; the top 2% line (about +6.5%, 18 Oct); the evening run's repository (tasks recreated 18 Oct).
+Answered: an order entered before 08:00 UK counted for that day up to 23 Oct (from 17 Oct treat 07:00 UK as the cut-off); the midday check stays off; the leaderboard shows only the top 10; Shell filled at its 08:00 open on 9 Oct; Microsoft, Coca-Cola, Palantir, Goldman Sachs, Meta Platforms and Eli Lilly are in the game's list; the orders for 13 to 16 Oct were entered; value, rank and players after Fri 16 Oct's close; the Marsh & McLennan panel swap; GitHub access from scheduled runs; the top 2% line (about +6.5%, 18 Oct); the evening run's repository (tasks recreated 18 Oct); the fetch tool refusing built addresses in scheduled runs (answered 21 Oct by the price feed, playbook 6.12).
 
 Still open:
 1. Is AbbVie in the game's list? Assumed yes (large NYSE listing); substitute Amgen. Tim to say if it was missing.
-2. Are Strategy and Coinbase in the game's list? Not needed until one is close to being bought.
-3. The cut-off after the clock change: 07:00 or 08:00 UK. Tim asked FT help on 18 Oct. No test order (removed 19 Oct): 07:00 UK stays until the FT answers.
-4. Does the game convert US stocks' returns into pounds? In the draft to FT help; the closing gap has stayed under 0.05%.
-5. New on 20 Oct: the scheduled evening run's WebFetch refused every address it had not first seen in a search result ("permission request not answered"), so clock-suffixed quote pages, Cboe's quotes, Coinbase's candles and the market data service could not be reached. Searches found most stock pages, but several watchlist rows, the oil and Ether fund rows, the US-listed Shell and BP lines and the coin prices were missing. Worth a look in the next session with Tim (fetch permissions for the scheduled task).
+2. New on 21 Oct: is Hasbro in the game's list? Assumed yes (large Nasdaq listing); if missing, leave the 5% with Eli Lilly (15%) for that day and say so.
+3. Are Strategy and Coinbase in the game's list? Not needed until one is close to being bought.
+4. The cut-off after the clock change: 07:00 or 08:00 UK. Tim asked FT help on 18 Oct. 07:00 UK stays until the FT answers.
+5. Does the game convert US stocks' returns into pounds? In the draft to FT help; the closing gap has stayed under 0.05%.
+6. Marsh & McLennan in the panel (from 21 Oct): the feed has two years for MRSH, and the run of 21 Oct loaded them. Keep MRSH (the panel stays as fixed on 15 Oct) or swap as agreed on 17 Oct? Until Tim answers, the weekly review of 24 Oct follows the 17 Oct agreement.
 
 ## 9. Game rules
 
@@ -201,28 +206,37 @@ In this game an order fills at the open, so the gap on the news day cannot be ca
 
 **Judging changes: one day against several (17 Oct)**
 
-- Lesson: judge a change over the five sessions it was meant for (the STANDSTILL block), not its first day, and judge the process against the first order never changed.
+- Lesson: judge a change over the five sessions it was meant for (the STANDSTILL block), not its first day, and judge the process against the first order never changed. On 21 Oct, with nine sessions priced, the first order never changed was ahead by 0.62 points as entered.
+
+**Hasbro, 20 and 21 Oct (a drift entry bought on its second session)**
+
+| Date | Open | High | Low | Close | Volume |
+|---|---|---|---|---|---|
+| Tue 20 Oct (reaction day) | 102.40 | n/a | n/a | 109.52 | 7.3m |
+| Wed 21 Oct | 110.27 | 114.05 | 109.60 | 114.00 | 5.2m (2.8 times average) |
+
+- Bought for 22 Oct at 5% (extended). The outcome is the test of buying drift on day two rather than day one.
 
 ## 11. Confidence ratings, shadow ratings, the panel test and the day call
 
-- Confidence ratings (not calibrated): 12 resolved by 20 Oct. Latest: Meta 57 (13 Oct) lagged. Earlier: RTX 60 beat, Lockheed 55 beat, Nvidia 50 lagged, Shell 59 beat, TSMC 53 lagged, Coca-Cola 55 beat, Goldman 54 beat, Microsoft 58 beat, Palantir 58 lagged. Far too few to judge. Ratings of 18 Oct for the order in force: Exxon 60, AbbVie 60, Coca-Cola 59, Shell 59, Chevron 59, Eli Lilly 59, Microsoft 57.
-- Shadow ratings: 184 logged, 60 settled. Live: score 70 and above, 17 cases, 76% beat the index (+1.73 points); 60 to 69, 17 cases, 41% (-3.60); 45 to 59, 13 cases, 23% (-3.09); below 45, 13 cases, 85% (+2.58). Weak evidence. Judgement test: no settled dates yet.
-- Panel test: see section 1. Old backtest (hindsight) correlation -0.12.
-- Drift record: first two entries logged 20 Oct (Hasbro ENTER, Equifax FAIL); settle five sessions after 20 Oct. Meta (21 Oct), Valero and Procter & Gamble (22 Oct) are the next likely entries. RTX (beat and raise, 20 Oct) not scanned: its closing row was not reachable.
-- Day call record (S&P 500): 3 right of 6. 20 Oct: S&P 500 green called and right; portfolio green called and right.
+- Confidence ratings (not calibrated): 13 resolved by 21 Oct. Latest: Eli Lilly (14 Oct) beat. Earlier: Meta 57 lagged, RTX 60 beat, Lockheed 55 beat, Nvidia 50 lagged, Shell 59 beat, TSMC 53 lagged, Coca-Cola 55 beat, Goldman 54 beat, Microsoft 58 beat, Palantir 58 lagged. Far too few to judge. Ratings for the order of 22 Oct: Exxon 60, AbbVie 60, Coca-Cola 59, Shell 59, Chevron 59, Eli Lilly 59, Microsoft 57, Hasbro 57.
+- Shadow ratings: 213 logged, 88 settled. Live: score 70 and above, 30 cases, 67% beat the index (+0.77 points); 60 to 69, 25 cases, 40% (-3.47); 45 to 59, 17 cases, 18% (-2.70); below 45, 16 cases, 81% (+2.41). Weak evidence, few dates. Judgement test: no settled dates yet.
+- Panel test: see section 1. Old backtest (hindsight) correlation -0.09.
+- Drift record: Hasbro ENTER and Equifax FAIL (20 Oct); Elevance, AT&T and Netflix FAIL (21 Oct; AT&T's revenue consensus and trend figures missing). All settle five sessions after their reaction days. Meta (22 Oct), Valero and Procter & Gamble (22 Oct) are the next likely entries.
+- Day call record (S&P 500): 4 right of 7. 21 Oct: S&P 500 green called and right; portfolio green called and wrong.
 
 ## 12. Tools
 
 - Tim's page: https://claude.ai/artifact/8P8UwQsb4QsbZMsKNYKrUJ, pinned in his Claude sidebar, with tabs Today, Macro, Performance, Risk, Calendar and Log. It reads four data files (`stocks`, `ledger`, `history`, `macro`) and a fifth dataset, `logos`, that no run touches. The Order panel reads the latest alert whose `stock` is "Order"; its "Enter before" bar uses a 07:00 UK cut-off.
-- Playbook docs (version 6.11.1): `claude/ft-game-playbook.md` (core, with the routing table), `claude/ft-game-rules.md`, `claude/ft-game-data.md`, and the run docs `claude/ft-game-run-evening.md`, `-morning`, `-refresh`, `-weekly`, `-weekend`.
+- Playbook docs (version 6.12): `claude/ft-game-playbook.md` (core, with the routing table), `claude/ft-game-rules.md`, `claude/ft-game-data.md`, and the run docs `claude/ft-game-run-evening.md`, `-morning`, `-refresh`, `-weekly`, `-weekend`.
 - Panel file: `panel.json` on the same artifact, named by the document `store/panel`.
-- Scripts: the pipeline (version 7.4) and the screening script are assets on that artifact. Their ids and hashes are in part B of the playbook, the only place they are kept.
+- Scripts: the pipeline (version 7.7) and the screening script are assets on that artifact. Their ids and hashes are in part B of the playbook, the only place they are kept.
 - Leftover assets: the four files the 14 Oct run uploaded are superseded but kept.
 - Fetching assets: read each asset with a single `path`.
-- Rate limits and access: on 20 Oct WebFetch accepted only addresses that had appeared in a search result; a search limited to stockanalysis.com with "<name> <ticker> stock price quote" usually surfaced the quote or history page. Pages fetched without a clock suffix were often "At close" for the session (holdings, most of the list), but some history pages and the BNO, ETHA and RTX pages were stale copies. No 429 refusals in groups of four with pauses of 40 to 60 seconds.
-- Market data service: massive.com, free plan, on an account opened by Tim's father. The key is in the evening and weekly review tasks and is never written into this project's docs, the page data, alerts or messages. Not used on 20 Oct (no year of closes was needed beyond Walmart, whose statistics page was read).
-- Cboe's delayed quotes: used on 19 Oct for 23 session rows; not reachable on 20 Oct. Not yet in part F: for Tim to decide whether to add it.
-- Coin prices: Coinbase's public candle and ticker pages (not reachable on 20 Oct).
-- Sources that did not work: CNN article pages, CNBC's oil page and live-updates page (fetch error 20 Oct), Detroit News (robots); US News world article (18 Oct).
+- Price feed (from 21 Oct, data doc G8): `feed/latest.json` and `feed/live.json` in the repository. First evening use 21 Oct: the scheduled close run had not yet run at 21:31 UK, so a pushed request forced it (about one minute); a `tickers:` line for nine new names was served within about a minute too. Every list stock, SPY, the extra rows, the panel and the US yields and coins came from it; nothing was missing or refused. Two caveats: a stock first added through the panel (Analog Devices) came back with only 10 rows, and one Yahoo bar (Charles River, 21 Oct) had its open below its low.
+- Pages reached through searches on 21 Oct: tradingeconomics' commodity and UK bond pages (non-US yields, Brent, WTI, gas, gold), news articles. Benzinga quote pages served copies days or weeks old (targets not used). earnings-watcher pages were not surfaced by search, so implied moves were not refreshed.
+- Market data service: massive.com, free plan, on an account opened by Tim's father. The key is in the evening and weekly review tasks and is never written into this project's docs, the page data, alerts or messages. Not used on 21 Oct (the feed covered every price).
+- Cboe's delayed quotes: used on 19 Oct; not yet in part F: for Tim to decide whether to add it.
+- Sources that did not work: Chartmill news pages (need JavaScript, 21 Oct); CNN article pages, CNBC's oil page and live-updates page (fetch error 20 Oct), Detroit News (robots); US News world article (18 Oct).
 - GitHub mirror: private repository `timzwang/ft-game` (part B and G6), reached by scheduled runs from 19 Oct.
 - Two saved skills, `ft-game-playbook` and `stock-score`, load in scheduled runs; the project docs win where they differ.
