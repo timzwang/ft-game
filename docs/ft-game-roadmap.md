@@ -127,6 +127,11 @@ On Tue 20 Oct the scheduled evening review's fetch tool refused every address it
 
 60. Refresh tasks with the repository. [Done 21 Oct, playbook 6.12.] The 16:45, 19:22 and 14:50 UK refresh tasks dated from 9 Oct, before the repository existed, so they could not reach the feed (the same cause as 6.9's fix for the evening and weekly tasks). They were recreated from a chat with the repository attached, with the same schedule, notifications and automatic approval; the old ones are switched off, not deleted.
 
+## Phase 9: the endgame stance (added 21 Oct at Tim's request)
+
+61. Variance over guardrails. [Approved by Tim on 21 Oct, 22:38 UK; playbook 6.13, core part D.] The gap maths of 21 Oct (Claude's plan "Seeking Beta: results season and risk plan") gave the order in force about a 1% chance of reaching a top 2% line estimated at 14.5 points above the market by 27 Nov, and a high-beta book pointed one way about 10% to 21%. The score floor, trend tests, downtrend replacement, 10% caps on results, momentum and drift positions, results budget, volatility caps and theme guide are suspended to the end of the game; exits, the gate, `order_expected`, confidence ratings and the crypto rules stay. The switch is made by the 22 Oct evening review, order A (memory-led) or B (broad tech) by Western Digital's after-hours reaction.
+62. Research checks for after the results cluster. [Prepared 21 Oct on branch `claude/research-after-results`, PR #7, not deployed: the top-five panel test (item 39) and the overbought split (item 42) as a read-only `research` command. First readings: top five against the panel -0.01 points a window; overbought ratings 9 settled, 22% beat the index.]
+
 ## Still open
 
 - **The panel's Marsh & McLennan swap.** [Settled 21 Oct: Tim chose to keep MRSH. The price feed has two years for it, so the reason for the 17 Oct swap no longer holds, and the panel stays exactly as fixed on 15 Oct.]

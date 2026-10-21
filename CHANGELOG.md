@@ -6,6 +6,16 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.13 (Wed 21 Oct 2026, late evening)
+
+The endgame stance. Approved by Tim at 22:38 UK ("Yes", to suspending the guardrail rules for the rest of the game). No score, panel, pipeline, page, scan, feed or scheduled task changed. Pipeline still 7.7.
+
+- Why: Claude's gap maths of 21 Oct (20,000 simulated paths of 26 sessions; each stock's return against SPY resampled from the last 250 sessions with its average set to zero, plus options-implied results moves) put the top 2% line about 14.5 points above the market by 27 Nov. The order in force had about a 1% chance of reaching it; a high-beta book pointed one way about 10% to 21%, with about a 50% chance of finishing below the market.
+- Core playbook part D: a new "Endgame stance" block, which wins over anything in parts D and E that conflicts. Suspended: the score floor and trend tests for a new position, the downtrend replacement, the 10% caps on results, momentum and drift positions, the results budget, the volatility caps, the 45% theme guide and the 20% normal maximum. Kept: the game's rules, the 07:00 UK cut-off, confidence ratings, the trade decision gate and `order_expected`, the crypto rules, the exit rules (heavy-volume close below the open; a report gap down beyond its options move with a close in the lower half), every record and test.
+- The switch: the 22 Oct evening review sells every holding and sets order A (memory-led: Sandisk 20, Micron 15, AMD 15, Palantir 15, Arm 15, Seagate 10, Western Digital 10) or order B (Sandisk 10, AMD 15, Palantir 15, Arm 10, Shopify 15, Datadog 10, ServiceNow 10, Robinhood 10, Strategy 5) for Fri 23 Oct's open, by Western Digital's after-hours reaction to its 22 Oct results. The watchlist cap of 25 is lifted until 30 Oct.
+- Rules doc part E: a pointer to the stance at the top. State doc, roadmap (items 61 and 62).
+- Also 21 Oct: PR #7 (not merged): the top-five panel test and the overbought split as a read-only `research` command, for after the results cluster.
+
 ## 6.12.1 (Wed 21 Oct 2026, late evening)
 
 A price feed fix, asked for by Tim after the 21 Oct evening review ("Fix the issue and prevent anything similar occurring in future"). No rule, score, sizing, pipeline, page or order changed. Pipeline still 7.7.
