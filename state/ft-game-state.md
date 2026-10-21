@@ -106,6 +106,7 @@ Intake tonight: five additions. Analog Devices was first left out because the fe
 
 ## 6. Review log (newest first, keep the latest 15)
 
+- Wed 21 Oct 2026 (about 23:12): Tim relayed FT Customer Care's answer: the order cut-off stays 08:00 UK local time all year. Recorded; the 07:00 working cut-off and the 06:36 morning check stay until Tim decides.
 - Wed 21 Oct 2026 (about 23:02): Tim sent the top 2% line (rank 274, +7.46%); stored as `top2_return_pct` 7.46 on the 21 Oct reading (ledger republished); gap maths re-run with a central line of 9.5 points over the market.
 - Wed 21 Oct 2026 (about 22:58): Tim confirmed order B entered and gave the FT figures after the close (101,342, rank 3,948 of 14,357); stored with a re-run (ledger only changed; RECONCILE -36 credits) and the ledger republished.
 - Wed 21 Oct 2026 (about 22:55): Hand-run session with Tim ("get started on all of the data required now"). Ten new stocks added from the feed (two years each), results events with implied moves for every new holding, re-run of the 21 Oct session: order B for Thu 22 Oct (message 22:50 UK). Ledger checked against the 21:45 files: only the 22 Oct order, positions, expectation, day call cases, events, shadow ratings and recalculated tables changed. Stocks, ledger, history and panel republished; old assets kept.
@@ -120,7 +121,6 @@ Intake tonight: five additions. Analog Devices was first left out because the fe
 - Mon 19 Oct 2026 (about 20:40): Hand-run session with Tim after ChatGPT's follow-up review (PR #3): pipeline 7.4 (`order_expected`) and the repository data check; playbook 6.11.
 - Mon 19 Oct 2026 (about 00:35): Hand-run session with Tim after ChatGPT's repository review of 18 Oct: pipeline 7.3 and a results budget of 1.0 points for 27 to 30 Oct; playbook 6.10.
 - Sun 18 Oct 2026 (about 22:05): Tim confirmed the Mon 19 Oct order is entered; the top 2% line is about +6.5%, about 5 points above Tim.
-- Sun 18 Oct 2026 (about 21:50): Evening review, a change evening for Mon 19 Oct (Palantir out; Chevron 15 to 10; AbbVie 10). Tim's 16 Oct FT figures stored (-34 credits against the estimate). Four watchlist additions; three removals.
 
 ## 7. Market regime notes
 
@@ -145,13 +145,13 @@ Near calendar (the full calendar to 27 Nov is on the page and in the ledger):
 
 ## 8. Open questions for Tim
 
-Answered: an order entered before 08:00 UK counted for that day up to 23 Oct (from 17 Oct treat 07:00 UK as the cut-off); the midday check stays off; the leaderboard shows only the top 10; Shell filled at its 08:00 open on 9 Oct; Microsoft, Coca-Cola, Palantir, Goldman Sachs, Meta Platforms and Eli Lilly are in the game's list; the orders for 13 to 16 Oct were entered; value, rank and players after Fri 16 Oct's close; the Marsh & McLennan panel swap; GitHub access from scheduled runs; the top 2% line (about +6.5%, 18 Oct); the evening run's repository (tasks recreated 18 Oct); the fetch tool refusing built addresses in scheduled runs (answered 21 Oct by the price feed, playbook 6.12); Marsh & McLennan stays in the panel (Tim, 21 Oct about 21:44 UK: the panel stays exactly as fixed on 15 Oct, so the weekly review of 24 Oct does not swap it).
+Answered: an order entered before 08:00 UK counted for that day up to 23 Oct (from 17 Oct treat 07:00 UK as the cut-off); the midday check stays off; the leaderboard shows only the top 10; Shell filled at its 08:00 open on 9 Oct; Microsoft, Coca-Cola, Palantir, Goldman Sachs, Meta Platforms and Eli Lilly are in the game's list; the orders for 13 to 16 Oct were entered; value, rank and players after Fri 16 Oct's close; the Marsh & McLennan panel swap; GitHub access from scheduled runs; the top 2% line (about +6.5%, 18 Oct); the evening run's repository (tasks recreated 18 Oct); the cut-off after the clock change (FT Customer Care to Tim, 21 Oct: the cut-off stays 08:00 UK local time all year, through the change from BST to GMT; whether runs move back to it is Tim's call); the fetch tool refusing built addresses in scheduled runs (answered 21 Oct by the price feed, playbook 6.12); Marsh & McLennan stays in the panel (Tim, 21 Oct about 21:44 UK: the panel stays exactly as fixed on 15 Oct, so the weekly review of 24 Oct does not swap it).
 
 Still open:
 1. Is AbbVie in the game's list? Assumed yes (large NYSE listing); substitute Amgen. Tim to say if it was missing.
 2. New on 21 Oct: is Hasbro in the game's list? Assumed yes (large Nasdaq listing); if missing, leave the 5% with Eli Lilly (15%) for that day and say so.
 3. Are Strategy and Coinbase in the game's list? Not needed until one is close to being bought.
-4. The cut-off after the clock change: 07:00 or 08:00 UK. Tim asked FT help on 18 Oct. 07:00 UK stays until the FT answers. Tim will also ask how a mixed London and US order entered for 26 Nov (US closed) fills (21 Oct).
+4. How a mixed London and US order entered for 26 Nov (US closed) fills: Tim to ask FT help (the cut-off question was answered on 21 Oct).
 5. Does the game convert US stocks' returns into pounds? In the draft to FT help; the closing gap has stayed under 0.05%.
 
 ## 9. Game rules
