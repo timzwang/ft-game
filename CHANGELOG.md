@@ -6,6 +6,16 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.12.1 (Wed 21 Oct 2026, late evening)
+
+A price feed fix, asked for by Tim after the 21 Oct evening review ("Fix the issue and prevent anything similar occurring in future"). No rule, score, sizing, pipeline, page or order changed. Pipeline still 7.7.
+
+- Why: the 21 Oct evening review named nine new tickers on a `tickers:` line. Analog Devices, a panel member not yet in the price store, came back with only ten rows: `feed.py` treated its close-only panel series as a stored history and sent no two-year series. Its score was unusable, so the run left it off the watchlist. AT&T, also a panel member, lost its drift entry's volume, 50-day and 200-day figures the same way.
+- Feed version 1.1 (`feed/feed.py`, commit `2b276c4`): a new `wants_long` rule sends the two-year series to every list or requested stock outside the price store, panel members included. Panel-only members keep their ten rows, so the file does not grow each night. `meta.short_history` in `latest.json`, a line in `latest.md` and the job log name any list or requested stock still short of 200 sessions after the feed.
+- Docs (uploaded to the Project from these files): the evening run doc, step 4, now checks each new candidate's history after `feed`; one still short is re-requested once before it is left out, and never scored on a short history. Data doc G8 step 2; core playbook version line.
+- Tests: `test_feed_long_series_for_a_requested_panel_member`, 159 in all, all passing.
+- Applied the same evening: the forced feed run on 1.1 (20:58 UTC) gave ADI 551 rows and reported no short histories. The review was re-run from the same input files with Analog Devices added (score 64, strong) and AT&T's drift row completed (still FAIL: reaction, held and trend). Stocks, ledger, history and panel were republished (macro unchanged). The order for Thu 22 Oct is unchanged.
+
 ## 6.12 (Wed 21 Oct 2026, afternoon)
 
 A price feed that does not depend on fetching pages, and pipeline 7.7 (7.6 plus a `feed` command) deployed. Approved by Tim on 21 Oct, 12:29 UK. No rule, score, sizing, panel rule, scan rule or order changed. Pipeline 7.7: asset `97024e28a7cbb015b5fdc48c6d4b68cf`, sha256 `abbb29c46723461bb44f83e15db8a4317e19daf3168d078daa5c8615abd74bbd`; 7.4 (asset `30bd733ca18434b8f577f2d57c3813e3`) kept as the rollback.

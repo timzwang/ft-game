@@ -279,13 +279,32 @@ def uk_final(now_uk, last_bar):
     return not (last_bar == now_uk.date() and (now_uk.hour, now_uk.minute) < (16, 45))
 
 
-def bar_rows(df):
+def consistent_range(row):
+    """Yahoo's first bar after the close sometimes has its open or close outside its own high and low (21 Oct 2026:
+    Charles River open 313.83 against a low of 315.825; UnitedHealth open 421.80 against a high of 421.47, which the
+    later bar corrected to 421.80). The pipeline skips such a row, so the day goes unscored. The official open and
+    close are prices that traded, so the range is widened to include them. Returns True when it changed the row."""
+    o, h, lo, c = row.get("open"), row.get("high"), row.get("low"), row.get("close")
+    if None in (h, lo):
+        return False
+    pts = [x for x in (o, c) if x is not None]
+    new_h, new_lo = max([h] + pts), min([lo] + pts)
+    if (new_h, new_lo) == (h, lo):
+        return False
+    row["high"], row["low"] = new_h, new_lo
+    return True
+
+
+def bar_rows(df, widened=None):
     rows = []
     for d, r in df.iterrows():
-        rows.append({"date": d.strftime("%Y-%m-%d"), "open": rnd(r.get("Open")), "high": rnd(r.get("High")),
-                     "low": rnd(r.get("Low")), "close": rnd(r.get("Close")),
-                     "volume": (int(r["Volume"]) if r.get("Volume") is not None and not math.isnan(float(r["Volume"]))
-                                and float(r["Volume"]) > 0 else None)})
+        row = {"date": d.strftime("%Y-%m-%d"), "open": rnd(r.get("Open")), "high": rnd(r.get("High")),
+               "low": rnd(r.get("Low")), "close": rnd(r.get("Close")),
+               "volume": (int(r["Volume"]) if r.get("Volume") is not None and not math.isnan(float(r["Volume"]))
+                          and float(r["Volume"]) > 0 else None)}
+        if consistent_range(row) and widened is not None:
+            widened.append(row["date"])
+        rows.append(row)
     return rows
 
 
@@ -425,7 +444,7 @@ def run_close(repo, out, force=False):
         except ValueError:
             pass
 
-    result, missing, mismatched, stale, short = {}, [], [], [], []
+    result, missing, mismatched, stale, short, ranges = {}, [], [], [], [], []
     wanted = wanted_tickers(repo)
     for t, m in sorted(tickers.items()):
         s = sym[t]
@@ -441,7 +460,10 @@ def run_close(repo, out, force=False):
         if df.empty:
             missing.append(t)
             continue
-        rows = bar_rows(df)
+        wid = []
+        rows = bar_rows(df, wid)
+        if wid and wid[-1] >= rows[max(0, len(rows) - ROWS_KEPT)]["date"]:
+            ranges.append(f"{t} {','.join(x for x in wid if x >= rows[max(0, len(rows) - ROWS_KEPT)]['date'])}")
         last_row = rows[-1]["date"]
         st = stored.get(t) or panel_closes.get(t) or {}
         check = compare(rows[-ROWS_KEPT - 15:], st)    # the last 25 sessions against the store (or the panel's closes)
@@ -479,14 +501,14 @@ def run_close(repo, out, force=False):
                 macro["futures"][k] = {"symbol": s, "date": df.index[-1].strftime("%Y-%m-%d"), "close": rnd(df["Close"].iloc[-1])}
     meta = {"feed_version": FEED_VERSION, "mode": "close", "generated_utc": datetime.now(UTC).isoformat(timespec="seconds"),
             "session_us": session_us, "session_uk": session_uk, "tickers": len(result), "missing": missing,
-            "stale": stale, "mismatched": mismatched, "short_history": short,
+            "stale": stale, "mismatched": mismatched, "short_history": short, "ranges_widened": ranges,
             "tolerances_pct": {"close": TOL_CLOSE, "open_high_low": TOL_OHL},
             "source": "Yahoo Finance daily bars through yfinance (auto_adjust off), checked against data/history.json; "
                       "US Treasury daily par yield curve CSV; Coinbase Exchange hourly candles"}
     write_json(os.path.join(out, "latest.json"), {"meta": meta, "tickers": result, "macro": macro})
     write_md(os.path.join(out, "latest.md"), meta, result, macro)
     log(f"written: {len(result)} tickers; missing {missing or 'none'}; stale {stale or 'none'}; mismatched {mismatched or 'none'}; "
-        f"short of {LONG_IF_STORED_BELOW} sessions {short or 'none'}")
+        f"short of {LONG_IF_STORED_BELOW} sessions {short or 'none'}; ranges widened {ranges or 'none'}")
     return 0
 
 
@@ -543,7 +565,9 @@ def write_md(path, meta, result, macro):
           f"- Disagree with the stored prices (close beyond {TOL_CLOSE}% or open, high, low beyond {TOL_OHL}%): "
           f"{', '.join(meta['mismatched']) or 'none'}",
           f"- List or requested stocks still short of {LONG_IF_STORED_BELOW} sessions after this feed: "
-          f"{', '.join(meta.get('short_history') or []) or 'none'}", "",
+          f"{', '.join(meta.get('short_history') or []) or 'none'}",
+          f"- Bars whose high and low were widened to include their own open or close (last ten sessions): "
+          f"{'; '.join(meta.get('ranges_widened') or []) or 'none'}", "",
           "| Ticker | Yahoo | Session | Open | High | Low | Close | Volume | Check | Max close gap | Max open gap |",
           "|---|---|---|---|---|---|---|---|---|---|---|"]
     for t, e in sorted(result.items()):

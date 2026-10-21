@@ -1,6 +1,6 @@
 # FT Stock Picking Game: state and log
 
-Last updated: Wed 21 Oct 2026, about 21:45 UK (evening review, a change evening: for Thu 22 Oct, Hasbro 5% added as a drift position and Eli Lilly cut from 15% to 10%, message sent about 21:39 UK; day -0.34% against SPY +0.53%; four watchlist additions, Walmart removed; price feed and broad scan both current after a forced run). Before that, Wed 21 Oct 2026, about 14:30 UK (hand-run session with Tim: playbook 6.12, the price feed on GitHub and pipeline 7.7). Earlier entries: see the review log (section 6).
+Last updated: Wed 21 Oct 2026, about 21:45 UK (evening review, a change evening: for Thu 22 Oct, Hasbro 5% added as a drift position and Eli Lilly cut from 15% to 10%, message sent about 21:39 UK; day -0.34% against SPY +0.53%; five watchlist additions, Walmart removed; price feed and broad scan both current after a forced run). About 22:05 UK, at Tim's request: the feed fault that kept Analog Devices off the list was fixed (feed 1.1, playbook 6.12.1), the review re-run with it added and the files republished; order unchanged. Before that, Wed 21 Oct 2026, about 14:30 UK (hand-run session with Tim: playbook 6.12, the price feed on GitHub and pipeline 7.7). Earlier entries: see the review log (section 6).
 
 This doc is the narrative record for Tim's entry, "Seeking Beta". The procedure for every run is in `claude/ft-game-playbook.md` (the core doc) and the docs its routing table names. The numbers (prices, scores, daily performance, contributions, ratings and their outcomes, the full calendar, analyst changes, alerts, the panel test, the drift record) live in the data files behind Tim's page and the panel file, and are produced by the pipeline script; this doc carries the decisions and the reasons.
 
@@ -12,7 +12,7 @@ Scheduled runs: evening review 21:30 UK Sun to Thu; morning check 06:36 UK Mon t
 
 ## 1. Status
 
-- **Playbook version 6.12** (6.12, 21 Oct afternoon: the price feed, a GitHub job whose `feed/latest.json` and `feed/live.json` the evening and weekly reviews and the price refreshes read first (data doc G8), pipeline 7.7 (7.6 plus the `feed` command) deployed, every page in a scheduled run reached through a search, the refresh tasks recreated with the repository; 6.11.1, 19 Oct late evening: the 26 Oct cut-off test removed at Tim's request; 6.11, 19 Oct evening: pipeline 7.4, `order_expected` with every change of order, and the repository's data check; 6.10, 19 Oct: pipeline 7.3 and a results budget of 1.0 points for reports dated 27 to 30 Oct; 6.9, 18 Oct: evening and weekly review tasks recreated with the repository attached; 6.8: G6 and G7 step 1; 6.7: pipeline 7.2, stricter price handling; 6.6: the handoff log; 6.5: the standstill test corrected; 6.4: after the outside audit, pipeline 7, 07:00 UK cut-off, score frozen; 6.3: the broad scan; 6.2: the day call never moves cash, "overbought" is a warning only; 6: split docs, panel test, earnings-drift scan). **Pipeline script version 7.7** (part B holds the asset id and hash).
+- **Playbook version 6.12.1** (6.12.1, 21 Oct late evening: feed 1.1 sends two years to every list or requested stock outside the price store, panel members included, and names any still short; the evening run re-requests a short candidate once before leaving it out; 6.12, 21 Oct afternoon: the price feed, a GitHub job whose `feed/latest.json` and `feed/live.json` the evening and weekly reviews and the price refreshes read first (data doc G8), pipeline 7.7 (7.6 plus the `feed` command) deployed, every page in a scheduled run reached through a search, the refresh tasks recreated with the repository; 6.11.1, 19 Oct late evening: the 26 Oct cut-off test removed at Tim's request; 6.11, 19 Oct evening: pipeline 7.4, `order_expected` with every change of order, and the repository's data check; 6.10, 19 Oct: pipeline 7.3 and a results budget of 1.0 points for reports dated 27 to 30 Oct; 6.9, 18 Oct: evening and weekly review tasks recreated with the repository attached; 6.8: G6 and G7 step 1; 6.7: pipeline 7.2, stricter price handling; 6.6: the handoff log; 6.5: the standstill test corrected; 6.4: after the outside audit, pipeline 7, 07:00 UK cut-off, score frozen; 6.3: the broad scan; 6.2: the day call never moves cash, "overbought" is a warning only; 6: split docs, panel test, earnings-drift scan). **Pipeline script version 7.7** (part B holds the asset id and hash).
 - **Estimated value at Wed 21 Oct close: 101,378, +1.38% since the start, against -0.41% for the S&P 500 fund (gap +1.78 points).** Wed 21 Oct -0.34% against SPY +0.53%: Coca-Cola -0.17 points, Eli Lilly -0.15, AbbVie -0.15; Chevron +0.05, Shell +0.04, Microsoft +0.03, Exxon +0.02. Tech led, defensives and health care lagged (Tuesday's rotation reversed). Tue 20 Oct: 101,725.
 - **Last FT figures: Fri 16 Oct after the close, 101,402 (+1.40%), rank 3,269 of 13,918 (top 23.5%).** RECONCILE -34 credits (-0.03%). Top 2% line about +6.5% (Tim's screenshots of 18 Oct; stored as `top2_return_pct` 6.5); gap to the line now roughly 5.1 points on the estimate.
 - **Standstill (21 Oct run):** change for 13 Oct +0.61 (complete); 14 Oct -0.48 (complete); 15 Oct +0.50 (complete); 16 Oct -0.27 (four sessions); 19 Oct -0.43 (three). Week of 12 Oct +0.12; week of 19 Oct -0.43 so far. Inception (now fully priced, nine sessions): -0.62 as entered, -1.30 fully invested: the first order, never changed, would have done better so far. Expected benefit: the change for 22 Oct carries +0.05 (waiting to fill).
@@ -59,7 +59,7 @@ Changes: add Hasbro 5 (drift position, second-session test passed); Eli Lilly 15
 
 ## 4. Watchlist
 
-Scores and bands at the Wed 21 Oct close. 22 names. Added Charles River Laboratories, Centene, Targa Resources, NetApp. Removed Walmart (rotate out). Hasbro moved into the order.
+Scores and bands at the Wed 21 Oct close. 23 names. Added Charles River Laboratories, Centene, Targa Resources, Analog Devices, NetApp. Removed Walmart (rotate out). Hasbro moved into the order.
 
 | Name | Band | Status | Score | Flags | Next results | Promote if |
 |---|---|---|---|---|---|---|
@@ -77,6 +77,7 @@ Scores and bands at the Wed 21 Oct close. 22 names. Added Charles River Laborato
 | Centene | Strong | Watching (added 21 Oct) | 65 | none (a -40% day in July 2025 is in its history) | 28 Oct (est.) | Not before results; managed care read from Elevance |
 | UnitedHealth | Strong | Ready | 64 | none | Jan 2027 (est.) | Up to 10% if a holding weakens |
 | Marathon Petroleum | Strong | Watching | 63 | extended | 3 Nov | 5% at most while extended |
+| Analog Devices | Strong | Watching (added 21 Oct) | 64 | none | 25 Nov (est.) | Chip exposure if the tech rebound holds (correlation -0.37 with the order) |
 | NetApp | Strong | Watching (added 21 Oct) | 63 | none | 25 Nov (est.) | Tech exposure if the rebound holds; cap 5% |
 | Strategy (crypto tracker) | Strong | Watching | 62 | golden cross 19 Oct; moves with Bitcoin | 29 Oct (est.) | Kept whatever it scores |
 | Amgen | Strong | Watching | 62 | none | 3 Nov, after US close | Steady name (cap 20%) |
@@ -85,7 +86,7 @@ Scores and bands at the Wed 21 Oct close. 22 names. Added Charles River Laborato
 | Meta Platforms | Middling | Results ahead | 50 | golden cross 6 Oct | reported 21 Oct, after US close | Drift tests on 22 Oct's session |
 | Coinbase (crypto tracker) | Weak | Watching | 44 | downtrend; below 50-day | 29 Oct, after US close | Kept whatever it scores |
 
-Intake tonight: four additions, fewer than five, because Analog Devices (a scan leader) had only 10 stored rows from the feed, so its score was not usable; it is left for another night. Consensus targets for the four came from Benzinga pages that were days or weeks old, so targets were left empty for Charles River, Centene and Targa. Candidates not yet checked: Viatris, Biogen, Illumina, Devon Energy, Ross Stores, Tate & Lyle, Rotork.
+Intake tonight: five additions. Analog Devices was first left out because the feed gave it only 10 rows (a feed fault, fixed the same evening in feed 1.1) and was added on the re-run with two years of rows. Consensus targets for the four came from Benzinga pages that were days or weeks old, so targets were left empty for Charles River, Centene and Targa. Candidates not yet checked: Viatris, Biogen, Illumina, Devon Energy, Ross Stores, Tate & Lyle, Rotork.
 
 ## 5. Trade log
 
@@ -103,6 +104,7 @@ Intake tonight: four additions, fewer than five, because Analog Devices (a scan 
 
 ## 6. Review log (newest first, keep the latest 15)
 
+- Wed 21 Oct 2026 (about 22:10): At Tim's request after the evening review: feed 1.1 (`2b276c4`; a panel member requested as a candidate had been sent only 10 rows), playbook 6.12.1 (evening run step 4, data doc G8), regression test (159 pass). Review re-run with Analog Devices added (score 64, strong); AT&T's drift row completed (still FAIL); stocks, ledger, history and panel files republished. Order unchanged.
 - Wed 21 Oct 2026 (about 21:45): Evening review, a change evening for Thu 22 Oct (Hasbro 5 added as a drift position; Eli Lilly 15 to 10). Day -0.34% against SPY +0.53% (Coca-Cola, Lilly, AbbVie -0.15 to -0.17 points each as tech led and defensives lagged). Drift scan: Elevance, AT&T, Netflix all FAIL. Watchlist: added Charles River Laboratories, Centene, Targa Resources, NetApp; removed Walmart. Price feed: forced (request pushed 21:32 UK, close run at 21:32 UK, second run for nine new tickers at 21:36 UK); broad scan: forced. Charles River's 21 Oct row from the feed had its open below its low (Yahoo); the low was set to the open (313.83, which matches the range StocksToTrade reported). Files published.
 - Wed 21 Oct 2026 (about 14:30): Hand-run session with Tim. Playbook 6.12: the price feed on GitHub (`feed/`, data doc G8) after the 20 Oct fetch refusals; pipeline 7.7 (7.6 from PR #6 plus the `feed` command) deployed, byte-identical to 7.6 on the snapshot and the 20 Oct mirror; page wording from 19 Oct deployed; refresh tasks recreated with the repository. Order, watchlist, score and rules unchanged.
 - Tue 20 Oct 2026 (about 22:05): Evening review, quiet: no change for Wed 21 Oct. Day +0.62% against SPY +0.34% (Lilly +0.52 points at a record). Drift scan: Hasbro ENTER (not bought: watchlist "Drift: day 1"), Equifax FAIL. WebFetch refused every address that had not first appeared in a search result. Files published.
@@ -117,7 +119,6 @@ Intake tonight: four additions, fewer than five, because Analog Devices (a scan 
 - Sun 18 Oct 2026 (about 01:20): Hand-run session with Tim. Playbook 6.6: the handoff log.
 - Sun 18 Oct 2026 (about 01:00): Hand-run session with Tim. Playbook 6.5 and pipeline 7.1, the corrected standstill test.
 - Sun 18 Oct 2026 (about 00:30): Hand-run session with Tim after the outside audit by ChatGPT. Playbook 6.4 and pipeline 7; morning check 06:36 UK and a 07:00 UK cut-off; score frozen.
-- Sat 17 Oct 2026 (about 20:25): Weekend news check (H7). No A item. Order unchanged.
 
 ## 7. Market regime notes
 
@@ -222,18 +223,18 @@ In this game an order fills at the open, so the gap on the news day cannot be ca
 - Confidence ratings (not calibrated): 13 resolved by 21 Oct. Latest: Eli Lilly (14 Oct) beat. Earlier: Meta 57 lagged, RTX 60 beat, Lockheed 55 beat, Nvidia 50 lagged, Shell 59 beat, TSMC 53 lagged, Coca-Cola 55 beat, Goldman 54 beat, Microsoft 58 beat, Palantir 58 lagged. Far too few to judge. Ratings for the order of 22 Oct: Exxon 60, AbbVie 60, Coca-Cola 59, Shell 59, Chevron 59, Eli Lilly 59, Microsoft 57, Hasbro 57.
 - Shadow ratings: 213 logged, 88 settled. Live: score 70 and above, 30 cases, 67% beat the index (+0.77 points); 60 to 69, 25 cases, 40% (-3.47); 45 to 59, 17 cases, 18% (-2.70); below 45, 16 cases, 81% (+2.41). Weak evidence, few dates. Judgement test: no settled dates yet.
 - Panel test: see section 1. Old backtest (hindsight) correlation -0.09.
-- Drift record: Hasbro ENTER and Equifax FAIL (20 Oct); Elevance, AT&T and Netflix FAIL (21 Oct; AT&T's revenue consensus and trend figures missing). All settle five sessions after their reaction days. Meta (22 Oct), Valero and Procter & Gamble (22 Oct) are the next likely entries.
+- Drift record: Hasbro ENTER and Equifax FAIL (20 Oct); Elevance, AT&T and Netflix FAIL (21 Oct; AT&T's revenue consensus missing; its volume and trend figures, first missing through the feed fault, were filled on the re-run: trend fails). All settle five sessions after their reaction days. Meta (22 Oct), Valero and Procter & Gamble (22 Oct) are the next likely entries.
 - Day call record (S&P 500): 4 right of 7. 21 Oct: S&P 500 green called and right; portfolio green called and wrong.
 
 ## 12. Tools
 
 - Tim's page: https://claude.ai/artifact/8P8UwQsb4QsbZMsKNYKrUJ, pinned in his Claude sidebar, with tabs Today, Macro, Performance, Risk, Calendar and Log. It reads four data files (`stocks`, `ledger`, `history`, `macro`) and a fifth dataset, `logos`, that no run touches. The Order panel reads the latest alert whose `stock` is "Order"; its "Enter before" bar uses a 07:00 UK cut-off.
-- Playbook docs (version 6.12): `claude/ft-game-playbook.md` (core, with the routing table), `claude/ft-game-rules.md`, `claude/ft-game-data.md`, and the run docs `claude/ft-game-run-evening.md`, `-morning`, `-refresh`, `-weekly`, `-weekend`.
+- Playbook docs (version 6.12.1): `claude/ft-game-playbook.md` (core, with the routing table), `claude/ft-game-rules.md`, `claude/ft-game-data.md`, and the run docs `claude/ft-game-run-evening.md`, `-morning`, `-refresh`, `-weekly`, `-weekend`.
 - Panel file: `panel.json` on the same artifact, named by the document `store/panel`.
 - Scripts: the pipeline (version 7.7) and the screening script are assets on that artifact. Their ids and hashes are in part B of the playbook, the only place they are kept.
 - Leftover assets: the four files the 14 Oct run uploaded are superseded but kept.
 - Fetching assets: read each asset with a single `path`.
-- Price feed (from 21 Oct, data doc G8): `feed/latest.json` and `feed/live.json` in the repository. First evening use 21 Oct: the scheduled close run had not yet run at 21:31 UK, so a pushed request forced it (about one minute); a `tickers:` line for nine new names was served within about a minute too. Every list stock, SPY, the extra rows, the panel and the US yields and coins came from it; nothing was missing or refused. Two caveats: a stock first added through the panel (Analog Devices) came back with only 10 rows, and one Yahoo bar (Charles River, 21 Oct) had its open below its low.
+- Price feed (from 21 Oct, data doc G8): `feed/latest.json` and `feed/live.json` in the repository. First evening use 21 Oct: the scheduled close run had not yet run at 21:31 UK, so a pushed request forced it (about one minute); a `tickers:` line for nine new names was served within about a minute too. Every list stock, SPY, the extra rows, the panel and the US yields and coins came from it; nothing was missing or refused. Two caveats: a panel member requested as a candidate (Analog Devices) came back with only 10 rows, a feed fault fixed in feed 1.1 the same evening (`meta.short_history` now names any list or requested stock still short of 200 sessions); and one Yahoo bar (Charles River, 21 Oct) had its open below its low.
 - Pages reached through searches on 21 Oct: tradingeconomics' commodity and UK bond pages (non-US yields, Brent, WTI, gas, gold), news articles. Benzinga quote pages served copies days or weeks old (targets not used). earnings-watcher pages were not surfaced by search, so implied moves were not refreshed.
 - Market data service: massive.com, free plan, on an account opened by Tim's father. The key is in the evening and weekly review tasks and is never written into this project's docs, the page data, alerts or messages. Not used on 21 Oct (the feed covered every price).
 - Cboe's delayed quotes: used on 19 Oct; not yet in part F: for Tim to decide whether to add it.

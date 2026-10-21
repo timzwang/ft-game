@@ -248,3 +248,15 @@ def test_feed_long_series_for_a_requested_panel_member(tmp_path):
     (tmp_path / "data" / "stocks.json").write_text(json.dumps([{"ticker": "XOM"}, {"ticker": "CASH", "group": "Cash"}]))
     (tmp_path / "feed" / "request.txt").write_text("tickers: ADI\n")
     assert f.wanted_tickers(str(tmp_path)) == {"XOM", "ADI"}
+
+
+def test_feed_widens_a_bar_that_excludes_its_own_open():
+    """Feed 1.1: Yahoo's first bar after the close can have its open outside its own range (Charles River and
+    UnitedHealth, 21 Oct 2026). The range is widened to include the open and close; a sound bar is left alone."""
+    f = _feed_mod()
+    crl = {"date": "2026-10-21", "open": 313.83, "high": 348.95, "low": 315.825, "close": 344.87, "volume": 1}
+    unh = {"date": "2026-10-21", "open": 421.8, "high": 421.47, "low": 415.0, "close": 417.0, "volume": 1}
+    ok = {"date": "2026-10-21", "open": 100.0, "high": 101.0, "low": 99.0, "close": 100.5, "volume": 1}
+    assert f.consistent_range(crl) and crl["low"] == 313.83 and crl["high"] == 348.95
+    assert f.consistent_range(unh) and unh["high"] == 421.8 and unh["low"] == 415.0
+    assert not f.consistent_range(ok) and ok["high"] == 101.0 and ok["low"] == 99.0
