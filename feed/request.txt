@@ -3,3 +3,4 @@
 2026-10-21 16:46 UK live request (price refresh)
 2026-10-21 19:23 UK live
 tickers: ELV NFLX T CNC CRL TRGP ADI NTAP ROST
+tickers: ADI T
