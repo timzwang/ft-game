@@ -1,14 +1,14 @@
 # Last sync
 
-Run: evening review (re-run after feed 1.1), 2026-10-21T21:02:22Z; state doc updated by a hand-run session, 2026-10-21T21:29:23Z (Tim's answers recorded; data files unchanged). Prices as of: Wed 21 Oct close.
+Run: hand-run session with Tim (endgame switch, re-run of the 21 Oct session with order B), 2026-10-21T21:49:35Z. Prices as of: Wed 21 Oct close.
 
 sha256 of each file as published to the artifact and the Project:
 
 ~~~
-b5ea77b00c631f46730600cbb9d3cf8aabcd67d0150c4136780b820fb7fef84f  data/history.json
-5c82ac363b11a7d81531973e37c14c9832d7d7775c32db26af68f4fd951fba41  data/ledger.json
+0226dec18004be87e127b3540ce652c1d210e7f102de7ad4daa14264eeb337f4  data/history.json
+6d9a871c43c1c8f30f6b2cf6ba6df72ada37f0623115389dd79311fc065e1cb2  data/ledger.json
 5b877e05f6852fa6ab3bd8f4a67db9f992c2e68a76ace414589c129f9e900d6a  data/macro.json
-9129ff99f92c81c49b127bbec458f0b7bff1d3a9cf56117c2148584d1be8bb76  data/panel.json
-3b263a33dba51f6d9185af56c4373ab52fd73637ee759bcd0381251cb42e07af  data/stocks.json
-4bbb5f6e28ef89a120a5812ca38cf55308b1b7e9b27fafb01baae748382f59e5  state/ft-game-state.md
+d8b8a88281e6737d61781203cb09416e38e511bd3abb738d97f08e57404347a2  data/panel.json
+1665c9bee4377ab381200694735b7b7fa281e6db07ed0a9962dc293f4a1a95ba  data/stocks.json
+e8998c973b6a140a02782811def5b02658b34a33d3c7a6f9b402644454717891  state/ft-game-state.md
 ~~~
