@@ -39,7 +39,7 @@ import traceback
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-FEED_VERSION = "1 (21 Oct 2026)"
+FEED_VERSION = "1.1 (21 Oct 2026)"
 NY = ZoneInfo("America/New_York")
 UK = ZoneInfo("Europe/London")
 UTC = timezone.utc
@@ -178,6 +178,37 @@ def build_list(repo):
                 panel_closes[t] = {d: {"open": c, "high": c, "low": c, "close": c, "volume": None}
                                    for d, c in (panel.get("closes") or {}).get(t, [])}
     return tickers, stored, panel_closes
+
+
+def wanted_tickers(repo):
+    """The stocks a run will score: the list (data/stocks.json) and the tickers on 'tickers:' request lines."""
+    out = set(requested_tickers(os.path.join(repo, "feed", "request.txt")))
+    try:
+        for s in json.load(open(os.path.join(repo, "data", "stocks.json"))):
+            if s.get("ticker") and s.get("group") != "Cash":
+                out.add(s["ticker"])
+    except (OSError, ValueError):
+        pass
+    return out
+
+
+def wants_long(t, stored, panel_closes, wanted=()):
+    """Whether a ticker gets the long series (about two years of full daily rows).
+
+    - A stock in the price store with fewer than 200 rows (the pipeline works averages out from 200 stored closes).
+    - A stock not in the price store that the runs score (on the list or named on a 'tickers:' line), whether or not
+      it is a panel member: the panel's closes live in data/panel.json, carry no open, high, low or volume, and never
+      reach history.json, so they cannot stand in for a stored history. Until 1.1 (21 Oct 2026) a panel member with a
+      full panel series got only ten rows when it was requested as a candidate (Analog Devices, 21 Oct).
+    - Any other ticker not in the store and not in the panel.
+    - A panel member with fewer than 480 panel closes (the panel test wants two years).
+    """
+    n_stored = len(stored.get(t, {}))
+    if t in stored and n_stored < LONG_IF_STORED_BELOW:
+        return True
+    if t not in stored and (t in wanted or t not in panel_closes):
+        return True
+    return t in panel_closes and len(panel_closes[t]) < PANEL_LONG_BELOW
 
 
 # ------------------------------------------------------------------ prices
@@ -394,7 +425,8 @@ def run_close(repo, out, force=False):
         except ValueError:
             pass
 
-    result, missing, mismatched, stale = {}, [], [], []
+    result, missing, mismatched, stale, short = {}, [], [], [], []
+    wanted = wanted_tickers(repo)
     for t, m in sorted(tickers.items()):
         s = sym[t]
         df = data.get(s)
@@ -420,9 +452,10 @@ def run_close(repo, out, force=False):
                  "sessions_available": len(rows), "stored_rows": len(stored.get(t, {})), "check": check}
         if t in panel_closes:
             entry["panel_closes"] = len(panel_closes[t])
-        if (t in stored and len(stored[t]) < LONG_IF_STORED_BELOW) or (t not in stored and t not in panel_closes) \
-                or (t in panel_closes and len(panel_closes[t]) < PANEL_LONG_BELOW):
+        if wants_long(t, stored, panel_closes, wanted):
             entry["long"] = rows
+        if t in wanted and len(stored.get(t, {})) < LONG_IF_STORED_BELOW and len(entry.get("long") or entry["rows"]) < LONG_IF_STORED_BELOW:
+            short.append(t)    # a list or requested stock that will still be short of 200 closes after this feed
         if last_row != cut:
             stale.append(t)
         if check["status"] == "mismatch":
@@ -446,13 +479,14 @@ def run_close(repo, out, force=False):
                 macro["futures"][k] = {"symbol": s, "date": df.index[-1].strftime("%Y-%m-%d"), "close": rnd(df["Close"].iloc[-1])}
     meta = {"feed_version": FEED_VERSION, "mode": "close", "generated_utc": datetime.now(UTC).isoformat(timespec="seconds"),
             "session_us": session_us, "session_uk": session_uk, "tickers": len(result), "missing": missing,
-            "stale": stale, "mismatched": mismatched,
+            "stale": stale, "mismatched": mismatched, "short_history": short,
             "tolerances_pct": {"close": TOL_CLOSE, "open_high_low": TOL_OHL},
             "source": "Yahoo Finance daily bars through yfinance (auto_adjust off), checked against data/history.json; "
                       "US Treasury daily par yield curve CSV; Coinbase Exchange hourly candles"}
     write_json(os.path.join(out, "latest.json"), {"meta": meta, "tickers": result, "macro": macro})
     write_md(os.path.join(out, "latest.md"), meta, result, macro)
-    log(f"written: {len(result)} tickers; missing {missing or 'none'}; stale {stale or 'none'}; mismatched {mismatched or 'none'}")
+    log(f"written: {len(result)} tickers; missing {missing or 'none'}; stale {stale or 'none'}; mismatched {mismatched or 'none'}; "
+        f"short of {LONG_IF_STORED_BELOW} sessions {short or 'none'}")
     return 0
 
 
@@ -507,7 +541,9 @@ def write_md(path, meta, result, macro):
           f"- Missing: {', '.join(meta['missing']) or 'none'}",
           f"- Last bar not the session: {', '.join(meta['stale']) or 'none'}",
           f"- Disagree with the stored prices (close beyond {TOL_CLOSE}% or open, high, low beyond {TOL_OHL}%): "
-          f"{', '.join(meta['mismatched']) or 'none'}", "",
+          f"{', '.join(meta['mismatched']) or 'none'}",
+          f"- List or requested stocks still short of {LONG_IF_STORED_BELOW} sessions after this feed: "
+          f"{', '.join(meta.get('short_history') or []) or 'none'}", "",
           "| Ticker | Yahoo | Session | Open | High | Low | Close | Volume | Check | Max close gap | Max open gap |",
           "|---|---|---|---|---|---|---|---|---|---|---|"]
     for t, e in sorted(result.items()):

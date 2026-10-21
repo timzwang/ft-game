@@ -227,3 +227,24 @@ def test_feed_tops_up_the_panel(pl, repo, tmp_path, today_file, stored):
     assert "FEED PANEL REFUSED" in out and t_bad in out
     again, _ = run_feed(pl, repo, tmp_path, today_file, feed, panel=str(repo / "data/panel.json"))
     assert again["panel_history"][t_ok] == [{"date": SESSION, "close": 10.5}]     # not added twice
+
+
+def test_feed_long_series_for_a_requested_panel_member(tmp_path):
+    """Feed 1.1 (21 Oct 2026): a panel member requested as a candidate, with no rows in the price store, gets the
+    long series. Panel closes carry no open, high, low or volume and never reach history.json, so they cannot stand
+    in for a stored history (Analog Devices got ten rows on 21 Oct and could not be scored)."""
+    f = _feed_mod()
+    full_panel = {f"2025-{i:04d}": {} for i in range(500)}           # 500 panel closes: the panel needs no top-up
+    stored = {"XOM": {f"d{i}": {} for i in range(250)}, "NEW": {f"d{i}": {} for i in range(30)}}
+    panel = {"ADI": full_panel, "HPE": {}}
+    assert f.wants_long("ADI", stored, panel, wanted={"ADI"})          # requested: the bug case
+    assert not f.wants_long("ADI", stored, panel, wanted=set())        # panel only, not scored: ten rows are enough
+    assert f.wants_long("HPE", stored, panel, wanted=set())            # a panel member short of two years
+    assert f.wants_long("NEW", stored, panel, wanted={"NEW"})          # a list stock short of 200 stored rows
+    assert not f.wants_long("XOM", stored, panel, wanted={"XOM"})      # a full store
+    assert f.wants_long("CRL", stored, panel, wanted=set())            # not stored, not in the panel
+    (tmp_path / "data").mkdir()
+    (tmp_path / "feed").mkdir()
+    (tmp_path / "data" / "stocks.json").write_text(json.dumps([{"ticker": "XOM"}, {"ticker": "CASH", "group": "Cash"}]))
+    (tmp_path / "feed" / "request.txt").write_text("tickers: ADI\n")
+    assert f.wanted_tickers(str(tmp_path)) == {"XOM", "ADI"}
