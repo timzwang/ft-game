@@ -1839,6 +1839,75 @@ def panel_rows(panel, hist, bench, date):
     return rows, summary
 
 
+def _block_boot(vals, reps=2000, block=4, seed=15, lo=5.0, hi=95.0):
+    """Percentile interval for the mean of vals by a moving-block bootstrap (blocks of `block` consecutive dates, so a run
+    of similar markets is resampled together). Deterministic: the same inputs always give the same interval."""
+    n = len(vals)
+    if n < 2:
+        return None, None
+    import random
+    rng = random.Random(seed)
+    b = max(1, min(block, n))
+    starts = list(range(n - b + 1))
+    means = []
+    for _ in range(reps):
+        xs = []
+        while len(xs) < n:
+            s0 = rng.choice(starts)
+            xs.extend(vals[s0:s0 + b])
+        xs = xs[:n]
+        means.append(sum(xs) / n)
+    means.sort()
+    q = lambda p: means[min(len(means) - 1, max(0, int(round(p / 100.0 * (len(means) - 1)))))]
+    return q(lo), q(hi)
+
+
+def panel_topfive(obs, ret="ex", k=5):
+    """Roadmap item 39 (agreed 16 Oct, supporting evidence only; the verdict stays panel_verdict). On each signal date
+    with at least PANEL_MIN_STOCKS scored members: the k members with the most price-only points (ties broken by
+    ticker, so the pick is fixed), equal weight, against the panel average and against the index over the window.
+    `ret` = "ex" (close to close) or "ex_late" (starting a day later, nearer what an order filling at the next open
+    could catch). Returns the average gaps, the share of dates positive and a block-bootstrap 90% interval."""
+    by_date = {}
+    for o in obs:
+        if o.get(ret) is None:
+            continue
+        by_date.setdefault(o["date"], []).append(o)
+    gaps_panel, gaps_index = [], []
+    for d in sorted(by_date):
+        xs = by_date[d]
+        if len(xs) < PANEL_MIN_STOCKS:
+            continue
+        top = sorted(xs, key=lambda o: (-o["pts"], o["ticker"]))[:k]
+        m_top = sum(o[ret] for o in top) / len(top)
+        m_all = sum(o[ret] for o in xs) / len(xs)
+        gaps_panel.append(m_top - m_all)
+        gaps_index.append(m_top)                   # every `ex` is already the stock's return minus the index's
+    out = {"dates": len(gaps_panel)}
+    for key, g in (("vs_panel", gaps_panel), ("vs_index", gaps_index)):
+        m, t, n = mean_t(g)
+        lo, hi = _block_boot(g)
+        out[key] = {"mean": m, "t": t, "pos": (sum(1 for v in g if v > 0) / n * 100.0) if n else None, "lo": lo, "hi": hi}
+    return out
+
+
+def overbought_split(ledger, min_score=None):
+    """Roadmap item 42's deferred check: settled shadow ratings split by whether the stock carried the "overbought"
+    flag (RSI above 75) on the rating date. Hit rate against the index and the average gap, for each side. With
+    min_score, only ratings at or above that score (where the flag would have capped a buy)."""
+    done = [r for r in ledger if r["table"] == "shadow" and r["beat"] in ("yes", "no")
+            and r.get("ret_pct") is not None and r.get("spx_ret_pct") is not None]
+    if min_score is not None:
+        done = [r for r in done if (num(r.get("score")) or 0) >= min_score]
+    out = {}
+    for side, g in (("overbought", [r for r in done if "overbought" in (r.get("text") or "")]),
+                    ("not overbought", [r for r in done if "overbought" not in (r.get("text") or "")])):
+        gaps = [r["ret_pct"] - r["spx_ret_pct"] for r in g]
+        m, t, n = mean_t(gaps)
+        out[side] = {"n": n, "hit": (sum(1 for r in g if r["beat"] == "yes") / n * 100.0) if n else None, "gap": m, "t": t}
+    return out
+
+
 def panel_status(panel, hist, bench):
     """Which panel stocks are short of a usable history, and which are behind the benchmark's last session."""
     last_b = (series(hist, bench) or [{"date": ""}])[-1]["date"]
@@ -3817,16 +3886,44 @@ def cmd_panel(a):
                 print(f"    BAND {r['name']}: {r['days']} cases, beat the index {r['percentile']:.0f}% of the time, average gap {r['value']:+.2f} points")
 
 
+def cmd_research(a):
+    """Read-only research checks deferred to after the results cluster (7.8). Prints the top-five panel test and the
+    overbought split; writes nothing. --history h.json --ledger l.json --panel p.json"""
+    hist = {(r["ticker"], r["date"]): r for r in json.load(open(a["history"]))}
+    ledger = json.load(open(a["ledger"]))
+    f = lambda v, d=2: "n/a" if v is None else f"{v:+.{d}f}"
+    if a.get("panel"):
+        panel = json.load(open(a["panel"]))
+        obs = panel_obs(panel, hist, "SPY")
+        for period, sub in (("history", [o for o in obs if not o["live"]]), ("live", [o for o in obs if o["live"]])):
+            for ret, label in (("ex", "close to close"), ("ex_late", "from a day later")):
+                r = panel_topfive(sub, ret=ret)
+                if not r["dates"]:
+                    print(f"TOP-FIVE PANEL {period}, {label}: no complete dates")
+                    continue
+                vp, vi = r["vs_panel"], r["vs_index"]
+                print(f"TOP-FIVE PANEL {period}, {label}: {r['dates']} dates; against the panel {f(vp['mean'])} points a window "
+                      f"(t {f(vp['t'], 1)}, positive on {vp['pos']:.0f}% of dates, 90% interval {f(vp['lo'])} to {f(vp['hi'])}); "
+                      f"against the index {f(vi['mean'])} (interval {f(vi['lo'])} to {f(vi['hi'])}). Supporting evidence only.")
+    for label, ms in (("all scores", None), ("score 60 and above", 60)):
+        sp = overbought_split(ledger, min_score=ms)
+        parts = []
+        for side in ("overbought", "not overbought"):
+            x = sp[side]
+            parts.append(f"{side} {x['n']} settled" + (f", beat the index {x['hit']:.0f}%, average gap {f(x['gap'])} points (t {f(x['t'], 1)})" if x["n"] else ""))
+        print(f"OVERBOUGHT SPLIT ({label}): " + "; ".join(parts))
+
+
 def main():
-    if len(sys.argv) < 2 or sys.argv[1] not in ("run", "refresh", "reorder", "report", "template", "closes", "panel", "feed"):
+    if len(sys.argv) < 2 or sys.argv[1] not in ("run", "refresh", "reorder", "report", "template", "closes", "panel", "feed", "research"):
         print(__doc__)
         sys.exit(1)
     args = sys.argv[2:]
     a = {args[i].lstrip("-"): args[i + 1] for i in range(0, len(args) - 1, 2)}
-    if sys.argv[1] not in ("template", "closes", "panel", "feed"):
+    if sys.argv[1] not in ("template", "closes", "panel", "feed", "research"):
         a.setdefault("out", "out")
     {"run": cmd_run, "refresh": cmd_refresh, "reorder": cmd_reorder, "report": cmd_report, "template": cmd_template,
-     "closes": cmd_closes, "panel": cmd_panel, "feed": cmd_feed}[sys.argv[1]](a)
+     "closes": cmd_closes, "panel": cmd_panel, "feed": cmd_feed, "research": cmd_research}[sys.argv[1]](a)
 
 
 if __name__ == "__main__":
