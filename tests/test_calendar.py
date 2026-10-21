@@ -42,6 +42,7 @@ P = {
             "2026-11-26": (480, 470), "2026-11-27": (465, 460)},
 }
 NAME = {"USA": "US One", "USB": "US Two", "UKA": "UK One", "UKB": "UK Two"}
+MARKETS = {"USA": "US", "USB": "US", "UKA": "UK", "UKB": "UK"}           # 7.6: each stock's listing market
 
 
 def o(t, d):
@@ -197,7 +198,7 @@ def test_6b_mixed_order_entered_for_26_nov(pl):
     """Expected (M2): the same order with US legs too (US One 50 to 40, US Two 0 to 10), all given the fill date of
     26 Nov: the London legs fill at the 26 Nov London open, the US legs at the 27 Nov US open, the next US session."""
     L = london_change_on_26(pl, us_leg=True)
-    pl.update_performance(L, history(), "SPY", "2026-11-27")
+    pl.update_performance(L, history(), "SPY", "2026-11-27", markets=MARKETS)       # 7.6: the listing decides (M2)
     v25 = chain([0.0] + first_days({"USA": 50, "UKA": 50}))
     d27 = (kept(40, "USA", "2026-11-25", "2026-11-27") + 10 * (o("USA", "2026-11-27") / c("USA", "2026-11-25") - 1)
            + 10 * (c("USB", "2026-11-27") / o("USB", "2026-11-27") - 1)

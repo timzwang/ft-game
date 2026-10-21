@@ -1,0 +1,42 @@
+{
+ "session": "2026-10-16",
+ "files": {
+  "history.json": "identical",
+  "ledger.json": {
+   "rows_old": 542,
+   "rows_new": 543,
+   "only_in_new": [
+    "{\"action\": null, \"actual\": null, \"adj_eve\": null, \"adj_morn\": null, \"bank\": null, \"beat\": null, \"chg_1d\": null, \"chg_20d\": null, \"chg_5d\": null, \"confidence\": null, \"confirmed\": null, \"contrib_pts\": null, \"cum_pct\": null, \"date\": null, \"day_pct\": null, \"days\": null, \"effective\": null, \"forecast\": null, \"from_w\": null, \"id\": \"meta:listing_market\", \"impact_pct\": null, \"implied_pct\": null, \"kind\": null, \"last_order\": null, \"lesson\": null, \"live\": null, \"live_chg\": null, \"name\": \"listing_market\", \"percentile\": null, \"plan\": null, \"players\": null, \"previous\": null, \"rank\": null, \"ret_pct\": null, \"risk_share_pct\": null, \"score\": null, \"spx_cum_pct\": null, \"spx_ret_pct\": null, \"stock\": null, \"surprise\": null, \"table\": \"meta\", \"text\": \"{\\\"ABBV\\\": \\\"US\\\", \\\"AMGN\\\": \\\"US\\\", \\\"BP.\\\": \\\"UK\\\", \\\"COIN\\\": \\\"US\\\", \\\"COP\\\": \\\"US\\\", \\\"CVX\\\": \\\"US\\\", \\\"HUM\\\": \\\"US\\\", \\\"KO\\\": \\\"US\\\", \\\"LLY\\\": \\\"US\\\", \\\"MA\\\": \\\"US\\\", \\\"META\\\": \\\"US\\\", \\\"MPC\\\": \\\"US\\\", \\\"MRK\\\": \\\"US\\\", \\\"MSFT\\\": \\\"US\\\", \\\"MSTR\\\": \\\"US\\\", \\\"PG\\\": \\\"US\\\", \\\"PLTR\\\": \\\"US\\\", \\\"PSX\\\": \\\"US\\\", \\\"SHEL\\\": \\\"UK\\\", \\\"TSM\\\": \\\"US\\\", \\\"UNH\\\": \\\"US\\\", \\\"V\\\": \\\"US\\\", \\\"VLO\\\": \\\"US\\\", \\\"WMT\\\": \\\"US\\\", \\\"XOM\\\": \\\"US\\\"}\", \"theme\": null, \"ticker\": null, \"time_uk\": null, \"to_w\": null, \"unit\": null, \"value\": null, \"value_est\": null, \"value_reported\": null, \"vol_pct\": null, \"weight\": null, \"window_end\": null}"
+   ],
+   "only_in_old": []
+  },
+  "macro.json": "identical",
+  "panel.json": "identical",
+  "scores.json": "identical",
+  "stocks.json": "identical"
+ },
+ "printout_only_in_new": [
+  "Pipeline version 7.6. Session 2026-10-16; order effective None; regime mixed; 10000 history rows"
+ ],
+ "printout_only_in_old": [
+  "Pipeline version 7.5. Session 2026-10-16; order effective None; regime mixed; 10000 history rows"
+ ],
+ "rebuild_identical": {
+  "perf": true,
+  "contrib": true,
+  "standstill": true,
+  "incomplete": true
+ },
+ "rebuild_final_value": {
+  "old": [
+   "2026-10-16",
+   101435.76,
+   0.642
+  ],
+  "new": [
+   "2026-10-16",
+   101435.76,
+   0.642
+  ]
+ }
+}

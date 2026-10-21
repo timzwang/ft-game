@@ -215,12 +215,14 @@ def test_after_close_report_allows_an_order_that_morning(cd, pl):
     assert cd.last_order_problem(ev, pl) is None
 
 
-def test_event_date_differing_from_stock_text_warns(cd, pl, tmp_repo):
+def test_event_on_another_date_fails(cd, pl, tmp_repo):
+    """7.6 (was a WARN in 7.5, ChatGPT's PR #5 finding 2): a holding's only results event on a date other than its stock
+    data's no longer counts as coverage; it is a FAIL until the date is corrected or the event is marked uncertain."""
     def f(s):
         for r in s:
             if r["name"] == "Coca-Cola":
                 r["next_results"] = "28 Oct, before US open"
     edit(tmp_repo, "stocks", f)
     resync(cd, tmp_repo)
-    _, rep = run(cd, pl, tmp_repo)
-    assert any(l.startswith("WARN results: results event date differs") and "Coca-Cola" in l for l in rep.lines)
+    fails, _ = run(cd, pl, tmp_repo)
+    assert any(f.startswith("FAIL results: holding(s) whose results event is not on the date") and "Coca-Cola" in f for f in fails)

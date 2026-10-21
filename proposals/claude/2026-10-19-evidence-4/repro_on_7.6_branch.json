@@ -1,0 +1,174 @@
+{
+ "pipeline_version": "7.6",
+ "pipeline_sha256": "57b280748b7d34ab40c8e53824500596b1b68a258377e73cd94ab3b788f24470",
+ "F2a_wrong_date": {
+  "check_failures": 1,
+  "check_failures_with_correct_date": 0,
+  "results_lines": [
+   "FAIL results: holding(s) with a results date but no results event: Coca-Cola (2026-10-27)",
+   "WARN results: no implied move yet for a report inside ten sessions: AbbVie (2026-10-30), Chevron (2026-10-30), Eli Lilly (2026-10-29), Exxon Mobil (2026-10-30), Microsoft (2026-10-28), Shell (2026-10-29)",
+   "WARN results: last order for a report inside ten sessions is missing or later than the rule allows: Chevron (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Eli Lilly (2026-10-29): none recorded; Exxon Mobil (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Microsoft (2026-10-28): none recorded; Shell (2026-10-29): 'Before 08:00 Wed 28 Oct' names a time after the 07:00 UK cut-off"
+  ],
+  "pipeline_results_missing": [
+   "Coca-Cola"
+  ],
+  "ten_session_total_pts": 4.8,
+  "with_correct_date_pts": 6.0,
+  "verdict": "ok"
+ },
+ "F2b_duplicate_event": {
+  "check_failures": 1,
+  "ten_session_total_pts": 6.0,
+  "reports_counted": 7,
+  "correct_pts": 6.0,
+  "verdict": "ok"
+ },
+ "F2c_uncertain_marked": {
+  "check_failures": 0,
+  "lines": [
+   "WARN results: results date marked uncertain: Coca-Cola: stock data 2026-10-27, event 2026-10-28 (Date unconfirmed: company IR page says 27 Oct, Nasdaq calendar says 28 Oct (checked 19 Oct))",
+   "WARN results: no implied move yet for a report inside ten sessions: AbbVie (2026-10-30), Chevron (2026-10-30), Coca-Cola (2026-10-28), Eli Lilly (2026-10-29), Exxon Mobil (2026-10-30), Microsoft (2026-10-28), Shell (2026-10-29)",
+   "WARN results: last order for a report inside ten sessions is missing or later than the rule allows: Chevron (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Coca-Cola (2026-10-28): none recorded; Eli Lilly (2026-10-29): none recorded; Exxon Mobil (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Microsoft (2026-10-28): none recorded; Shell (2026-10-29): 'Before 08:00 Wed 28 Oct' names a time after the 07:00 UK cut-off",
+   "PASS results: every holding's results date has an event on that date (as of 2026-10-16)"
+  ]
+ },
+ "F3_reorder_after_completed_session": {
+  "effective": "2026-10-16",
+  "latest_perf_session": "2026-10-16",
+  "entered_same_day": {
+   "accepted": [],
+   "warnings": [
+    "the change at 2026-10-16 has already filled (performance is already recorded for 2026-10-16, on or after the fill date 2026-10-16): an expected benefit given now would be hindsight, so it is not recorded"
+   ]
+  },
+  "entered_next_day": {
+   "accepted": [],
+   "warnings": [
+    "the change at 2026-10-16 has already filled (entered on 2026-10-17, after the fill date 2026-10-16): an expected benefit given now would be hindsight, so it is not recorded"
+   ]
+  },
+  "verdict": "ok"
+ },
+ "F4_control_real_26_open": {
+  "value": 107318.25,
+  "incomplete": []
+ },
+ "F4_missing_26_row": {
+  "value": null,
+  "incomplete": [
+   "2026-11-27: UK Two (UKB): no traded open on 2026-11-26 and its listing market is not known, so a shut market cannot be told from a missing quote; give the row or a stated fill price"
+  ],
+  "value_if_27_open_used": 108573.01,
+  "verdict": "ok"
+ },
+ "F4_imputed_26_open": {
+  "value": null,
+  "incomplete": [
+   "2026-11-27: UK Two (UKB): no traded open on 2026-11-26 and its listing market is not known, so a shut market cannot be told from a missing quote; give the row or a stated fill price"
+  ],
+  "value_if_27_open_used": 108573.01,
+  "verdict": "ok"
+ },
+ "F4_sale_leg_imputed_26_open": {
+  "value": null,
+  "incomplete": [
+   "2026-11-27: UK One (UKA): no traded open on 2026-11-26 and its listing market is not known, so a shut market cannot be told from a missing quote; give the row or a stated fill price"
+  ],
+  "verdict": "ok"
+ },
+ "F5_changes_on_26_and_27": {
+  "value": 107104.45,
+  "hand_value": 107104.45,
+  "difference": 0.0,
+  "incomplete": [],
+  "standstill": [
+   {
+    "name": "Change for 2026-11-26",
+    "value": -1.61,
+    "text": "UK One 50 to 30, UK Two 0 to 20"
+   },
+   {
+    "name": "Change for 2026-11-27",
+    "value": -0.205,
+    "text": "UK One 30 to 20, UK Two 20 to 30"
+   }
+  ],
+  "verdict": "ok"
+ },
+ "F6_last_order": {
+  "london_0700_report_27_nov_valid": {
+   "problem": null,
+   "expected": "none",
+   "verdict": "ok"
+  },
+  "us_preopen_report_27_nov_valid": {
+   "problem": null,
+   "expected": "none",
+   "verdict": "ok"
+  },
+  "us_preopen_report_27_nov_too_late": {
+   "problem": "'Before 07:00 Thu 26 Nov' is later than the last possible order day, 2026-11-25",
+   "expected": "a problem",
+   "verdict": "ok"
+  },
+  "after_close_valid": {
+   "problem": null,
+   "expected": "none",
+   "verdict": "ok"
+  },
+  "no_time": {
+   "problem": "'Any time Wed 28 Oct' gives no time; it must say before 07:00 UK (or earlier)",
+   "expected": "a problem",
+   "verdict": "ok"
+  },
+  "after_wording": {
+   "problem": "'After 07:00 Wed 28 Oct' does not read as a deadline at or before the cut-off (write \"Before 07:00 <Day D Mon>\")",
+   "expected": "a problem",
+   "verdict": "ok"
+  },
+  "old_0800": {
+   "problem": "'Before 08:00 Wed 28 Oct' names a time after the 07:00 UK cut-off",
+   "expected": "a problem",
+   "verdict": "ok"
+  }
+ },
+ "F7_control": {
+  "failures": 0,
+  "fail_lines": []
+ },
+ "F7a_one_file_manifest": {
+  "failures_added": 1,
+  "sync": [
+   "FAIL sync: state/last-sync.md does not record data/history.json, data/ledger.json, data/macro.json, data/panel.json, state/ft-game-state.md: every mirror records all 6 files"
+  ],
+  "verdict": "ok"
+ },
+ "F7b_contributions_deleted": {
+  "failures_added": 1,
+  "performance": [
+   "FAIL performance: 2026-10-09: no contribution row for Chevron, Exxon Mobil, Lockheed Martin, Nvidia, RTX, Shell; 2026-10-12: no contribution row for Chevron, Coca-Cola, Exxon Mobil, Goldman Sachs, Lockheed Martin, Microsoft; 2026-10-13: no contribution row for Chevron, Coca-Cola, Exxon Mobil, Goldman Sachs, Microsoft, Nvidia; 2026-10-14: no contribution row for Chevron, Coca-Cola, Exxon Mobil, Goldman Sachs, Meta Platforms, Microsoft; 2026-10-15: no contribution row for Chevron, Coca-Cola, Eli Lilly, Exxon Mobil, Meta Platforms, Microsoft; 2026-10-16: no contribution row for Chevron, Coca-Cola, Eli Lilly, Exxon Mobil, Microsoft, Palantir"
+  ],
+  "verdict": "ok"
+ },
+ "F7b2_one_contribution_deleted": {
+  "failures_added": 1,
+  "performance": [
+   "FAIL performance: 2026-10-09: no contribution row for Chevron"
+  ]
+ },
+ "F7b3_one_day_contributions_deleted": {
+  "day": "2026-10-09",
+  "failures_added": 1,
+  "verdict": "ok"
+ },
+ "F7c_bare_unavailable": {
+  "failures_bare": 1,
+  "failures_with_reason": 0,
+  "lines_bare": [
+   "FAIL results: implied move recorded as unavailable without a usable reason, report inside five sessions: Coca-Cola (2026-10-21): it does not give the source tried, the date checked, what happened",
+   "WARN results: no implied move yet for a report inside ten sessions: AbbVie (2026-10-30), Chevron (2026-10-30), Eli Lilly (2026-10-29), Exxon Mobil (2026-10-30), Microsoft (2026-10-28), Shell (2026-10-29)",
+   "WARN results: last order for a report inside ten sessions is missing or later than the rule allows: Chevron (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Eli Lilly (2026-10-29): none recorded; Exxon Mobil (2026-10-30): 'Before 08:00 Thu 29 Oct' names a time after the 07:00 UK cut-off; Microsoft (2026-10-28): none recorded; Shell (2026-10-29): 'Before 08:00 Wed 28 Oct' names a time after the 07:00 UK cut-off"
+  ],
+  "verdict": "ok"
+ }
+}

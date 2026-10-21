@@ -1,0 +1,28 @@
+== 7.5 checker (main at 0d3c4e8)
+Data check at 2026-10-19T21:20:00Z (pipeline 7.5):
+  PASS files: all five data files parse
+  PASS ledger: 590 rows, fields and ids in order
+  PASS history: 10035 rows, one per ticker and date, prices consistent
+  PASS order: 7 holdings, cash 0%, matching the latest order
+  PASS performance: 7 sessions to 2026-10-19, none missing, values compound, contributions add up
+  PASS recalc: 7 stored values match a recalculation from positions and prices (within 0.05 credits)
+  WARN results: no implied move yet for a report inside ten sessions: Exxon Mobil (2026-10-30), Shell (2026-10-29)
+  PASS results: every holding's results date has an event (as of 2026-10-19)
+  PASS sync: 6 files match state/last-sync.md (run 2026-10-19T21:01:18Z)
+  PASS fresh: the last mirror ran 0.3 hours ago
+  PASS fresh: prices and performance run to 2026-10-19, the latest closed US session
+PASSED: 0 failure(s), 1 warning(s)
+== 7.6 checker (this branch) on the same files
+Data check at 2026-10-19T21:20:00Z (pipeline 7.6):
+  PASS files: all five data files parse
+  PASS ledger: 590 rows, fields and ids in order
+  PASS history: 10035 rows, one per ticker and date, prices consistent
+  PASS order: 7 holdings, cash 0%, matching the latest order
+  PASS performance: 7 sessions to 2026-10-19, none missing, values compound, contributions add up
+  PASS recalc: 7 stored values match a recalculation from positions and prices (within 0.05 credits)
+  WARN results: implied move recorded as unavailable (the 6% in RESULTS TOTAL is an assumption, not a market estimate): Exxon Mobil (2026-10-30), Shell (2026-10-29)
+  PASS results: every holding's results date has an event on that date (as of 2026-10-19)
+  PASS sync: all 6 files match state/last-sync.md (run 2026-10-19T21:01:18Z)
+  PASS fresh: the last mirror ran 0.3 hours ago
+  PASS fresh: prices and performance run to 2026-10-19, the latest closed US session
+PASSED: 0 failure(s), 1 warning(s)
