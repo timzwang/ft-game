@@ -1,5 +1,5 @@
-20:32:32Z tickers: 79 (77 US symbols, 2 London; 30 panel stocks)
-20:32:38Z session: US 2026-10-22, London 2026-10-22
-20:33:00Z treasury: 6 rows, last 2026-10-22
-20:33:02Z coins: btc 81381.49, eth 2383.89, sol 103.49, xrp 1.3036
-20:33:02Z written: 79 tickers; missing none; stale none; mismatched none; short of 200 sessions none; ranges widened ['CVX 2026-10-22', 'GLW 2026-10-22', 'MCK 2026-10-22', 'VLO 2026-10-22']
+20:36:59Z tickers: 80 (78 US symbols, 2 London; 30 panel stocks)
+20:37:07Z session: US 2026-10-22, London 2026-10-22
+20:37:25Z treasury: 6 rows, last 2026-10-22
+20:37:28Z coins: btc 81381.49, eth 2383.89, sol 103.49, xrp 1.3036
+20:37:28Z written: 80 tickers; missing none; stale none; mismatched none; short of 200 sessions none; ranges widened ['CVX 2026-10-22', 'GLW 2026-10-22', 'MCK 2026-10-22', 'VLO 2026-10-22']
