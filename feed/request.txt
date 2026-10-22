@@ -9,3 +9,4 @@ tickers: SNDK MU AMD ARM STX WDC SHOP DDOG NOW HOOD
 2026-10-22 14:52 UK live (results-day refresh)
 2026-10-22 16:47 UK live request
 2026-10-22 19:23 UK live request
+tickers: NET NVDA
