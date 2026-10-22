@@ -6,3 +6,4 @@ tickers: ELV NFLX T CNC CRL TRGP ADI NTAP ROST
 tickers: ADI T
 tickers: ADI T
 tickers: SNDK MU AMD ARM STX WDC SHOP DDOG NOW HOOD
+2026-10-22 14:52 UK live (results-day refresh)
