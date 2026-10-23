@@ -1,3 +1,5 @@
-21:44:26Z tickers: 80 (78 US symbols, 2 London; 30 panel stocks)
-21:44:35Z session: US 2026-10-22, London 2026-10-22
-21:44:35Z this session is already in latest.json: nothing to do
+20:44:37Z tickers: 80 (78 US symbols, 2 London; 30 panel stocks)
+20:44:45Z session: US 2026-10-23, London 2026-10-23
+20:45:04Z treasury: 6 rows, last 2026-10-23
+20:45:06Z coins: btc 81184.34, eth 2391.74, sol 103.43, xrp 1.3019
+20:45:06Z written: 80 tickers; missing none; stale none; mismatched none; short of 200 sessions none; ranges widened ['TRGP 2026-10-23']
