@@ -1,6 +1,6 @@
 # FT Stock Picking Game: state and log
 
-Last updated: Sat 24 Oct 2026, about 09:35 UK (weekly review: Friday 23 Oct logged from the price feed, +0.06% against SPY -0.52%; estimated value 99,667 at the Friday close; no change of order, the Sunday review decides Monday's). Before that, Thu 22 Oct about 21:45 UK (evening review, a change evening for Fri 23 Oct: AMD, Shopify and Datadog sold on the endgame exit rule; Nvidia 20 added; ServiceNow 10 to 20, Palantir 15 to 20, Arm Holdings 10 to 15). Earlier entries: see the review log (section 6).
+Last updated: Sun 25 Oct 2026, about 21:50 UK (evening review, FAULT: the script hash matched but running it was refused by the session's permission check; nothing scored, logged or published; the order in force for Mon 26 Oct stands, confirmed by hand). Before that, Sun 25 Oct about 20:30 UK (weekend news check, no A item) and Sat 24 Oct 2026, about 09:35 UK (weekly review: Friday 23 Oct logged from the price feed, +0.06% against SPY -0.52%; estimated value 99,667 at the Friday close; no change of order, the Sunday review decides Monday's). Before that, Thu 22 Oct about 21:45 UK (evening review, a change evening for Fri 23 Oct: AMD, Shopify and Datadog sold on the endgame exit rule; Nvidia 20 added; ServiceNow 10 to 20, Palantir 15 to 20, Arm Holdings 10 to 15). Earlier entries: see the review log (section 6).
 
 This doc is the narrative record for Tim's entry, "Seeking Beta". The procedure for every run is in `claude/ft-game-playbook.md` (the core doc) and the docs its routing table names. The numbers (prices, scores, daily performance, contributions, ratings and their outcomes, the full calendar, analyst changes, alerts, the panel test, the drift record) live in the data files behind Tim's page and the panel file, and are produced by the pipeline script; this doc carries the decisions and the reasons.
 
@@ -49,7 +49,7 @@ Points for the coming reviews:
 
 ## 3. Pending order
 
-**No change since Fri 23 Oct's open. The Sunday 25 Oct evening review decides Monday's order.**
+**No change for Mon 26 Oct's open (Sunday 25 Oct evening review, a fault evening: the order in force stands, confirmed by hand; fault message sent about 21:45 UK).**
 
 Palantir 20, Nvidia 20, ServiceNow 20, Arm Holdings 15, Sandisk 10, Robinhood 10, Strategy 5, cash 0. (Last change: message sent about 21:42 UK on Thu 22 Oct; taken as entered.)
 
@@ -105,6 +105,9 @@ Palantir 20, Nvidia 20, ServiceNow 20, Arm Holdings 15, Sandisk 10, Robinhood 10
 
 ## 6. Review log (newest first, keep the latest 15)
 
+- Sun 25 Oct 2026 (about 21:50): Evening review, FAULT. Script hash matched part B, but running it was refused by the session's permission check (the third run in a row), so no template, feed, scores, drift scan, intake, day call or ledger rows; nothing published; GitHub data unchanged. Order in force for Mon 26 Oct confirmed by hand (no session since Friday; no exit signal on Friday; IBIT 1.8% above its 50-day) and stands. Fault message sent about 21:45 UK. Bitcoin about $80,936 (Investing.com, 04:53 GMT Sun). Price feed and broad scan current (23 Oct) but not used: the script could not run. Monday's review must log Fri 23 Oct to Mon 26 Oct together.
+- Sun 25 Oct 2026 (about 20:30): Weekend news check (Sunday). No A item. B: Houthi missiles and drones at Saudi Arabia; Saudi TASI -2.65% on Sunday; Trump: "There will not be a strike today", none before the 3 Nov midterms. C: Bitcoin -0.9% since Friday's close (about -0.17 points). Weekend Wall Street -0.06%. Script hash matched, but running it was again refused by the session's permission check, so no alerts were added to the ledger and nothing was published; state doc Weekend log updated only.
+- Sat 24 Oct 2026 (about 20:30): Weekend news check (Saturday). No A item. B: possible US strike on Iran this weekend (Barrack; Trump non-committal). C: Bitcoin -0.6% since Friday's close; Canada tariff shuffle. Weekend Wall Street -0.05%. Script hash matched, but running it was refused by the session's permission check, so no alerts were added to the ledger and nothing was published; state doc Weekend log updated only.
 - Sat 24 Oct 2026 (about 09:35): Weekly review. Fri 23 Oct logged from the price feed (every list stock, SPY, the panel, LMT and RTX, the drift rows, US yields and coins); commodities from the futures fallback; gilt from the tradingeconomics news stream; other non-US yields not read. Week -1.74% against SPY -0.43%; game -0.33% against -2.10%. Flash PMIs and Michigan final stored. Post-mortems written for AMD, Datadog, Shopify. Files published; two old data assets (stocks, macro) could not be deleted (permission refused) and remain as leftovers. Broad scan read: current.
 - Thu 22 Oct 2026 (about 21:45): Evening review, a change evening for Fri 23 Oct (rule exits of AMD, Shopify and Datadog; Nvidia 20; ServiceNow, Palantir and Arm raised). Day -1.75% against SPY -1.18% on a Nasdaq -2.6% AI sell-off. Western Digital: no after-hours price found, so order B stayed the base. Drift scan: Valero, Procter & Gamble, Meta all FAIL. Watchlist: added Nvidia, Cloudflare; removed Analog Devices, Meta. Price feed and broad scan: forced. Files published.
 - Wed 21 Oct 2026 (about 23:12): Tim relayed FT Customer Care's answer: the order cut-off stays 08:00 UK local time all year. Recorded; the 07:00 working cut-off stays until Tim decides.
@@ -117,9 +120,6 @@ Palantir 20, Nvidia 20, ServiceNow 20, Arm Holdings 15, Sandisk 10, Robinhood 10
 - Wed 21 Oct 2026 (about 21:45): Evening review, a change evening for Thu 22 Oct (Hasbro 5; Lilly 15 to 10), later replaced by order B.
 - Wed 21 Oct 2026 (about 14:30): Hand-run session with Tim. Playbook 6.12: the price feed; pipeline 7.7.
 - Tue 20 Oct 2026 (about 22:05): Evening review, quiet. Day +0.62% against SPY +0.34%.
-- Mon 19 Oct 2026 (about 22:25): The Mon 26 Oct cut-off test removed (playbook 6.11.1).
-- Mon 19 Oct 2026 (about 22:15): Evening review, quiet. Day -0.33% against SPY +0.42%.
-- Mon 19 Oct 2026 (about 20:40): Pipeline 7.4 (`order_expected`) and the repository data check; playbook 6.11.
 
 ## 7. Market regime notes
 
@@ -129,7 +129,20 @@ Fri 23 Oct: S&P 500 -0.52% (7,623.68), Nasdaq -0.21% (25,955.34), Dow -1.23% (52
 
 Thu 22 Oct: S&P 500 -1.21% (7,663.45), Nasdaq -2.60%; chips led the fall after Meta's results; Brent near $113. Wed 21 Oct: S&P 500 +0.5%. Tue 20 Oct: S&P 500 +0.3%. Mon 19 Oct: S&P 500 +0.41%. Week to Fri 23 Oct: S&P 500 -0.43% (SPY). Week to Fri 16 Oct: S&P 500 -1.95%, Nasdaq -4.48%.
 
-Weekend log (weekend of 24 and 25 Oct): to be filled by the weekend news checks. Weekend of 17 and 18 Oct: no A item. B: Hormuz; Russia sanctions waiver.
+Weekend log (weekend of 24 and 25 Oct):
+- Sat 24 Oct, check at about 20:25 UK. No A item.
+  - B: Iran. US envoy Tom Barrack said in a Friday interview that a US strike on Iran "absolutely" could come this weekend; Trump said he knew nothing of it, has said strikes may wait until after the 3 Nov midterms, and warned of "another little Epic Fury" without a deal (ANI, 08:49 UTC Sat; CBS live page, to 18:40 UK Sat). WSJ: USS George Washington rearming with bunker-busters (Gulf News live blog). IRGC says two supertankers hit mines near Hormuz on 23 Oct; Houthi missiles at Riyadh, Taif and Yanbu intercepted Sat. Iran offers to reopen Hormuz if the US lifts its blockade (not new). No strike by about 20:25 UK. If a strike lands: scenario "Oil spike on escalation", about -2.05 points; would likely carry on after the open for a day or two. Without one, largely in Friday's prices (Brent +3.5% to about $117).
+  - C: Bitcoin about $80,708 (CoinDesk, 14:01 UK Sat) against $81,184 at Friday's US close, -0.6%; Saturday low about $79,280 with $436m of liquidations (The Crypto Basic). One outlet (cryptoticker.io) puts it 1.2% below its own 50-day average. Effect by the stored links, worked by hand because the script could not be run: Strategy 5% x 1.82 x -0.6% about -0.05 points, Robinhood 10% x 1.00 x -0.6% about -0.06: about -0.1 points. The rule that matters is an IBIT close below its 50-day (1.8% above it on Friday).
+  - C: Trump shifts some Canada tariffs (24/7 Wall St, 24 Oct); no chip or tech measure.
+  - Weekend Wall Street (IG): 52,210.6 sell, -0.05% (no timestamp on the page): noise.
+  - Ledger alerts not written: running the script was refused by the session's permission check (hash matched).
+- Sun 25 Oct, check at about 20:25 UK (GMT from today). No A item.
+  - B: Houthi escalation against Saudi Arabia. The coalition intercepted Houthi missiles and drones aimed at Riyadh and Khamis Mushait on Sunday; debris injured two (Gulf News live blog, 13:59 UK); the Houthis claim hits on Riyadh airport, King Khalid Air Base and a Jazan naval base, unconfirmed (Gulf News, 18:28 UK). Saudi TASI closed -2.65% at 9,438.50 (Arab News, updated 13:48 UK, taking its 16:48 as Riyadh time; tradingeconomics), its worst day since April 2025, broad across sectors; Aramco only -1.1%, oil output not hit (Startup Fortune, 11:34 UK). No fitting scenario unless it spreads to oil supply ("Oil spike on escalation", about -2.05 points). Without that, a regional risk-off read that should mostly fade for a US tech book; worth checking futures at 23:00 UK.
+  - B (carried from Saturday, now cooler): Iran. Trump told Fox News "Do I finish it off ... or do I make a deal?", then at the White House: "There will not be a strike today"; he has said no strike before the 3 Nov midterms (The National, 17:34 UK; TASS; Gulf News 16:36 UK). CENTCOM has strike options ready; a third carrier group heading to the Gulf; CENTCOM chief visited Hormuz and says lanes are cleared of mines (Al Jazeera; The National). Araghchi: Hormuz will not return to pre-war management (Gulf News, 18:33 UK). Iran says it shot down a US drone over Bandar Abbas (Al Jazeera, via Tasnim). No strike by about 20:25 UK, so Saturday's -2.05 point tail risk is less likely before Monday's open; largely priced on Friday.
+  - C: Bitcoin about $80,477 (Coinbase, 08:00 ET / 12:00 UK Sun, via Bitcoin News Digest) against $81,184 at Friday's US close, -0.9%; Saturday low about $79,107 with about $815m of liquidations in 24 hours. By hand (script refused): Strategy 5% x 1.82 x -0.9% about -0.08 points, Robinhood 10% x 1.00 x -0.9% about -0.09: about -0.17 points expected at the open. Well short of the 5% B threshold; IBIT's 50-day test is the rule that matters.
+  - Weekend Wall Street (IG): 52,207.2 sell, -0.06% (no timestamp on the page): noise. No holding-specific weekend news found for Palantir, Nvidia, ServiceNow, Arm, Sandisk, Robinhood or Strategy. OPEC+ not meeting this weekend (November targets held on 4 Oct).
+  - Ledger alerts not written: running the script was again refused by the session's permission check (hash matched).
+Weekend of 17 and 18 Oct: no A item. B: Hormuz; Russia sanctions waiver.
 
 Near calendar (the full calendar to 27 Nov is on the page and in the ledger):
 - Sun 25 Oct: UK clocks go back; the US session is 13:30 to 20:00 UK in the week of 26 Oct.
