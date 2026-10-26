@@ -69,19 +69,22 @@ COINBASE_TICKER = "https://api.exchange.coinbase.com/products/{pair}/ticker"
 
 # Non-US 10-year government bond yields (feed 1.2, 26 Oct 2026, playbook 6.14.1). Until then the evening review read
 # them from tradingeconomics through a search, and from 22 Oct that page came back days old, so the stored figures were
-# carried (26 Oct: none for any of the five). Three sources, tried in this order for each yield; the first figure dated
-# the session is used, and every source's figure is kept beside it so a disagreement can be seen:
-#   CNBC's quote service (Tradeweb benchmark yields, the generic 10-year as tradingeconomics shows it), with the time of
-#   its last trade; the Japanese Ministry of Finance's daily JGB file (official close, Japan only, tried first there);
-#   stooq's daily history (a dated close). A figure not dated the session is never used for it.
-INTL_YIELDS = {"uk10y": {"cnbc": "UK10Y-GB", "stooq": "10uky.b", "zone": "Europe/London"},
-               "de10y": {"cnbc": "DE10Y-DE", "stooq": "10dey.b", "zone": "Europe/Berlin"},
-               "fr10y": {"cnbc": "FR10Y-FR", "stooq": "10fry.b", "zone": "Europe/Paris"},
-               "it10y": {"cnbc": "IT10Y-IT", "stooq": "10ity.b", "zone": "Europe/Rome"},
-               "jp10y": {"cnbc": "JP10Y-JP", "stooq": "10jpy.b", "zone": "Asia/Tokyo", "mof": True}}
+# carried (26 Oct: none for any of the five). Sources, tried in this order; the first figure dated the session is used,
+# and every source's figure is kept beside it so a disagreement can be seen:
+#   - Japan only: the Ministry of Finance's daily JGB file (the official close; often a day behind when the run reads it).
+#   - CNBC's quote service (Tradeweb benchmark yields), dated by the time of its last trade in the bond's own market.
+#     On its first run (26 Oct, 22:57 UTC) it gave UK 5.352, Germany 3.370, France 4.903, Italy 4.500; two other pages
+#     gave France 4.92 to 4.93 and Germany 3.37 for that day.
+#   - CNBC's previous close, when its last trade already falls on the market's next weekday (Tokyo trades while the
+#     evening review runs): that close is then the session's.
+# stooq's daily files were tried and refuse GitHub's servers (26 Oct). A figure not dated the session is never used.
+INTL_YIELDS = {"uk10y": {"cnbc": "UK10Y-GB", "zone": "Europe/London"},
+               "de10y": {"cnbc": "DE10Y-DE", "zone": "Europe/Berlin"},
+               "fr10y": {"cnbc": "FR10Y-FR", "zone": "Europe/Paris"},
+               "it10y": {"cnbc": "IT10Y-IT", "zone": "Europe/Rome"},
+               "jp10y": {"cnbc": "JP10Y-JP", "zone": "Asia/Tokyo", "mof": True}}
 CNBC_QUOTES = ("https://quote.cnbc.com/quote-html-webservice/restQuote/symbolType/symbol?symbols={syms}"
                "&requestMethod=itv&noform=1&partnerId=2&fund=1&exthrs=1&output=json&events=1")
-STOOQ_DAILY = "https://stooq.com/q/d/l/?s={sym}&i=d"
 MOF_JGB = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv"
 YIELD_DISAGREE = 0.10   # percentage points between two sources for the same session: shown, not refused
 
@@ -453,26 +456,6 @@ def parse_cnbc(payload):
     return out
 
 
-def parse_stooq(text):
-    """stooq's daily CSV ('Date,Open,High,Low,Close') to a list of (date, close), oldest first."""
-    lines = [ln.strip() for ln in (text or "").splitlines() if ln.strip()]
-    if not lines or not lines[0].lower().startswith("date"):
-        raise ValueError((lines[0] if lines else "empty reply")[:80])
-    head = [h.strip().lower() for h in lines[0].split(",")]
-    ic = head.index("close")
-    out = []
-    for ln in lines[1:]:
-        p = ln.split(",")
-        try:
-            date.fromisoformat(p[0])
-            v = _pct(p[ic])
-        except (ValueError, IndexError):
-            continue
-        if v is not None:
-            out.append((p[0], v))
-    return out
-
-
 def parse_mof(text):
     """The Ministry of Finance's JGB file (two title lines, then 'Date,1Y,...,10Y,...') to a list of (date, 10-year),
     oldest first. Dates are written like 2026/10/26."""
@@ -500,24 +483,30 @@ def _local_date(t_utc, zone):
         return None
 
 
-def choose_yields(session, cnbc, stooq, mof):
-    """For each yield, every source's figure for the session and the one used. A CNBC figure counts as the session's
-    when its last trade fell on that day in the bond's own market; stooq and the MoF give dated closes."""
+def next_weekday(d):
+    x = date.fromisoformat(d) + timedelta(days=1)
+    while x.weekday() >= 5:
+        x += timedelta(days=1)
+    return x.isoformat()
+
+
+def choose_yields(session, cnbc, mof):
+    """For each yield, every source's figure and the one used for the session. A CNBC figure counts as the session's
+    when its last trade fell on that day in the bond's own market; its previous close counts when the last trade fell on
+    the next weekday (a holiday in that market in between makes it not count); the MoF gives dated closes."""
     values, sources = {}, {}
     for k, spec in INTL_YIELDS.items():
         cands = []
         c = cnbc.get(spec["cnbc"]) or {}
+        c_day = _local_date(c.get("time_utc"), spec["zone"])
         if c.get("value") is not None:
-            cands.append({"source": "cnbc", "date": _local_date(c.get("time_utc"), spec["zone"]), "value": c["value"],
-                          "time_utc": c.get("time_utc")})
+            cands.append({"source": "cnbc", "date": c_day, "value": c["value"], "time_utc": c.get("time_utc")})
+        if c.get("prev_close") is not None and c_day and c_day == next_weekday(session):
+            cands.append({"source": "cnbc previous close", "date": session, "value": c["prev_close"]})
         if spec.get("mof") and mof:
             d, v = mof[-1]
             cands.append({"source": "mof", "date": d, "value": v})
-        st = stooq.get(k) or []
-        if st:
-            d, v = st[-1]
-            cands.append({"source": "stooq", "date": d, "value": v})
-        order = ["mof", "cnbc", "stooq"] if spec.get("mof") else ["cnbc", "stooq"]
+        order = ["mof", "cnbc", "cnbc previous close"]
         same = sorted([x for x in cands if x["date"] == session], key=lambda x: order.index(x["source"]))
         sources[k] = cands
         if same:
@@ -534,8 +523,8 @@ def choose_yields(session, cnbc, stooq, mof):
 
 
 def fetch_intl_yields(session=None):
-    """Reads the three sources; returns (values, sources, errors). With no session (live mode) it gives CNBC's
-    latest figures only."""
+    """Reads the sources; returns (values, sources, errors). With no session (live mode) it gives CNBC's latest
+    figures only."""
     import requests
     errors = {}
     cnbc = {}
@@ -557,16 +546,7 @@ def fetch_intl_yields(session=None):
             raise ValueError("no rows parsed")
     except Exception as e:  # noqa: BLE001
         errors["mof"] = f"{type(e).__name__}: {e}"[:160]
-    stooq = {}
-    for k, spec in INTL_YIELDS.items():
-        try:
-            r = requests.get(STOOQ_DAILY.format(sym=spec["stooq"]), headers=UA, timeout=20)
-            r.raise_for_status()
-            stooq[k] = parse_stooq(r.text)[-5:]
-        except Exception as e:  # noqa: BLE001
-            errors[f"stooq {k}"] = f"{type(e).__name__}: {e}"[:160]
-        time.sleep(0.5)
-    values, sources = choose_yields(session, cnbc, stooq, mof)
+    values, sources = choose_yields(session, cnbc, mof)
     return values, sources, errors
 
 
@@ -681,7 +661,7 @@ def run_close(repo, out, force=False):
             "tolerances_pct": {"close": TOL_CLOSE, "open_high_low": TOL_OHL},
             "source": "Yahoo Finance daily bars through yfinance (auto_adjust off), checked against data/history.json; "
                       "US Treasury daily par yield curve CSV; Coinbase Exchange hourly candles; non-US 10-year yields from "
-                      "CNBC's quote service, the Japanese Ministry of Finance and stooq"}
+                      "CNBC's quote service and the Japanese Ministry of Finance"}
     write_json(os.path.join(out, "latest.json"), {"meta": meta, "tickers": result, "macro": macro})
     write_md(os.path.join(out, "latest.md"), meta, result, macro)
     log(f"written: {len(result)} tickers; missing {missing or 'none'}; stale {stale or 'none'}; mismatched {mismatched or 'none'}; "

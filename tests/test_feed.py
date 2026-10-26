@@ -266,35 +266,37 @@ def test_feed_intl_yields_parsers_and_choice():
     """Feed 1.2 (26 Oct 2026): the non-US 10-year yields. Offline: canned replies in each source's format."""
     f = _feed_mod()
     cnbc = f.parse_cnbc({"FormattedQuoteResult": {"FormattedQuote": [
-        {"symbol": "UK10Y-GB", "last": "5.352%", "previous_day_closing": "5.331%", "last_time": "2026-10-26T17:59:57.000+0000"},
-        {"symbol": "DE10Y-DE", "last": "3.341%", "previous_day_closing": "3.33%", "last_time": "2026-10-26T20:01:00.000+0000"},
+        {"symbol": "UK10Y-GB", "last": "5.352%", "previous_day_closing": "5.331%", "last_time": "2026-10-26T17:15:00.000+0000"},
+        {"symbol": "DE10Y-DE", "last": "3.37%", "previous_day_closing": "3.33%", "last_time": "2026-10-26T21:00:00.000+0000"},
         {"symbol": "FR10Y-FR", "last": "5.10%", "last_time": "2026-10-23T17:30:00.000+0000"},
         {"symbol": "IT10Y-IT", "last": "n/a", "last_time": "2026-10-26T17:30:00.000+0000"},
-        {"symbol": "JP10Y-JP", "last": "2.885%", "last_time": "2026-10-26T06:00:00.000+0000"}]}})
+        {"symbol": "JP10Y-JP", "last": "2.805%", "previous_day_closing": "2.83%", "last_time": "2026-10-26T22:50:00.000+0000"}]}})
     assert cnbc["UK10Y-GB"]["value"] == 5.352 and cnbc["UK10Y-GB"]["prev_close"] == 5.331
     assert cnbc["IT10Y-IT"]["value"] is None
-    stooq = {"it10y": f.parse_stooq("Date,Open,High,Low,Close\n2026-10-23,4.60,4.62,4.58,4.61\n2026-10-26,4.59,4.63,4.57,4.62\n"),
-             "uk10y": f.parse_stooq("Date,Open,High,Low,Close\n2026-10-26,5.33,5.40,5.30,5.60\n")}
-    assert stooq["it10y"][-1] == ("2026-10-26", 4.62)
-    with pytest.raises(ValueError):
-        f.parse_stooq("Get your apikey at stooq.com")
-    mof = f.parse_mof("Interest Rate\nJGB Interest Rate (%)\nDate,1Y,2Y,5Y,10Y,20Y\n2026/10/23,0.9,1.1,1.6,2.88,3.4\n2026/10/26,0.9,1.1,1.6,2.89,3.4\n")
-    assert mof[-1] == ("2026-10-26", 2.89)
-    vals, srcs = f.choose_yields("2026-10-26", cnbc, stooq, mof)
+    mof = f.parse_mof("Interest Rate\nJGB Interest Rate (%)\nDate,1Y,2Y,5Y,10Y,20Y\n2026/10/22,0.9,1.1,1.6,2.88,3.4\n2026/10/23,0.9,1.1,1.6,2.837,3.4\n")
+    assert mof[-1] == ("2026-10-23", 2.837)
+    vals, srcs = f.choose_yields("2026-10-26", cnbc, mof)
     assert vals["uk10y"]["value"] == 5.352 and vals["uk10y"]["source"] == "cnbc"
-    assert "disagree" in vals["uk10y"]                      # stooq 5.60 against CNBC 5.352
-    assert vals["de10y"]["value"] == 3.341                  # 20:01 UTC is still 26 Oct in Berlin
+    assert vals["de10y"]["value"] == 3.37                   # 21:00 UTC is still 26 Oct in Berlin
     assert vals["fr10y"]["value"] is None and "no figure dated 2026-10-26" in vals["fr10y"]["note"]
-    assert vals["it10y"]["value"] == 4.62 and vals["it10y"]["source"] == "stooq"
-    assert vals["jp10y"]["value"] == 2.89 and vals["jp10y"]["source"] == "mof"   # the official close comes first
-    assert len(srcs["jp10y"]) == 2
+    assert vals["it10y"]["value"] is None
+    # Tokyo is already trading on 27 Oct (07:50 JST): its previous close is 26 Oct's; the MoF file still ends on 23 Oct
+    assert vals["jp10y"]["value"] == 2.83 and vals["jp10y"]["source"] == "cnbc previous close"
+    assert len(srcs["jp10y"]) == 3
+    # once the MoF file has the session, the official close comes first and a gap to CNBC is shown
+    mof2 = mof + [("2026-10-26", 2.98)]
+    vals2, _ = f.choose_yields("2026-10-26", cnbc, mof2)
+    assert vals2["jp10y"]["source"] == "mof" and "disagree" in vals2["jp10y"]
 
 
 def test_feed_intl_yields_never_dated_wrong():
-    """A CNBC figure whose last trade fell on another day in its own market is not used for the session."""
+    """A CNBC figure is not used for a session it does not belong to: a last trade two weekdays on (a holiday in the
+    bond's own market between) gives nothing, and a Friday's previous close counts for the Friday when Monday trades."""
     f = _feed_mod()
-    cnbc = f.parse_cnbc({"FormattedQuoteResult": {"FormattedQuote": {
-        "symbol": "JP10Y-JP", "last": "2.90%", "last_time": "2026-10-26T16:00:00.000+0000"}}})   # 01:00 on 27 Oct in Tokyo
-    vals, _ = f.choose_yields("2026-10-26", cnbc, {}, [])
-    assert vals["jp10y"]["value"] is None
-    assert "latest cnbc 2.900 on 2026-10-27" in vals["jp10y"]["note"]
+    jp = lambda t: f.parse_cnbc({"FormattedQuoteResult": {"FormattedQuote": {
+        "symbol": "JP10Y-JP", "last": "2.90%", "previous_day_closing": "2.88%", "last_time": t}}})
+    vals, _ = f.choose_yields("2026-11-02", jp("2026-11-03T23:30:00.000+0000"), [])   # 4 Nov in Tokyo (3 Nov a holiday)
+    assert vals["jp10y"]["value"] is None and "latest cnbc 2.900 on 2026-11-04" in vals["jp10y"]["note"]
+    vals, _ = f.choose_yields("2026-10-30", jp("2026-11-01T23:30:00.000+0000"), [])   # Mon 2 Nov in Tokyo
+    assert vals["jp10y"]["value"] == 2.88 and vals["jp10y"]["source"] == "cnbc previous close"
+    assert f.next_weekday("2026-10-30") == "2026-11-02"
