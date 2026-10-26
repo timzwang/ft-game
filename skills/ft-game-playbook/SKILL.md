@@ -35,7 +35,7 @@ Which part of the procedure to use:
 | Score or screen stocks | The `stock-score` skill and part E |
 | Change what the page shows or how a run behaves | Edit the procedure docs, the page, or the script, with Tim |
 
-Scheduled tasks (UK times): evening review 21:30 Sun to Thu; morning check 07:26 Mon to Fri (06:36 until Tim moves the task); price refreshes 16:45 and 19:22 Mon to Fri; results-day refresh 14:50 Mon to Fri (acts only on results days); weekly performance review Sat 09:12; weekend news check Sat and Sun 20:20; nightly watchdog 22:47 every day (checks every run, messages Tim only on a problem); midday check 12:40 (switched off: the game's rules rule out same-day changes).
+Scheduled tasks (UK times): evening review 21:30 Sun to Thu; morning check 07:26 Mon to Fri; price refreshes 16:45 and 19:22 Mon to Fri; results-day refresh 14:50 Mon to Fri (acts only on results days); weekly performance review Sat 09:12; weekend news check Sat and Sun 20:20; nightly watchdog 22:47 every day (checks every run, messages Tim only on a problem); midday check 12:40 (switched off: the game's rules rule out same-day changes).
 
 ## Hard limits
 

@@ -33,5 +33,5 @@ Final message, also sent through SendUserMessage when there is an A item:
 
 - First line: with no A item, exactly "No change. Nothing this weekend changes Monday's plan."; with an A item, "Tim, weekend news that matters:".
 - Then at most five items, most important first: what happened with its source and time, the effect on the portfolio in points, whether it should carry on or fade, the rating, and for an A item the provisional action with its confidence rating.
-- Then the weekend prices from step 3 in one line, and one line on what comes next: Sunday's evening review sets the order, futures reopen at 23:00 UK on Sunday, and Monday's morning check (07:26, or 06:36 until Tim moves it) reads them before the 08:00 UK cut-off (part C).
+- Then the weekend prices from step 3 in one line, and one line on what comes next: Sunday's evening review sets the order, futures reopen at 23:00 UK on Sunday, and Monday's morning check at 07:26 reads them before the 08:00 UK cut-off (part C).
 - Sources as markdown links.

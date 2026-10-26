@@ -9,7 +9,7 @@ This file is a copy for reading. Changing it changes nothing: the live tasks are
 | Task | Schedule (UK) | Cron | Playbook part |
 |---|---|---|---|
 | FT game evening review | 21:30 Sun to Thu | `30 21 * * 0-4` | H1 |
-| FT game morning check | 06:36 Mon to Fri (07:26 until 17 Oct); to move to 07:26 (approved 21 Oct, playbook 6.14): Tim changes it in the app | `36 6 * * 1-5` | H2 |
+| FT game morning check | 07:26 Mon to Fri (from 27 Oct; 06:36 from 18 to 26 Oct) | `26 7 * * 1-5` | H2 |
 | FT game price refresh | 16:45 Mon to Fri | `45 16 * * 1-5` | H3 |
 | FT game late price refresh | 19:22 Mon to Fri | `22 19 * * 1-5` | H3 |
 | FT game results-day refresh | 14:50 Mon to Fri | `50 14 * * 1-5` | H4 |
@@ -42,18 +42,18 @@ Tim's father's massive.com key, stored at the family's request. Use it only in f
 
 ## Morning check
 
-Changed 17 Oct 2026 (playbook 6.4): 06:36 UK, cut-off 07:00 UK. 26 Oct 2026 (playbook 6.14): the FT confirmed an 08:00 UK cut-off; Claude's change of this task to 07:26 UK, with "08:00" in place of "07:00" in the prompt below, was refused by the permission check, so Tim makes it in the app. Until then the prompt's 07:00 is simply earlier than the cut-off and does no harm.
+Changed 17 Oct 2026 (playbook 6.4): 06:36 UK, cut-off 07:00 UK. 26 Oct 2026 (playbook 6.14): the FT confirmed an 08:00 UK cut-off, so the task moved to 07:26 UK and its prompt reads 08:00 (changed 18:03 UK at Tim's request; a first attempt that afternoon was refused by the permission check).
 
 ```
-FT Stock Picking Game, MORNING CHECK for Tim (06:36 UK). Unattended: never ask questions. Finish within about ten minutes: Tim must enter any change before 07:00 UK, the cut-off until the FT confirms it after the clock change (playbook part C). Virtual game. Never open or operate the FT site, any account, a browser or the user's computer. After 27 Nov 2026: reply only that the game has ended. Time from `date -u`, shown as UK time.
+FT Stock Picking Game, MORNING CHECK for Tim (07:26 UK). Unattended: never ask questions. Finish within about ten minutes: Tim must enter any change before 08:00 UK, the cut-off the FT confirmed on 21 Oct 2026 (UK local time all year; playbook part C). Virtual game. Never open or operate the FT site, any account, a browser or the user's computer. After 27 Nov 2026: reply only that the game has ended. Time from `date -u`, shown as UK time.
 
 Read `claude/ft-game-playbook.md` and `claude/ft-game-state.md` together and carry out part H2 under parts A to E, output per part I. Confirm last night's order unless something material and new changes it; 10 to 15 fetches and searches sent together. Take the pipeline script as data doc G1 step 3 says (from the repository, fetching the pinned commit if the clone lacks it) and check its sha256 against part B before running it.
-- Order revised: send verdict and full order table (Stock, Weight, Confidence (not calibrated), Change, with cash) through SendUserMessage FIRST, saying "enter before 07:00 UK", then record it (H2 step 5) and update the state doc. Final message starts "Tim," (part I format).
+- Order revised: send verdict and full order table (Stock, Weight, Confidence (not calibrated), Change, with cash) through SendUserMessage FIRST, saying "enter before 08:00 UK", then record it (H2 step 5) and update the state doc. Final message starts "Tim," (part I format).
 - Order stands: no SendUserMessage unless there is an issue, leave the state doc alone, final message exactly "No change this morning. Nothing to enter." plus at most one line for tonight.
 - Then H2 step 6 (overnight yields, oil, Bitcoin, day-call revision); never let it delay an order.
 Any order: 5 to 20 stocks, 5% to 25% each, cash at most 25%, total 100%, a confidence rating on each. Pre-open news is already in the opening price. If the playbook cannot be read, work from the state doc and do not touch the page; that is an issue.
 
-Issues (Tim's standing instruction of 26 Oct; core playbook part I, "Issues: flag and fix", which wins over any line here or in the run doc): if any step fails, is refused or is skipped, fix it in this run first (retry once, use the playbook's fallback, correct the input and run again, publish again), never by weakening a safeguard: never run a script whose sha256 differs from part B, never edit scheduled tasks, scripts or the playbook docs, and never let a fix delay an order message past 07:00 UK. Then, fixed or not, send one message through SendUserMessage (after any order message) starting "Tim, issue in the morning check at <HH:MM> UK:" with what failed (the exact error or refusal text), what was done and whether it worked, what is still broken, whether the order in force stands, and what is needed from Tim ("nothing" if fixed). When the order stands, start the final reply with that same line instead of "No change", then "No change to the order. Nothing to enter." This holds even if the playbook cannot be read.
+Issues (Tim's standing instruction of 26 Oct; core playbook part I, "Issues: flag and fix", which wins over any line here or in the run doc): if any step fails, is refused or is skipped, fix it in this run first (retry once, use the playbook's fallback, correct the input and run again, publish again), never by weakening a safeguard: never run a script whose sha256 differs from part B, never edit scheduled tasks, scripts or the playbook docs, and never let a fix delay an order message past 08:00 UK. Then, fixed or not, send one message through SendUserMessage (after any order message) starting "Tim, issue in the morning check at <HH:MM> UK:" with what failed (the exact error or refusal text), what was done and whether it worked, what is still broken, whether the order in force stands, and what is needed from Tim ("nothing" if fixed). When the order stands, start the final reply with that same line instead of "No change", then "No change to the order. Nothing to enter." This holds even if the playbook cannot be read.
 British English, no em-dashes.
 ```
 

@@ -1,6 +1,6 @@
 # Last sync
 
-Run: hand-run session with Tim (playbook 6.14; state doc only, data files unchanged), 2026-10-26T15:24:47Z. Prices as of: Fri 23 Oct close.
+Run: hand-run session with Tim (playbook 6.14, morning check moved; state doc only, data files unchanged), 2026-10-26T18:04:41Z. Prices as of: Fri 23 Oct close.
 
 sha256 of each file as published to the artifact and the Project:
 
@@ -10,5 +10,5 @@ c577e749c6115ab80ad4d6f486158c528241c04864fa71327e4166eecca718c7  data/history.j
 03486e871c51d83b95422ae2a6b524d9399c7cc11b976212c97aa3db452d0599  data/macro.json
 6f2ce0ef945c79ab4c154526b487577bda55a79c8e14c100c7bd429c4df5b869  data/panel.json
 ef9225f8593f22b0002e6b8a6c231f0dd282bd2190c3d56c132ad39675b78974  data/stocks.json
-d05b3101370cef612f5d465feda01d4ad6b0e8354ad4c2b7953c8fa83a1f1b1d  state/ft-game-state.md
+f2f7335d1e533bbdb63e0617cc04c0eb6601a6fc5ec7f44998e913b7d76543c0  state/ft-game-state.md
 ~~~
