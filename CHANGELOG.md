@@ -6,6 +6,15 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.13.1 (Mon 26 Oct 2026, afternoon)
+
+A fix for the pipeline script being refused, approved by Tim ("Yes do everything recommended", about 14:40 UK). No rule, score, sizing, order, page, feed, scan or scheduled task changed.
+
+- Why: from Sat 24 Oct the session's permission check refused to run the pipeline script downloaded from the artifact asset. That stopped the weekend news checks of 24 and 25 Oct and the 25 Oct evening review, which sent a fault message and left the order in force.
+- Fix: commit `87d8f64` holds `scripts/ft_pipeline.py` version 7.7 byte for byte (sha256 `abbb29c4...4bbd`, the hash in core part B). Runs now take the script with `git show 87d8f64:scripts/ft_pipeline.py` (data doc G1 step 3) and check the same hash. That copy ran on 26 Oct. The artifact asset stays as the fallback and the record.
+- G6: push with `git push origin HEAD:main`, because the session's clone can sit on a detached HEAD (the 25 Oct push of `main` was refused).
+- Docs: core playbook (version line, part B) and data doc (G1, G6), uploaded to the Project from these files.
+
 ## 6.13 (Wed 21 Oct 2026, late evening)
 
 The endgame stance. Approved by Tim at 22:38 UK ("Yes", to suspending the guardrail rules for the rest of the game). No score, panel, pipeline, page, scan, feed or scheduled task changed. Pipeline still 7.7.
