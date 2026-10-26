@@ -327,7 +327,11 @@ def check(repo, now, fresh, pl):
             # 7.6: every stock held or traded that session needs its own contribution row; before, a session with no rows
             # at all passed as "contributions add up"
             want = set(pl.live_weights(ledger, d)) | (set(pl.live_weights(ledger, dprev)) if dprev and dprev >= start_d else set())
-            want |= {r_["name"] for r_ in ledger if r_["table"] == "position" and (dprev or "") < (r_["effective"] or "") <= d}
+            # 26 Oct: only a row with a weight above zero adds a name here. A zero row for a name not held the session
+            # before is no trade (an order replaced before it filled leaves one: Hasbro, 22 Oct), and a sale of a name
+            # that was held is already covered by the previous session's weights.
+            want |= {r_["name"] for r_ in ledger if r_["table"] == "position" and (dprev or "") < (r_["effective"] or "") <= d
+                     and (pl.num(r_["weight"]) or 0) > 0}
             lack = sorted(want - named.get(d, set()))
             if lack:
                 errs.append(f"{d}: no contribution row for {', '.join(lack[:6])}")

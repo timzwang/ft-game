@@ -226,3 +226,26 @@ def test_event_on_another_date_fails(cd, pl, tmp_repo):
     resync(cd, tmp_repo)
     fails, _ = run(cd, pl, tmp_repo)
     assert any(f.startswith("FAIL results: holding(s) whose results event is not on the date") and "Coca-Cola" in f for f in fails)
+
+
+def test_order_replaced_before_it_filled_is_no_trade(cd, pl, tmp_repo):
+    """26 Oct: an order replaced before it filled leaves a zero row for a name never held (Hasbro, 22 Oct). That is no
+    trade, so it needs no contribution row; before the fix the data check failed every night on it."""
+    def f(L):
+        r = dict(next(r for r in L if r["table"] == "position" and r["effective"] == "2026-10-15"))
+        r.update(id="position:2026-10-15:Hasbro", name="Hasbro", ticker="HAS", weight=0.0)
+        L.append(r)
+    edit(tmp_repo, "ledger", f)
+    resync(cd, tmp_repo)
+    fails, _ = run(cd, pl, tmp_repo)
+    assert len(fails) == 1 and "AbbVie" in fails[0]
+
+
+def test_held_name_without_contribution_still_fails(cd, pl, tmp_repo):
+    """The 26 Oct fix must not hide a real gap: a name held that session with no contribution row still fails."""
+    def f(L):
+        L.remove(next(r for r in L if r["table"] == "contrib" and r["date"] == "2026-10-15"))
+    edit(tmp_repo, "ledger", f)
+    resync(cd, tmp_repo)
+    fails, _ = run(cd, pl, tmp_repo)
+    assert any(f.startswith("FAIL performance") and "no contribution row" in f for f in fails)
