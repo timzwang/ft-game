@@ -6,9 +6,20 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.13.2 (Mon 26 Oct 2026, afternoon)
+
+Tim's standing instruction ("From now on, if there are any issues in the automated runs, then you must flag them to me and fix them immediately", 13:29 UK). No rule, score, sizing, order, page, feed or scan changed. Pipeline still 7.7.
+
+- Flag and fix (core part I, "Issues: flag and fix"): every run fixes what it can in the same run (retry once, the playbook's fallback, correct the input and run again, publish again), never by weakening a safeguard, then tells Tim about any issue through SendUserMessage, fixed or not. Its final reply starts "Tim, issue in the <run> at <HH:MM> UK:" instead of "No change", so the issue shows on his phone. Runs that write the state doc add an "ISSUE:" review-log line. This overrides the price refreshes' and results-day refresh's old "never message" rule and every fixed quiet reply.
+- Sessions with Tim start by checking for open issues (the review log's ISSUE and FAULT lines, "System" alerts, each task's last run) and fix them first.
+- Shallow-clone fix (data doc G1 step 3): a `--depth 1` clone does not hold commit `87d8f64`, so 6.13.1's `git show 87d8f64:scripts/ft_pipeline.py` fails there with "invalid object name" (tested 26 Oct). Runs now fetch the commit by its full hash when it is missing, then take the script; the hash is unchanged. Tested on a fresh shallow clone and on a full clone; the repository copy ran `template` on the 23 Oct data in the session with Tim (exit 0).
+- Scheduled tasks: the prompts of all eight enabled tasks carry the issues clause and point at G1 step 3 for the script (evening review, morning check, midday check, price refresh, late price refresh, results-day refresh, weekly review, weekend news check). Times, models and approval settings unchanged.
+- Docs: core playbook (version line, part I) and data doc (version line, G1 step 3), uploaded to the Project from these files.
+- 6.13.1's entry: its approval time corrected to before 13:31 UK, the time of its commit (UK time is GMT from 25 Oct).
+
 ## 6.13.1 (Mon 26 Oct 2026, afternoon)
 
-A fix for the pipeline script being refused, approved by Tim ("Yes do everything recommended", about 14:40 UK). No rule, score, sizing, order, page, feed, scan or scheduled task changed.
+A fix for the pipeline script being refused, approved by Tim ("Yes do everything recommended", before 13:31 UK). No rule, score, sizing, order, page, feed, scan or scheduled task changed.
 
 - Why: from Sat 24 Oct the session's permission check refused to run the pipeline script downloaded from the artifact asset. That stopped the weekend news checks of 24 and 25 Oct and the 25 Oct evening review, which sent a fault message and left the order in force.
 - Fix: commit `87d8f64` holds `scripts/ft_pipeline.py` version 7.7 byte for byte (sha256 `abbb29c4...4bbd`, the hash in core part B). Runs now take the script with `git show 87d8f64:scripts/ft_pipeline.py` (data doc G1 step 3) and check the same hash. That copy ran on 26 Oct. The artifact asset stays as the fallback and the record.
