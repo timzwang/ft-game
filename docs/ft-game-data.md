@@ -166,6 +166,8 @@ The private repository `timzwang/ft-game` holds a copy of the data files and the
 5. If `git -C <repo> diff --cached --quiet` succeeds, nothing changed: stop. Otherwise commit with the message "<Evening review|Weekly review>: data and state as of <prices_as_of>", then `git -C <repo> pull --rebase origin main` and `git -C <repo> push origin HEAD:main` (the session's clone can be on a detached HEAD, where `push origin main` is refused: 25 Oct). If the push is refused, pull with rebase and push once more. If a rebase stops on a conflict, `git -C <repo> rebase --abort`, stop and report it.
 6. Check: `git -C <repo> fetch origin main`, and `git -C <repo> rev-parse HEAD` must equal `git -C <repo> rev-parse origin/main`.
 
+A session with Tim that commits a changed state doc (or data file) to the repository also rewrites `state/last-sync.md` the same way, keeping the last run's "Run:" line and adding one line that says what the session changed, or the repository's data check fails ("files changed since the last sync record"; 26 Oct, 23:08 UTC, fixed the same night).
+
 From version 6.11 the push starts the repository's data check (`scripts/check_data.py`, GitHub workflow `data-check`), and a scheduled check about two hours after each evening and weekly review confirms that this step ran and that the data reach the latest closed US session. The run does not wait for either check and never reads its result; a red check is for Tim, ChatGPT and the next session with Tim to look into.
 
 **G7. Read the broad scan (evening review, step 4)**
