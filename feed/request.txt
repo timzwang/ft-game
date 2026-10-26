@@ -16,3 +16,4 @@ tickers: NET NVDA
 2026-10-26 16:46 UK live request (price refresh)
 2026-10-26 19:23 UK
 tickers: FTNT CRWD PANW ADI FFIV
+2026-10-26 22:56 UK: feed 1.2 test, non-US yields (session with Tim)
