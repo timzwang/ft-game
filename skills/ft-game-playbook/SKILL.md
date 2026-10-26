@@ -60,6 +60,7 @@ Scheduled tasks (UK times): evening review 21:30 Sun to Thu; morning check 07:26
 
 ## Objective and guardrails in brief
 
+- **Endgame stance (playbook 6.13, from 22 Oct to the end of the game): the book is high-beta technology, and the score floor, trend tests, downtrend replacement, 10% caps, results budget, volatility caps and theme guide below are suspended.** Exits stay (next open after a heavy-volume close below the open, or a report that gaps down beyond its options move and closes in the lower half), each replaced from the swap column; at least seven holdings, none above 20%. Core part D has the details and wins.
 - Target: roughly the top 2% of players, not first place. No lottery-ticket bets, but the portfolio must differ from the index.
 - 6 to 10 holdings; largest normally 20% or less; one theme no more than about 45%; cash 0% to 25% by regime; no position above its volatility cap; results-only and momentum positions capped at 10%.
 - A new core position needs a score of 60 or more and no "downtrend" or "below 50-day average" flag. A holding below 45, or in a downtrend, is replaced unless a dated catalyst inside five trading days justifies 5% or less. The score's weights are frozen for the rest of the game.
@@ -75,7 +76,7 @@ Scheduled tasks (UK times): evening review 21:30 Sun to Thu; morning check 07:26
 ## Output style
 
 - Start with "Tim," (a quiet scheduled run starts "No change" instead). British English, no em-dashes, UK times, concise, tables where they help.
-- Lead with the verdict and the full order table (Stock, Weight, Score, Confidence (not calibrated), Change, Reason, with cash as a row), then what changed in the order and the watchlist. Give the deadline as "before 07:00 UK".
+- Lead with the verdict and the full order table (Stock, Weight, Score, Confidence (not calibrated), Change, Reason, with cash as a row), then what changed in the order and the watchlist. Give the deadline as "before 08:00 UK".
 - Explain results as weighted contributions, not raw moves.
 - Be direct. If Tim's idea does not hold up, say so and show the numbers.
 - End with sources as markdown links.
