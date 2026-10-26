@@ -12,7 +12,8 @@ On Tue 20 Oct the evening review's fetch tool refused every address it had not f
 |---|---|---|
 | `latest.json` | close mode, after the US close | For every ticker the runs may need: the last ten completed sessions (open, high, low, close, volume), the 52-week high and low, a check against the stored prices, and about two years of daily bars for any ticker with fewer than 200 stored rows (or a panel stock with fewer than 480 closes); the Treasury's 2, 10 and 30-year yields (latest six days); Coinbase's Bitcoin, Ether, Solana and XRP prices at the hour before the US close; front-month Brent, WTI, natural gas and gold futures (a fallback only: around an expiry the front month can differ by several dollars from tradingeconomics' figure, as WTI did on 20 Oct, $101.79 against $98.07) |
 | `latest.md` | close mode | The same, for reading, with the check for every ticker |
-| `live.json` | live mode, on request during the US session | The latest price, previous close, open, high, low and volume for the list and the price store, when the feed read them, Coinbase's live Bitcoin and Ether and the futures |
+| `latest.json` `macro.intl_yields` | close mode, from feed 1.2 (26 Oct 2026) | The UK, German, French, Italian and Japanese 10-year yields for the session (`values`: each with its value, source, date and, for CNBC, the time of the last trade), every source's figure beside it (`sources`) and any source that did not answer (`errors`). A figure not dated the session is left null with a note |
+| `live.json` | live mode, on request during the US session | The latest price, previous close, open, high, low and volume for the list and the price store, when the feed read them, Coinbase's live Bitcoin and Ether, the futures and (from 1.2) the live US, UK, German, French, Italian and Japanese 10-year yields under `macro_now.intl_yields` |
 | `log-close.txt`, `log-live.txt` | each mode | The last run's log (the Actions logs are not readable from Claude's sessions) |
 | `request.txt` | the runs | Pushing a changed line forces a run (see below) |
 | `feed.py` | | The script |
@@ -26,6 +27,16 @@ Every stock in `data/stocks.json`, every ticker in `data/history.json` (stocks t
 Yahoo Finance daily bars through the `yfinance` library, with dividend adjustment off, so a price is the price traded that day (adjusted only for splits, like stockanalysis.com's history pages). London prices are in pence, as in the price store. Bars are dated in the exchange's own zone. A US bar counts as final from 16:15 New York (13:15 on 27 Nov), a London bar from 16:45 UK.
 
 First run (21 Oct 2026, 984 overlapping sessions across 41 tickers): Yahoo's close matched the stored close to the cent in 973; the largest gap was 0.42%, on one close-only row from September. 837 of 858 opens were within 0.05%; the six beyond 0.2% were mostly 19 Oct rows taken that night from Cboe's delayed quotes. The rows that first looked like disagreements were old close-only rows (open, high and low set to the close), which are now compared on the close only.
+
+## Non-US 10-year yields (feed 1.2, 26 Oct 2026)
+
+Until 26 Oct the evening review read these from tradingeconomics through a search; from 22 Oct that page came back days old and the stored figures were carried (26 Oct: none of the five). Now, for each yield, the first figure dated the session is used:
+
+1. Japan only: the Ministry of Finance's daily JGB file (`jgbcme.csv`), the official close. It is often a day behind when the feed reads it.
+2. CNBC's quote service (Tradeweb benchmark yields), dated by its last trade in the bond's own market.
+3. CNBC's previous close, when the last trade already falls on that market's next weekday (Tokyo is trading by the time the evening review runs). A holiday in between means no figure.
+
+stooq's daily files were tried and refuse GitHub's servers. First run, for 26 Oct: UK 5.352, Germany 3.370, France 4.903, Italy 4.500, Japan 2.787. Two other pages gave France 4.92 to 4.93 and Germany 3.37 for that day; the stored tradingeconomics series sat a few basis points apart from these, so the first day from the feed may show a small step that is the source, not the market. Two sources more than 0.10 points apart for the same session are shown as `disagree`, never refused.
 
 ## The check
 

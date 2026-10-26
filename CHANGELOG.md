@@ -6,6 +6,16 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.14.1 (Mon 26 Oct 2026, late evening)
+
+Tim's "Do it now" (22:52 UK), after the 26 Oct evening review logged an open ISSUE. No rule, score, sizing, order, page, pipeline or scheduled task changed. Pipeline still 7.8.
+
+- Why: the UK, German, French, Italian and Japanese 10-year yields came from tradingeconomics through a search, and from 22 Oct that page came back days old, so the five series were carried (26 Oct: none dated that day).
+- Feed 1.2 (`feed/feed.py`): `feed/latest.json` gains `macro.intl_yields`, the five yields for the session, each with its value, source, date and time, every source's figure beside it and any source that failed. Sources: CNBC's quote service (Tradeweb benchmark yields), dated by its last trade in the bond's own market; for Japan the Ministry of Finance's daily JGB file first (the official close), and CNBC's previous close once Tokyo has moved to the next weekday. A figure not dated the session is never used. `feed/live.json` gains the live US, UK, German, French, Italian and Japanese 10-year yields under `macro_now.intl_yields`. stooq was tried and refuses GitHub's servers, so it was dropped.
+- Tested with two forced feed runs on 26 Oct: UK 5.352, Germany 3.370, France 4.903, Italy 4.500, Japan 2.787, all dated 26 Oct. Two other pages gave France 4.92 to 4.93 and Germany 3.37 that day. Two offline tests added (170 pass).
+- Docs: core playbook (version line), data doc (version line, part F, G8 step 3: copy the five values into today.json; the pipeline's `feed` command does not fill them), evening run doc (step 3), refresh run doc (live yields from the feed), morning run doc (live yields may come from a live feed request). Uploaded to the Project from these files.
+- State doc: Tim's FT figures for the 26 Oct close (100,973, rank 3,994 of 14,736; +94 credits against the estimate; a player at rank 330 at +8.14%), for the next evening review to give under `reported`; the 27 Oct order seen entered.
+
 ## 6.14 (Mon 26 Oct 2026, late afternoon)
 
 Tim asked "What's next to implement/improve? Work on it all now" (15:11 UK). No rule, score, sizing or order changed.

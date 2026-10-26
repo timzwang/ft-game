@@ -83,6 +83,7 @@ INTL_YIELDS = {"uk10y": {"cnbc": "UK10Y-GB", "zone": "Europe/London"},
                "fr10y": {"cnbc": "FR10Y-FR", "zone": "Europe/Paris"},
                "it10y": {"cnbc": "IT10Y-IT", "zone": "Europe/Rome"},
                "jp10y": {"cnbc": "JP10Y-JP", "zone": "Asia/Tokyo", "mof": True}}
+LIVE_ONLY_YIELDS = {"us10y": {"cnbc": "US10Y", "zone": "America/New_York"}}   # live readings only: the close is the Treasury's
 CNBC_QUOTES = ("https://quote.cnbc.com/quote-html-webservice/restQuote/symbolType/symbol?symbols={syms}"
                "&requestMethod=itv&noform=1&partnerId=2&fund=1&exthrs=1&output=json&events=1")
 MOF_JGB = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv"
@@ -528,15 +529,16 @@ def fetch_intl_yields(session=None):
     import requests
     errors = {}
     cnbc = {}
+    specs = INTL_YIELDS if session is not None else {**LIVE_ONLY_YIELDS, **INTL_YIELDS}
     try:
-        syms = "%7C".join(v["cnbc"] for v in INTL_YIELDS.values())
+        syms = "%7C".join(v["cnbc"] for v in specs.values())
         r = requests.get(CNBC_QUOTES.format(syms=syms), headers=UA, timeout=20)
         r.raise_for_status()
         cnbc = parse_cnbc(r.json())
     except Exception as e:  # noqa: BLE001
         errors["cnbc"] = f"{type(e).__name__}: {e}"[:160]
     if session is None:
-        return {k: {**(cnbc.get(v["cnbc"]) or {"value": None}), "source": "cnbc"} for k, v in INTL_YIELDS.items()}, {}, errors
+        return {k: {**(cnbc.get(v["cnbc"]) or {"value": None}), "source": "cnbc"} for k, v in specs.items()}, {}, errors
     mof = []
     try:
         r = requests.get(MOF_JGB, headers=UA, timeout=20)
