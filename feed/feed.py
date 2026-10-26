@@ -15,11 +15,14 @@ read them with git:
                       the 52-week high and low, and a check of every overlapping row against data/history.json;
                       the US Treasury's 2, 10 and 30-year yields (the same file the playbook names); Coinbase's
                       Bitcoin, Ether, Solana and XRP prices at the US close (the same candles the playbook names);
-                      and the front-month Brent, WTI, natural gas and gold futures as a fallback only.
+                      the front-month Brent, WTI, natural gas and gold futures as a fallback only; and, from 1.2
+                      (26 Oct 2026), the UK, German, French, Italian and Japanese 10-year government bond yields for
+                      the session, each with its source, date and time (`macro.intl_yields`).
     feed/latest.md    the same, for reading.
   live mode (during the US session; the 16:45 and 19:22 UK price refreshes)
     feed/live.json    the latest price, previous close, open, high, low and volume for the same tickers, the time
-                      each was read, Coinbase's live Bitcoin and Ether prices and the futures.
+                      each was read, Coinbase's live Bitcoin and Ether prices, the futures and (from 1.2) the
+                      live non-US 10-year yields.
 
 Prices are Yahoo Finance's daily bars through the yfinance library, unadjusted for dividends (adjusted for splits,
 like stockanalysis.com's history pages). London prices are in pence, as in the price store. The feed never
@@ -39,7 +42,7 @@ import traceback
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-FEED_VERSION = "1.1 (21 Oct 2026)"
+FEED_VERSION = "1.2 (26 Oct 2026)"
 NY = ZoneInfo("America/New_York")
 UK = ZoneInfo("Europe/London")
 UTC = timezone.utc
@@ -63,6 +66,24 @@ TREASURY = ("https://home.treasury.gov/resource-center/data-chart-center/interes
 COINBASE_CANDLE = ("https://api.exchange.coinbase.com/products/{pair}/candles?granularity=3600"
                    "&start={start}&end={start}")
 COINBASE_TICKER = "https://api.exchange.coinbase.com/products/{pair}/ticker"
+
+# Non-US 10-year government bond yields (feed 1.2, 26 Oct 2026, playbook 6.14.1). Until then the evening review read
+# them from tradingeconomics through a search, and from 22 Oct that page came back days old, so the stored figures were
+# carried (26 Oct: none for any of the five). Three sources, tried in this order for each yield; the first figure dated
+# the session is used, and every source's figure is kept beside it so a disagreement can be seen:
+#   CNBC's quote service (Tradeweb benchmark yields, the generic 10-year as tradingeconomics shows it), with the time of
+#   its last trade; the Japanese Ministry of Finance's daily JGB file (official close, Japan only, tried first there);
+#   stooq's daily history (a dated close). A figure not dated the session is never used for it.
+INTL_YIELDS = {"uk10y": {"cnbc": "UK10Y-GB", "stooq": "10uky.b", "zone": "Europe/London"},
+               "de10y": {"cnbc": "DE10Y-DE", "stooq": "10dey.b", "zone": "Europe/Berlin"},
+               "fr10y": {"cnbc": "FR10Y-FR", "stooq": "10fry.b", "zone": "Europe/Paris"},
+               "it10y": {"cnbc": "IT10Y-IT", "stooq": "10ity.b", "zone": "Europe/Rome"},
+               "jp10y": {"cnbc": "JP10Y-JP", "stooq": "10jpy.b", "zone": "Asia/Tokyo", "mof": True}}
+CNBC_QUOTES = ("https://quote.cnbc.com/quote-html-webservice/restQuote/symbolType/symbol?symbols={syms}"
+               "&requestMethod=itv&noform=1&partnerId=2&fund=1&exthrs=1&output=json&events=1")
+STOOQ_DAILY = "https://stooq.com/q/d/l/?s={sym}&i=d"
+MOF_JGB = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv"
+YIELD_DISAGREE = 0.10   # percentage points between two sources for the same session: shown, not refused
 
 # Agreement with the stored prices (stockanalysis.com, lse.co.uk, Cboe), checked on every overlapping session. The
 # check is there to catch the wrong instrument (a ticker mapped to another listing, pence against pounds, a split),
@@ -402,6 +423,153 @@ def coin_live():
     return out
 
 
+def _pct(x):
+    """'4.567%' or 4.567 to 4.567; anything else to None."""
+    if x is None:
+        return None
+    try:
+        v = float(str(x).replace("%", "").replace(",", "").strip())
+    except ValueError:
+        return None
+    return v if -5 < v < 30 else None
+
+
+def parse_cnbc(payload):
+    """CNBC's restQuote JSON to {symbol: {value, prev_close, time_utc}}."""
+    q = (payload or {}).get("FormattedQuoteResult", {}).get("FormattedQuote") or []
+    if isinstance(q, dict):
+        q = [q]
+    out = {}
+    for x in q:
+        sym = x.get("symbol")
+        if not sym:
+            continue
+        t = x.get("last_time") or ""
+        try:
+            t_utc = datetime.fromisoformat(t.replace("+0000", "+00:00")).astimezone(UTC).isoformat(timespec="minutes")
+        except ValueError:
+            t_utc = None
+        out[sym] = {"value": _pct(x.get("last")), "prev_close": _pct(x.get("previous_day_closing")), "time_utc": t_utc}
+    return out
+
+
+def parse_stooq(text):
+    """stooq's daily CSV ('Date,Open,High,Low,Close') to a list of (date, close), oldest first."""
+    lines = [ln.strip() for ln in (text or "").splitlines() if ln.strip()]
+    if not lines or not lines[0].lower().startswith("date"):
+        raise ValueError((lines[0] if lines else "empty reply")[:80])
+    head = [h.strip().lower() for h in lines[0].split(",")]
+    ic = head.index("close")
+    out = []
+    for ln in lines[1:]:
+        p = ln.split(",")
+        try:
+            date.fromisoformat(p[0])
+            v = _pct(p[ic])
+        except (ValueError, IndexError):
+            continue
+        if v is not None:
+            out.append((p[0], v))
+    return out
+
+
+def parse_mof(text):
+    """The Ministry of Finance's JGB file (two title lines, then 'Date,1Y,...,10Y,...') to a list of (date, 10-year),
+    oldest first. Dates are written like 2026/10/26."""
+    out, ix = [], None
+    for ln in (text or "").splitlines():
+        p = [x.strip() for x in ln.split(",")]
+        if ix is None:
+            if p and p[0].lower() == "date" and "10Y" in p:
+                ix = p.index("10Y")
+            continue
+        try:
+            y, m, d = (int(x) for x in p[0].replace("-", "/").split("/"))
+            v = _pct(p[ix])
+        except (ValueError, IndexError):
+            continue
+        if v is not None:
+            out.append((f"{y:04d}-{m:02d}-{d:02d}", v))
+    return sorted(out)
+
+
+def _local_date(t_utc, zone):
+    try:
+        return datetime.fromisoformat(t_utc).astimezone(ZoneInfo(zone)).date().isoformat()
+    except (TypeError, ValueError):
+        return None
+
+
+def choose_yields(session, cnbc, stooq, mof):
+    """For each yield, every source's figure for the session and the one used. A CNBC figure counts as the session's
+    when its last trade fell on that day in the bond's own market; stooq and the MoF give dated closes."""
+    values, sources = {}, {}
+    for k, spec in INTL_YIELDS.items():
+        cands = []
+        c = cnbc.get(spec["cnbc"]) or {}
+        if c.get("value") is not None:
+            cands.append({"source": "cnbc", "date": _local_date(c.get("time_utc"), spec["zone"]), "value": c["value"],
+                          "time_utc": c.get("time_utc")})
+        if spec.get("mof") and mof:
+            d, v = mof[-1]
+            cands.append({"source": "mof", "date": d, "value": v})
+        st = stooq.get(k) or []
+        if st:
+            d, v = st[-1]
+            cands.append({"source": "stooq", "date": d, "value": v})
+        order = ["mof", "cnbc", "stooq"] if spec.get("mof") else ["cnbc", "stooq"]
+        same = sorted([x for x in cands if x["date"] == session], key=lambda x: order.index(x["source"]))
+        sources[k] = cands
+        if same:
+            use = dict(same[0])
+            spread = max(x["value"] for x in same) - min(x["value"] for x in same)
+            if len(same) > 1 and spread > YIELD_DISAGREE:
+                use["disagree"] = ", ".join(f"{x['source']} {x['value']:.3f}" for x in same)
+            values[k] = use
+        else:
+            latest = max(cands, key=lambda x: x["date"] or "") if cands else None
+            values[k] = {"value": None, "note": f"no figure dated {session}" + (
+                f"; latest {latest['source']} {latest['value']:.3f} on {latest['date']}" if latest else "; no source answered")}
+    return values, sources
+
+
+def fetch_intl_yields(session=None):
+    """Reads the three sources; returns (values, sources, errors). With no session (live mode) it gives CNBC's
+    latest figures only."""
+    import requests
+    errors = {}
+    cnbc = {}
+    try:
+        syms = "%7C".join(v["cnbc"] for v in INTL_YIELDS.values())
+        r = requests.get(CNBC_QUOTES.format(syms=syms), headers=UA, timeout=20)
+        r.raise_for_status()
+        cnbc = parse_cnbc(r.json())
+    except Exception as e:  # noqa: BLE001
+        errors["cnbc"] = f"{type(e).__name__}: {e}"[:160]
+    if session is None:
+        return {k: {**(cnbc.get(v["cnbc"]) or {"value": None}), "source": "cnbc"} for k, v in INTL_YIELDS.items()}, {}, errors
+    mof = []
+    try:
+        r = requests.get(MOF_JGB, headers=UA, timeout=20)
+        r.raise_for_status()
+        mof = parse_mof(r.content.decode("utf-8", "replace"))
+        if not mof:
+            raise ValueError("no rows parsed")
+    except Exception as e:  # noqa: BLE001
+        errors["mof"] = f"{type(e).__name__}: {e}"[:160]
+    stooq = {}
+    for k, spec in INTL_YIELDS.items():
+        try:
+            r = requests.get(STOOQ_DAILY.format(sym=spec["stooq"]), headers=UA, timeout=20)
+            r.raise_for_status()
+            stooq[k] = parse_stooq(r.text)[-5:]
+        except Exception as e:  # noqa: BLE001
+            errors[f"stooq {k}"] = f"{type(e).__name__}: {e}"[:160]
+        time.sleep(0.5)
+    values, sources = choose_yields(session, cnbc, stooq, mof)
+    return values, sources, errors
+
+
 # -------------------------------------------------------------------- main
 
 def write_json(path, obj):
@@ -499,12 +667,21 @@ def run_close(repo, out, force=False):
             df = df[df.index <= pd.Timestamp(session_us)]
             if not df.empty:
                 macro["futures"][k] = {"symbol": s, "date": df.index[-1].strftime("%Y-%m-%d"), "close": rnd(df["Close"].iloc[-1])}
+    try:
+        vals, srcs, errs = fetch_intl_yields(session_us)
+        macro["intl_yields"] = {"session": session_us, "values": vals, "sources": srcs, "errors": errs}
+        log("non-US 10-year yields: " + ", ".join(f"{k} {v.get('value')} ({v.get('source', '-')})" for k, v in vals.items())
+            + (f"; source errors: {', '.join(errs)}" if errs else ""))
+    except Exception as e:  # noqa: BLE001     never let the yields stop the prices
+        macro["intl_yields"] = {"session": session_us, "values": {}, "sources": {}, "errors": {"all": f"{type(e).__name__}: {e}"[:200]}}
+        log(f"non-US 10-year yields: FAILED ({type(e).__name__}: {e})")
     meta = {"feed_version": FEED_VERSION, "mode": "close", "generated_utc": datetime.now(UTC).isoformat(timespec="seconds"),
             "session_us": session_us, "session_uk": session_uk, "tickers": len(result), "missing": missing,
             "stale": stale, "mismatched": mismatched, "short_history": short, "ranges_widened": ranges,
             "tolerances_pct": {"close": TOL_CLOSE, "open_high_low": TOL_OHL},
             "source": "Yahoo Finance daily bars through yfinance (auto_adjust off), checked against data/history.json; "
-                      "US Treasury daily par yield curve CSV; Coinbase Exchange hourly candles"}
+                      "US Treasury daily par yield curve CSV; Coinbase Exchange hourly candles; non-US 10-year yields from "
+                      "CNBC's quote service, the Japanese Ministry of Finance and stooq"}
     write_json(os.path.join(out, "latest.json"), {"meta": meta, "tickers": result, "macro": macro})
     write_md(os.path.join(out, "latest.md"), meta, result, macro)
     log(f"written: {len(result)} tickers; missing {missing or 'none'}; stale {stale or 'none'}; mismatched {mismatched or 'none'}; "
@@ -546,8 +723,13 @@ def run_live(repo, out):
     meta = {"feed_version": FEED_VERSION, "mode": "live", "read_utc": read_at.isoformat(timespec="seconds"),
             "read_uk": read_at.astimezone(UK).strftime("%H:%M"), "quotes": len(quotes),
             "note": "Yahoo quotes can lag the market by up to about 15 minutes; read_utc is when the feed read them."}
+    try:
+        yl, _s, yerr = fetch_intl_yields(None)
+    except Exception as e:  # noqa: BLE001
+        yl, yerr = {}, {"all": f"{type(e).__name__}: {e}"[:160]}
     write_json(os.path.join(out, "live.json"), {"meta": meta, "quotes": quotes,
-                                                 "macro_now": {"coins": coin_live(), "futures": fut}})
+                                                 "macro_now": {"coins": coin_live(), "futures": fut,
+                                                               "intl_yields": yl, "intl_yields_errors": yerr}})
     log(f"live: {len(quotes)} quotes read at {meta['read_uk']} UK")
     return 0
 
@@ -584,6 +766,17 @@ def write_md(path, meta, result, macro):
     md += ["", "| Coin | Price at the hour before the US close | Candle (UTC) |", "|---|---|---|"]
     for k, v in (macro.get("coins") or {}).items():
         md.append(f"| {k} | {fmt(v.get('price'), 4)} | {v.get('candle_start_utc')} {v.get('note', '')} |")
+    iy = macro.get("intl_yields") or {}
+    md += ["", f"Non-US 10-year yields for {iy.get('session')} (the first figure dated the session; feed 1.2):", "",
+           "| Yield | Value | Source | Date | Time (UTC) | Other sources | Note |", "|---|---|---|---|---|---|---|"]
+    for k in INTL_YIELDS:
+        v = (iy.get("values") or {}).get(k) or {}
+        others = "; ".join(f"{x['source']} {x['value']:.3f} ({x['date']})" for x in (iy.get("sources") or {}).get(k, [])
+                           if x["source"] != v.get("source"))
+        md.append(f"| {k} | {fmt(v.get('value'), 3)} | {v.get('source', '')} | {v.get('date', '')} | {v.get('time_utc', '')} | "
+                  f"{others} | {v.get('disagree', '') and 'sources disagree: ' + v['disagree']}{v.get('note', '')} |")
+    if iy.get("errors"):
+        md.append("\nSources that did not answer: " + "; ".join(f"{k}: {e}" for k, e in iy["errors"].items()))
     md += ["", "Futures (fallback only; the stored series are tradingeconomics figures):", ""]
     for k, v in (macro.get("futures") or {}).items():
         md.append(f"- {k}: {v['symbol']} {fmt(v['close'])} ({v['date']})")
