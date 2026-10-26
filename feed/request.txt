@@ -18,3 +18,4 @@ tickers: NET NVDA
 tickers: FTNT CRWD PANW ADI FFIV
 2026-10-26 22:56 UK: feed 1.2 test, non-US yields (session with Tim)
 2026-10-26 22:59 UK: feed 1.2 test 2, non-US yields (session with Tim)
+2026-10-26 23:08 UK: feed 1.2 live test (session with Tim)
