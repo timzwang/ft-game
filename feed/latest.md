@@ -1,6 +1,6 @@
 # Price feed: US session 2026-10-26, London 2026-10-26
 
-Generated 2026-10-26T22:57:16+00:00 UTC (feed version 1.2 (26 Oct 2026)). 81 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
+Generated 2026-10-26T23:00:06+00:00 UTC (feed version 1.2 (26 Oct 2026)). 81 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
 
 - Missing: none
 - Last bar not the session: none
@@ -118,13 +118,11 @@ Non-US 10-year yields for 2026-10-26 (the first figure dated the session; feed 1
 | de10y | 3.370 | cnbc | 2026-10-26 | 2026-10-26T21:00+00:00 |  |  |
 | fr10y | 4.903 | cnbc | 2026-10-26 | 2026-10-26T21:01+00:00 |  |  |
 | it10y | 4.500 | cnbc | 2026-10-26 | 2026-10-26T17:00+00:00 |  |  |
-| jp10y |  |  |  |  | cnbc 2.805 (2026-10-27); mof 2.837 (2026-10-23) | no figure dated 2026-10-26; latest cnbc 2.805 on 2026-10-27 |
-
-Sources that did not answer: stooq uk10y: ValueError: <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="no; stooq de10y: ValueError: <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="no; stooq fr10y: ValueError: <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="no; stooq it10y: ValueError: <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="no; stooq jp10y: ValueError: <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="no
+| jp10y | 2.787 | cnbc previous close | 2026-10-26 |  | cnbc 2.805 (2026-10-27); mof 2.837 (2026-10-23) |  |
 
 Futures (fallback only; the stored series are tradingeconomics figures):
 
 - brent: BZ=F 110.24 (2026-10-26)
-- wti: CL=F 101.42 (2026-10-26)
+- wti: CL=F 101.37 (2026-10-26)
 - natgas: NG=F 3.04 (2026-10-26)
-- gold: GC=F 4,026.50 (2026-10-26)
+- gold: GC=F 4,026.30 (2026-10-26)

@@ -2,7 +2,7 @@
  "meta": {
   "feed_version": "1.2 (26 Oct 2026)",
   "mode": "close",
-  "generated_utc": "2026-10-26T22:57:16+00:00",
+  "generated_utc": "2026-10-26T23:00:06+00:00",
   "session_us": "2026-10-26",
   "session_uk": "2026-10-26",
   "tickers": 81,
@@ -17,7 +17,7 @@
    "close": 0.5,
    "open_high_low": 1.5
   },
-  "source": "Yahoo Finance daily bars through yfinance (auto_adjust off), checked against data/history.json; US Treasury daily par yield curve CSV; Coinbase Exchange hourly candles; non-US 10-year yields from CNBC's quote service, the Japanese Ministry of Finance and stooq"
+  "source": "Yahoo Finance daily bars through yfinance (auto_adjust off), checked against data/history.json; US Treasury daily par yield curve CSV; Coinbase Exchange hourly candles; non-US 10-year yields from CNBC's quote service and the Japanese Ministry of Finance"
  },
  "tickers": {
   "ABBV": {
@@ -52355,17 +52355,17 @@
    "wti": {
     "symbol": "CL=F",
     "date": "2026-10-26",
-    "close": 101.42
+    "close": 101.37
    },
    "natgas": {
     "symbol": "NG=F",
     "date": "2026-10-26",
-    "close": 3.039
+    "close": 3.037
    },
    "gold": {
     "symbol": "GC=F",
     "date": "2026-10-26",
-    "close": 4026.5
+    "close": 4026.3
    }
   },
   "intl_yields": {
@@ -52396,8 +52396,9 @@
      "time_utc": "2026-10-26T17:00+00:00"
     },
     "jp10y": {
-     "value": null,
-     "note": "no figure dated 2026-10-26; latest cnbc 2.805 on 2026-10-27"
+     "source": "cnbc previous close",
+     "date": "2026-10-26",
+     "value": 2.787
     }
    },
    "sources": {
@@ -52441,19 +52442,18 @@
       "time_utc": "2026-10-26T18:26+00:00"
      },
      {
+      "source": "cnbc previous close",
+      "date": "2026-10-26",
+      "value": 2.787
+     },
+     {
       "source": "mof",
       "date": "2026-10-23",
       "value": 2.837
      }
     ]
    },
-   "errors": {
-    "stooq uk10y": "ValueError: <!DOCTYPE html><html><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"no",
-    "stooq de10y": "ValueError: <!DOCTYPE html><html><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"no",
-    "stooq fr10y": "ValueError: <!DOCTYPE html><html><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"no",
-    "stooq it10y": "ValueError: <!DOCTYPE html><html><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"no",
-    "stooq jp10y": "ValueError: <!DOCTYPE html><html><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"no"
-   }
+   "errors": {}
   }
  }
 }
