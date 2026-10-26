@@ -38,9 +38,13 @@ Written Mon 12 Oct 2026, 01:40 UK, after the third design pass on Tim's page (ht
 
 - Deployed the wording merged with pipeline 7.5 on 19 Oct (PR #4, approved by Tim) but never published: the watchlist's "Conviction" tooltip now says the anchor is the score rescaled (50 + 0.35 x (score - 40), held between 40 and 68), a ranking and not a measured chance of beating the S&P 500; the calibration banner no longer hides itself at 150 settled ratings and says the count is a minimum before a test, not proof. Only `files/app.js` changed (version 4, equal to the repository's `page/app.js`, sha256 `1583ef5d...1cc3`). Checked with `node --check`; the page was not rendered.
 
+## What changed on 26 Oct (playbook 6.14)
+
+- The order cut-off on the page moved back from 07:00 to 08:00 UK, the cut-off FT Customer Care confirmed to Tim on 21 Oct (UK local time all year): the constant `CUTOFF` in `files/app.js` and the "Order states" help sentence in `files/index.html`. Nothing else changed. Checked with `node --check`; the live files matched the repository's `page/` copies byte for byte before the change.
+
 ## Things a later chat must keep
 
-- The Order panel reads the latest alert whose `stock` is "Order", exactly as the old banner did: text starting "Changed" or "Revised" shows the blue "Enter before <cut-off>" bar until the cut-off on the effective day (the cut-off is the constant `CUTOFF` in `files/app.js`, 07:00 UK from 18 Oct, playbook part C; London fills still show 08:00, the LSE open); "No change" shows "Nothing to enter". The "New" marks and the Sell line come from the `trade` rows with the latest `effective` date, while that date is today or later.
+- The Order panel reads the latest alert whose `stock` is "Order", exactly as the old banner did: text starting "Changed" or "Revised" shows the blue "Enter before <cut-off>" bar until the cut-off on the effective day (the cut-off is the constant `CUTOFF` in `files/app.js`, 08:00 UK from 26 Oct (07:00 from 18 to 26 Oct), playbook part C; London fills still show 08:00, the LSE open); "No change" shows "Nothing to enter". The "New" marks and the Sell line come from the `trade` rows with the latest `effective` date, while that date is today or later.
 - Logos are a fifth dataset, `datasets/logos`, a JSON file of rows `{key, src}` with keys like `US:XOM` and `UK:SHEL` (UK keys use the ticker as it appears in stocks.json, for example `UK:BP.`). About 550 names. A stock with no logo shows its initials. To add one, rebuild the file and update that dataset; the pipeline never touches it.
 - The page before the third pass is kept on the artifact as the asset `c2263c65f6b1c81a12ccd051709c0630` (page_before_redesign_2026-10-11.txt).
 - Superdesign was asked for but is not signed in for this account, so it was not used in either pass.

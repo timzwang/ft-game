@@ -6,6 +6,17 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.14 (Mon 26 Oct 2026, late afternoon)
+
+Tim asked "What's next to implement/improve? Work on it all now" (15:11 UK). No rule, score, sizing or order changed.
+
+- Data check fixed: `data-check` had failed every run since 22 Oct ("2026-10-22: no contribution row for Hasbro") and nobody was told. The Hasbro order of 21 Oct was replaced before it filled, leaving a zero-weight position row for a stock never held, which the check counted as a trade. A zero row for a name not held the session before is no longer a trade (`scripts/check_data.py`, commit `0ac74b9`); two regression tests. Green from 15:16 UK.
+- Cut-off 08:00 UK (approved by Tim on 21 Oct at 23:31 UK; that night's work was never pushed): FT Customer Care confirmed 08:00 UK local time all year. Pipeline 7.8 (commit `9760163`, sha256 `837ab0b9...d427`, also artifact asset `e3ca0a59...`) changes only `CUTOFF_UK`, the hindsight lock on `order_expected`, so a morning revision entered after 07:00 can record its expected benefit; the data check, the tests and the page's "Enter before" bar match; every deadline in the docs reads 08:00. Runs take 7.8 from commit `9760163` (data doc G1 step 3; core part B). 7.7 (asset `97024e28...`, commit `87d8f64`) is kept as the rollback.
+- Morning check to 07:26 UK: approved, but changing the task was refused by the session's permission check, so Tim moves it in the app; until then it runs at 06:36, which still works with an 08:00 cut-off.
+- Nightly watchdog: a new scheduled task, "FT game nightly watchdog", at 22:47 UK every day (core part I). It checks every FT game task's last run, the review log, the page's publish and the repository's workflows, messages Tim only when something is wrong, and may re-fire a failed evening review once or push a scan request; nothing else.
+- Sessions with Tim now also check the repository's workflow runs and the watchdog's messages (core part I).
+- Docs: core playbook (version line, part B, part C, part D, part I), data doc (G1, G3, G4), rules doc, run docs (evening, morning, weekend), page notes, roadmap (phase 10), saved skill copy, ops record.
+
 ## 6.13.2 (Mon 26 Oct 2026, afternoon)
 
 Tim's standing instruction ("From now on, if there are any issues in the automated runs, then you must flag them to me and fix them immediately", 13:29 UK). No rule, score, sizing, order, page, feed or scan changed. Pipeline still 7.7.

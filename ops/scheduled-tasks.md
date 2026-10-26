@@ -9,13 +9,14 @@ This file is a copy for reading. Changing it changes nothing: the live tasks are
 | Task | Schedule (UK) | Cron | Playbook part |
 |---|---|---|---|
 | FT game evening review | 21:30 Sun to Thu | `30 21 * * 0-4` | H1 |
-| FT game morning check | 06:36 Mon to Fri (07:26 until 17 Oct) | `36 6 * * 1-5` | H2 |
+| FT game morning check | 06:36 Mon to Fri (07:26 until 17 Oct); to move to 07:26 (approved 21 Oct, playbook 6.14): Tim changes it in the app | `36 6 * * 1-5` | H2 |
 | FT game price refresh | 16:45 Mon to Fri | `45 16 * * 1-5` | H3 |
 | FT game late price refresh | 19:22 Mon to Fri | `22 19 * * 1-5` | H3 |
 | FT game results-day refresh | 14:50 Mon to Fri | `50 14 * * 1-5` | H4 |
 | FT game weekly review | 09:12 Sat | `12 9 * * 6` | H5 |
 | FT game midday check | 12:40 Mon to Fri (exits at once: switched off by its own instructions) | `40 12 * * 1-5` | H6 |
 | FT game weekend news check | 20:20 Sat and Sun | `20 20 * * 6,0` | H7 |
+| FT game nightly watchdog | 22:47 every day (from 26 Oct) | `47 22 * * *` | Core part I, "Nightly watchdog" |
 
 Changed 18 Oct 2026 (playbook 6.9): the evening review and weekly review tasks were recreated from a chat with this repository attached (new tasks, same prompts, schedules and automatic approval), so their runs start with the repository cloned. The old tasks of 8 and 9 Oct are kept, switched off. Any new task that needs the repository must be created the same way.
 
@@ -41,7 +42,7 @@ Tim's father's massive.com key, stored at the family's request. Use it only in f
 
 ## Morning check
 
-Changed 17 Oct 2026 (playbook 6.4): 06:36 UK, cut-off 07:00 UK.
+Changed 17 Oct 2026 (playbook 6.4): 06:36 UK, cut-off 07:00 UK. 26 Oct 2026 (playbook 6.14): the FT confirmed an 08:00 UK cut-off; Claude's change of this task to 07:26 UK, with "08:00" in place of "07:00" in the prompt below, was refused by the permission check, so Tim makes it in the app. Until then the prompt's 07:00 is simply earlier than the cut-off and does no harm.
 
 ```
 FT Stock Picking Game, MORNING CHECK for Tim (06:36 UK). Unattended: never ask questions. Finish within about ten minutes: Tim must enter any change before 07:00 UK, the cut-off until the FT confirms it after the clock change (playbook part C). Virtual game. Never open or operate the FT site, any account, a browser or the user's computer. After 27 Nov 2026: reply only that the game has ended. Time from `date -u`, shown as UK time.
@@ -142,4 +143,26 @@ Output, British English, no em-dashes, UK times:
 - An A item: start "Tim, weekend news that matters:" and send through SendUserMessage, with a provisional action, a 1 to 100 confidence rating and what would cancel it.
 - An issue and no A item: final message starts with the "Tim, issue in ..." line, then "Nothing this weekend changes Monday's plan." With an A item too, the A item message goes first and the issue message second.
 Then at most five items, weekend prices in one line, one line on what comes next, sources as links. If the playbook cannot be read, say so first, give a news check from the state doc, and do not touch the page, data or state doc.
+```
+
+## Nightly watchdog
+
+Created 26 Oct 2026 (playbook 6.14) from a chat with this repository attached; automatic approval; push notifications only. Prompt as live:
+
+```
+FT Stock Picking Game, NIGHTLY WATCHDOG (22:47 UK, every day) for Tim. Unattended: never ask questions. Virtual game. Never open or operate the FT site, any account, a browser or the user's computer. After 28 Nov 2026: reply only that the game has ended. Time from `date -u`, shown as UK time (GMT from 25 Oct 2026).
+
+Purpose (Tim's standing instruction of 26 Oct: "if there are any issues in the automated runs, then you must flag them to me and fix them immediately"; playbook 6.14, core part I, "Nightly watchdog"): catch a run that failed, never ran, or stopped without saying so, which the run itself cannot report. Read `claude/ft-game-playbook.md` (Projects tool) for part I if you can; this prompt is enough on its own.
+
+Check, all for the window since 22:47 UK yesterday:
+1. Scheduled tasks: ToolSearch "select:mcp__claude-code-remote__list_triggers,mcp__claude-code-remote__fire_trigger", then list_triggers (enabled true, limit 50). For every enabled task whose name starts "FT game" (skip this watchdog and the midday check), work out from its cron expression whether it was due in the window, and from `last_run` whether it fired within 30 minutes of that time, finished, and has status SUCCEEDED. Flag: due but not fired; FAILED or not finished; for the evening review, weekly review, morning check, price refreshes and weekend news check a run that finished in under 45 seconds (the results-day refresh may stop in seconds when there are no results).
+2. The state doc: project_read `claude/ft-game-state.md`; flag any review-log line in the window starting "ISSUE:" or containing "FAULT" that does not say it was fixed.
+3. The page: ArtifactData `list` collection `datasets` on https://claude.ai/artifact/8P8UwQsb4QsbZMsKNYKrUJ (load ArtifactData through ToolSearch). On a Sunday to Thursday evening, `ledger` and `stocks` should show `updated.at` after 21:30 UK today; flag if not.
+4. GitHub: the repository timzwang/ft-game is normally cloned at /home/claude/ft-game (check `git -C /home/claude/ft-game remote get-url origin` ends in timzwang/ft-game; never reset, clean or delete anything in it); otherwise `git clone --depth 1 https://github.com/timzwang/ft-game` with a 10-minute timeout. Run `gh api 'repos/timzwang/ft-game/actions/runs?per_page=40' --jq '.workflow_runs[] | "\(.name) \(.event) \(.status) \(.conclusion) \(.created_at)"'` (if gh is refused, use the mcp__github__ tools found with ToolSearch "github"). Flag any run in the window whose conclusion is failure, for data-check, price-feed, broad-scan or tests; for a data-check failure read its log (`gh run view <id> --repo timzwang/ft-game --log-failed`) and quote the FAIL lines. On a weekday night also check that `feed/latest.json` (`meta.session_us`) and `scan/latest.json` (`session_us`) show today's US session (the US closes at 20:00 UK until 30 Oct, 21:00 UK from 2 Nov; none on 26 Nov).
+
+Fix, only within these limits: if the evening review was due tonight and did not fire or FAILED, fire it once with fire_trigger and the text "Re-run by the nightly watchdog after <what happened>". If the price feed or broad scan is behind on a weekday, append one line with the UK time to `scan/request.txt`, commit only that file ("Scan request: watchdog <date>"), pull with rebase and push. Never edit scheduled tasks, scripts, the playbook docs, the state doc, the page or the data files; never change the order; never write the market data key anywhere. Anything else is for Tim's next session, which takes open issues first; your message is the record.
+
+Output, British English, no em-dashes, UK times:
+- Nothing wrong: no SendUserMessage; final reply exactly "No change. Watchdog at <HH:MM> UK: every FT game run tonight checked and fine."
+- Anything wrong: send one message through SendUserMessage starting "Tim, issue found by the watchdog at <HH:MM> UK:", then at most eight lines: each problem with the exact error or status, what the watchdog did about it and whether that worked, whether the order in force stands (it does unless the evening review says otherwise), and what is needed from Tim ("nothing" if fixed). The final reply starts with the same "Tim, issue found by the watchdog ..." line.
 ```
