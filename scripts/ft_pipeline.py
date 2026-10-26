@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.7 (21 Oct 2026).
+"""ft_pipeline.py: one tested pipeline for the FT Stock Picking Game. Version 7.8 (26 Oct 2026).
+
+Version 7.8 (26 Oct 2026, approved by Tim on 21 Oct at 23:31 UK, deployed with playbook 6.14) changes one constant:
+CUTOFF_UK is 08:00, the cut-off FT Customer Care confirmed (UK local time all year). It sets only the hindsight lock on
+`order_expected` (an entry at or after the cut-off on the fill date is refused) and its message. Every command, file
+and figure is otherwise identical to 7.7.
 
 Version 7.7 (21 Oct 2026, approved by Tim with release 6.12) adds one command, `feed`, and changes nothing else: `run`,
 `refresh`, `reorder`, `template`, `closes`, `report` and `panel` behave exactly as in 7.6. `feed` reads the price feed
@@ -28,7 +33,7 @@ the scan's rules or any order:
     later event). Two results events for one stock in the window are counted once and named (RESULTS DUPLICATE);
   - expectations: one test for every entry path. An expected benefit is locked once its change has filled: entered
     after the fill date, a performance line or a benchmark row already stored for the fill date, or an entry time
-    (`entered_time`, HH:MM UK) at or after the 07:00 UK cut-off on the fill date. A same-day entry with no time is
+    (`entered_time`, HH:MM UK) at or after the 08:00 UK cut-off (07:00 before 7.8) on the fill date. A same-day entry with no time is
     accepted with a WARNING. 7.5's reorder accepted one on the fill date after the session had closed;
   - with every fill on a benchmark session, one fill per stock between sessions, one results event per stock and no
     order_expected, every figure is identical to 7.5 (and so to 7.4), apart from the new listing_market meta row.
@@ -262,12 +267,12 @@ import math
 import os
 import sys
 
-PIPELINE_VERSION = "7.7"
+PIPELINE_VERSION = "7.8"
 
 # Version 7.3: the US calendar for the rest of the game (NYSE and Nasdaq), and the results budget windows Tim agreed.
 US_CLOSED = {"2026-11-26"}                        # Thanksgiving: US markets shut (London trades)
 LONDON_CLOSED = set()                             # 7.6: no UK bank holiday falls between 5 Oct and 27 Nov 2026
-CUTOFF_UK = "07:00"                               # 7.6: playbook part C, the order cut-off until the FT confirms otherwise
+CUTOFF_UK = "08:00"                               # 7.8: playbook part C; the FT confirmed 08:00 UK local time all year (21 Oct 2026)
 US_EARLY_CLOSE_NY = {"2026-11-27": "13:00"}       # the day after Thanksgiving, the game's last day: 13:00 New York
 RESULTS_BUDGET_WINDOWS = [                        # (first report date, last report date, points, why)
     ("2026-10-27", "2026-10-30", 1.0, "October results cluster: Tim agreed 1.0 points per report on 19 Oct"),
@@ -328,7 +333,7 @@ def expectation_lock(ledger, eff, entered, entered_time=None, hist=None, bench=N
     """Version 7.6: why an expected benefit for the change filling at `eff` would be hindsight, or None. The same test
     for `run` and `reorder`: entered after the fill date; the run's own session on or after it; a performance line or a
     benchmark price row already stored for the fill date (the session has closed); or an entry time on the fill date at
-    or after the 07:00 UK cut-off."""
+    or after the order cut-off (CUTOFF_UK, 08:00 UK from 7.8)."""
     if entered and entered > eff:
         return f"entered on {entered}, after the fill date {eff}"
     if run_date and run_date >= eff:

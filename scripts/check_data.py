@@ -56,7 +56,7 @@ KNOWN_TABLES = {"alert", "analog", "calib", "confidence", "contrib", "corr", "da
                 "theme", "trade"}
 RECALC_CREDITS = 0.05        # stored against recalculated value; the pipeline rounds each day to the cent
 GAME_END = "2026-11-27"
-CUTOFF_UK = "07:00"          # playbook part C: the order cut-off until the FT confirms otherwise (change it there, here and in ft_pipeline.py)
+CUTOFF_UK = "08:00"          # playbook part C: the FT confirmed 08:00 UK local time all year, 21 Oct 2026 (change it there, here and in ft_pipeline.py)
 _MONTH = {m: i + 1 for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"])}
 
 

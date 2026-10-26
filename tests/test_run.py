@@ -53,7 +53,7 @@ def test_full_run_keeps_figures_and_applies_73(pl, repo, tmp_path, stored):
     today["market_closed"] = [{"ticker": "TEST", "date": "2026-11-26"}]
     led, out, _ = run(pl, repo, tmp_path, today)
 
-    assert out.startswith("Pipeline version 7.7")
+    assert out.startswith("Pipeline version 7.8")
     assert perf_rows(led) == perf_rows(stored["ledger"])
     assert not pl.INCOMPLETE
 

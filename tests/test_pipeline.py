@@ -29,7 +29,7 @@ def synthetic(dates, ticker="TEST", step=1.0):
 # ----------------------------------------------------------------- stored figures stay put
 
 def test_version(pl):
-    assert pl.PIPELINE_VERSION == "7.7"
+    assert pl.PIPELINE_VERSION == "7.8"
 
 
 def test_performance_rebuild_matches_stored(pl, data):

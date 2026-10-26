@@ -154,7 +154,7 @@ dash.calc('standing', {
   };
   const sessionsBetween = (a, b) => { let n = 0; let d = a; while (d < b) { d = addDays(d, 1); if (isUsSession(d)) n += 1; } return n; };
   const usOpenUk = (s) => (s >= '2026-10-26' && s <= '2026-10-30' ? '13:30' : '14:30');
-  const CUTOFF = '07:00';   // order cut-off, UK time: 07:00 until the FT confirms it after the clock change (playbook 6.4, part C)
+  const CUTOFF = '08:00';   // order cut-off, UK time: 08:00 UK local time all year, confirmed by the FT on 21 Oct (playbook 6.14, part C)
   const whenKey = (r) => String(r.date) + String(r.time_uk || '');
   const shortTime = (t) => String(t || '').replace(/\s*\(est\.\)/i, '').replace(/before US open/i, 'pre-open').replace(/after US close/i, 'after close');
 

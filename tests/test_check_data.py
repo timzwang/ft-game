@@ -193,7 +193,7 @@ def test_documented_absence_of_implied_move_is_a_warning(cd, pl, tmp_repo):
 
 @pytest.mark.parametrize("last_order,bad", [("Before 07:00 Tue 20 Oct", None),
                                             ("Before 07:00 Wed 21 Oct", "later than the last possible order day, 2026-10-20"),
-                                            ("Before 08:00 Tue 20 Oct", "after the 07:00 UK cut-off"),
+                                            ("Before 09:00 Tue 20 Oct", "after the 08:00 UK cut-off"),
                                             ("", "none recorded")])
 def test_last_order_inside_five_sessions(cd, pl, tmp_repo, last_order, bad):
     """Coca-Cola reporting before the US open on Wed 21 Oct: the last order is before 07:00 UK on Tue 20 Oct."""

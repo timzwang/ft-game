@@ -202,7 +202,7 @@ def test_reorder_pre_open_with_a_time_is_kept(pl, repo, tmp_path, capsys):
     assert not [w for w in pl.WARN if "expected benefit" in w]
 
 
-@pytest.mark.parametrize("t", ["07:00", "07:20", "21:45", "after close"])
+@pytest.mark.parametrize("t", ["08:00", "08:20", "21:45", "after close"])
 def test_reorder_at_or_after_the_cut_off_is_refused(pl, repo, tmp_path, t, capsys):
     assert reorder(pl, repo, tmp_path, "2026-10-19", "2026-10-19", t) == []
     assert any("hindsight" in w for w in pl.WARN)
@@ -333,7 +333,7 @@ def test_uncertain_date_must_say_why(cd, pl, tmp_repo, reason, ok):  # noqa: F81
     ({"date": "2026-10-28", "time_uk": "after US close", "last_order": "After 07:00 Wed 28 Oct"}, "US", "deadline"),
     ({"date": "2026-10-28", "time_uk": "after US close", "last_order": "07:00 Wed 28 Oct"}, "US", "deadline"),
     ({"date": "2026-10-28", "time_uk": "after US close", "last_order": "Before 07:00 Thu 28 Oct"}, "US", "weekday"),
-    ({"date": "2026-10-29", "time_uk": "07:00", "last_order": "Before 08:00 Wed 28 Oct"}, "UK", "after the 07:00"),
+    ({"date": "2026-10-29", "time_uk": "07:00", "last_order": "Before 09:00 Wed 28 Oct"}, "UK", "after the 08:00"),
 ])
 def test_last_order_wording_and_calendar(cd, pl, ev, market, bad):  # noqa: F811
     got = cd.last_order_problem(ev, pl, market)
