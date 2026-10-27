@@ -21,3 +21,4 @@ tickers: FTNT CRWD PANW ADI FFIV
 2026-10-26 23:08 UK: feed 1.2 live test (session with Tim)
 2026-10-27 14:51 UK live (results-day refresh)
 2026-10-27 16:47 UK live (price refresh)
+2026-10-27 19:23 UK late price refresh
