@@ -32,9 +32,9 @@ First run (21 Oct 2026, 984 overlapping sessions across 41 tickers): Yahoo's clo
 
 Until 26 Oct the evening review read these from tradingeconomics through a search; from 22 Oct that page came back days old and the stored figures were carried (26 Oct: none of the five). Now, for each yield, the first figure dated the session is used:
 
-1. Japan only: the Ministry of Finance's daily JGB file (`jgbcme.csv`), the official close. It is often a day behind when the feed reads it.
-2. CNBC's quote service (Tradeweb benchmark yields), dated by its last trade in the bond's own market.
-3. CNBC's previous close, when the last trade already falls on that market's next weekday (Tokyo is trading by the time the evening review runs). A holiday in between means no figure.
+1. CNBC's quote service (Tradeweb benchmark yields), dated by its last trade in the bond's own market.
+2. CNBC's previous close, when the last trade falls after the session and no later than that market's next weekday (Tokyo is trading by the time the evening review runs, and a Friday's evening mark is dated Saturday there). A holiday in between means no figure.
+3. Japan only, last (from feed 1.2.1, 27 Oct): the Ministry of Finance's daily JGB file (`jgbcme.csv`). It is a constant-maturity curve, not the benchmark bond, so it sits a few hundredths above CNBC's figure (26 Oct: 2.824 against 2.787; on 23 Oct the benchmark traded at 2.755 while the MoF closed at 2.837). In 1.2 it came first, which would have mixed the two measures in one series (the weekly review, which logs Fridays, would have taken it every week); it is now the fallback and is shown beside CNBC's figure as a check.
 
 stooq's daily files were tried and refuse GitHub's servers. First run, for 26 Oct: UK 5.352, Germany 3.370, France 4.903, Italy 4.500, Japan 2.787. Two other pages gave France 4.92 to 4.93 and Germany 3.37 for that day; the stored tradingeconomics series sat a few basis points apart from these, so the first day from the feed may show a small step that is the source, not the market. Two sources more than 0.10 points apart for the same session are shown as `disagree`, never refused.
 

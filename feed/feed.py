@@ -42,7 +42,7 @@ import traceback
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-FEED_VERSION = "1.2 (26 Oct 2026)"
+FEED_VERSION = "1.2.1 (27 Oct 2026)"
 NY = ZoneInfo("America/New_York")
 UK = ZoneInfo("Europe/London")
 UTC = timezone.utc
@@ -71,12 +71,16 @@ COINBASE_TICKER = "https://api.exchange.coinbase.com/products/{pair}/ticker"
 # them from tradingeconomics through a search, and from 22 Oct that page came back days old, so the stored figures were
 # carried (26 Oct: none for any of the five). Sources, tried in this order; the first figure dated the session is used,
 # and every source's figure is kept beside it so a disagreement can be seen:
-#   - Japan only: the Ministry of Finance's daily JGB file (the official close; often a day behind when the run reads it).
 #   - CNBC's quote service (Tradeweb benchmark yields), dated by the time of its last trade in the bond's own market.
 #     On its first run (26 Oct, 22:57 UTC) it gave UK 5.352, Germany 3.370, France 4.903, Italy 4.500; two other pages
 #     gave France 4.92 to 4.93 and Germany 3.37 for that day.
-#   - CNBC's previous close, when its last trade already falls on the market's next weekday (Tokyo trades while the
-#     evening review runs): that close is then the session's.
+#   - CNBC's previous close, when its last trade falls after the session but no later than the market's next weekday
+#     (Tokyo trades while the evening review runs, and a Friday's evening mark is dated Saturday there): that close is
+#     then the session's.
+#   - Japan only, last: the Ministry of Finance's daily JGB file. It is a constant-maturity curve, not the benchmark
+#     bond: on 26 Oct it read 2.824 against CNBC's 2.787, and on 23 Oct 2.837 while the benchmark traded at 2.755
+#     (MUFG). Used first in 1.2, it would have mixed two measures into one series (the weekly review, which logs
+#     Fridays, would have taken it every week); from 1.2.1 (27 Oct) it is the fallback and a cross-check only.
 # stooq's daily files were tried and refuse GitHub's servers (26 Oct). A figure not dated the session is never used.
 INTL_YIELDS = {"uk10y": {"cnbc": "UK10Y-GB", "zone": "Europe/London"},
                "de10y": {"cnbc": "DE10Y-DE", "zone": "Europe/Berlin"},
@@ -493,8 +497,9 @@ def next_weekday(d):
 
 def choose_yields(session, cnbc, mof):
     """For each yield, every source's figure and the one used for the session. A CNBC figure counts as the session's
-    when its last trade fell on that day in the bond's own market; its previous close counts when the last trade fell on
-    the next weekday (a holiday in that market in between makes it not count); the MoF gives dated closes."""
+    when its last trade fell on that day in the bond's own market; its previous close counts when the last trade fell
+    after the session and no later than the next weekday (a holiday in that market in between makes it not count); the
+    MoF's dated close is the last resort for Japan, since it measures a constant maturity, not the benchmark bond."""
     values, sources = {}, {}
     for k, spec in INTL_YIELDS.items():
         cands = []
@@ -502,12 +507,12 @@ def choose_yields(session, cnbc, mof):
         c_day = _local_date(c.get("time_utc"), spec["zone"])
         if c.get("value") is not None:
             cands.append({"source": "cnbc", "date": c_day, "value": c["value"], "time_utc": c.get("time_utc")})
-        if c.get("prev_close") is not None and c_day and c_day == next_weekday(session):
+        if c.get("prev_close") is not None and c_day and session < c_day <= next_weekday(session):
             cands.append({"source": "cnbc previous close", "date": session, "value": c["prev_close"]})
         if spec.get("mof") and mof:
             d, v = mof[-1]
             cands.append({"source": "mof", "date": d, "value": v})
-        order = ["mof", "cnbc", "cnbc previous close"]
+        order = ["cnbc", "cnbc previous close", "mof"]
         same = sorted([x for x in cands if x["date"] == session], key=lambda x: order.index(x["source"]))
         sources[k] = cands
         if same:

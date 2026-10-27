@@ -283,10 +283,14 @@ def test_feed_intl_yields_parsers_and_choice():
     # Tokyo is already trading on 27 Oct (07:50 JST): its previous close is 26 Oct's; the MoF file still ends on 23 Oct
     assert vals["jp10y"]["value"] == 2.83 and vals["jp10y"]["source"] == "cnbc previous close"
     assert len(srcs["jp10y"]) == 3
-    # once the MoF file has the session, the official close comes first and a gap to CNBC is shown
+    # 1.2.1: even when the MoF file has the session, CNBC's benchmark figure is used (one measure for the series);
+    # the MoF's constant-maturity figure is kept beside it, and a gap above 0.10 points is shown
     mof2 = mof + [("2026-10-26", 2.98)]
     vals2, _ = f.choose_yields("2026-10-26", cnbc, mof2)
-    assert vals2["jp10y"]["source"] == "mof" and "disagree" in vals2["jp10y"]
+    assert vals2["jp10y"]["source"] == "cnbc previous close" and "disagree" in vals2["jp10y"]
+    # with no CNBC figure for the session, the MoF's close is the fallback
+    vals3, _ = f.choose_yields("2026-10-26", {}, mof2)
+    assert vals3["jp10y"]["source"] == "mof" and vals3["jp10y"]["value"] == 2.98
 
 
 def test_feed_intl_yields_never_dated_wrong():
@@ -300,3 +304,5 @@ def test_feed_intl_yields_never_dated_wrong():
     vals, _ = f.choose_yields("2026-10-30", jp("2026-11-01T23:30:00.000+0000"), [])   # Mon 2 Nov in Tokyo
     assert vals["jp10y"]["value"] == 2.88 and vals["jp10y"]["source"] == "cnbc previous close"
     assert f.next_weekday("2026-10-30") == "2026-11-02"
+    vals, _ = f.choose_yields("2026-10-30", jp("2026-10-30T18:26:00.000+0000"), [])   # Friday's evening mark, Sat 03:26 in Tokyo
+    assert vals["jp10y"]["value"] == 2.88 and vals["jp10y"]["source"] == "cnbc previous close"

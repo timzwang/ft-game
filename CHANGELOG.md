@@ -6,6 +6,16 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.14.2 (Tue 27 Oct 2026, late evening)
+
+Found by the scheduled check of the first evening review on the new yields (Tim's standing instruction: issues are fixed at once). No rule, score, sizing, order, page, pipeline or scheduled task changed.
+
+- The check: the 27 Oct review stored all five yields from the feed (UK 5.35, Germany 3.36, France 4.92, Italy 4.50, Japan 2.79), Tim's 26 Oct FT figures went into the ledger, and the data check was green.
+- Japan: the Ministry of Finance's 26 Oct figure (2.824) arrived a day late and sat 3.7 bp above the 2.787 the feed had taken from CNBC's previous close. The gap is the measure, not the day: the MoF file is a constant-maturity curve, the CNBC figure the benchmark bond (on 23 Oct the benchmark traded at 2.755, per MUFG, against the MoF's 2.837 close). Feed 1.2 put the MoF first, so the weekly review, which logs Fridays when the MoF already has the day, would have mixed the two measures every week.
+- Feed 1.2.1 (`feed/feed.py`): Japan uses CNBC first (same-day figure, then the previous close), the MoF only as the fallback, shown beside it as a check. The previous close now also counts when the last trade falls on a weekend day before the next weekday (a Friday's evening mark is dated Saturday in Tokyo). Tests updated (170 pass).
+- Docs: core playbook and data doc (version lines), `feed/README.md`.
+- Also found: the morning check and the weekend news check each have two enabled copies (new ones created at 17:20 UK on 27 Oct, the old ones never switched off). Switching off the old ones was refused by the permission check; Tim was asked at 22:10 UK to switch them off before 07:26.
+
 ## 6.14.1 (Mon 26 Oct 2026, late evening)
 
 Tim's "Do it now" (22:52 UK), after the 26 Oct evening review logged an open ISSUE. No rule, score, sizing, order, page, pipeline or scheduled task changed. Pipeline still 7.8.
