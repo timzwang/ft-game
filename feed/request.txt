@@ -26,3 +26,4 @@ tickers: TXN FFIV FLEX JCI PNR
 2026-10-28 07:27 UK morning check
 2026-10-28 14:52 UK live request (results-day refresh)
 2026-10-28 16:47 UK live
+2026-10-28 19:23 UK live request (late price refresh)
