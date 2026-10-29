@@ -1,15 +1,14 @@
 # Last sync
 
-Run: evening review, 2026-10-28T21:38:30Z. Prices as of: Wed 28 Oct close.
-Session with Tim, 2026-10-29T19:30:13Z: playbook 6.14.3; state doc updated (status, review log, tools); data files unchanged.
+Run: evening review, 2026-10-29T21:38:17Z. Prices as of: Thu 29 Oct close.
 
 sha256 of each file as published to the artifact and the Project:
 
 ~~~
-271f8d471e729fdff9947966d9a83af4892e0132e1c28b9567a59795bf081e5f  data/history.json
-1c65b5d35fdec6a7ff9dde02dac6316a8612979b8dad31caf40d85a720258b76  data/ledger.json
-53efdf62ad777916039ff6751934a204a187ae7648316a5212d9ae95127ad8de  data/macro.json
-98c1a9699554b6a30205c9606395db0c0769b006463861558dc5d8025b52034b  data/panel.json
-c6cd6ca2fda3f927e3540faab5149253a922ed5f3b72923e06cf32cf8f2a4052  data/stocks.json
-2fd3cfaa6005a695e7078ca53378cfd0e04882d94ca522cc294e87c1f739ce69  state/ft-game-state.md
+b2f3bf52d6d5d23f39b47f29daac98b6f04c5f553afd3d43b7084769c51e7fd3  data/history.json
+a8875dcb76a0b89d77cdb8bf773a95ac7459c932b2844c92c22fc4c9f59194fb  data/ledger.json
+5a6a907e9f39757c4369608230237c9cc014405d4a2e7c8d97d64f00bc8429f2  data/macro.json
+6d775e401c72bbb5230ef13559278c5740856e5208436387985435ece05f5e1c  data/panel.json
+865f24e71b42b73a921a2009a042a2ebba7fe44e306af5f65df38111bbd2a01a  data/stocks.json
+1c51c6bf8a201d1d7d7eba98c70130e8fec13e9fa46ac00af5e6f653dd17593f  state/ft-game-state.md
 ~~~
