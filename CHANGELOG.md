@@ -6,6 +6,15 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.14.3 (Thu 29 Oct 2026, evening)
+
+Tim's request after the late price refresh: "Scan everything again and ensure that no issues will ever arise again." No rule, score, sizing, order, page, pipeline or scheduled task changed. Pipeline still 7.8.
+
+- The scan: every FT game task's last run SUCCEEDED (the results-day refresh fired at 15:10 UK, 20 minutes after its slot: the scheduler, inside the 30-minute limit); the old duplicate morning check and weekend news check are now switched off; every workflow run (`data-check`, `price-feed`, `broad-scan`, `tests`) green since 26 Oct 23:08 UK; feed and scan current; no ChatGPT handoff notes since 27 Oct.
+- The one issue still recurring: the session's permission check refused the delete of a superseded data asset on the artifact ("Irreversible Deletion (general)") on 24, 26 and 28 Oct and twice on 29 Oct (results-day refresh 15:15 UK, leaving `6ba7bd723d82aeda5a05459d5c046f1d`; late price refresh 19:25 UK, retry worked). Each refusal sent Tim an issue message.
+- Fix: runs no longer delete old data assets (data doc G5 step 4); they stay as expected leftovers (core part B, part I). The store held 30 MB of its 1 GB (63 of 5,000 files) on 29 Oct; the runs to 27 Nov add at most about 300 MB. G5 step 5 makes a store above 700 MB or 4,000 files an issue, and sessions with Tim check its size (core part I), clearing old files only if needed.
+- Docs: core playbook (version line, part B, part I), data doc (version line, G5 steps 4 and 5); state doc (status, review log, tools).
+
 ## 6.14.2 (Tue 27 Oct 2026, late evening)
 
 Found by the scheduled check of the first evening review on the new yields (Tim's standing instruction: issues are fixed at once). No rule, score, sizing, order, page, pipeline or scheduled task changed.

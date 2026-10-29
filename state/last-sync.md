@@ -1,6 +1,7 @@
 # Last sync
 
 Run: evening review, 2026-10-28T21:38:30Z. Prices as of: Wed 28 Oct close.
+Session with Tim, 2026-10-29T19:30:13Z: playbook 6.14.3; state doc updated (status, review log, tools); data files unchanged.
 
 sha256 of each file as published to the artifact and the Project:
 
@@ -10,5 +11,5 @@ sha256 of each file as published to the artifact and the Project:
 53efdf62ad777916039ff6751934a204a187ae7648316a5212d9ae95127ad8de  data/macro.json
 98c1a9699554b6a30205c9606395db0c0769b006463861558dc5d8025b52034b  data/panel.json
 c6cd6ca2fda3f927e3540faab5149253a922ed5f3b72923e06cf32cf8f2a4052  data/stocks.json
-a6afc908a3717ee49299b18135b09e5d5c6e5c8609c3e6aed91e9ca99b91bf76  state/ft-game-state.md
+2fd3cfaa6005a695e7078ca53378cfd0e04882d94ca522cc294e87c1f739ce69  state/ft-game-state.md
 ~~~
