@@ -33,3 +33,4 @@ tickers: LH PWR FIX AON ILMN
 2026-10-29 16:46 UK live request
 2026-10-29 19:23 UK live request (late price refresh)
 2026-10-30 07:30 UK morning check
+2026-10-30 14:51 UK live (results-day refresh)
