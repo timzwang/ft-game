@@ -1,6 +1,6 @@
 # Price feed: US session 2026-11-02, London 2026-11-02
 
-Generated 2026-11-02T21:32:34+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 94 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
+Generated 2026-11-02T21:37:37+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 95 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
 
 - Missing: none
 - Last bar not the session: none
@@ -50,6 +50,7 @@ Generated 2026-11-02T21:32:34+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 94 t
 | HPE | HPE | 2026-11-02 | 55.50 | 55.73 | 50.83 | 51.19 | 16188505 | agrees (24) | 0.000% | 0.000% |
 | HUM | HUM | 2026-11-02 | 420.64 | 420.64 | 399.35 | 410.41 | 916787 | agrees (24) | 0.000% | 0.000% |
 | IBIT | IBIT | 2026-11-02 | 43.90 | 44.14 | 43.29 | 43.35 | 34543051 | agrees (24) | 0.021% | 0.022% |
+| IDXX | IDXX | 2026-11-02 | 625.00 | 673.19 | 620.20 | 671.64 | 1944992 | no overlap (0) | 0.000% | 0.000% |
 | ILMN | ILMN | 2026-11-02 | 236.01 | 236.01 | 223.33 | 226.58 | 2916636 | agrees (24) | 0.000% | 0.760% |
 | JCI | JCI | 2026-11-02 | 150.55 | 151.28 | 145.02 | 146.49 | 5280193 | agrees (24) | 0.000% | 0.000% |
 | KLAC | KLAC | 2026-11-02 | 161.37 | 162.13 | 152.76 | 153.11 | 14603882 | no overlap (0) | 0.000% | 0.000% |
@@ -128,14 +129,14 @@ Non-US 10-year yields for 2026-11-02 (the first figure dated the session; feed 1
 | Yield | Value | Source | Date | Time (UTC) | Other sources | Note |
 |---|---|---|---|---|---|---|
 | uk10y | 5.196 | cnbc | 2026-11-02 | 2026-11-02T17:15+00:00 |  |  |
-| de10y | 3.299 | cnbc | 2026-11-02 | 2026-11-02T21:31+00:00 |  |  |
+| de10y | 3.299 | cnbc | 2026-11-02 | 2026-11-02T21:37+00:00 |  |  |
 | fr10y | 4.899 | cnbc | 2026-11-02 | 2026-11-02T20:59+00:00 |  |  |
-| it10y | 4.458 | cnbc | 2026-11-02 | 2026-11-02T21:32+00:00 |  |  |
+| it10y | 4.458 | cnbc | 2026-11-02 | 2026-11-02T21:37+00:00 |  |  |
 | jp10y | 2.773 | cnbc previous close | 2026-11-02 |  | cnbc 2.768 (2026-11-03); mof 2.817 (2026-10-30) |  |
 
 Futures (fallback only; the stored series are tradingeconomics figures):
 
-- brent: BZ=F 104.17 (2026-11-02)
-- wti: CL=F 96.06 (2026-11-02)
+- brent: BZ=F 104.04 (2026-11-02)
+- wti: CL=F 96.04 (2026-11-02)
 - natgas: NG=F 2.86 (2026-11-02)
-- gold: GC=F 3,955.20 (2026-11-02)
+- gold: GC=F 3,956.30 (2026-11-02)
