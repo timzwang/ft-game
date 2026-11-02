@@ -38,3 +38,4 @@ tickers: LH PWR FIX AON ILMN
 2026-10-30 19:24 UK live request (late price refresh)
 tickers: QCOM AVGO LRCX AMAT KLAC MRVL ANET DELL APP META AMZN GOOGL AAPL ORCL TSLA NXPI MPWR
 2026-11-02 07:30 morning check macro
+15:47 UK results-day refresh
