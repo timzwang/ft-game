@@ -42,7 +42,7 @@ Themes: AI and chips 70%, Software 30%. Memory and storage (Micron, Seagate, WDC
 
 Points for the coming reviews:
 
-- Watchlist clean-up due in the 4 Nov evening review (core part D, playbook 6.15): remove the names in barred themes (Exxon Mobil, Chevron, Shell, Eli Lilly, Coca-Cola, Labcorp, Valero Energy, Johnson Controls), refresh stale notes (TSMC's, for example), and rebuild towards about 20 buyable high-beta names. A dry run on 3 Nov left every figure unchanged.
+- Watchlist clean-up due in the 4 Nov evening review (core part D, playbook 6.15): remove the names in barred themes (Exxon Mobil, Chevron, Shell, Valero Energy, Eli Lilly, Labcorp, Coca-Cola), refresh stale notes (TSMC's, for example), and rebuild towards about 20 buyable high-beta names. A dry run on 3 Nov left every figure unchanged.
 - Memory bounced on 3 Nov but Micron, Seagate and Western Digital all closed below their opens (faded gaps), on 0.77, 0.85 and 0.59 times average volume, under the 1.3 heavy-volume line, so no exit signal. A repeat on heavy volume would be one. The stance names the memory theme breaking down as what would show it wrong; Tim was told on 2 Nov that a change of direction is his call.
 - Palantir sold at the 3 Nov open, -5.70% from the previous close (cost -1.14 points), then rose 4.29% open to close on 2.2 times volume. Drift FAIL.
 - AMD reported after the 3 Nov close: beat, Q4 guide about $17bn against about $16.3bn, up after hours. Reaction session is 4 Nov: add its drift row in that review. It closed above its open on 3 Nov, so the swap column is open if a holding signals.

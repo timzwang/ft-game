@@ -11,5 +11,5 @@ sha256 of each file as published to the artifact and the Project:
 2e0b2dcd0f3325c6cd64634471c4144f598229a1b13a4dded9ada11db48bef85  data/macro.json
 8ae646d9e0304480b157cc8cc39884478c65fdb3c936a5300265056dcaca646b  data/panel.json
 54a7e520f28c259afc00500373d09ff28582512a8a81f968a6b3641e2ecba0ea  data/stocks.json
-792372b2fff8cd3b6b7b64ced2f1eb458f7a91df03207dd7dc88fbf1e2a12133  state/ft-game-state.md
+45d020b50358131db776958cac33cc7545bab80f782943dcb35aef1a16ba6805  state/ft-game-state.md
 ~~~
