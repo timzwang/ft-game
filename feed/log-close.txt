@@ -1,6 +1,3 @@
-21:38:27Z tickers: 96 (95 US symbols, 1 London; 30 panel stocks)
-21:38:36Z session: US 2026-11-03, London 2026-11-03
-21:38:56Z treasury: 6 rows, last 2026-11-03
-21:38:58Z coins: btc 77784.25, eth 2288.07, sol 93.49, xrp 1.2782
-21:38:59Z non-US 10-year yields: uk10y 5.2476 (cnbc), de10y 3.3286 (cnbc), fr10y 4.9475 (cnbc), it10y 4.467 (cnbc), jp10y 2.768 (cnbc)
-21:38:59Z written: 96 tickers; missing none; stale none; mismatched none; short of 200 sessions none; ranges widened ['ADBE 2026-11-03', 'PNR 2026-11-03', 'VRT 2026-11-03']
+21:56:46Z tickers: 94 (93 US symbols, 1 London; 30 panel stocks)
+21:56:56Z session: US 2026-11-03, London 2026-11-03
+21:56:56Z this session is already in latest.json: nothing to do
