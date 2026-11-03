@@ -44,3 +44,4 @@ live 2026-11-02 19:23 UK
 tickers: IDXX
 live request 07:27 UK morning check
 live 14:50 UK 2026-11-03T14:50:53Z
+tickers: MPC AMGN
