@@ -6,6 +6,17 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.15 (Tue 3 Nov 2026, about 23:00)
+
+Tim's request: "Fix EVERY issue with runs at the moment... Refinement is key", with the page redesigned like Apple's Liquid Glass. No score, sizing, order or pipeline changed. Pipeline still 7.8.
+
+- Results-day refresh: acts only on results of stocks on the list (task prompt, H4 step 1). On 3 Nov it ran in full for Marathon Petroleum, long off the list.
+- Price refresh: 16:45 to 17:04 UK, out of the scheduler's busy window (54 and 56 minutes late on 2 Nov). A late price or results-day refresh is no longer an issue (part I); watchdog thresholds 30 and 90 minutes.
+- Watchlist: holds what the stance could buy (part D; evening run step 6). A dry run removing eight barred names left every figure unchanged.
+- Page: Liquid Glass redesign (`page/index.html`, `page/app.js`): no captions under numbers, gap to the top 2% as a headline, results of stocks off the list and events already past hidden, wording about suspended rules removed. Old page kept as asset `53081510b3a7830082995aec759e3ce3`.
+- Exit rule tested, no change (`scripts/exit_rule_test.py`, roadmap item 69): sold minus kept -0.40 points over five sessions on 343 signal dates (t -1.3), +0.51 on 16 sector days (t +0.5).
+- Open: the midday check still fires (harmless); switching it off was refused by the permission check, so it is for Tim.
+
 ## 6.14.3 (Thu 29 Oct 2026, evening)
 
 Tim's request after the late price refresh: "Scan everything again and ensure that no issues will ever arise again." No rule, score, sizing, order, page, pipeline or scheduled task changed. Pipeline still 7.8.
@@ -312,6 +323,8 @@ Not versioned with the playbook; its changes are listed here by date.
 - Sun 18 Oct: order cut-off shown as 07:00 UK (`app.js` version 2).
 - Mon 19 Oct, about 00:30: results budget read from the ledger (1.0 for 27 to 30 Oct), US calendar for 26 and 27 Nov, day-call help text (`app.js` version 3).
 - Wed 21 Oct, afternoon: conviction tooltip and calibration banner wording from 19 Oct deployed (`app.js` version 4).
+- Mon 26 Oct: cut-off shown as 08:00 UK (`app.js` version 5, `index.html` version 14).
+- Tue 3 Nov: Liquid Glass redesign (`app.js` version 6, `index.html` version 15).
 
 ## Recording a new version
 

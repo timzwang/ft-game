@@ -1,7 +1,7 @@
 dash.calc('standing', {
     inputs: ['ledger'],
     title: 'Where the portfolio stands',
-    description: 'The latest estimated value and return against the S&P 500, the latest value and rank read from the FT site, the rank needed for the top 2% of players, and the open day-ahead call for the S&P 500.',
+    description: 'The latest estimated value and return against the S&P 500, the latest value and rank read from the FT site, the rank needed for the top 2% of players, the gap to the player nearest that line, and the open day-ahead call for the S&P 500.',
     fn: (ledger) => {
       const perf = ledger.filter((r) => r.table === 'perf').sort((a, b) => String(a.date).localeCompare(String(b.date)));
       const rep = ledger.filter((r) => r.table === 'reported').sort((a, b) => (String(a.date) + String(a.time_uk || '')).localeCompare(String(b.date) + String(b.time_uk || '')));
@@ -13,7 +13,11 @@ dash.calc('standing', {
       const c = open[open.length - 1] || null;
       const startRow = ledger.find((x) => x.table === 'meta' && x.name === 'start_value');
       const start = startRow && has(startRow.value) ? Number(startRow.value) : 100000;
+      const line = rep.filter((x) => has(x.value)).pop() || null;
       return [{
+        top2_return: line ? Number(line.value) : null,
+        top2_on: line ? line.date : null,
+        top2_gap: line && has(p.cum_pct) ? Math.round((Number(line.value) - Number(p.cum_pct)) * 100) / 100 : null,
         chg_abs: has(p.value_est) ? Math.round(Number(p.value_est) - start) : null,
         next_call: c ? (c.kind === 'green' ? 'Green ' : 'Red ') + Number(c.confidence) + '%' : null,
         next_usual: c && has(c.percentile) ? Math.round(Number(c.percentile)) : null,
@@ -23,7 +27,7 @@ dash.calc('standing', {
         value_est: has(p.value_est) ? Number(p.value_est) : null,
         cum_pct: has(p.cum_pct) ? Number(p.cum_pct) : null,
         spx_cum_pct: has(p.spx_cum_pct) ? Number(p.spx_cum_pct) : null,
-        gap_pts: has(p.cum_pct) && has(p.spx_cum_pct) ? Math.round((Number(p.cum_pct) - Number(p.spx_cum_pct)) * 100) / 100 : null,
+        gap_pts: has(p.cum_pct) && has(p.spx_cum_pct) ? Number(p.cum_pct) - Number(p.spx_cum_pct) : null,
         value_reported: has(r.value_reported) ? Number(r.value_reported) : null,
         reported_on: r.date ? r.date + (r.time_uk ? ' ' + r.time_uk : '') : null,
         rank: has(r.rank) ? Number(r.rank) : null,
@@ -109,15 +113,14 @@ dash.calc('standing', {
   };
   const S = {page: 'today', size: 's', sel: null, range: 63, busy: true,
     view: {macro: 'call', performance: 'overview', calendar: 'next', log: 'orders'},
-    wl: {who: 'notheld', band: 'all', soon: false, changed: false, sort: 'score', dir: -1},
-    hold: {sort: 'weight', dir: -1}, revAll: false};
-  const CALIB_TARGET = 150;
+    wl: {band: 'all', sort: 'score', dir: -1}, revAll: false};
 
   const num = (x) => (x === null || x === undefined || x === '' || Number.isNaN(Number(x)) ? null : Number(x));
   const fmt2 = d3.format(',.2f');
   const fmt0 = d3.format(',.0f');
-  const pct = (v, d) => (v === null || v === undefined ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d === undefined ? 2 : d) + '%');
-  const pts = (v, d) => (v === null || v === undefined ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d === undefined ? 2 : d));
+  const fix = (v, d) => (Math.abs(v) + 1e-9).toFixed(d);
+  const pct = (v, d) => (v === null || v === undefined ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + fix(v, d === undefined ? 2 : d) + '%');
+  const pts = (v, d) => (v === null || v === undefined ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + fix(v, d === undefined ? 2 : d));
   const bp = (v) => (v === null || v === undefined ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(0) + 'bp');
   const wt = (v) => (v === null || v === undefined ? '—' : (Number.isInteger(v) ? v : v.toFixed(1)) + '%');
   const dir = (v) => (v === null || v === undefined || Math.abs(v) < 0.005 ? 'flat' : v > 0 ? 'up' : 'down');
@@ -156,7 +159,17 @@ dash.calc('standing', {
   const usOpenUk = (s) => (s >= '2026-10-26' && s <= '2026-10-30' ? '13:30' : '14:30');
   const CUTOFF = '08:00';   // order cut-off, UK time: 08:00 UK local time all year, confirmed by the FT on 21 Oct (playbook 6.14, part C)
   const whenKey = (r) => String(r.date) + String(r.time_uk || '');
-  const shortTime = (t) => String(t || '').replace(/\s*\(est\.\)/i, '').replace(/before US open/i, 'pre-open').replace(/after US close/i, 'after close');
+  const shortTime = (t) => { const m = /\b(\d{1,2}:\d{2})\b/.exec(String(t || '')); if (m) return m[1]; return String(t || '').replace(/\s*\(est\.\)/i, '').replace(/before US open/i, 'Pre-open').replace(/after US close/i, 'After close'); };
+  // Has an event dated today already happened? Results stored as text ("after US close") count from the US close.
+  const eventPassed = (r) => {
+    const p = ukParts();
+    if (String(r.date) !== p.date) return String(r.date) < p.date;
+    const m = /\b(\d{1,2}):(\d{2})\b/.exec(String(r.time_uk || ''));
+    if (m) return p.time >= m[1].padStart(2, '0') + ':' + m[2];
+    if (/after US close/i.test(String(r.time_uk || ''))) return p.time >= usFinalUk(p.date);
+    if (/before US open/i.test(String(r.time_uk || ''))) return p.time >= usOpenUk(p.date);
+    return false;
+  };
 
   const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined && text !== null) n.textContent = text; return n; };
   const svgEl = (tag, attrs) => { const n = document.createElementNS('http://www.w3.org/2000/svg', tag); Object.entries(attrs || {}).forEach(([k, v]) => n.setAttribute(k, v)); return n; };
@@ -240,7 +253,7 @@ dash.calc('standing', {
     const t0 = today();
     const events = L.filter((r) => r.table === 'event');
     const nextRes = new Map();
-    events.filter((r) => r.kind === 'results' && String(r.date) >= t0).sort((a, b) => String(a.date).localeCompare(String(b.date))).forEach((r) => { if (r.stock && !nextRes.has(r.stock)) nextRes.set(r.stock, r); });
+    events.filter((r) => r.kind === 'results' && !eventPassed(r)).sort((a, b) => String(a.date).localeCompare(String(b.date))).forEach((r) => { if (r.stock && !nextRes.has(r.stock)) nextRes.set(r.stock, r); });
     const revBy = new Map();
     L.filter((r) => r.table === 'revision').forEach((r) => { if (!revBy.has(r.stock)) revBy.set(r.stock, []); revBy.get(r.stock).push(r); });
     const stocks = rows.filter((r) => r.group !== 'Cash').map((r) => {
@@ -261,9 +274,14 @@ dash.calc('standing', {
       });
     });
     const latestPerf = L.filter((r) => r.table === 'perf').sort((a, b) => String(a.date).localeCompare(String(b.date)));
-    D = {byT, spy, stocks, shadow, events, revBy, perf: latestPerf, relN, retN};
+    const sold = new Map();
+    L.filter((r) => r.table === 'trade' && num(r.to_w) === 0).forEach((r) => { if (!sold.has(r.name) || String(r.effective) > sold.get(r.name)) sold.set(r.name, String(r.effective)); });
+    D = {byT, spy, stocks, shadow, events, revBy, perf: latestPerf, relN, retN, sold, listed: new Set(rows.map((r) => r.name))};
     return D;
   };
+
+  // A company's results matter here only while it is held or on the watchlist; the calendar keeps older rows in the ledger.
+  const relevantEvent = (r) => r.kind !== 'results' || !r.stock || D.listed.has(r.stock);
 
   // ---------------------------------------------------------------- charts
   // A line chart with a left value axis, a date axis, an optional reference line and a hover readout.
@@ -305,12 +323,12 @@ dash.calc('standing', {
     });
     series.forEach((s) => {
       const p = rows.map((r, i) => [i, r[s.key]]).filter((d) => d[1] !== null && d[1] !== undefined && Number.isFinite(d[1]));
-      if (s.area && p.length > 1) { const a = svgEl('path', {d: d3.area().x((d) => x(d[0])).y0(y(o.areaBase !== undefined ? o.areaBase : dom[0])).y1((d) => y(d[1]))(p) || '', 'fill-opacity': 0.08, stroke: 'none'}); a.style.fill = s.color; svg.append(a); }
-      const path = svgEl('path', {d: d3.line().x((d) => x(d[0])).y((d) => y(d[1]))(p) || '', fill: 'none', 'stroke-width': s.width || 1.75, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'});
+      if (s.area && p.length > 1) { const a = svgEl('path', {d: d3.area().x((d) => x(d[0])).y0(y(o.areaBase !== undefined && o.areaBase !== null ? o.areaBase : y.domain()[0])).y1((d) => y(d[1]))(p) || '', 'fill-opacity': 0.1, stroke: 'none'}); a.style.fill = s.color; svg.append(a); }
+      const path = svgEl('path', {d: d3.line().curve(d3.curveMonotoneX).x((d) => x(d[0])).y((d) => y(d[1]))(p) || '', fill: 'none', 'stroke-width': s.width || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'});
       if (s.dash) path.setAttribute('stroke-dasharray', s.dash);
       path.style.stroke = s.color;
       svg.append(path);
-      if (p.length) { const c = svgEl('circle', {cx: x(p[p.length - 1][0]), cy: y(p[p.length - 1][1]), r: 2.75}); c.style.fill = s.color; svg.append(c); }
+      if (p.length) { const c = svgEl('circle', {cx: x(p[p.length - 1][0]), cy: y(p[p.length - 1][1]), r: 3}); c.style.fill = s.color; svg.append(c); }
     });
     (o.dots || []).forEach((k) => rows.forEach((r, i) => { if (r[k] === null || r[k] === undefined) return; svg.append(svgEl('circle', {cx: x(i), cy: y(r[k]), r: 3.5, fill: 'var(--ink)', stroke: 'var(--panel)', 'stroke-width': 1.5})); }));
     const rule = svgEl('line', {y1: m.t, y2: H - m.b, stroke: 'var(--ink3)', 'stroke-width': 1, visibility: 'hidden'});
@@ -436,92 +454,74 @@ dash.calc('standing', {
     root.querySelectorAll('#' + name + ' [data-view]').forEach((n) => { n.hidden = n.dataset.view !== S.view[name]; });
   };
 
-  // ---------------------------------------------------------------- header: what each figure is as of
-  const freshness = (rows, L) => {
+  // ---------------------------------------------------------------- header: how fresh the prices are
+  const freshness = (rows) => {
     const box = q('#fresh');
     const first = rows[0] || {};
     const sess = D.spy.length ? D.spy[D.spy.length - 1].date : null;
     const kids = [];
-    const item = (label, value, state, tip) => { const s = span('', label + ' '); s.append(el('b', '', value)); if (state) s.append(document.createTextNode(' '), state); if (tip) { s.dataset.tip = tip; s.tabIndex = 0; } return s; };
     if (first.prices_as_of) {
-      let flag = null;
-      if (/UK/.test(first.prices_as_of)) flag = st('Intraday', 'plain', 'A price refresh during the session. Weighted moves are provisional until the evening review.');
-      else if (sess) { const n = sessionsBetween(sess, expectedSession()); if (n === 1) flag = st('1 session behind', 'warn', 'The last completed US session is not in the files yet. The evening review adds it after 21:30 UK.'); else if (n > 1) flag = st('Stale: ' + n + ' sessions behind', 'bad', 'Prices have not been refreshed for ' + n + ' sessions. Treat moves and scores as out of date.'); }
-      kids.push(item('Prices', first.prices_as_of, flag, 'US prices from stockanalysis.com, UK from lse.co.uk.'));
+      kids.push(span('', String(first.prices_as_of).replace(/\s*\(.*\)\s*$/, '')));
+      if (!/UK/.test(first.prices_as_of) && sess) {
+        const n = sessionsBetween(sess, expectedSession());
+        if (n === 1) kids.push(st('1 session behind', 'warn', 'The last completed US session is not in the files yet. The evening review adds it after 21:30 UK.'));
+        else if (n > 1) kids.push(st(n + ' sessions behind', 'bad', 'Prices have not been refreshed for ' + n + ' sessions. Treat moves and scores as out of date.'));
+      }
     }
-    if (first.scores_as_of && first.scores_as_of !== first.prices_as_of) kids.push(item('Scores', first.scores_as_of));
-    const rep = L.filter((r) => r.table === 'reported').sort((a, b) => whenKey(b).localeCompare(whenKey(a)))[0];
-    if (rep) kids.push(item('FT rank', 'read ' + shortDate(rep.date) + (rep.time_uk ? ' ' + rep.time_uk : ''), null, 'Values and ranks are read off the FT site by Tim; the page cannot read the FT site itself.'));
-    const al = L.filter((r) => r.table === 'alert').sort((a, b) => whenKey(b).localeCompare(whenKey(a)))[0];
-    if (al) kids.push(item('Last run', shortDate(al.date) + (al.time_uk ? ' ' + al.time_uk : '')));
     box.replaceChildren(...kids);
   };
 
-  // ---------------------------------------------------------------- status strip
+  // ---------------------------------------------------------------- where the portfolio stands
+  let heroDraw = () => {};
   const strip = (rows, L) => {
     const box = q('#strip');
     const sd = dash.data('standing');
     const s = sd.status === 'ok' && sd.data && sd.data[0] ? sd.data[0] : null;
-    const kp = (label, value, vcls, note, extra, first) => {
-      const d = el('div', 'kp' + (first ? ' first' : ''));
-      const l = el('div', 'kp-l', label); if (extra) l.append(extra);
-      const v = el('div', 'kp-v ' + (vcls || ''));
-      if (value instanceof Node) v.append(value); else v.textContent = value;
+    const tile = (label, value, cls, unit, tip, flag) => {
+      const d = el('div', 'tile');
+      const l = el('div', 'tile-l', label);
+      if (flag) l.prepend(el('i'));
+      if (tip) { d.dataset.tip = tip; d.tabIndex = 0; }
+      const v = el('div', 'tile-v ' + (cls || ''), value);
+      if (unit) v.append(el('small', '', unit));
       d.append(l, v);
-      if (note) { const n = el('div', 'kp-n'); if (note instanceof Node) n.append(note); else n.textContent = note; d.append(n); }
       return d;
     };
-    if (!s) { box.replaceChildren(kp('Portfolio value', '—', '', S.busy ? 'Loading' : 'No completed session yet', null, true)); return; }
-    const has = s.sessions > 0;
+    const hero = el('div', 'hero');
+    hero.append(el('div', 'hero-l', 'Portfolio'));
+    const hv = el('div', 'hero-v');
+    const has = s && s.sessions > 0;
+    hv.append(el('b', '', has ? fmt0(s.value_est) : '—'));
+    if (has) hv.append(el('span', 'pill big ' + dir(s.cum_pct), pct(s.cum_pct)));
+    hero.append(hv);
+    const lg = el('ul', 'lg');
+    [['Portfolio', 'var(--s1)'], ['S&P 500', 'var(--bench)']].forEach(([n, c]) => { const li = el('li'); const sw = span('sw'); sw.style.background = c; li.append(sw, document.createTextNode(n)); lg.append(li); });
+    const chart = el('div', 'ch');
+    hero.append(lg, chart);
     const perf = D.perf;
     const last = perf[perf.length - 1];
-    // value
-    const v = el('span', '', has ? fmt0(s.value_est) : '—');
-    if (has) v.append(el('small', dir(s.cum_pct), (s.chg_abs > 0 ? '+' : s.chg_abs < 0 ? '−' : '') + fmt0(Math.abs(s.chg_abs)) + ' (' + pct(s.cum_pct) + ')'));
-    const vn = has ? 'Estimate at the ' + dateText(last.date) + ' close' + (s.value_reported !== null ? '. FT site ' + fmt0(s.value_reported) + ' on ' + shortDate(s.reported_on) : '') : 'Starts after the first session';
-    // 5 sessions
-    const n5 = Math.min(5, perf.length);
-    const base = perf.length > 5 ? num(perf[perf.length - 6].value_est) : 100000 * 1;
-    const startRow = L.find((r) => r.table === 'meta' && r.name === 'start_value');
-    const b0 = perf.length > 5 ? base : (startRow ? num(startRow.value) : 100000);
-    const r5 = last ? (num(last.value_est) / b0 - 1) * 100 : null;
-    const spxPrev = perf.length > 5 ? num(perf[perf.length - 6].spx_cum_pct) : 0;
-    const s5 = last ? ((100 + num(last.spx_cum_pct)) / (100 + spxPrev) - 1) * 100 : null;
-    // rank
-    const ranked = s.rank !== null;
-    const rv = el('span', '', ranked ? fmt0(s.rank) : '—');
-    if (ranked) rv.append(el('small', 'mut', 'top ' + s.percentile + '%'));
-    let rn = 'Send your rank and the number of players to track it';
-    let rflag = null;
-    if (ranked) {
-      const gap = s.rank - s.target_rank;
-      rn = 'Of ' + fmt0(s.players) + '. Top 2% is rank ' + fmt0(s.target_rank) + (gap > 0 ? ': ' + fmt0(gap) + ' places to go' : ': inside the target') + '. Read ' + shortDate(s.reported_on);
-      const age = sessionsBetween(String(s.reported_on).slice(0, 10), expectedSession());
-      if (age >= 2) rflag = st('Not updated for ' + age + ' sessions', 'warn', 'Rank is only known when Tim reads it off the FT site. Send a new value, rank and number of players.');
-    }
-    // call
-    const calls = L.filter((r) => r.table === 'daycall');
-    const open = calls.filter((r) => num(r.ret_pct) === null).sort((a, b) => String(b.date).localeCompare(String(a.date)));
-    const cS = open.find((r) => r.name === 'S&P 500');
-    const cP = open.find((r) => r.name === 'Portfolio' && cS && r.date === cS.date);
-    const settled = calls.filter((r) => r.name === 'S&P 500' && (r.beat === 'yes' || r.beat === 'no'));
-    const right = settled.filter((r) => r.beat === 'yes').length;
-    const cv = el('span', '', cS ? (cS.kind === 'green' ? 'Up ' : 'Down ') + num(cS.confidence) + '%' : '—');
-    if (cS) { cv.className = cS.kind === 'green' ? 'up' : 'down'; cv.append(el('small', 'mut', 'usual ' + Math.round(num(cS.percentile)) + '%')); }
-    const cn = cS ? 'S&P 500, ' + dateText(cS.date) + (cP ? '. Portfolio ' + (cP.kind === 'green' ? 'up ' : 'down ') + num(cP.confidence) + '%' : '') + '. Record ' + right + ' of ' + settled.length : 'No call yet';
-    box.replaceChildren(
-      kp('Portfolio value', v, '', vn, st('Estimate', 'plain', 'Worked out from the order weights and closing prices. The FT site value, when sent, is the verified figure.'), true),
-      kp('Against the S&P 500', has ? pts(s.gap_pts) + ' pts' : '—', has ? dir(s.gap_pts) : '', has ? 'Portfolio ' + pct(s.cum_pct) + ', S&P 500 ' + pct(s.spx_cum_pct) + ' since the start' : 'After the first session'),
-      kp(perf.length > 5 ? 'Last 5 sessions' : 'Since the start', r5 === null ? '—' : pct(r5), dir(r5), r5 === null ? '' : 'S&P 500 ' + pct(s5) + (perf.length <= 5 ? '. ' + n5 + ' sessions so far' : '')),
-      kp('Competition rank', rv, '', rn, rflag),
-      kp('Next session call', cv, '', cn, st('Uncalibrated', 'warn', 'A similar-days model with ' + settled.length + ' settled calls. A research record only: it never changes the order or the cash level.')),
+    const lastDay = last ? num(last.day_pct) : null;
+    const ranked = s && s.rank !== null;
+    const stale = ranked ? sessionsBetween(String(s.reported_on).slice(0, 10), expectedSession()) >= 2 : false;
+    const rankLabel = ranked ? 'Rank, ' + shortDate(s.reported_on) : 'Rank';
+    const tiles = el('div', 'tiles');
+    tiles.append(
+      tile('Against S&P 500', has ? pts(s.gap_pts) : '—', has ? dir(s.gap_pts) : '', has ? 'pts' : ''),
+      tile(last ? 'Last session, ' + shortDate(last.date) : 'Last session', pct(lastDay), dir(lastDay)),
+      tile(rankLabel, ranked ? fmt0(s.rank) : '—', '', ranked && s.percentile !== null ? 'top ' + Math.round(s.percentile) + '%' : '', ranked ? 'Of ' + fmt0(s.players) + ' players. The top 2% is rank ' + fmt0(s.target_rank) + ' or better. Only known when read off the FT site.' : 'Send your rank and the number of players.', stale),
+      tile('Gap to top 2%', s && s.top2_gap !== null ? Math.abs(s.top2_gap).toFixed(1) : '—', s && s.top2_gap !== null ? (s.top2_gap > 0 ? 'down' : 'up') : '', s && s.top2_gap !== null ? 'pts' : '', s && s.top2_return !== null ? 'The player nearest the line was at ' + pct(s.top2_return) + ' on ' + shortDate(s.top2_on) + '. Portfolio now ' + pct(s.cum_pct) + ' (estimate).' : 'Needs the return of a player near the line.', stale),
     );
+    box.replaceChildren(hero, tiles);
+    box.classList.remove('skel');
+    const ix = dash.data('indexed');
+    const irows = ix.status === 'ok' ? ix.data : [];
+    if (irows.length >= 2) lineChart(chart, irows, [{key: 'portfolio', name: 'Portfolio', color: 'var(--s1)', width: 2.25, area: true}, {key: 'sp500', name: 'S&P 500', color: 'var(--bench)', width: 1.5}], {height: S.size === 's' ? 128 : 148, ref: 100, label: 'Portfolio estimate and the S&P 500 since the start, both 100 at the start', yfmt: (t) => t.toFixed(0), vfmt: (x) => x.toFixed(2), xfmt: (r) => (r.date === 'Start' ? 'Start' : shortDate(r.date)), xlong: (r) => (r.date === 'Start' ? 'Start, Fri 9 Oct open' : dateText(r.date)), areaBase: null});
   };
 
-  // ---------------------------------------------------------------- order queue
+  // ---------------------------------------------------------------- the order
   const orderQueue = (rows, L) => {
     const box = q('#oq');
-    const held = rows.filter((r) => r.group === 'Portfolio');
+    const held = rows.filter((r) => r.group === 'Portfolio').sort((a, b) => num(b.weight) - num(a.weight));
     const cashRow = rows.find((r) => r.group === 'Cash');
     const cash = cashRow ? num(cashRow.weight) || 0 : 0;
     const trades = L.filter((r) => r.table === 'trade');
@@ -529,90 +529,63 @@ dash.calc('standing', {
     const round = trades.filter((r) => String(r.effective) === E);
     const alert = L.filter((r) => r.table === 'alert' && r.stock === 'Order').sort((a, b) => whenKey(b).localeCompare(whenKey(a)))[0] || null;
     const now = ukNow();
-    const t0 = today();
-    const noChange = alert && /^no change/i.test(String(alert.text || '')) && String(alert.date) >= String(round.length ? round[0].date : '');
-    const reps = L.filter((r) => r.table === 'reported');
-    const stateOf = (r) => {
-      if (now < E + ' ' + CUTOFF) return 'proposed';
-      const s = rows.find((x) => x.name === r.name) || {};
-      const fill = E + ' ' + (s.market === 'UK' || /\.$/.test(String(r.ticker || '')) ? '08:00' : usOpenUk(E));
-      if (now < fill) return 'pending';
-      return reps.some((x) => whenKey(x) >= E + (s.market === 'UK' ? '08:00' : usOpenUk(E))) ? 'confirmed' : 'filled';
-    };
-    const STATES = {proposed: ['Proposed', 'acc', 'Issued by the review. Enter it on the FT site before ' + CUTOFF + ' UK on ' + dateText(E) + '.'],
-      pending: ['Pending fill', '', 'Assumed entered before the cut-off; fills at the next open. Say in the project chat if it was not entered.'],
-      filled: ['Filled, estimated', '', 'Past the open. The fill is assumed at the opening price until an FT value is read.'],
-      confirmed: ['Confirmed', 'okay', 'An FT site value has been read since the fill.']};
-    const order = ['proposed', 'pending', 'filled', 'confirmed'];
-    const states = round.map(stateOf);
-    const overall = states.length ? order[Math.min(...states.map((x) => order.indexOf(x)))] : null;
-    const kids = [];
+    // An order is live from the review's message until the cut-off on the day it fills.
+    const live = !!alert && /^(changed|revised)/i.test(String(alert.text || '')) && E && now < E + ' ' + CUTOFF;
+    const first = rows[0] || {};
     const head = el('div', 'ph');
-    head.append(el('h2', '', 'Order queue'));
-    const meta = span('meta', '');
-    if (E) meta.append(document.createTextNode('For the open of '), el('b', '', dateText(E)), document.createTextNode(alert ? ', issued ' + shortDate(alert.date) + ' ' + (alert.time_uk || '') : ''));
-    head.append(meta);
-    if (overall === 'proposed' && E >= t0) {
-      const c = el('div', 'oq-cta', 'Enter on the FT site before ' + CUTOFF + ' UK, ' + dateText(E));
-      const mins = Math.round((new Date(E + 'T' + CUTOFF + ':00') - new Date(now.replace(' ', 'T') + ':00')) / 60000);
-      if (mins > 0) c.append(el('small', '', 'Cut-off in ' + (mins >= 60 ? Math.floor(mins / 60) + 'h ' : '') + (mins % 60) + 'm'));
-      kids.push(c);
-    }
-    kids.push(head);
-    if (!E) { const b = el('div', 'pb'); msg(b, 'No order has been logged yet.'); kids.push(b); box.replaceChildren(...kids); return; }
-    if (noChange) { const b = el('div', 'pb'); b.append(el('p', 'note', 'Latest review: no change. ' + String(alert.text || '').replace(/^no change[^.:]*[.:]\s*/i, ''))); kids.push(b); }
-    const steps = el('div', 'steps');
-    steps.setAttribute('aria-label', 'Order progress');
-    order.forEach((k, i) => { const s = el('div', 'step' + (overall === k ? ' now' : overall && order.indexOf(overall) > i ? ' done' : '')); s.append(el('b', '', STATES[k][0]), span('', k === 'proposed' ? 'Before ' + CUTOFF : k === 'pending' ? 'Until the open' : k === 'filled' ? 'At the open' : 'FT value read')); if (overall === k) s.setAttribute('aria-current', 'step'); steps.append(s); });
-    kids.push(steps);
-    const body = el('div', 'pb flush');
-    const lines = round.slice().sort((a, b) => (num(b.to_w) - num(b.from_w)) - (num(a.to_w) - num(a.from_w)));
-    table(body, [
-      {h: 'Stock', cell: (r) => { const s = rows.find((x) => x.name === r.name) || {}; const w = el('div', 'stk'); w.append(logoFor(r.ticker, s.market, r.name, 's'), span('', r.name)); return w; }},
-      {h: 'Action', cell: (r) => (num(r.from_w) === 0 ? 'Buy' : num(r.to_w) === 0 ? 'Sell all' : num(r.to_w) > num(r.from_w) ? 'Add' : 'Trim')},
-      {h: 'From', num: true, cell: (r) => wt(num(r.from_w))},
-      {h: 'To', num: true, cls: 'b', cell: (r) => wt(num(r.to_w))},
-      {h: 'Change', num: true, only: ['m', 'l'], tip: 'Percentage points of the portfolio.', cell: (r) => { const c = num(r.to_w) - num(r.from_w); return (c > 0 ? '+' : '−') + Math.abs(c); }},
-      {h: 'Fills', only: ['m', 'l'], cell: (r) => { const s = rows.find((x) => x.name === r.name) || {}; return (s.market === 'UK' ? '08:00' : usOpenUk(E)) + ' UK'; }},
-      {h: 'State', cell: (r) => { const k = stateOf(r); return st(STATES[k][0], STATES[k][1], STATES[k][2]); }},
-    ], lines, {empty: 'No changes in this order.'});
-    kids.push(body);
-    const changed = new Set(round.map((r) => r.name));
-    const keep = held.filter((r) => !changed.has(r.name)).sort((a, b) => num(b.weight) - num(a.weight));
+    head.append(el('h2', '', 'Order'));
+    const state = el('span', 'oq-state' + (live ? ' go' : ''), live ? 'Enter before ' + CUTOFF + ' UK' : 'Nothing to enter');
+    head.append(state);
+    const body = el('div', 'pb');
+    const pendingFill = !!E && now < E + ' ' + usOpenUk(E);
+    const marks = new Map(pendingFill ? round.map((r) => [r.name, r]) : []);
+    const grid = el('div', 'oq-grid');
+    held.forEach((r) => {
+      const m = marks.get(r.name);
+      const i = el('div', 'oq-i' + (m && num(m.to_w) > num(m.from_w) ? ' new' : ''));
+      i.append(logoFor(r.ticker, r.market, r.name, 's'), span('t', r.ticker), span('w', wt(num(r.weight))));
+      grid.append(i);
+    });
+    if (cash > 0) { const i = el('div', 'oq-i'); i.append(span('t', 'Cash'), span('w', wt(cash))); grid.append(i); }
+    if (!held.length) msg(grid, S.busy ? 'Loading' : 'No order has been logged yet.');
+    body.append(grid);
+    const sells = pendingFill ? round.filter((r) => num(r.to_w) === 0) : [];
+    if (sells.length) { const x = el('div', 'oq-sell'); sells.forEach((r) => x.append(span('', 'Sell ' + r.ticker))); body.append(x); }
     const total = held.reduce((t, r) => t + (num(r.weight) || 0), 0) + cash;
-    const checks = [held.length >= 5 && held.length <= 20, held.every((r) => num(r.weight) >= 5 && num(r.weight) <= 25), cash <= 25, Math.abs(total - 100) < 0.05];
-    const foot = el('div', 'oq-foot');
-    const k1 = span('', 'Unchanged: '); k1.append(el('b', '', keep.map((r) => r.ticker + ' ' + wt(num(r.weight))).join(', ') || 'none'));
-    const k2 = span('', '');
-    k2.append(document.createTextNode(held.length + ' stocks, cash '), el('b', '', wt(cash)), document.createTextNode(', total '), el('b', '', wt(Math.round(total * 10) / 10)), document.createTextNode(' '));
-    k2.append(checks.every(Boolean) ? st('Rules met', 'okay', 'Checked here against the game rules: 5 to 20 stocks, each 5% to 25%, cash at most 25%, total 100%.') : st('Breaks a rule', 'bad', 'One of: 5 to 20 stocks, each 5% to 25%, cash at most 25%, total 100%. The pipeline refuses such an order; check the log.'));
-    foot.append(k1, k2);
-    kids.push(foot);
-    if (false) {
-      const parts = sentences(String(alert.text || '').replace(/^(changed|revised)[^:]*:\s*/i, '').replace(/enter before 0[78]:00 UK\.?\s*/i, '')).flatMap((x) => x.split(/;\s+/)).map((x) => x.trim()).filter(Boolean).map((x) => x.charAt(0).toUpperCase() + x.slice(1));
-      const why = el('div', 'pb'); const b = bullets(parts, {small: true, max: 2}); if (b) { why.append(b); kids.push(why); }
+    const ok = held.length >= 5 && held.length <= 20 && held.every((r) => num(r.weight) >= 5 && num(r.weight) <= 25) && cash <= 25 && Math.abs(total - 100) < 0.05;
+    if (held.length && !ok) body.append(st('Breaks a game rule: check the log', 'bad'));
+    const lastLine = el('div', 'oq-last');
+    if (live) {
+      const mins = Math.round((new Date(E + 'T' + CUTOFF + ':00') - new Date(now.replace(' ', 'T') + ':00')) / 60000);
+      lastLine.textContent = 'For ' + (first.order_for || dateText(E)) + (mins > 0 ? ', cut-off in ' + (mins >= 60 ? Math.floor(mins / 60) + 'h ' : '') + (mins % 60) + 'm' : '');
+    } else {
+      const outs = round.filter((r) => num(r.to_w) === 0).map((r) => r.ticker);
+      const ins = round.filter((r) => num(r.from_w) === 0).map((r) => r.ticker);
+      lastLine.textContent = (first.order_for ? 'For ' + first.order_for + '. ' : '') + (E ? 'Last changed ' + dateText(E) + (outs.length + ins.length && outs.length + ins.length <= 4 ? ': ' + [outs.length ? outs.join(', ') + ' out' : '', ins.length ? ins.join(', ') + ' in' : ''].filter(Boolean).join(', ') : '') : '');
     }
-    box.replaceChildren(...kids);
+    body.append(lastLine);
+    box.replaceChildren(head, body);
   };
 
   // ---------------------------------------------------------------- holdings and watchlist
+  const soldOn = (r) => (D.sold.get(r.name) && daysAway(D.sold.get(r.name)) >= -10 ? D.sold.get(r.name) : null);
   const statusChip = (r) => {
-    if (r.held) return st('Held ' + wt(num(r.weight)), 'plain');
+    if (r.held) return st('Held ' + wt(num(r.weight)));
     const t = String(r.status || '').toLowerCase();
-    if (/exit/.test(t)) return st('Exit signal', 'bad');
     if (/ready|confirmed/.test(t)) return st(/ready/.test(t) ? 'Ready' : 'Confirmed', 'okay', 'Passes the entry rules; a candidate for the next order.');
+    if (/drift: enter/.test(t)) return st('Drift entry', 'okay', 'Passed all six earnings-drift tests.');
+    if (/follow|2nd day/.test(t)) return st('Needs 2nd day', 'warn', 'Strong news, but needs a second session closing above its open on heavy volume.');
+    const so = soldOn(r);
+    if (so) return st('Sold ' + shortDate(so));
     if (/faded/.test(t)) return st('Faded gap', 'warn', 'Gapped up then closed below its open; needs a second strong session.');
-    if (/follow/.test(t)) return st('Needs 2nd day', 'warn', 'Strong news, but needs a second session closing above its open on heavy volume.');
-    if (/results/.test(t)) return st('Results ahead', 'plain');
-    return span('faint', 'Watching');
+    return null;
   };
-  const scoreCell = (r) => { const w = el('span', 'band ' + tierOf(r)); w.append(el('i'), span('b', num(r.score) === null ? '—' : String(num(r.score)))); w.title = (tierOf(r) || 'unscored') + ' band'; return w; };
+  const scoreCell = (r) => el('span', 'sc ' + tierOf(r), num(r.score) === null ? '—' : String(num(r.score)));
   const deltaCell = (r) => (r.dScore === null ? span('faint', '—') : r.dScore === 0 ? span('faint', '0') : span('delta ' + (r.dScore > 0 ? 'up' : 'down'), (r.dScore > 0 ? '+' : '−') + Math.abs(r.dScore)));
-  const resCell = (r) => (r.nextRes ? shortDate(r.nextRes.date) + (r.nextRes.confirmed === 'yes' ? '' : ' (est.)') : '—');
-  const stkCell = (r) => { const w = el('div', 'stk'); const t = el('div', 'stk-t'); t.append(el('b', '', r.ticker), span('', r.name)); w.append(logoFor(r.ticker, r.market, r.name), t); return w; };
+  const stkCell = (r) => { const w = el('div', 'stk'); const t = el('div', 'stk-t'); t.append(el('b', '', r.ticker), span('', r.name)); w.append(logoFor(r.ticker, r.market, r.name, 's'), t); return w; };
   const rowLabel = (r) => r.name + ', ' + money(r, num(r.price)) + ', ' + pct(num(r.day_pct)) + ' on the day, score ' + num(r.score) + '. Open research.';
   const sortRows = (list, sort, dirn) => {
-    const val = {score: (r) => num(r.score), delta: (r) => r.dScore, rel: (r) => r.rel20, day: (r) => num(r.day_pct), res: (r) => (r.resDays === null ? 999 : r.resDays), imp: (r) => r.implied, conv: (r) => r.conv, weight: (r) => num(r.weight), pts: (r) => num(r.contrib_pts), risk: (r) => r.riskShare, name: (r) => r.name}[sort];
+    const val = {score: (r) => num(r.score), delta: (r) => r.dScore, rel: (r) => r.rel20, day: (r) => num(r.day_pct), res: (r) => (r.resDays === null ? 999 : r.resDays), weight: (r) => num(r.weight), name: (r) => r.name}[sort];
     return list.slice().sort((a, b) => {
       const x = val(a); const y = val(b);
       if (x === null || x === undefined) return 1;
@@ -621,51 +594,38 @@ dash.calc('standing', {
     });
   };
   const open = (r) => { S.sel = r.name; draw(); const p = q('#research'); if (S.size !== 'l') root.scrollIntoView({block: 'start'}); if (p) p.focus({preventScroll: S.size === 'l'}); };
+  const pxCell = (r) => { const d = el('div', 'px'); d.append(span('', money(r, num(r.price))), el('span', 'pill ' + dir(num(r.day_pct)), pct(num(r.day_pct)))); return d; };
+  const sparkCell = (r) => { const d = el('div', 'spk ' + dir(num(r.day_pct))); const s = sparkOf(r); if (s) d.append(s); return d; };
+  const idCell = (r, sub) => { const d = el('div', 'id'); const n = el('span', '', sub || r.name); d.append(el('b', '', r.ticker), n); return d; };
+  const rowBtn = (cls, r) => { const b = btn('row ' + cls + (S.sel === r.name ? ' on' : ''), null, () => open(r)); b.setAttribute('aria-label', rowLabel(r)); b.append(logoFor(r.ticker, r.market, r.name)); return b; };
 
-  const holdings = (L) => {
+  const holdings = () => {
     const box = q('#hold-body');
-    const risk = new Map(L.filter((r) => r.table === 'risk').map((r) => [r.name, num(r.risk_share_pct)]));
-    const held = D.stocks.filter((r) => r.held).map((r) => Object.assign(r, {riskShare: risk.has(r.name) ? risk.get(r.name) : null}));
-    const list = sortRows(held, S.hold.sort, S.hold.dir);
-    const first = D.stocks[0] || {};
-    const te = num(first.today_est_pct);
-    const hm = q('#hold-meta');
-    hm.replaceChildren(document.createTextNode(held.length + ' stocks. Last session '), el('b', dir(te), pct(te)), document.createTextNode(' weighted'));
-    if (!held.length) { msg(box, S.busy ? 'Loading' : 'No holdings.'); return; }
-    if (S.size === 's') { mobileRows(box, list, true); return; }
-    table(box, [
-      {h: 'Stock', key: 'name', cell: stkCell},
-      {h: 'Weight', key: 'weight', num: true, cls: 'b', cell: (r) => wt(num(r.weight))},
-      {h: 'Price', num: true, only: ['l'], cell: (r) => money(r, num(r.price))},
-      {h: 'Day', key: 'day', num: true, cell: (r) => [pct(num(r.day_pct)), dir(num(r.day_pct))]},
-      {h: 'Points', key: 'pts', num: true, tip: 'Weight × the day\'s move: what the position added to the portfolio.', cell: (r) => (num(r.contrib_pts) === null ? (r.live_from ? 'fills ' + shortDate(r.live_from) : '—') : [pts(num(r.contrib_pts)), dir(num(r.contrib_pts))])},
-      {h: 'vs S&P, 20d', key: 'rel', num: true, tip: 'Return over the last 20 stored sessions minus the S&P 500\'s, percentage points.', cell: (r) => [pts(r.rel20, 1), dir(r.rel20)]},
-      {h: 'Risk share', key: 'risk', num: true, only: ['l'], tip: 'Share of the portfolio\'s day-to-day movement. Well above its weight means it moves with other holdings.', cell: (r) => (r.riskShare === null ? '—' : r.riskShare.toFixed(0) + '%')},
-      {h: 'Next results', key: 'res', cell: resCell},
-      {h: 'Score', key: 'score', num: true, cell: scoreCell},
-    ], list, {sort: S.hold, onSort: (k) => { S.hold = {sort: k, dir: S.hold.sort === k ? -S.hold.dir : (k === 'res' || k === 'name' ? 1 : -1)}; draw(); }, onRow: open, label: rowLabel, rowCls: (r) => (S.sel === r.name ? 'on' : ''), caption: 'Holdings'});
-  };
-
-  const mobileRows = (box, list, held, groupFn) => {
+    const held = sortRows(D.stocks.filter((r) => r.held), 'weight', -1);
     box.classList.remove('skel');
-    const wrap = el('div', 'mrows');
-    let lastG = null;
-    list.forEach((r) => {
-      if (groupFn) { const g = groupFn(r); if (g !== lastG) { wrap.append(el('div', 'mgroup', g)); lastG = g; } }
-      const b = btn('mr', null, () => open(r));
-      b.setAttribute('aria-label', rowLabel(r));
-      const a = el('div', 'mr-a'); a.append(el('b', '', r.ticker), span('', r.name));
-      const bot = el('div', 'mr-b');
-      if (held) bot.append(span('', wt(num(r.weight))), span(dir(num(r.contrib_pts)), num(r.contrib_pts) === null ? '' : pts(num(r.contrib_pts)) + ' pts'));
-      else bot.append(statusChip(r));
-      const sc = el('span', ''); sc.append(document.createTextNode('Score '), scoreCell(r)); if (r.dScore) { sc.append(document.createTextNode(' '), deltaCell(r)); }
-      bot.append(sc);
-      if (r.rel20 !== null) bot.append(span(dir(r.rel20), pts(r.rel20, 1) + ' vs S&P'));
-      if (r.nextRes && r.resDays <= 14) bot.append(span('', 'Results ' + shortDate(r.nextRes.date) + (r.implied !== null ? ' ±' + r.implied + '%' : '')));
-      b.append(logoFor(r.ticker, r.market, r.name), a, span('mr-p', money(r, num(r.price))), bot, span('mr-d ' + dir(num(r.day_pct)), pct(num(r.day_pct))));
+    if (!held.length) { msg(box, S.busy ? 'Loading' : 'No holdings.'); return; }
+    const wide = (S.cols || S.size) !== 's' && root.clientWidth >= 720 && !(S.sel && S.size === 'l');
+    const wrap = el('div', 'rows one');
+    if (wide) {
+      const h = el('div', 'row-h hold wide');
+      ['', 'Stock', '', 'Price', '', 'Weight', 'Points', 'vs S&P, 20d', 'Score'].forEach((t, i) => h.append(span(i > 2 ? 'r' : '', t)));
+      h.children[4].textContent = 'Day';
+      wrap.append(h);
+    }
+    held.forEach((r) => {
+      const b = rowBtn('hold' + (wide ? ' wide' : ''), r);
+      const cp = num(r.contrib_pts);
+      if (wide) {
+        const price = span('cell', money(r, num(r.price)));
+        b.append(idCell(r), sparkCell(r), price, el('span', 'pill ' + dir(num(r.day_pct)), pct(num(r.day_pct))), span('cell w', wt(num(r.weight))), span('cell ' + dir(cp), cp === null ? (r.live_from ? 'fills ' + shortDate(r.live_from) : '—') : pts(cp)), span('cell ' + dir(r.rel20), pts(r.rel20, 1)), el('span', 'cell'));
+        b.lastChild.append(scoreCell(r));
+      } else {
+        const w = el('div', 'stack');
+        w.append(el('b', '', wt(num(r.weight))), span(dir(cp), cp === null ? '—' : pts(cp) + ' pts'));
+        b.append(idCell(r), w, pxCell(r));
+      }
       wrap.append(b);
     });
-    if (!list.length) { msg(box, 'No stocks match these filters.'); return; }
     box.replaceChildren(wrap);
   };
 
@@ -673,38 +633,31 @@ dash.calc('standing', {
     const box = q('#watch-body');
     const w = S.wl;
     const fl = q('#watch-fl');
-    const seg = (opts, key) => { const s = el('div', 'seg'); s.setAttribute('role', 'group'); opts.forEach(([k, t]) => { const b = btn('', t, () => { S.wl[key] = k; draw(); }); b.setAttribute('aria-pressed', w[key] === k ? 'true' : 'false'); s.append(b); }); return s; };
-    const tog = (key, t, tip) => { const b = btn('tg', t, () => { S.wl[key] = !S.wl[key]; draw(); }); b.setAttribute('aria-pressed', w[key] ? 'true' : 'false'); if (tip) b.title = tip; return b; };
-    let list = D.stocks.filter((r) => (w.who === 'all' ? true : w.who === 'held' ? r.held : !r.held))
-      .filter((r) => (w.band === 'all' ? true : tierOf(r) === w.band))
-      .filter((r) => (!w.soon || (r.resDays !== null && r.resDays <= 10)))
-      .filter((r) => (!w.changed || (r.dScore !== null && r.dScore !== 0)));
-    list = sortRows(list, w.sort, w.dir);
-    const kids = [seg([['notheld', 'Not held'], ['held', 'Held'], ['all', 'All']], 'who'), seg([['all', 'Any band'], ['strong', 'Strong'], ['middling', 'Middling'], ['weak', 'Weak']], 'band'), tog('soon', 'Results in 10 days'), tog('changed', 'Score changed', 'Score moved since the previous nightly rating')];
-    if (S.size === 's') {
-      const sel = el('select', 'sel'); sel.setAttribute('aria-label', 'Sort by');
-      [['score', 'Score'], ['delta', 'Score change'], ['rel', 'vs S&P 500, 20d'], ['day', 'Day move'], ['res', 'Next results'], ['imp', 'Expected results move'], ['conv', 'Conviction']].forEach(([k, t]) => { const o = el('option', '', 'Sort: ' + t); o.value = k; if (w.sort === k) o.selected = true; sel.append(o); });
-      sel.addEventListener('change', () => { S.wl.sort = sel.value; S.wl.dir = sel.value === 'res' ? 1 : -1; draw(); });
-      kids.push(sel);
-    }
-    kids.push(span('fl-count', list.length + ' of ' + D.stocks.length));
-    fl.replaceChildren(...kids);
-    const n = (t) => D.stocks.filter((r) => !r.held && tierOf(r) === t).length;
-    q('#watch-meta').textContent = n('strong') + ' strong, ' + n('middling') + ' middling, ' + n('weak') + ' weak not held. Ranked by ' + ({score: 'score', delta: 'score change', rel: 'momentum vs S&P 500', day: 'day move', res: 'next results', imp: 'expected results move', conv: 'conviction', name: 'name'}[w.sort] || 'score');
-    if (S.size === 's') { mobileRows(box, list, false); return; }
-    table(box, [
-      {h: 'Stock', key: 'name', cell: stkCell},
-      {h: 'Status', cell: statusChip},
-      {h: 'Score', key: 'score', num: true, tip: 'Pipeline score out of 100; the square shows the strength band.', cell: scoreCell},
-      {h: 'Change', key: 'delta', num: true, tip: 'Score change since the previous nightly rating.', cell: deltaCell},
-      {h: 'vs S&P, 20d', key: 'rel', num: true, tip: 'Return over the last 20 stored sessions minus the S&P 500\'s, percentage points. Market-relative: sector benchmarks are not stored.', cell: (r) => [pts(r.rel20, 1), dir(r.rel20)]},
-      {h: 'Day', key: 'day', num: true, cell: (r) => [pct(num(r.day_pct)), dir(num(r.day_pct))]},
-      {h: 'Price', num: true, only: ['l'], cell: (r) => money(r, num(r.price))},
-      {h: 'Results', key: 'res', cell: resCell},
-      {h: 'Exp. move', key: 'imp', num: true, only: ['l'], tip: 'Options-implied move on results day, where priced. Size, not direction.', cell: (r) => (r.implied === null ? '—' : '±' + r.implied + '%')},
-      {h: 'Conviction', key: 'conv', num: true, tip: 'Confidence anchor: the score rescaled (50 + 0.35 x (score - 40), held between 40 and 68). A ranking that adds nothing to the score, not a measured chance of beating the S&P 500.', cell: (r) => (r.conv === null ? '—' : String(r.conv))},
-      {h: '20 sessions', only: ['l'], cell: (r) => sparkOf(r) || '—'},
-    ], list, {sort: w, onSort: (k) => { S.wl.dir = S.wl.sort === k ? -S.wl.dir : (k === 'res' || k === 'name' ? 1 : -1); S.wl.sort = k; draw(); }, onRow: open, label: rowLabel, rowCls: (r) => (S.sel === r.name ? 'on' : ''), empty: 'No stocks match these filters.', caption: 'Research watchlist'});
+    const seg = el('div', 'seg'); seg.setAttribute('role', 'group'); seg.setAttribute('aria-label', 'Strength');
+    [['all', 'All'], ['strong', 'Strong'], ['middling', 'Middling'], ['weak', 'Weak']].forEach(([k, t]) => { const b = btn('', t, () => { S.wl.band = k; draw(); }); b.setAttribute('aria-pressed', w.band === k ? 'true' : 'false'); seg.append(b); });
+    const sel = el('select', 'sel'); sel.setAttribute('aria-label', 'Sort by');
+    [['score', 'Score'], ['day', 'Today'], ['rel', 'vs S&P, 20 days'], ['delta', 'Score change'], ['res', 'Next results']].forEach(([k, t]) => { const o = el('option', '', t); o.value = k; if (w.sort === k) o.selected = true; sel.append(o); });
+    sel.addEventListener('change', () => { S.wl.sort = sel.value; S.wl.dir = sel.value === 'res' ? 1 : -1; draw(); });
+    fl.replaceChildren(seg, sel);
+    const list = sortRows(D.stocks.filter((r) => !r.held).filter((r) => (w.band === 'all' ? true : tierOf(r) === w.band)), w.sort, w.dir);
+    box.classList.remove('skel');
+    if (!list.length) { msg(box, S.busy ? 'Loading' : 'No stocks at this strength.'); return; }
+    const wrap = el('div', 'rows');
+    const cap = S.size === 's' && !S.wlAll ? 10 : list.length;
+    list.slice(0, cap).forEach((r) => {
+      const b = rowBtn('watch', r);
+      const chip = r.nextRes && r.resDays !== null && r.resDays <= 5 ? 'Results ' + (r.resDays === 0 ? 'today' : r.resDays === 1 ? 'tomorrow' : shortDate(r.nextRes.date)) : null;
+      const c = statusChip(r);
+      const id = el('div', 'id');
+      id.append(el('b', '', r.ticker));
+      const sub = el('span', '', r.name);
+      if (chip || c) { sub.replaceChildren(el('span', 'tag', chip || c.textContent)); }
+      id.append(sub);
+      b.append(id, sparkCell(r), scoreCell(r), pxCell(r));
+      wrap.append(b);
+    });
+    box.replaceChildren(wrap);
+    if (S.size === 's' && list.length > 10) { const m = btn('more', S.wlAll ? 'Show fewer' : 'Show all ' + list.length, () => { S.wlAll = !S.wlAll; draw(); }); m.style.padding = '0.5rem 1.125rem 0.25rem'; box.append(m); }
   };
 
   // ---------------------------------------------------------------- right rail
@@ -714,36 +667,29 @@ dash.calc('standing', {
     L.filter((r) => r.table === 'macro').forEach((r) => { by[r.ticker] = r; });
     const sess = D.spy.length ? D.spy[D.spy.length - 1].date : null;
     const g = el('div', 'kv');
-    ['', 'Last', '1 day', 'As of'].forEach((h, i) => g.append(span('h' + (i ? ' num' : ''), h)));
+    let n = 0;
     const add = (name, value, chg, cc, date) => {
       const stale = sess && date && date < sess;
-      g.append(span('', name), span('num b' + (stale ? ' faint' : ''), value), span('num ' + (cc || ''), chg), span('num ' + (stale ? 'down' : 'mut'), date ? shortDate(date) + (stale ? ' stale' : '') : '—'));
+      const f = n === 0 ? ' fst' : ''; n += 1;
+      const nm = span(f.trim(), name);
+      g.append(nm, span('num b' + f + (stale ? ' faint' : ''), value), span('num' + f + ' ' + (cc || ''), chg));
     };
-    if (D.spy.length > 1) { const a = D.spy[D.spy.length - 1]; const b = D.spy[D.spy.length - 2]; const c = (a.close / b.close - 1) * 100; add('S&P 500 (SPY)', fmt2(Number(a.close)), pct(c), dir(c), a.date); }
-    [['us2y', 'US 2-year'], ['us10y', 'US 10-year'], ['uk10y', 'UK 10-year'], ['brent', 'Brent'], ['gold', 'Gold'], ['btc', 'Bitcoin']].forEach(([k, n]) => {
+    if (D.spy.length > 1) { const a = D.spy[D.spy.length - 1]; const b = D.spy[D.spy.length - 2]; const c = (a.close / b.close - 1) * 100; add('S&P 500', '$' + fmt2(Number(a.close)), pct(c), dir(c), a.date); }
+    [['us10y', 'US 10-year'], ['us2y', 'US 2-year'], ['uk10y', 'UK 10-year'], ['brent', 'Brent'], ['btc', 'Bitcoin']].forEach(([k, nm]) => {
       const r = by[k]; if (!r || num(r.value) === null) return;
       const v = num(r.value); const c = num(r.chg_1d);
-      add(n, r.kind === 'yield' ? v.toFixed(2) + '%' : '$' + (v >= 1000 ? fmt0(v) : fmt2(v)), r.kind === 'yield' ? bp(c) : pct(c, 1), r.kind === 'yield' ? 'mut' : dir(c), r.date);
+      add(nm, r.kind === 'yield' ? v.toFixed(2) + '%' : '$' + (v >= 1000 ? fmt0(v) : fmt2(v)), r.kind === 'yield' ? bp(c) : pct(c, 1), r.kind === 'yield' ? 'mut' : dir(c), r.date);
     });
-    Array.from(g.children).slice(-4).forEach((n) => n.classList.add('last'));
-    const first = rows[0] || {};
-    const bd = by.backdrop;
-    const kids = [g];
-    const read = [first.regime ? 'Regime: ' + first.regime : '', bd ? 'Backdrop for shares from yields and oil: ' + bd.action : ''].filter(Boolean);
-    if (read.length) kids.push(bullets(read, {small: true}));
-    box.replaceChildren(...kids);
-    q('#ctx-meta').textContent = 'US close, UK time';
+    box.replaceChildren(g);
   };
   const rail = (L) => {
     const heldNames = new Set(D.stocks.filter((r) => r.held).map((r) => r.name));
-    const t0 = today();
-    const ev = L.filter((r) => r.table === 'event' && String(r.date) >= t0).sort((a, b) => String(a.date).localeCompare(String(b.date))).slice(0, 6);
-    q('#next-list').replaceChildren(...(ev.length ? ev.map((r) => agItem(dateText(r.date) + (r.time_uk ? ', ' + shortTime(r.time_uk) : ''), r.name,
-      [num(r.implied_pct) !== null ? 'Options imply ±' + num(r.implied_pct) + '%' : '', r.last_order && r.last_order !== 'Passed' ? 'Last order: ' + r.last_order : ''].filter(Boolean).join('. '), [heldNames.has(r.stock) ? st('Held', 'plain') : null])) : [agItem('', 'No dated events ahead.')]));
-    const al = L.filter((r) => r.table === 'alert' && r.stock !== 'Order').sort((a, b) => whenKey(b).localeCompare(whenKey(a)));
+    const ev = L.filter((r) => r.table === 'event' && !eventPassed(r) && relevantEvent(r)).sort((a, b) => String(a.date).localeCompare(String(b.date))).slice(0, 6);
+    q('#next-list').replaceChildren(...(ev.length ? ev.map((r) => agItem(shortDate(r.date) + (shortTime(r.time_uk) ? ', ' + shortTime(r.time_uk) : ''), r.name, null, [heldNames.has(r.stock) ? st('Held') : null, num(r.implied_pct) !== null ? span('mut', '±' + num(r.implied_pct) + '%') : null])) : [agItem('', 'No dated events ahead.')]));
+    // Today's alerts rail: what bears on the holdings, not every mover on the list.
+    const al = L.filter((r) => r.table === 'alert' && r.stock !== 'Order' && r.stock !== 'Watchlist' && (heldNames.has(r.stock) || ['Portfolio', 'Market', 'System'].includes(r.stock))).sort((a, b) => whenKey(b).localeCompare(whenKey(a)));
     const top = al.slice(0, 4);
-    q('#alerts-meta').textContent = al.length > top.length ? 'Latest ' + top.length + ' of ' + al.length + '; all in Log' : '';
-    q('#alerts-list').replaceChildren(...(top.length ? top.map((r) => agItem(shortDate(r.date) + (r.time_uk ? ', ' + r.time_uk : ''), r.stock || 'Market', bullets(r.text, {small: true, max: 1}))) : [agItem('', 'No alerts yet.')]));
+    q('#alerts-list').replaceChildren(...(top.length ? top.map((r) => agItem(shortDate(r.date) + (r.time_uk ? ', ' + String(r.time_uk).replace(/\s*UK$/, '') : ''), r.stock || 'Market', el('small', '', String(r.text || '')))) : [agItem('', 'No alerts yet.')]));
   };
 
   // ---------------------------------------------------------------- research pane for one stock
@@ -756,15 +702,15 @@ dash.calc('standing', {
   const evidence = (r) => {
     const fo = []; const ag = [];
     const v50 = num(r.vs_50d_pct); const v200 = num(r.vs_200d_pct); const rsi = num(r.rsi); const up = num(r.upside_pct);
-    if (tierOf(r) === 'strong') fo.push('Score ' + num(r.score) + ', strong band: passes the core-position test'); else if (tierOf(r) === 'weak') ag.push('Score ' + num(r.score) + ', weak band: fails the trend filter');
+    if (tierOf(r) === 'strong') fo.push('Score ' + num(r.score) + ', strong'); else if (tierOf(r) === 'weak') ag.push('Score ' + num(r.score) + ', weak');
     if (v50 !== null && v200 !== null) { if (v50 > 0 && v200 > 0) fo.push('Above its 50-day (' + pct(v50, 1) + ') and 200-day (' + pct(v200, 1) + ') averages'); else if (v50 < 0) ag.push('Below its 50-day average (' + pct(v50, 1) + ')'); }
     if (r.ema_stack === 'up') fo.push('Exponential averages stacked upwards'); else if (r.ema_stack === 'down') ag.push('Exponential averages stacked downwards');
     if (r.rel20 !== null) (r.rel20 >= 0 ? fo : ag).push((r.rel20 >= 0 ? 'Beat' : 'Lagged') + ' the S&P 500 by ' + Math.abs(r.rel20).toFixed(1) + ' points over 20 sessions');
-    if (rsi !== null && rsi >= 70) ag.push('RSI ' + rsi.toFixed(0) + ': overbought, so no more than 5% until it consolidates');
+    if (rsi !== null && rsi >= 70) ag.push('RSI ' + rsi.toFixed(0) + ': overbought');
     if (num(r.catalyst_pts) !== null && r.catalyst_note && (num(r.catalyst_pts) >= 11 || num(r.catalyst_pts) <= 5)) (num(r.catalyst_pts) <= 5 ? ag : fo).push('Catalyst (' + num(r.catalyst_pts) + '/20): ' + r.catalyst_note);
     if (num(r.revisions_pts) !== null && r.revisions_note && (num(r.revisions_pts) >= 11 || num(r.revisions_pts) <= 5)) (num(r.revisions_pts) <= 5 ? ag : fo).push('Analysts (' + num(r.revisions_pts) + '/20): ' + r.revisions_note);
     if (up !== null) { if (up >= 10) fo.push('Consensus target ' + money(r, num(r.target)) + ', ' + pct(up, 0) + ' above the price'); else if (up < 0) ag.push('Price is above the consensus target (' + money(r, num(r.target)) + ')'); }
-    if (r.nextRes && r.resDays !== null && r.resDays <= 10) { const cap = num(r.weight_cap_pct); const w = r.held ? num(r.weight) : cap; ag.push('Results ' + dateText(r.nextRes.date) + (r.implied !== null ? ': options imply ±' + r.implied + '%' + (w ? ', ' + (w * r.implied / 100).toFixed(2) + ' points at ' + wt(w) : '') : '')); }
+    if (r.nextRes && r.resDays !== null && r.resDays <= 10) { const w = r.held ? num(r.weight) : null; ag.push('Results ' + dateText(r.nextRes.date) + (r.implied !== null ? ': options imply ±' + r.implied + '%' + (w ? ', ' + (w * r.implied / 100).toFixed(2) + ' points at ' + wt(w) : '') : '')); }
     String(r.flags || '').split(';').map((x) => x.trim()).filter(Boolean).forEach((f) => { if (/below|downtrend|extended|overbought|faded|death|heavy-volume|bitcoin/i.test(f)) ag.push('Flag: ' + f); });
     if (r.crypto_link === 'yes') ag.push('Moves with Bitcoin: bought only while Bitcoin\'s trend is up, 10% at most');
     return {fo, ag};
@@ -785,8 +731,8 @@ dash.calc('standing', {
     const kids = [];
     // bar
     const bar = el('div', 'rs-bar');
-    const close = btn('btn', null, () => { const was = S.sel; S.sel = null; draw(); const n = Array.from(root.querySelectorAll('tr.sel, .mr')).find((x) => (x.getAttribute('aria-label') || '').startsWith(was + ',')); if (n) n.focus(); });
-    close.append(chev('M10 3 5 8l5 5'), document.createTextNode(S.size === 'l' ? 'Close research' : 'Back to the list'));
+    const close = btn('btn', null, () => { const was = S.sel; S.sel = null; draw(); const n = Array.from(root.querySelectorAll('tr.sel, .row')).find((x) => (x.getAttribute('aria-label') || '').startsWith(was + ',')); if (n) n.focus(); });
+    close.append(chev('M10 3 5 8l5 5'), document.createTextNode(S.size === 'l' ? 'Close' : 'Back'));
     const nav = el('div'); nav.style.display = 'flex'; nav.style.gap = '0.375rem';
     [['Previous stock', 'M10 3 5 8l5 5', at - 1], ['Next stock', 'M6 3l5 5-5 5', at + 1]].forEach(([lab, d, to]) => { const b = btn('btn', null, () => { S.sel = list[to]; draw(); }); b.setAttribute('aria-label', lab); b.append(chev(d)); if (to < 0 || to >= list.length) b.disabled = true; nav.append(b); });
     bar.append(close, nav);
@@ -794,25 +740,24 @@ dash.calc('standing', {
     // header
     const h = el('div', 'rs-h');
     const id = el('div'); id.style.minWidth = '0';
-    id.append(el('h2', '', r.ticker + '  ' + r.name), el('div', 'sub', [r.theme, r.market === 'UK' ? 'London' : 'US', r.currency].filter(Boolean).join(', ')));
-    const px = el('div', 'rs-px'); px.append(el('b', '', money(r, num(r.price))), span(dir(num(r.day_pct)), (num(r.day_chg) !== null ? (num(r.day_chg) >= 0 ? '+' : '−') + money(r, Math.abs(num(r.day_chg))) + ' ' : '') + '(' + pct(num(r.day_pct)) + ')'));
+    id.append(el('h2', '', r.ticker), el('div', 'sub', r.name));
+    const px = el('div', 'rs-px'); px.append(el('b', '', money(r, num(r.price))), el('span', 'pill ' + dir(num(r.day_pct)), pct(num(r.day_pct))));
     h.append(logoFor(r.ticker, r.market, r.name, 'l'), id, px);
     kids.push(h);
     const tags = el('div', 'rs-tags');
-    tags.append(statusChip(r), bandEl(tierOf(r)));
-    if (r.dScore) tags.append(st('Score ' + (r.dScore > 0 ? 'up ' : 'down ') + Math.abs(r.dScore) + ' since ' + shortDate(r.dFrom), r.dScore > 0 ? 'okay' : 'bad'));
-    if (r.conv !== null) tags.append(st('Conviction ' + r.conv, 'plain', 'Confidence anchor from the latest nightly rating. Uncalibrated: a ranking, not a probability.'));
-    const src = span('note', 'Price ' + (r.prices_as_of || '—') + ', ' + (r.market === 'UK' ? 'lse.co.uk' : 'stockanalysis.com') + '. Score ' + (r.scores_as_of || '—') + '.');
-    src.style.width = '100%';
-    tags.append(src);
+    const chip0 = statusChip(r);
+    if (chip0) tags.append(chip0);
+    tags.append(scoreCell(r), bandEl(tierOf(r)));
+    if (r.theme) tags.append(st(r.theme));
+    if (r.conv !== null) tags.append(st('Conviction ' + r.conv, '', 'Confidence anchor from the latest nightly rating. Not calibrated: a ranking, not a chance of beating the S&P 500.'));
     kids.push(tags);
     // thesis and evidence
     const ev = evidence(r);
     const evb = el('div', 'ev');
     const col = (title, color, items, empty) => { const d = el('div'); const h4 = el('h4', '', title); const i = el('i'); i.style.background = color; h4.prepend(i); d.append(h4, items.length ? bullets(items, {small: true}) : el('p', 'note', empty)); return d; };
     evb.append(col('Supports the case', 'var(--up)', ev.fo, 'Nothing in the stored figures.'), col('Argues against', 'var(--down)', ev.ag, 'Nothing in the stored figures.'));
-    kids.push(sec(r.held ? 'Why it is held' : 'What would promote it', 'from the latest review', bullets(r.note) || el('p', 'note', 'No note logged.')));
-    kids.push(sec('Evidence', 'rules applied to the stored figures', evb));
+    kids.push(sec(r.held ? 'Why it is held' : 'Note', '', bullets(r.note) || el('p', 'note', 'No note logged.')));
+    kids.push(sec('Evidence', '', evb));
     // relative performance chart
     const hist = D.byT.get(r.histT) || D.byT.get(r.ticker) || [];
     const spyAt = new Map(D.spy.map((x) => [x.date, Number(x.close)]));
@@ -830,8 +775,7 @@ dash.calc('standing', {
       head.append(lg, seg);
       const box = el('div', 'ch');
       const last = cr[cr.length - 1];
-      const diff = last.stock - last.spx;
-      kids.push(sec('Relative performance', pick[1] + ': ' + pct(last.stock - 100, 1) + ' against ' + pct(last.spx - 100, 1) + ' (' + pts(diff, 1) + ' pts)', head, box));
+            kids.push(sec('Against the S&P 500', pct(last.stock - 100, 1) + ' and ' + pct(last.spx - 100, 1), head, box));
       after = () => lineChart(box, cr, [{key: 'stock', name: r.ticker, color: 'var(--s1)'}, {key: 'spx', name: 'S&P 500', color: 'var(--bench)', width: 1.25}], {height: S.size === 's' ? 170 : 190, ref: 100, label: r.name + ' against the S&P 500, both set to 100 at the start of the window', yfmt: (t) => t.toFixed(0), vfmt: (v) => v.toFixed(1), xfmt: (x) => shortDate(x.date), xlong: (x) => dateText(x.date)});
     }
     // catalysts
@@ -846,33 +790,33 @@ dash.calc('standing', {
     const behind = tl.filter((x) => String(x.date) < t0).sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 6);
     const ul = el('ul', 'ag');
     ahead.concat(behind).forEach((x) => ul.append(agItem(shortDate(x.date) + ', ' + (String(x.date) >= t0 ? relDay(x.date) : x.kind), x.what, x.body ? bullets(x.body, {small: true, max: 1}) : null)));
-    kids.push(sec('Catalyst timeline', ahead.length + ' ahead, latest ' + behind.length + ' past', tl.length ? ul : el('p', 'note', 'No events, analyst changes or alerts logged for this stock.')));
+    kids.push(sec('Timeline', '', tl.length ? ul : el('p', 'note', 'No events, analyst changes or alerts logged for this stock.')));
     // technicals
     const facts = el('dl', 'facts');
     const rsi = num(r.rsi);
     facts.append(
       fact('vs 50-day', pct(num(r.vs_50d_pct), 1), dir(num(r.vs_50d_pct))), fact('vs 200-day', pct(num(r.vs_200d_pct), 1), dir(num(r.vs_200d_pct))), fact('RSI (14)', rsi === null ? '—' : rsi.toFixed(0) + (rsi >= 70 ? ', overbought' : rsi <= 30 ? ', oversold' : '')),
       fact('5 sessions', pct(num(r.five_day_pct), 1), dir(num(r.five_day_pct))), fact('Gap at open', pct(num(r.gap_pct)), dir(num(r.gap_pct)), 'Previous close to open. Orders fill at the open, so the gap cannot be captured.'), fact('Open to close', pct(num(r.from_open_pct)), dir(num(r.from_open_pct))),
-      fact('Averages', r.ema_stack === 'up' ? 'Stacked up' : r.ema_stack === 'down' ? 'Stacked down' : r.ema_stack ? 'Mixed' : '—'), fact('Cross', r.cross ? String(r.cross).replace(/ on (\d{4}-\d{2}-\d{2})/, (a, d0) => ', ' + shortDate(d0)) : 'None in 20 sessions'), fact('Source', r.ma_source === 'stored prices' ? 'Stored closes' : 'Published figures'),
+      fact('Averages', r.ema_stack === 'up' ? 'Stacked up' : r.ema_stack === 'down' ? 'Stacked down' : r.ema_stack ? 'Mixed' : '—'), fact('Cross', r.cross ? String(r.cross).replace(/ on (\d{4}-\d{2}-\d{2})/, (a, d0) => ', ' + shortDate(d0)) : 'None'), fact('Target', num(r.target) === null ? '—' : money(r, num(r.target))),
     );
     const lo = num(r.week52_low); const hi = num(r.week52_high); const p0 = num(r.price);
     let range = null;
     if (lo !== null && hi !== null && p0 !== null && hi > lo) {
       range = el('div', 'range');
-      const t = el('div', 'range-t'); t.append(span('', money(r, lo) + ' 52-week low'), span('', pct(num(r.off_high_pct), 1) + ' from high'), span('', money(r, hi) + ' high'));
+      const t = el('div', 'range-t'); t.append(span('', money(r, lo)), span('', '52 weeks, ' + pct(num(r.off_high_pct), 1) + ' from the high'), span('', money(r, hi)));
       const k = el('div', 'range-k'); k.setAttribute('aria-hidden', 'true'); const d = el('i'); d.style.left = Math.max(0, Math.min(100, (p0 - lo) / (hi - lo) * 100)) + '%'; k.append(d);
       range.append(t, k);
     }
     const sc = el('div', 'bars');
     bars(sc, [['Trend', num(r.trend_pts), 40], ['Recent behaviour', num(r.short_pts), 20], ['Catalyst', num(r.catalyst_pts), 20], ['Analyst changes', num(r.revisions_pts), 20]].map(([l, v, m]) => ({label: l, value: v === null ? null : v / m * 100, text: (v === null ? '—' : v) + ' / ' + m})), {min: 100});
-    kids.push(sec('Technical conditions', r.ma_source === 'stored prices' ? 'from stored closes' : 'published averages', facts, range));
-    kids.push(sec('Score ' + (num(r.score) === null ? '—' : num(r.score)) + ' of 100', 'four parts, as of ' + (r.scores_as_of || '—'), sc));
+    kids.push(sec('Technicals', '', facts, range));
+    kids.push(sec('Score ' + (num(r.score) === null ? '—' : num(r.score)) + ' of 100', '', sc));
     // risk
     const rk = el('dl', 'facts');
     const riskRow = L.find((x) => x.table === 'risk' && x.name === r.name);
     rk.append(
-      fact('Daily range', num(r.atr_pct) === null ? '—' : num(r.atr_pct).toFixed(1) + '%', '', 'Average true range: a typical day\'s move.'), fact('Weight cap', num(r.weight_cap_pct) === null ? '—' : wt(num(r.weight_cap_pct)), '', 'About 30 divided by the daily range; the most this stock should carry.'),
-      fact(r.held ? 'Weight' : 'Not held', r.held ? wt(num(r.weight)) : '—'), fact('Share of risk', riskRow && num(riskRow.risk_share_pct) !== null ? num(riskRow.risk_share_pct).toFixed(0) + '%' : '—'),
+      fact('Daily range', num(r.atr_pct) === null ? '—' : num(r.atr_pct).toFixed(1) + '%', '', 'Average true range: a typical day\'s move.'),
+      fact('Weight', r.held ? wt(num(r.weight)) : 'Not held'), fact('Share of risk', riskRow && num(riskRow.risk_share_pct) !== null ? num(riskRow.risk_share_pct).toFixed(0) + '%' : '—'),
       fact('Per 1% in Bitcoin', num(r.btc_beta) === null ? '—' : pct(num(r.btc_beta), 2), '', 'Move that has gone with a 1% move in Bitcoin over 120 sessions.'), fact('Results', r.nextRes ? shortDate(r.nextRes.date) + (r.implied !== null ? ', ±' + r.implied + '%' : '') : '—'),
     );
     const pairs = L.filter((x) => x.table === 'corr' && String(x.name).split(' / ').includes(r.name)).sort((a, b) => num(b.value) - num(a.value));
@@ -891,22 +835,13 @@ dash.calc('standing', {
         ['Conviction', r.conv, m((x) => x.conv), (v) => (v === null ? '—' : v.toFixed(0))],
       ];
       const tb = el('div');
-      table(tb, [{h: 'Measure', cell: (x) => x[0]}, {h: r.ticker, num: true, cls: 'b', cell: (x) => x[3](x[1])}, {h: 'Holdings median', num: true, cell: (x) => x[3](x[2])}], rowsC, {size: 'l'});
-      const s2 = sec('Against your holdings', 'median of ' + held.length + (r.held ? ' other' : '') + ' holdings', tb);
+      table(tb, [{h: 'Measure', cell: (x) => x[0]}, {h: r.ticker, num: true, cls: 'b', cell: (x) => x[3](x[1])}, {h: 'Median', num: true, cell: (x) => x[3](x[2])}], rowsC, {size: 'l'});
+      const s2 = sec('Against the holdings', '', tb);
       s2.style.paddingLeft = '0'; s2.style.paddingRight = '0';
-      s2.firstChild.style.padding = '0 0.75rem';
+      s2.firstChild.style.padding = '0 1.125rem';
       kids.push(s2);
     }
-    // sources
-    const srcs = [
-      'Price and day move: ' + (r.market === 'UK' ? 'lse.co.uk' : 'stockanalysis.com') + ', ' + (r.prices_as_of || '—'),
-      'Score, bands and averages: the pipeline, ' + (r.scores_as_of || '—'),
-      'Target and results date: stockanalysis.com quote page, refreshed each evening' + (r.target ? '; target ' + money(r, num(r.target)) : ''),
-      'Analyst changes and notes: logged by the reviews, dated in the timeline',
-    ];
-    const s3 = sec('Sources', '', bullets(srcs, {small: true}));
-    if (r.link) { const a = el('a', 'btn', 'Open live quote'); a.href = r.link; a.target = '_blank'; a.rel = 'noopener'; a.style.alignSelf = 'flex-start'; s3.append(a); }
-    kids.push(s3);
+    if (r.link) { const a = el('a', 'btn', 'Open live quote'); a.href = r.link; a.target = '_blank'; a.rel = 'noopener'; const s3 = el('section', 'rs-sec'); a.style.alignSelf = 'flex-start'; s3.append(a); kids.push(s3); }
     pane.replaceChildren(...kids);
     after();
   };
@@ -914,18 +849,16 @@ dash.calc('standing', {
   // ---------------------------------------------------------------- macro
   const calBanner = (box, settled, what) => {
     box.replaceChildren();
-    const b = el('b', '', 'Uncalibrated. ');
+    const b = el('b', '', 'Not calibrated. ');
     // 19 Oct evening: the banner no longer hides itself at CALIB_TARGET. A count of ratings is not evidence: ratings
     // made on the same few dates share one market move. It stays until Tim agrees the ratings may be read as probabilities.
-    box.append(b, document.createTextNode(settled + ' settled ' + what + ' so far (' + CALIB_TARGET + ' is the minimum before a calibration test, not proof of one). A ranking from the score and the review\'s judgement, not a measured probability.'));
+    box.append(b, document.createTextNode(settled + ' settled ' + what + '. A ranking, not a measured probability.'));
     box.hidden = false;
   };
   const drawMacro = (L) => {
     const M = L.filter((r) => r.table === 'macro');
     const by = {}; M.forEach((r) => { by[r.ticker] = r; });
-    const dates = M.map((r) => r.date).filter(Boolean).sort();
-    q('#macro-asof').textContent = dates.length ? 'Readings as of the ' + dateText(dates[dates.length - 1]) + ' US close' : '';
-    const calls = L.filter((r) => r.table === 'daycall').sort((a, b) => String(a.date).localeCompare(String(b.date)));
+        const calls = L.filter((r) => r.table === 'daycall').sort((a, b) => String(a.date).localeCompare(String(b.date)));
     const hd = dash.data('history');
     const H = hd.status === 'ok' ? hd.data : [];
     const v = S.view.macro;
@@ -942,7 +875,7 @@ dash.calc('standing', {
       else cards.replaceChildren(...['S&P 500', 'Portfolio'].map((nm) => {
         const r = now.find((x) => x.name === nm);
         const c = el('div');
-        c.append(el('div', 'note', nm === 'Portfolio' ? 'Portfolio at the new weights' : 'S&P 500'));
+        c.append(el('div', 'note', nm));
         if (!r) { c.append(el('div', 'call-n flat', '—'), el('p', 'note', 'No figure: under 70% of the weight has a year of stored prices.')); return c; }
         const p = num(r.confidence); const u = num(r.percentile);
         const n = el('div', 'call-n ' + (r.kind === 'green' ? 'up' : 'down'), (r.kind === 'green' ? 'Up ' : 'Down ') + p + '%');
@@ -975,20 +908,18 @@ dash.calc('standing', {
     }
     if (v === 'rates') {
       const bd = by.backdrop;
-      const bdb = q('#backdrop'); bdb.replaceChildren(); if (bd) bdb.append(document.createTextNode('Backdrop for shares: '), el('b', '', String(bd.action || '—')));
+      const bdb = q('#backdrop'); bdb.replaceChildren(); if (bd) bdb.append(el('b', '', String(bd.action || '—')));
       const series = M.filter((r) => ['yield', 'commodity', 'spread'].includes(r.kind));
       const sess = D.spy.length ? D.spy[D.spy.length - 1].date : null;
       const val = (r, x) => (x === null ? '—' : r.kind === 'yield' ? x.toFixed(2) + '%' : r.kind === 'spread' ? x.toFixed(0) + 'bp' : '$' + fmt2(x));
       const ch = (r, f) => { const x = num(r[f]); return r.unit === 'bp' ? bp(x) : [pct(x, 1), dir(x)]; };
       table(q('#rates'), [
         {h: 'Series', cell: (r) => String(r.name).replace(/, \$.*$/, '')},
-        {h: 'Last', num: true, cls: 'b', cell: (r) => val(r, num(r.value))},
+        {h: 'Last', num: true, cls: 'b', cell: (r) => [val(r, num(r.value)) + (sess && r.date < sess ? ', ' + shortDate(r.date) : ''), sess && r.date < sess ? 'faint' : '']},
         {h: '1 day', num: true, cell: (r) => ch(r, 'chg_1d')},
         {h: '5 days', num: true, cell: (r) => ch(r, 'chg_5d')},
         {h: '20 days', num: true, only: ['m', 'l'], cell: (r) => ch(r, 'chg_20d')},
         {h: '1-year range', num: true, only: ['l'], tip: 'Where the latest reading sits between the 1-year low (0%) and high (100%).', cell: (r) => (num(r.percentile) === null ? '—' : num(r.percentile).toFixed(0) + '%')},
-        {h: 'Since', num: true, only: ['l'], cell: (r) => (num(r.live) === null ? '—' : val(r, num(r.live)) + ' at ' + (r.time_uk || '—'))},
-        {h: 'As of', num: true, cell: (r) => [shortDate(r.date) + (sess && r.date < sess ? ', stale' : ''), sess && r.date < sess ? 'down' : 'mut']},
       ], series, {empty: 'No readings stored yet.'});
       const md = dash.data('macro');
       const mrows = md.status === 'ok' ? md.data : [];
@@ -1018,7 +949,6 @@ dash.calc('standing', {
         {h: '1 day', num: true, cell: (r) => [pct(num(r.chg_1d), 1), dir(num(r.chg_1d))]},
         {h: '5 days', num: true, cell: (r) => [pct(num(r.chg_5d), 1), dir(num(r.chg_5d))]},
         {h: '20 days', num: true, cell: (r) => [pct(num(r.chg_20d), 1), dir(num(r.chg_20d))]},
-        {h: 'As of', num: true, cell: (r) => shortDate(r.date)},
       ], coins, {empty: 'No coin prices stored yet.'});
       q('#coin-read').replaceChildren(bullets(M.filter((r) => r.kind === 'crypto-trend').map((r) => String(r.name) + ': ' + String(r.action || '—') + '. ' + String(r.text || '').split(';')[0]).concat(['Orders fill at the open, so an overnight move in Bitcoin is already in the fill price. The trend is what counts.']), {small: true}) || el('p', 'note', ''));
       const ib = H.filter((r) => r.ticker === 'IBIT').sort((a, b) => String(a.date).localeCompare(String(b.date))).slice(-252);
@@ -1026,7 +956,7 @@ dash.calc('standing', {
       const links = D.stocks.filter((r) => num(r.btc_beta) !== null && num(r.btc_corr) !== null).sort((a, b) => (b.crypto_link === 'yes') - (a.crypto_link === 'yes') || num(b.btc_corr) - num(a.btc_corr)).slice(0, 10);
       table(q('#btc-links'), [
         {h: 'Stock', cell: stkCell},
-        {h: 'Status', cell: (r) => (r.held ? st('Held ' + wt(num(r.weight)), 'plain') : r.crypto_link === 'yes' ? st('Linked', 'warn', 'Correlation of 0.5 or more with Bitcoin, or a crypto business.') : '')},
+        {h: 'Status', cell: (r) => (r.held ? st('Held ' + wt(num(r.weight))) : r.crypto_link === 'yes' ? st('Linked', 'warn', 'Correlation of 0.5 or more with Bitcoin, or a crypto business.') : '')},
         {h: 'Per 1% in Bitcoin', num: true, cls: 'b', cell: (r) => [pct(num(r.btc_beta), 2), dir(num(r.btc_beta))]},
         {h: 'Correlation', num: true, cell: (r) => num(r.btc_corr).toFixed(2)},
         {h: 'Net of market', num: true, only: ['m', 'l'], cell: (r) => pct(num(r.btc_net), 2)},
@@ -1100,7 +1030,7 @@ dash.calc('standing', {
         {h: 'Window', cell: (r) => (r.window_end ? shortDate(r.effective) + ' to ' + shortDate(r.window_end) : 'from ' + shortDate(r.effective))},
         {h: 'Stock', num: true, only: ['l'], cell: (r) => [pct(num(r.ret_pct)), dir(num(r.ret_pct))]},
         {h: 'S&P 500', num: true, only: ['l'], cell: (r) => [pct(num(r.spx_ret_pct)), dir(num(r.spx_ret_pct))]},
-        {h: 'Beat it?', cell: (r) => (r.beat === 'yes' ? st('Yes', 'okay') : r.beat === 'no' ? st('No', 'bad') : st('Open', 'plain'))},
+        {h: 'Beat it?', cell: (r) => (r.beat === 'yes' ? st('Yes', 'okay') : r.beat === 'no' ? st('No', 'bad') : st('Open'))},
       ], conf, {empty: 'No ratings logged yet.'});
     }
     if (v === 'score') {
@@ -1121,7 +1051,7 @@ dash.calc('standing', {
   // ---------------------------------------------------------------- risk
   const drawRisk = (L) => {
     const th = L.filter((r) => r.table === 'theme').filter((r) => num(r.weight) > 0).sort((a, b) => num(b.weight) - num(a.weight));
-    bars(q('#themes'), th.map((r) => ({label: r.name, value: num(r.weight), text: wt(num(r.weight))})), {min: 60, guide: 45, empty: 'No holdings.'});
+    bars(q('#themes'), th.map((r) => ({label: r.name, value: num(r.weight), text: wt(num(r.weight))})), {min: 100, empty: 'No holdings.'});
     const sc = L.filter((r) => r.table === 'scenario').sort((a, b) => num(a.impact_pct) - num(b.impact_pct));
     bars(q('#scen'), sc.map((r) => ({label: r.name, value: num(r.impact_pct), text: pts(num(r.impact_pct))})), {diverging: true, min: 1, empty: 'No scenarios stored.'});
     const risk = L.filter((r) => r.table === 'risk').sort((a, b) => (num(b.risk_share_pct) ?? -99) - (num(a.risk_share_pct) ?? -99));
@@ -1139,8 +1069,7 @@ dash.calc('standing', {
     table(q('#rrisk'), [
       {h: 'Stock', cell: (r) => r.stock}, {h: 'Results', cell: (r) => shortDate(r.date)}, {h: 'Weight', num: true, only: ['m', 'l'], cell: (r) => wt(r.weight)},
       {h: 'Expected move', num: true, cell: (r) => (r.implied_pct === null ? 'Not priced yet' : '±' + r.implied_pct + '%')},
-      {h: 'At risk', num: true, cls: 'b', cell: (r) => [r.risk_pts === null ? '—' : r.risk_pts.toFixed(2) + ' pts', r.risk_pts !== null && r.risk_pts > r.budget + 1e-9 ? 'down' : '']},
-      {h: 'Budget', only: ['m', 'l'], cell: (r) => (r.risk_pts === null ? '' : r.risk_pts > r.budget + 1e-9 ? st('Over ' + r.budget.toFixed(1), 'bad') : st('Within ' + r.budget.toFixed(1), 'plain'))},
+      {h: 'At risk', num: true, cls: 'b', tip: 'Weight × options-implied move. The results budget is suspended under the endgame stance: this is information.', cell: (r) => (r.risk_pts === null ? '—' : r.risk_pts.toFixed(2) + ' pts')},
     ], (rr.status === 'ok' ? rr.data : []).filter((r) => String(r.date) >= t0), {empty: 'No holding has results ahead.'});
   };
 
@@ -1149,7 +1078,7 @@ dash.calc('standing', {
     const t0 = today();
     const v = S.view.calendar;
     const heldN = new Set(D.stocks.filter((r) => r.held).map((r) => r.name));
-    const ev = L.filter((r) => r.table === 'event').filter((r) => (v === 'past' ? String(r.date) < t0 : String(r.date) >= t0 && (v !== 'next' || daysAway(r.date) <= 7)))
+    const ev = L.filter((r) => r.table === 'event').filter((r) => (v === 'past' ? String(r.date) < t0 : relevantEvent(r) && String(r.date) >= t0 && (v !== 'next' || daysAway(r.date) <= 7)))
       .filter((r) => (v === 'held' ? heldN.has(r.stock) : v === 'results' ? r.kind === 'results' : v === 'data' ? r.kind === 'macro' : true))
       .sort((a, b) => (v === 'past' ? -1 : 1) * String(a.date).localeCompare(String(b.date)) || String(a.time_uk || '').localeCompare(String(b.time_uk || '')));
     const groups = [];
@@ -1157,7 +1086,7 @@ dash.calc('standing', {
       let g = groups[groups.length - 1];
       if (!g || g.date !== r.date) { g = {date: r.date, title: dateText(r.date), sub: relDay(r.date), past: String(r.date) < t0, body: el('ul', 'ag')}; groups.push(g); }
       g.body.append(agItem(shortTime(r.time_uk), r.name, bullets([r.last_order && r.last_order !== 'Passed' ? 'Last order: ' + r.last_order : '', r.plan ? 'Plan: ' + r.plan : '', r.forecast ? 'Forecast: ' + r.forecast : '', r.actual ? 'Actual: ' + r.actual + (r.surprise ? ' (' + r.surprise + ')' : '') : ''].concat(sentences(r.text)), {small: true, max: 2}),
-        [heldN.has(r.stock) ? st('Held', 'plain') : null, num(r.implied_pct) !== null ? st('±' + num(r.implied_pct) + '%', 'plain', 'Options-implied move on results day') : null, r.kind === 'results' && r.confirmed !== 'yes' ? st('Date estimated', 'warn') : null]));
+        [heldN.has(r.stock) ? st('Held') : null, num(r.implied_pct) !== null ? st('±' + num(r.implied_pct) + '%', '', 'Options-implied move on results day') : null, r.kind === 'results' && r.confirmed !== 'yes' ? st('Date estimated', 'warn') : null]));
     });
     dayGroups(q('#events'), groups, v === 'past' ? 'No past events.' : 'Nothing dated in this view.');
   };
@@ -1232,6 +1161,7 @@ dash.calc('standing', {
     S.size = root.clientWidth >= 1240 ? 'l' : root.clientWidth >= 760 ? 'm' : 's';
     root.dataset.w = S.size;
     S.cols = S.size === 'l' && S.sel && S.page === 'today' ? 'm' : S.size;
+    root.dataset.c = S.cols;
     const s = dash.data('stocks');
     const lg = dash.data('ledger');
     const hd = dash.data('history');
@@ -1240,14 +1170,14 @@ dash.calc('standing', {
     const rows = s.status === 'ok' ? s.data : [];
     const L = lg.status === 'ok' ? lg.data : [];
     derive(rows, L, hd.status === 'ok' ? hd.data : []);
-    freshness(rows, L);
+    freshness(rows);
     if (S.page !== 'today') root.dataset.focus = '0';
     if (SEGS[S.page]) segBar(S.page);
     if (s.status === 'error' || lg.status === 'error') { ['#hold-body', '#watch-body'].forEach((x) => msg(q(x), '', true)); }
     if (S.page === 'today') {
       strip(rows, L);
       orderQueue(rows, L);
-      if (s.status === 'ok') { holdings(L); watchlist(); context(rows, L); rail(L); research(L, rows); }
+      if (s.status === 'ok') { holdings(); watchlist(); context(rows, L); rail(L); research(L, rows); }
     }
     if (S.page === 'macro') drawMacro(L);
     if (S.page === 'performance') drawPerformance(L);
@@ -1255,12 +1185,21 @@ dash.calc('standing', {
     if (S.page === 'calendar') drawCalendar(L);
     if (S.page === 'log') drawLog(L);
   };
+  // The selected tab sits under a sliding lens.
+  const placeLens = () => {
+    const a = root.querySelector('.tab[aria-selected="true"]');
+    const l = q('#lens');
+    if (!a || !l) return;
+    l.style.width = a.offsetWidth + 'px';
+    l.style.transform = 'translateX(' + a.offsetLeft + 'px)';
+  };
   const show = (name, link) => {
     S.page = PAGES.includes(name) ? name : 'today';
     PAGES.forEach((p) => { q('#' + p).hidden = p !== S.page; });
     root.querySelectorAll('.tab').forEach((b) => b.setAttribute('aria-selected', b.dataset.tab === S.page ? 'true' : 'false'));
     if (link) dash.setLink(S.page);
     draw();
+    placeLens();
   };
   root.querySelectorAll('.tab').forEach((b) => b.addEventListener('click', () => show(b.dataset.tab, true)));
   root.querySelector('.tabs').addEventListener('keydown', (e) => {
@@ -1272,7 +1211,9 @@ dash.calc('standing', {
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && S.sel) { S.sel = null; draw(); } });
   let rt = null; let lw = root.clientWidth;
-  window.addEventListener('resize', () => { if (root.clientWidth === lw) return; lw = root.clientWidth; clearTimeout(rt); rt = setTimeout(draw, 150); });
+  window.addEventListener('resize', () => { if (root.clientWidth === lw) return; lw = root.clientWidth; clearTimeout(rt); rt = setTimeout(() => { draw(); placeLens(); }, 150); });
   dash.onData(draw);
   const named = location.hash.slice(1);
   if (PAGES.includes(named) && named !== 'today') show(named, false);
+  placeLens();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeLens);

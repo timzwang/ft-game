@@ -7,7 +7,7 @@ description: "Rules, timing, risk limits and review steps for Tim's FT Stock Pic
 
 Tim runs an entry ("Seeking Beta") in the FT Stock Picking Game (5 Oct to 27 Nov 2026, virtual 100,000 credits). Claude researches and recommends; Tim enters every order himself.
 
-The full procedure lives in the "FT Stock Picking Game" project, so that every scheduled run and every chat works from the same rules. **Read the core doc `claude/ft-game-playbook.md` first** (Projects tool, `project_read`): it holds parts A to D and I to K and a routing table naming the other docs each job needs (`claude/ft-game-rules.md` for part E, `claude/ft-game-data.md` for parts F and G, and one run doc per part H). The project docs always win over this skill. This skill is the short version for when the docs cannot be reached, plus a map of where things are. Updated for playbook version 6.4 (17 Oct 2026); cut-off, schedule and script lines updated for 6.14 (26 Oct 2026).
+The full procedure lives in the "FT Stock Picking Game" project, so that every scheduled run and every chat works from the same rules. **Read the core doc `claude/ft-game-playbook.md` first** (Projects tool, `project_read`): it holds parts A to D and I to K and a routing table naming the other docs each job needs (`claude/ft-game-rules.md` for part E, `claude/ft-game-data.md` for parts F and G, and one run doc per part H). The project docs always win over this skill. This skill is the short version for when the docs cannot be reached, plus a map of where things are. Updated for playbook version 6.4 (17 Oct 2026); cut-off, schedule and script lines updated for 6.15 (3 Nov 2026).
 
 ## Where things live
 
@@ -35,7 +35,7 @@ Which part of the procedure to use:
 | Score or screen stocks | The `stock-score` skill and part E |
 | Change what the page shows or how a run behaves | Edit the procedure docs, the page, or the script, with Tim |
 
-Scheduled tasks (UK times): evening review 21:30 Sun to Thu; morning check 07:26 Mon to Fri; price refreshes 16:45 and 19:22 Mon to Fri; results-day refresh 14:50 Mon to Fri (acts only on results days); weekly performance review Sat 09:12; weekend news check Sat and Sun 20:20; nightly watchdog 22:47 every day (checks every run, messages Tim only on a problem); midday check 12:40 (switched off: the game's rules rule out same-day changes).
+Scheduled tasks (UK times): evening review 21:30 Sun to Thu; morning check 07:26 Mon to Fri; price refreshes 17:04 and 19:22 Mon to Fri; results-day refresh 14:50 Mon to Fri (acts only on results days); weekly performance review Sat 09:12; weekend news check Sat and Sun 20:20; nightly watchdog 22:47 every day (checks every run, messages Tim only on a problem); midday check 12:40 (not in use: the game's rules rule out same-day changes).
 
 ## Hard limits
 

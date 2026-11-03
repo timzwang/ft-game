@@ -1,5 +1,7 @@
 # Scheduled tasks
 
+**3 Nov 2026 (playbook 6.15):** three prompts below changed in the live tasks and these copies are not rewritten. Price refresh: 17:04 for 16:45, plus "A late start is not an issue for this run: it reads the feed when it starts, so nothing is lost." Results-day refresh: step 1 reads `ledger` and `stocks` and acts only on a results row whose `stock` is a name in stocks.json, plus the same late-start line. Nightly watchdog: no 30-minute test for every task; a start more than 30 minutes late is flagged for the evening review and morning check, more than 90 minutes for the others.
+
 The schedule and instructions of the Claude scheduled tasks that run this system, copied on Fri 16 Oct 2026 at about 01:15 UK; the morning check updated on Sat 17 Oct 2026; every prompt below brought up to date on Mon 26 Oct 2026 (playbook 6.13.2: the issues clause and the G1 step 3 wording, added to all eight tasks). All run in Anthropic's cloud (not on anyone's computer), with automatic approval, on model `claude-opus-5-5`. Times are UK local (`CRON_TZ=Europe/London`).
 
 **Redacted:** the evening and weekly review prompts contain a market data API key in a line beginning `Market data key:`. It is replaced below by `<REDACTED: held only in the scheduled task>`. The key must never be written into this repository.
@@ -10,7 +12,7 @@ This file is a copy for reading. Changing it changes nothing: the live tasks are
 |---|---|---|---|
 | FT game evening review | 21:30 Sun to Thu | `30 21 * * 0-4` | H1 |
 | FT game morning check | 07:26 Mon to Fri (from 27 Oct; 06:36 from 18 to 26 Oct) | `26 7 * * 1-5` | H2 |
-| FT game price refresh | 16:45 Mon to Fri | `45 16 * * 1-5` | H3 |
+| FT game price refresh | 17:04 Mon to Fri (from 4 Nov; 16:45 until 3 Nov) | `4 17 * * 1-5` | H3 |
 | FT game late price refresh | 19:22 Mon to Fri | `22 19 * * 1-5` | H3 |
 | FT game results-day refresh | 14:50 Mon to Fri | `50 14 * * 1-5` | H4 |
 | FT game weekly review | 09:12 Sat | `12 9 * * 6` | H5 |
