@@ -413,7 +413,7 @@ dash.calc('standing', {
       use.forEach((c) => {
         const td = el('td', (c.num ? 'num ' : '') + (c.cls || ''));
         const v = c.cell(r);
-        if (v instanceof Node) td.append(v); else if (Array.isArray(v)) { td.textContent = v[0]; if (v[1]) td.classList.add(v[1]); } else td.textContent = v === null || v === undefined || v === '' ? '—' : String(v);
+        if (v instanceof Node) td.append(v); else if (Array.isArray(v)) { td.textContent = v[0]; if (v[1]) td.classList.add(v[1]); } else td.textContent = v === null || v === undefined ? '—' : String(v);
         tr.append(td);
       });
       if (o.onRow) {
@@ -445,9 +445,69 @@ dash.calc('standing', {
   };
   const dayGroups = (box, groups, empty) => {
     box.classList.remove('skel');
-    if (!groups.length) { msg(box, empty); return; }
-    box.replaceChildren(...groups.map((g) => { const d = el('div', 'dg' + (g.past ? ' past' : '')); const h = el('div', 'dg-h', g.title); if (g.sub) h.append(el('small', '', g.sub)); d.append(h, g.body); return d; }));
+    if (!groups.length) { const c = el('section', 'pn'); msg(c, empty); box.replaceChildren(c); return; }
+    const cards = groups.map((g) => {
+      const d = el('section', 'pn dg' + (g.past ? ' past' : ''));
+      const h = el('div', 'ph');
+      h.append(el('h2', '', g.title));
+      if (g.sub) h.append(span('meta', g.sub));
+      const b = el('div', 'pb');
+      b.append(g.body);
+      d.append(h, b);
+      return {d, size: 2 + g.body.children.length};
+    });
+    // Two columns on a wide screen, each card going to the shorter one, so short days leave no holes.
+    const n = root.clientWidth >= 1180 ? 2 : 1;
+    const cols = Array.from({length: n}, () => ({node: el('div', 'col'), size: 0}));
+    cards.forEach((c) => { const t0 = cols.reduce((a, b) => (b.size < a.size ? b : a)); t0.node.append(c.d); t0.size += c.size; });
+    box.style.gridTemplateColumns = 'repeat(' + n + ', minmax(0, 1fr))';
+    box.replaceChildren(...cols.map((c) => c.node));
   };
+  // One line of a list: time, icon, what it is, key figures; tap to read the rest.
+  const OPEN = new Set();
+  const lineRow = (o) => {
+    const w = el('div', 'er');
+    const can = !!o.detail;
+    const h = can ? btn('er-h', null) : el('div', 'er-h');
+    if (o.when !== undefined) { const a = el('div', 'er-w', o.when); if (o.whenSub) a.append(el('small', '', o.whenSub)); h.append(a); }
+    if (o.icon) { const i = el('div', 'er-i'); i.append(o.icon); h.append(i); }
+    const m = el('div', 'er-t');
+    m.append(el('b', '', o.title));
+    if (o.note) m.append(el('span', '', o.note));
+    h.append(m);
+    const s = el('div', 'er-s');
+    (o.stats || []).filter(Boolean).forEach((x) => s.append(x));
+    h.append(s);
+    const c = el('div', 'er-c');
+    if (can) c.append(chev('M6 3l5 5-5 5'));
+    h.append(c);
+    w.append(h);
+    if (can) {
+      const d = el('div', 'er-d');
+      d.append(o.detail);
+      const set = (on) => { d.hidden = !on; h.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+      set(OPEN.has(o.key));
+      h.addEventListener('click', () => { const on = !OPEN.has(o.key); if (on) OPEN.add(o.key); else OPEN.delete(o.key); set(on); });
+      w.append(d);
+    }
+    return w;
+  };
+  const stat = (label, value, cls, tip) => { const s = el('span', 'stat'); if (label) s.append(el('i', '', label)); s.append(el('b', cls || '', value)); if (tip && tip !== value) { s.dataset.tip = tip; s.tabIndex = 0; } return s; };
+  // Figures as logged carry their source in brackets and sometimes a sentence: keep the figure.
+  const cleanFig = (x) => String(x || '').replace(/\s*\([^)]*\)/g, '').split(';')[0].trim();
+  const lastOrderText = (r) => (r.last_order && r.last_order !== 'Passed' ? String(r.last_order).replace(/^Before 07:00/, 'Before ' + CUTOFF) : '');
+  const iconFor = (stock, kind) => {
+    const s = stock ? D.stocks.find((x) => x.name === stock) : null;
+    if (s) return logoFor(s.ticker, s.market, s.name, 's');
+    if (stock) return logoFor('', '', stock, 's');
+    const g = el('span', 'glyph');
+    const v = svgEl('svg', {viewBox: '0 0 16 16', 'aria-hidden': 'true'});
+    v.append(svgEl('path', {d: kind === 'game' ? 'M4 14V2.5M4 3h8l-2 3 2 3H4' : 'M3 13V9M8 13V3M13 13V6'}));
+    g.append(v);
+    return g;
+  };
+  const capDay = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '');
+  const timeKey = (r) => { const m = /\b(\d{1,2}):(\d{2})\b/.exec(String(r.time_uk || '')); if (m) return m[1].padStart(2, '0') + m[2]; return /all day/i.test(String(r.time_uk || '')) ? '0000' : /before/i.test(String(r.time_uk || '')) ? '1100' : /after/i.test(String(r.time_uk || '')) ? '2105' : '9999'; };
   const segBar = (name) => {
     const box = q('#seg-' + name);
     box.replaceChildren(...SEGS[name].map(([k, t]) => { const b = btn('', t, () => { S.view[name] = k; draw(); }); b.setAttribute('aria-pressed', S.view[name] === k ? 'true' : 'false'); return b; }));
@@ -782,7 +842,7 @@ dash.calc('standing', {
     const t0 = today();
     const evs = D.events.filter((x) => x.stock === r.name);
     const tl = [];
-    evs.forEach((x) => tl.push({date: x.date, what: x.name, body: [x.implied_pct ? 'Options imply ±' + x.implied_pct + '%' : '', x.last_order && x.last_order !== 'Passed' ? 'Last order: ' + x.last_order : '', x.plan ? 'Plan: ' + x.plan : ''].filter(Boolean).join('. '), kind: 'Event'}));
+    evs.forEach((x) => tl.push({date: x.date, what: x.name, body: [x.implied_pct ? 'Options imply ±' + x.implied_pct + '%' : '', lastOrderText(x) ? 'Last order: ' + lastOrderText(x) : '', x.plan ? 'Plan: ' + x.plan : ''].filter(Boolean).join('. '), kind: 'Event'}));
     (D.revBy.get(r.name) || []).forEach((x) => tl.push({date: x.date, what: x.bank + ': ' + x.action, body: x.text, kind: 'Analyst'}));
     L.filter((x) => x.table === 'trade' && x.name === r.name).forEach((x) => tl.push({date: x.effective, what: 'Order: ' + wt(num(x.from_w)) + ' to ' + wt(num(x.to_w)), body: '', kind: 'Order'}));
     L.filter((x) => x.table === 'alert' && x.stock === r.name).forEach((x) => tl.push({date: x.date, what: 'Alert, ' + (x.time_uk || ''), body: x.text, kind: 'Alert'}));
@@ -908,19 +968,19 @@ dash.calc('standing', {
     }
     if (v === 'rates') {
       const bd = by.backdrop;
-      const bdb = q('#backdrop'); bdb.replaceChildren(); if (bd) bdb.append(el('b', '', String(bd.action || '—')));
+      const bdb = q('#backdrop'); bdb.replaceChildren(); if (bd) bdb.append(document.createTextNode('Backdrop '), el('b', '', String(bd.action || '—')));
       const series = M.filter((r) => ['yield', 'commodity', 'spread'].includes(r.kind));
       const sess = D.spy.length ? D.spy[D.spy.length - 1].date : null;
       const val = (r, x) => (x === null ? '—' : r.kind === 'yield' ? x.toFixed(2) + '%' : r.kind === 'spread' ? x.toFixed(0) + 'bp' : '$' + fmt2(x));
       const ch = (r, f) => { const x = num(r[f]); return r.unit === 'bp' ? bp(x) : [pct(x, 1), dir(x)]; };
-      table(q('#rates'), [
-        {h: 'Series', cell: (r) => String(r.name).replace(/, \$.*$/, '')},
+      const rateCols = (first) => [
+        {h: first, cell: (r) => String(r.name).replace(/, \$.*$/, '').replace(/ 10-year( gilt)? yield$/, ' 10-year').replace(/ yield$/, '')},
         {h: 'Last', num: true, cls: 'b', cell: (r) => [val(r, num(r.value)) + (sess && r.date < sess ? ', ' + shortDate(r.date) : ''), sess && r.date < sess ? 'faint' : '']},
         {h: '1 day', num: true, cell: (r) => ch(r, 'chg_1d')},
         {h: '5 days', num: true, cell: (r) => ch(r, 'chg_5d')},
-        {h: '20 days', num: true, only: ['m', 'l'], cell: (r) => ch(r, 'chg_20d')},
-        {h: '1-year range', num: true, only: ['l'], tip: 'Where the latest reading sits between the 1-year low (0%) and high (100%).', cell: (r) => (num(r.percentile) === null ? '—' : num(r.percentile).toFixed(0) + '%')},
-      ], series, {empty: 'No readings stored yet.'});
+      ];
+      table(q('#rates'), rateCols('Bond'), series.filter((r) => r.kind === 'yield'), {empty: 'No readings stored yet.'});
+      table(q('#rates2'), rateCols('Series'), series.filter((r) => r.kind !== 'yield'), {empty: 'No readings stored yet.'});
       const md = dash.data('macro');
       const mrows = md.status === 'ok' ? md.data : [];
       const byDate = {};
@@ -965,12 +1025,13 @@ dash.calc('standing', {
     if (v === 'releases') {
       const t0 = today();
       const rel = L.filter((r) => r.table === 'event' && r.kind === 'macro' && (r.forecast || r.actual || r.previous || String(r.date) < t0)).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      const fig = (x, full) => { const c = cleanFig(x); if (!c) return '—'; const s = span('', c); if (full && full !== c) { s.dataset.tip = full; s.tabIndex = 0; } return s; };
       table(q('#releases'), [
-        {h: 'When', cell: (r) => shortDate(r.date) + (r.time_uk ? ', ' + r.time_uk : '')},
+        {h: 'When', cls: 'nowrap', cell: (r) => shortDate(r.date)},
         {h: 'Release', cls: 'wrap b', cell: (r) => r.name},
-        {h: 'Forecast', cls: 'wrap', only: ['m', 'l'], cell: (r) => r.forecast || '—'},
-        {h: 'Previous', cls: 'wrap', only: ['l'], cell: (r) => r.previous || '—'},
-        {h: 'Actual', cls: 'wrap', cell: (r) => (r.actual ? r.actual + (r.surprise ? ' (' + r.surprise + ')' : '') : String(r.date) >= t0 ? 'Due' : '—')},
+        {h: 'Forecast', cls: 'wrap', only: ['m', 'l'], cell: (r) => fig(r.forecast, r.forecast)},
+        {h: 'Previous', cls: 'wrap', only: ['l'], cell: (r) => fig(r.previous, r.previous)},
+        {h: 'Actual', cls: 'wrap', cell: (r) => (r.actual ? fig(r.actual, r.actual + (r.surprise ? ' (' + r.surprise + ')' : '')) : String(r.date) >= t0 ? st('Due') : '—')},
         {h: 'S&P 500', num: true, only: ['m', 'l'], cell: (r) => [pct(num(r.spx_ret_pct)), dir(num(r.spx_ret_pct))]},
         {h: 'US 10y', num: true, only: ['l'], cell: (r) => bp(num(r.chg_1d))},
       ], rel, {empty: 'No releases stored yet.'});
@@ -1027,8 +1088,8 @@ dash.calc('standing', {
         {h: 'Stock', cell: (r) => { const s = D.stocks.find((x) => x.name === r.name) || {}; const w = el('div', 'stk'); w.append(logoFor(r.ticker, s.market, r.name, 's'), span('', r.name)); return w; }},
         {h: 'Rating', num: true, cls: 'b', cell: (r) => num(r.confidence)},
         {h: 'Score', num: true, only: ['m', 'l'], cell: (r) => num(r.score)},
-        {h: 'Window', cell: (r) => (r.window_end ? shortDate(r.effective) + ' to ' + shortDate(r.window_end) : 'from ' + shortDate(r.effective))},
-        {h: 'Stock', num: true, only: ['l'], cell: (r) => [pct(num(r.ret_pct)), dir(num(r.ret_pct))]},
+        {h: 'Window', cls: 'nowrap', cell: (r) => (r.window_end ? shortDate(r.effective) + ' to ' + shortDate(r.window_end) : 'from ' + shortDate(r.effective))},
+        {h: 'Return', num: true, only: ['l'], cell: (r) => [pct(num(r.ret_pct)), dir(num(r.ret_pct))]},
         {h: 'S&P 500', num: true, only: ['l'], cell: (r) => [pct(num(r.spx_ret_pct)), dir(num(r.spx_ret_pct))]},
         {h: 'Beat it?', cell: (r) => (r.beat === 'yes' ? st('Yes', 'okay') : r.beat === 'no' ? st('No', 'bad') : st('Open'))},
       ], conf, {empty: 'No ratings logged yet.'});
@@ -1078,32 +1139,44 @@ dash.calc('standing', {
     const t0 = today();
     const v = S.view.calendar;
     const heldN = new Set(D.stocks.filter((r) => r.held).map((r) => r.name));
-    const ev = L.filter((r) => r.table === 'event').filter((r) => (v === 'past' ? String(r.date) < t0 : relevantEvent(r) && String(r.date) >= t0 && (v !== 'next' || daysAway(r.date) <= 7)))
+    const past = v === 'past';
+    const ev = L.filter((r) => r.table === 'event').filter((r) => (past ? eventPassed(r) : !eventPassed(r) && relevantEvent(r) && (v !== 'next' || daysAway(r.date) <= 7)))
       .filter((r) => (v === 'held' ? heldN.has(r.stock) : v === 'results' ? r.kind === 'results' : v === 'data' ? r.kind === 'macro' : true))
-      .sort((a, b) => (v === 'past' ? -1 : 1) * String(a.date).localeCompare(String(b.date)) || String(a.time_uk || '').localeCompare(String(b.time_uk || '')));
+      .sort((a, b) => (past ? -1 : 1) * String(a.date).localeCompare(String(b.date)) || timeKey(a).localeCompare(timeKey(b)));
     const groups = [];
     ev.forEach((r) => {
       let g = groups[groups.length - 1];
-      if (!g || g.date !== r.date) { g = {date: r.date, title: dateText(r.date), sub: relDay(r.date), past: String(r.date) < t0, body: el('ul', 'ag')}; groups.push(g); }
-      g.body.append(agItem(shortTime(r.time_uk), r.name, bullets([r.last_order && r.last_order !== 'Passed' ? 'Last order: ' + r.last_order : '', r.plan ? 'Plan: ' + r.plan : '', r.forecast ? 'Forecast: ' + r.forecast : '', r.actual ? 'Actual: ' + r.actual + (r.surprise ? ' (' + r.surprise + ')' : '') : ''].concat(sentences(r.text)), {small: true, max: 2}),
-        [heldN.has(r.stock) ? st('Held') : null, num(r.implied_pct) !== null ? st('±' + num(r.implied_pct) + '%', '', 'Options-implied move on results day') : null, r.kind === 'results' && r.confirmed !== 'yes' ? st('Date estimated', 'warn') : null]));
+      if (!g || g.date !== r.date) { g = {date: r.date, title: dateText(r.date), sub: capDay(relDay(r.date)), past, body: el('div', 'ers')}; groups.push(g); }
+      const lines = [lastOrderText(r) && !past ? 'Last order: ' + lastOrderText(r) : '', r.plan ? 'Plan: ' + r.plan : ''].concat(sentences(r.text)).filter(Boolean);
+      const macro = r.kind === 'macro';
+      const actual = cleanFig(r.actual);
+      g.body.append(lineRow({
+        key: 'ev:' + r.id, when: capDay(shortTime(r.time_uk)), whenSub: !past && r.kind === 'results' && r.confirmed !== 'yes' ? 'est.' : '', icon: iconFor(r.stock, r.kind), title: r.name,
+        stats: [heldN.has(r.stock) ? st('Held') : null, num(r.implied_pct) !== null ? stat('', '±' + num(r.implied_pct) + '%', '', 'Options-implied move on results day') : null, macro && cleanFig(r.forecast) && !actual ? stat('Forecast', cleanFig(r.forecast), '', r.forecast) : null, macro && actual ? stat('Actual', actual, '', r.actual) : null],
+        detail: lines.length ? bullets(lines, {small: true}) : null,
+      }));
     });
-    dayGroups(q('#events'), groups, v === 'past' ? 'No past events.' : 'Nothing dated in this view.');
+    dayGroups(q('#events'), groups, past ? 'No past events.' : 'Nothing dated in this view.');
   };
 
   // ---------------------------------------------------------------- log
   const drawLog = (L) => {
     const v = S.view.log;
+    const titled = (x) => x.charAt(0).toUpperCase() + x.slice(1);
     if (v === 'orders') {
       const tr = L.filter((r) => r.table === 'trade').sort((a, b) => String(b.effective).localeCompare(String(a.effective)) || num(b.to_w) - num(a.to_w));
       const groups = [];
-      tr.forEach((r) => { let g = groups.find((x) => x.date === r.effective); if (!g) { g = {date: r.effective, title: 'Open of ' + dateText(r.effective), sub: relDay(r.effective), rows: [], texts: []}; groups.push(g); } g.rows.push(r); if (r.text && !g.texts.includes(r.text)) g.texts.push(r.text); });
+      tr.forEach((r) => { let g = groups.find((x) => x.date === r.effective); if (!g) { g = {date: r.effective, title: 'Open of ' + dateText(r.effective), sub: capDay(relDay(r.effective)), rows: [], texts: []}; groups.push(g); } g.rows.push(r); if (r.text && !g.texts.includes(r.text)) g.texts.push(r.text); });
       groups.forEach((g) => {
-        const b = el('div'); b.style.display = 'flex'; b.style.flexDirection = 'column'; b.style.gap = '0.375rem';
-        const t = el('div');
-        table(t, [{h: 'Stock', cell: (r) => r.name}, {h: 'Action', cell: (r) => (num(r.from_w) === 0 ? 'Buy' : num(r.to_w) === 0 ? 'Sell all' : num(r.to_w) > num(r.from_w) ? 'Add' : 'Trim')}, {h: 'Weight', num: true, cls: 'b', cell: (r) => wt(num(r.from_w)) + ' to ' + wt(num(r.to_w))}], g.rows);
-        b.append(t);
-        g.texts.forEach((x) => { const bl = bullets(sentences(x).flatMap((s) => s.split(/;\s+/)).map((s) => s.charAt(0).toUpperCase() + s.slice(1)), {small: true, max: 2}); if (bl) b.append(bl); });
+        const b = el('div', 'ers');
+        g.rows.forEach((r) => {
+          const a = num(r.from_w) === 0 ? ['Buy', 'okay'] : num(r.to_w) === 0 ? ['Sell', 'bad'] : num(r.to_w) > num(r.from_w) ? ['Add', 'okay'] : ['Trim', 'bad'];
+          const row = el('div', 'or');
+          const s = D.stocks.find((x) => x.name === r.name);
+          row.append(logoFor(r.ticker || (s && s.ticker), s && s.market, r.name, 's'), span('or-n', r.name), st(a[0], a[1]), span('or-w mut', wt(num(r.from_w))), span('or-w b', wt(num(r.to_w))));
+          b.append(row);
+        });
+        g.texts.forEach((x) => { const bl = bullets(sentences(x).flatMap((s) => s.split(/;\s+/)).map((s) => titled(s)), {small: true, max: 2}); if (bl) { const n = el('div', 'or-why'); n.append(bl); b.append(n); } });
         g.body = b;
       });
       dayGroups(q('#log-orders'), groups, 'No order changes yet.');
@@ -1111,7 +1184,12 @@ dash.calc('standing', {
     if (v === 'alerts') {
       const al = L.filter((r) => r.table === 'alert').sort((a, b) => whenKey(b).localeCompare(whenKey(a))).slice(0, 80);
       const groups = [];
-      al.forEach((r) => { let g = groups[groups.length - 1]; if (!g || g.date !== r.date) { g = {date: r.date, title: dateText(r.date), sub: relDay(r.date), body: el('ul', 'ag')}; groups.push(g); } g.body.append(agItem(r.time_uk || '', r.stock || 'Market', bullets(r.text, {small: true, max: 3}), [r.stock === 'Order' ? st('Order', 'acc') : null])); });
+      al.forEach((r, i) => {
+        let g = groups[groups.length - 1];
+        if (!g || g.date !== r.date) { g = {date: r.date, title: dateText(r.date), sub: capDay(relDay(r.date)), body: el('div', 'ers')}; groups.push(g); }
+        const parts = sentences(r.text);
+        g.body.append(lineRow({key: 'al:' + r.date + i, when: String(r.time_uk || '').replace(/\s*UK$/, ''), icon: iconFor(['Portfolio', 'Market', 'System', 'Order', 'Watchlist'].includes(r.stock) ? '' : r.stock, 'macro'), title: r.stock || 'Market', note: parts[0] || '', detail: parts.length > 1 ? bullets(parts.slice(1), {small: true}) : null}));
+      });
       dayGroups(q('#log-alerts'), groups, 'No alerts yet.');
     }
     if (v === 'analysts') {
@@ -1119,21 +1197,49 @@ dash.calc('standing', {
       const cap = S.size === 's' ? 12 : 30;
       const rev = S.revAll ? all : all.slice(0, cap);
       const groups = [];
-      rev.forEach((r) => { let g = groups[groups.length - 1]; if (!g || g.date !== r.date) { g = {date: r.date, title: dateText(r.date), sub: relDay(r.date), body: el('ul', 'ag')}; groups.push(g); } g.body.append(agItem(r.bank || '', r.stock, r.text ? el('small', '', r.action + '. ' + r.text) : el('small', '', r.action))); });
+      rev.forEach((r) => {
+        let g = groups[groups.length - 1];
+        if (!g || g.date !== r.date) { g = {date: r.date, title: dateText(r.date), sub: capDay(relDay(r.date)), body: el('div', 'ers')}; groups.push(g); }
+        const act = String(r.action || '');
+        const kind = /upgrade|raised|initiat/i.test(act) ? 'okay' : /downgrade|cut|lowered/i.test(act) ? 'bad' : '';
+        g.body.append(lineRow({icon: iconFor(r.stock), title: r.stock, note: [r.bank, cleanFig(r.text)].filter(Boolean).join(': '), stats: [st(titled(act), kind)]}));
+      });
       const box = q('#log-rev');
       dayGroups(box, groups, 'No analyst changes logged yet.');
-      if (all.length > cap) box.append(btn('more', S.revAll ? 'Show the latest ' + cap : 'Show all ' + all.length, () => { S.revAll = !S.revAll; draw(); }));
+      if (all.length > cap) { const m = btn('more', S.revAll ? 'Show the latest ' + cap : 'Show all ' + all.length, () => { S.revAll = !S.revAll; draw(); }); m.style.gridColumn = '1 / -1'; box.append(m); }
     }
     if (v === 'closed') {
-      table(q('#log-closed'), [
-        {h: 'Stock', cell: (r) => r.name}, {h: 'Held', cell: (r) => shortDate(r.effective) + ' to ' + shortDate(r.date)},
-        {h: 'Sessions', num: true, only: ['m', 'l'], cell: (r) => num(r.days)},
-        {h: 'Return', num: true, cell: (r) => [pct(num(r.ret_pct)), dir(num(r.ret_pct))]},
-        {h: 'Points', num: true, cls: 'b', cell: (r) => [pts(num(r.contrib_pts)), dir(num(r.contrib_pts))]},
-        {h: 'Lesson', cls: 'wrap', only: ['m', 'l'], cell: (r) => r.lesson || r.text || '—'},
-      ], L.filter((r) => r.table === 'postmortem').sort((a, b) => String(b.date).localeCompare(String(a.date))), {empty: 'Nothing has been sold yet.'});
+      const box = q('#log-closed');
+      const rows = L.filter((r) => r.table === 'postmortem').sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      const wrap = el('div', 'ers');
+      rows.forEach((r) => {
+        const lesson = r.lesson || r.text || '';
+        wrap.append(lineRow({key: 'pm:' + r.id, icon: iconFor(r.name), title: r.name, note: shortDate(r.effective) + ' to ' + shortDate(r.date), stats: [stat('Return', pct(num(r.ret_pct)), dir(num(r.ret_pct))), stat('Points', pts(num(r.contrib_pts)), dir(num(r.contrib_pts)))], detail: lesson ? bullets(sentences(lesson), {small: true}) : null}));
+      });
+      if (!rows.length) msg(box, 'Nothing has been sold yet.'); else box.replaceChildren(wrap);
     }
   };
+
+  // ---------------------------------------------------------------- details on hover, focus or tap
+  // One layer on the page root: a panel's glass makes its own stacking layer, so a tooltip inside a panel falls behind the next one.
+  const pop = el('div', 'pop'); pop.hidden = true; pop.setAttribute('role', 'tooltip'); root.append(pop);
+  let popFor = null;
+  const hideTip = () => { pop.hidden = true; popFor = null; };
+  const showTip = (t) => {
+    popFor = t;
+    pop.textContent = t.dataset.tip;
+    pop.hidden = false;
+    const b = t.getBoundingClientRect(); const w = pop.offsetWidth; const h = pop.offsetHeight;
+    const vw = document.documentElement.clientWidth; const vh = window.innerHeight;
+    pop.style.left = Math.max(8, Math.min(vw - w - 8, b.left)) + 'px';
+    pop.style.top = (b.bottom + h + 12 > vh && b.top > h + 12 ? b.top - h - 6 : b.bottom + 6) + 'px';
+  };
+  root.addEventListener('pointerover', (e) => { if (e.pointerType === 'touch') return; const t = e.target.closest('[data-tip]'); if (t) showTip(t); else if (popFor) hideTip(); });
+  root.addEventListener('pointerleave', hideTip);
+  root.addEventListener('focusin', (e) => { const t = e.target.closest('[data-tip]'); if (t && e.target.matches(':focus-visible')) showTip(t); });
+  root.addEventListener('focusout', hideTip);
+  root.addEventListener('click', (e) => { const t = e.target.closest('[data-tip]'); if (t) { if (popFor === t && e.pointerType !== 'mouse') hideTip(); else showTip(t); } else hideTip(); });
+  window.addEventListener('scroll', hideTip, {passive: true, capture: true});
 
   // ---------------------------------------------------------------- theme and main loop
   const probe = el('span');
@@ -1157,6 +1263,7 @@ dash.calc('standing', {
   if (window.MutationObserver) { const mo = new MutationObserver(setTheme); [document.documentElement, document.body].forEach((n) => { if (n) mo.observe(n, {attributes: true, attributeFilter: ['class', 'style', 'data-theme', 'data-mode', 'data-color-scheme']}); }); }
 
   const draw = () => {
+    hideTip();
     setTheme();
     S.size = root.clientWidth >= 1240 ? 'l' : root.clientWidth >= 760 ? 'm' : 's';
     root.dataset.w = S.size;

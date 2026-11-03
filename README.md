@@ -4,7 +4,7 @@
 
 Tim's entry ("Seeking Beta") in the FT Stock Picking Game, 5 Oct to 27 Nov 2026: a virtual 100,000-credit portfolio of 5 to 20 stocks. The aim is a finish in roughly the top 2% of players. No real money is involved.
 
-**Current version: 6.15 (3 Nov 2026, late evening): the results-day refresh acts only on stocks on the list; the 16:45 refresh moves to 17:04 UK; a late refresh is no longer an issue; the watchlist holds what the stance could buy; the page is redesigned in Liquid Glass; the exit rule tested and unchanged. Pipeline still 7.8.** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
+**Current version: 6.15.1 (3 Nov 2026): page only: hover details fixed; calendar, log and tables reworked. Previous: 6.15, run fixes and the Liquid Glass page. Pipeline still 7.8.** Every version and its changes are in `CHANGELOG.md`; releases from 6.0 on are listed under Releases.
 
 This repository is a **mirror and a place to propose changes**. The live system runs in Claude (scheduled tasks, a Claude Project and a dashboard artifact). Claude writes snapshots here; ChatGPT and Tim read them and propose changes through pull requests.
 

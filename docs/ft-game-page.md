@@ -54,6 +54,14 @@ Tim asked for the page to look like Apple's Liquid Glass and Apple's own dashboa
 - The tab labelled Returns is still `performance` in the code.
 - Checked on a local copy with the live data files at 390, 834 and 1440px, light and dark, all tabs, with a changed order simulated; no horizontal scroll at any width. The old page, both files, is kept on the artifact as asset `53081510b3a7830082995aec759e3ce3` (page_before_glass_2026-11-03.txt). To go back, split it at the `=== app.js ===` line and write each part to its file.
 
+## What changed on 3 Nov, later (playbook 6.15.1): details and tables
+
+- Hover details: each glass panel makes its own stacking layer, so a tooltip inside one fell behind the next panel. One `.pop` element on the page root now shows every `data-tip`, on hover, keyboard focus or tap, kept on the screen and above everything.
+- Calendar and Log: one card per day (two columns on a wide screen, each card going to the shorter column). Each line has time, logo or icon, title and key figures, and opens on tap for the rest (`lineRow`). Events in time order; a stock's boilerplate plan and last order sit behind the tap; events already past move to Past; stored "Before 07:00" reads as the 08:00 cut-off.
+- Orders: stock, Buy, Sell, Add or Trim, from and to weights. Alerts: first sentence, tap for the rest. Analysts: stock, bank and figure, with a coloured action. Closed: dates, return and points, tap for the lesson.
+- Tables: alternating rows instead of rules, figures grouped on the right. Rates split into government bonds and commodities with spreads. Releases show the figure without its source in brackets; the full wording is on hover.
+- `files/app.js` version 8, `files/index.html` version 17. Checked on a local copy at 390 and 1440px, light and dark, with hover and expanded rows.
+
 ## Things a later chat must keep
 
 - The Order card reads the latest alert whose `stock` is "Order", exactly as the old banner did: text starting "Changed" or "Revised" shows the blue "Enter before <cut-off>" capsule until the cut-off on the effective day (the cut-off is the constant `CUTOFF` in `files/app.js`, 08:00 UK from 26 Oct (07:00 from 18 to 26 Oct), playbook part C; London fills still show 08:00, the LSE open); "No change" shows "Nothing to enter". The blue "new" dots and the Sell line come from the `trade` rows with the latest `effective` date, until that date's US open.

@@ -6,6 +6,14 @@ Before 16 Oct 2026 the system lived only in Claude, so those versions have no co
 
 How a new version is recorded is set out at the end.
 
+## 6.15.1 (Tue 3 Nov 2026, about 23:20)
+
+Tim's request: fix the hover details hidden under the Order box, and make the calendar and other table-style data clearer. Page only. No rule, score, sizing, order, pipeline or scheduled task changed. Pipeline still 7.8.
+
+- Hover details: shown in one layer above every panel and kept on the screen, on hover, focus or tap.
+- Calendar and Log: one card per day; one clean line per event, alert or order; tap a line for the detail; events in time order; events already past move to Past.
+- Tables: alternating rows, figures grouped on the right; rates split into bonds and commodities with spreads; releases without source text in the cells (full wording on hover).
+
 ## 6.15 (Tue 3 Nov 2026, about 23:00)
 
 Tim's request: "Fix EVERY issue with runs at the moment... Refinement is key", with the page redesigned like Apple's Liquid Glass. No score, sizing, order or pipeline changed. Pipeline still 7.8.
@@ -324,7 +332,7 @@ Not versioned with the playbook; its changes are listed here by date.
 - Mon 19 Oct, about 00:30: results budget read from the ledger (1.0 for 27 to 30 Oct), US calendar for 26 and 27 Nov, day-call help text (`app.js` version 3).
 - Wed 21 Oct, afternoon: conviction tooltip and calibration banner wording from 19 Oct deployed (`app.js` version 4).
 - Mon 26 Oct: cut-off shown as 08:00 UK (`app.js` version 5, `index.html` version 14).
-- Tue 3 Nov: Liquid Glass redesign (`app.js` version 6, `index.html` version 15).
+- Tue 3 Nov: Liquid Glass redesign (`app.js` version 6, `index.html` version 15); later that night, details layer, calendar, log and tables (`app.js` version 8, `index.html` version 17).
 
 ## Recording a new version
 
