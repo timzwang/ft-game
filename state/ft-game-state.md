@@ -1,6 +1,6 @@
 # FT Stock Picking Game: state and log
 
-Last updated: Mon 2 Nov 2026, about 21:45 UK (evening review, a change evening: Palantir out on the endgame exit rule, ServiceNow in, for Tue 3 Nov's open; order message sent about 21:39 UK). Before that, Sun 1 Nov 2026, about 21:45 UK (evening review, a change evening). Earlier entries: see the review log (section 6).
+Last updated: Tue 3 Nov 2026, about 21:45 UK (evening review, a quiet evening: no change for Wed 4 Nov's open). Before that, Mon 2 Nov 2026, about 21:45 UK (evening review, a change evening). Earlier entries: see the review log (section 6).
 
 This doc is the narrative record for Tim's entry, "Seeking Beta". The procedure for every run is in `claude/ft-game-playbook.md` (the core doc) and the docs its routing table names. The numbers (prices, scores, daily performance, contributions, ratings and their outcomes, the full calendar, analyst changes, alerts, the panel test, the drift record) live in the data files behind Tim's page and the panel file, and are produced by the pipeline script; this doc carries the decisions and the reasons.
 
@@ -12,79 +12,81 @@ Scheduled runs: evening review 21:30 UK Sun to Thu; morning check 07:26 UK Mon t
 
 ## 1. Status
 
-- **Playbook version 6.14.3** (6.14.3, 29 Oct evening: runs no longer delete superseded data assets, data doc G5 step 4; G5 step 5 checks the store's size instead; 6.14.2, 27 Oct: feed 1.2.1 takes Japan's 10-year from CNBC first; 6.14.1, 26 Oct: the five non-US 10-year yields from the price feed; 6.14, 26 Oct: cut-off 08:00 UK, pipeline 7.8 from commit `9760163`, nightly watchdog 22:47 UK; 6.13.2: flag and fix every issue; 6.13.1: the script run from the repository; 6.13, 21 Oct: the endgame stance in core part D; earlier versions in the playbook header). **Pipeline script version 7.8** (part B holds the asset id, the run commit and the hash). The 2 Nov evening review ran it from commit `9760163` (hash matched part B).
-- **Estimated value at Mon 2 Nov close: 89,814, -10.19% since the start, against -3.11% for the S&P 500 fund (gap -7.08 points).** Mon 2 Nov -4.33% against SPY -0.48%: Micron -1.22 points, Seagate -1.21, Western Digital -1.18, NetApp -0.76, Palantir -0.63, Nvidia (sold at the open) +0.29, Amazon +0.11. Week of 26 Oct: -5.81% against SPY -0.56%.
-- **Last FT figures: Mon 26 Oct close, 100,973 (+0.97%), rank 3,994 of 14,736 (top 27.1%; the top 2% is rank 294 or better).** `reported` row with top2_return_pct 8.14 (a player at rank 330). RECONCILE +94 credits (+0.09%). Asked for again on 31 Oct and 1 Nov; not yet received.
-- **Standstill (2 Nov evening run):** change for 22 Oct +1.67, 23 Oct -4.20, 27 Oct +4.26, all complete; 30 Oct +0.15 after two sessions; 2 Nov -1.11 after one; 3 Nov waiting to fill (expected 0.0). Week of 19 Oct -3.17; week of 26 Oct +5.58. Inception (17 sessions): -12.14 as entered, -12.79 fully invested. EXPECTED BENEFIT: three settled, expected 0.0, actual +1.73, sign right in 1 of 3.
+- **Playbook version 6.14.3** (6.14.3, 29 Oct evening: runs no longer delete superseded data assets, data doc G5 step 4; G5 step 5 checks the store's size instead; 6.14.2, 27 Oct: feed 1.2.1 takes Japan's 10-year from CNBC first; 6.14.1, 26 Oct: the five non-US 10-year yields from the price feed; 6.14, 26 Oct: cut-off 08:00 UK, pipeline 7.8 from commit `9760163`, nightly watchdog 22:47 UK; 6.13.2: flag and fix every issue; 6.13.1: the script run from the repository; 6.13, 21 Oct: the endgame stance in core part D; earlier versions in the playbook header). **Pipeline script version 7.8** (part B holds the asset id, the run commit and the hash). The 3 Nov evening review ran it from commit `9760163` (hash matched part B).
+- **Estimated value at Tue 3 Nov close: 91,605, -8.40% since the start, against -2.82% for the S&P 500 fund (gap -5.58 points).** Tue 3 Nov +1.99% against SPY +0.30%: ServiceNow +0.73 points, Monolithic Power +0.68, Micron +0.52, Western Digital +0.39, Seagate +0.32, NetApp +0.30, Amazon +0.21, Palantir (sold at the open, -5.70% gap) -1.14.
+- **Last FT figures: Mon 26 Oct close, 100,973 (+0.97%), rank 3,994 of 14,736 (top 27.1%; the top 2% is rank 294 or better).** `reported` row with top2_return_pct 8.14 (a player at rank 330). RECONCILE +94 credits (+0.09%). Asked for on 31 Oct and 1 Nov; not yet received.
+- **Standstill (3 Nov evening run):** change for 22 Oct +1.67, 23 Oct -4.20, 27 Oct +4.26, all complete; 30 Oct +0.20 after three sessions; 2 Nov +1.16 after two; 3 Nov -0.08 after one. Week of 19 Oct -3.17; week of 26 Oct +5.58; week of 2 Nov +1.08 so far. Inception (18 sessions): -10.26 as entered, -10.87 fully invested. EXPECTED BENEFIT: three settled, expected 0.0, actual +1.73, sign right in 1 of 3.
 - **Panel test (all 30 members loaded):** history verdict "no evidence" (average rank correlation +0.042, t +1.1, 58 dates). Live: two dates (-0.130), too few to judge. The score is frozen.
-- **Order in force for Tue 3 Nov's open (changed by the Mon 2 Nov evening review; message sent about 21:39 UK):** ServiceNow 20, Micron 20, Seagate 15, Western Digital 15, Monolithic Power Systems 10, NetApp 10, Amazon 10, cash 0.
-- Day call record (S&P 500): 9 right of 15; Brier in the ledger. Tue 3 Nov: S&P 500 Green 58% against a usual 55%; portfolio Green 58% against a usual 56%; no adjustment.
-- Macro at Mon 2 Nov: US 2-year 4.59% (+3bp; -9bp over five), 10-year 4.91% (-3bp; -9bp over five), 30-year 5.28%. UK 10-year 5.20% (-9bp; -13bp over five), Germany 3.30%, France 4.90%, Italy 4.46%, Japan 2.77% (all from the feed). Brent $104.17 (-7.2%), WTI $96.06 (-6.7%), natural gas $2.86, gold $3,955 (+1.8%) (futures fallback). Backdrop label: tailwind.
-- Crypto: Bitcoin $76,641 at the US close (-0.1% on the day, -4.0% over five); trend **mixed** (IBIT 5.5% below its 50-day, 6.2% below its 20-day, 4.6% above its 200-day), so no crypto-linked buy. No crypto-linked holding. A $6.3bn Binance hack was reported (Yahoo live page; one source).
-- Regime: risk-off in tech. Mon 2 Nov: S&P 500 -0.51% (7,541.40), Nasdaq -1.07% (25,164.32), Dow +0.41% (51,983.98), Russell 2000 -0.21%. AI hardware fell again on Kioxia's soft guide and the Marvell and Lumentum deal; oil fell about 7% on Iran diplomacy; ISM manufacturing 55.5 against 54.5.
+- **Order in force, unchanged for Wed 4 Nov's open (set by the Mon 2 Nov evening review; message sent about 21:39 UK that night):** ServiceNow 20, Micron 20, Seagate 15, Western Digital 15, Monolithic Power Systems 10, NetApp 10, Amazon 10, cash 0.
+- Day call record (S&P 500): 10 right of 16; Brier in the ledger. Wed 4 Nov: S&P 500 Green 56% against a usual 55%; portfolio Green 58% against a usual 56%; reviewer +1 and +2 for AMD's after-hours rise and guide.
+- Macro at Tue 3 Nov: US 2-year 4.61% (+2bp; -9bp over five), 10-year 4.95% (+4bp; -4bp over five), 30-year 5.32%. UK 10-year 5.25% (+5bp; -10bp over five), Germany 3.33%, France 4.95%, Italy 4.47%, Japan 2.77% (all from the feed). Brent $104.51 (+0.3%; -4.8% over five), WTI $96.90, natural gas $2.91, gold $3,934.50 (futures fallback). Backdrop label: neutral.
+- Crypto: Bitcoin $77,784 at the US close (+1.5% on the day, -3.6% over five); trend **mixed** (IBIT 4.0% below its 50-day, 4.2% below its 20-day, 6.5% above its 200-day), so no crypto-linked buy. No crypto-linked holding. Binance hack of about $6.3bn, attributed by the FBI to North Korea (Yahoo).
+- Regime: mixed. Tue 3 Nov: S&P 500 about +0.36%, Nasdaq about +0.83%, Dow about -0.38%, Russell 2000 about +0.24% (TheStreet, closing wrap; levels not read). Chips rebounded after a Monday that left the semiconductor index in a bear market; Apple -4.4% on a margin guide cut by memory costs; US strike on Qeshm Island, Iran calls itself "in a state of war".
 
 ## 2. Current portfolio
 
-The order for Tue 3 Nov's open. Scores and bands from the pipeline at the Mon 2 Nov close. Under the endgame stance (core part D) the score floor, trend tests, volatility caps, theme guide and results budget do not apply; the NOTE lines for them are expected.
+The order for Wed 4 Nov's open (unchanged). Scores and bands from the pipeline at the Tue 3 Nov close. Under the endgame stance (core part D) the score floor, trend tests, volatility caps, theme guide and results budget do not apply; the NOTE lines for them are expected.
 
 | Stock | Weight | Confidence (not calibrated) | Score | Band | Flags | Next results (implied move) | Swap if missing or broken |
 |---|---|---|---|---|---|---|---|
-| ServiceNow | 20% | 50 | 34 | Weak | below 50-day, oversold | Reported 28 Oct; next late Jan (est.) | Shopify |
-| Micron | 20% | 52 | 31 | Weak | below 50-day | December (after the game) | Sandisk |
-| Seagate | 15% | 50 | 38 | Weak | below 50-day, oversold | Reported 27 Oct | Western Digital |
-| Western Digital | 15% | 50 | 26 | Weak | below 50-day, downtrend, death cross 2 Nov | Reported 22 Oct | Seagate |
-| Monolithic Power Systems | 10% | 53 | 46 | Weak | below 50-day, downtrend | Reported 29 Oct; next Feb | Analog Devices |
-| NetApp | 10% | 50 | 38 | Weak | below 50-day, oversold | 25 Nov, after US close (est.) | Seagate |
-| Amazon | 10% | 52 | 46 | Middling | below 50-day | Late Jan (after the game) | Microsoft |
+| ServiceNow | 20% | 50 | 33 | Weak | below 50-day, oversold | Reported 28 Oct; next late Jan (est.) | Shopify |
+| Micron | 20% | 52 | 33 | Weak | below 50-day, faded gap | December (after the game) | Sandisk |
+| Seagate | 15% | 50 | 40 | Weak | below 50-day, oversold, faded gap | Reported 27 Oct | Western Digital |
+| Western Digital | 15% | 50 | 28 | Weak | below 50-day, downtrend, faded gap, death cross 2 Nov | Reported 22 Oct | Seagate |
+| Monolithic Power Systems | 10% | 54 | 66 | Weak | downtrend, death cross 19 Oct | Reported 29 Oct; next Feb | Analog Devices |
+| NetApp | 10% | 50 | 45 | Middling | below 50-day | 25 Nov, after US close (est.) | Seagate |
+| Amazon | 10% | 52 | 49 | Middling | below 50-day | Late Jan (after the game) | Microsoft |
 | Cash | 0% | | | | | | |
 
-Themes: AI and chips 70%, Software 30%. Memory and storage (Micron, Seagate, WDC, NetApp) 60%. Largest risk shares: Micron 23.2%, Western Digital 20%, Seagate 19.8%, ServiceNow 17.7%; estimated daily volatility 2.53%. Worst scenario: a deeper AI sell-off, -7.4%. The concentration is deliberate under the stance. No holding reports inside ten sessions.
+Themes: AI and chips 70%, Software 30%. Memory and storage (Micron, Seagate, WDC, NetApp) 60%. Largest risk shares: Micron 23%, Western Digital 19.7%, Seagate 19.3%, ServiceNow 18%; estimated daily volatility 2.58%. Worst scenario: a deeper AI sell-off, -7.4%. The concentration is deliberate under the stance. No holding reports inside ten sessions.
 
 Points for the coming reviews:
 
-- Memory fell 6% to 8% on 2 Nov on below-line volume (Micron 1.13 times, NetApp 1.09, Seagate 0.98, Western Digital 0.78), so no exit signal. The stance names the memory theme breaking down as what would show it wrong; Tim was told on 2 Nov that a change of direction is his call.
-- Palantir sold for 3 Nov on its 2 Nov signal, taking the results gap at the open. Reaction session is Tue 3 Nov: add its drift row in that review (revenue $2.31bn against $2.18bn, EPS $0.44 against $0.41, FY guide raised; figures from 24/7 Wall St).
-- Sold and kept on the list five sessions for the standstill test: Palantir (to Mon 9 Nov); Nvidia, Shopify, Arm, Sandisk, Cloudflare, Datadog (to Fri 6 Nov); Robinhood and Strategy can go from 3 Nov.
-- Iran: Trump reported favouring diplomacy (Axios), Netanyahu pressing for strikes, midterms Tue 3 Nov. Scenario "Oil spike on escalation" -2.0 points.
+- Memory bounced on 3 Nov but Micron, Seagate and Western Digital all closed below their opens (faded gaps), on 0.77, 0.85 and 0.59 times average volume, under the 1.3 heavy-volume line, so no exit signal. A repeat on heavy volume would be one. The stance names the memory theme breaking down as what would show it wrong; Tim was told on 2 Nov that a change of direction is his call.
+- Palantir sold at the 3 Nov open, -5.70% from the previous close (cost -1.14 points), then rose 4.29% open to close on 2.2 times volume. Drift FAIL.
+- AMD reported after the 3 Nov close: beat, Q4 guide about $17bn against about $16.3bn, up after hours. Reaction session is 4 Nov: add its drift row in that review. It closed above its open on 3 Nov, so the swap column is open if a holding signals.
+- Sold and kept on the list five sessions for the standstill test: Palantir (to Mon 9 Nov); Nvidia, Shopify, Arm, Sandisk, Cloudflare, Datadog (to Fri 6 Nov).
+- Iran: US struck Qeshm Island ("small-scale", "defensive"); Iran says it is "in a state of war"; a senior official says a deal is out of reach. Scenario "Oil spike on escalation" -2.0 points.
+- Midterm count overnight: Democrats about 76% to win both chambers on Polymarket (Yahoo).
 - Bitcoin's trend is mixed: no crypto-linked buy.
 
 ## 3. Pending order
 
-**Changed for Tue 3 Nov's open (Monday 2 Nov evening review; message sent about 21:39 UK):** ServiceNow 20, Micron 20, Seagate 15, Western Digital 15, Monolithic Power Systems 10, NetApp 10, Amazon 10, cash 0. Change: Palantir 20 out (endgame exit rule), ServiceNow 20 in (its swap). Expected 0.0 points (`order_expected` recorded). Taken as entered unless Tim says otherwise.
+**No change for Wed 4 Nov's open (Tuesday 3 Nov evening review).** Order in force: ServiceNow 20, Micron 20, Seagate 15, Western Digital 15, Monolithic Power Systems 10, NetApp 10, Amazon 10, cash 0. Last changed for Tue 3 Nov's open (message sent 2 Nov about 21:39 UK); taken as entered unless Tim says otherwise.
 
 ## 4. Watchlist
 
-27 names after tonight (above the cap of 25 because the sold holdings, the first order's stocks and the open drift rows must stay listed). Scores and bands at the Mon 2 Nov close. Removed tonight: CrowdStrike. No additions: tonight's only scan Event, Idexx (drift FAIL on trend), is health care, barred by the stance, and the Leaders are outside the stance.
+27 names after tonight (above the cap of 25 because the sold holdings, the first order's stocks and the open drift rows must stay listed). Scores and bands at the Tue 3 Nov close. Removed tonight: Robinhood, Pentair. Added: Advanced Energy (drift FAIL on trend only), Bloom Energy (Barclays upgrade). Fewer than five added: the scan's Events (Fiserv, DuPont, Drax) and Leaders are outside the stance.
 
 | Name | Band | Status | Score | Note |
 |---|---|---|---|---|
-| Coca-Cola | Strong | Watching (sold 22 Oct) | 82 | Drift row open to 3 Nov |
-| Eli Lilly | Strong | Watching (sold 22 Oct) | 77 | Drift FAIL; health care barred |
-| Exxon Mobil | Strong | Watching (sold 22 Oct) | 70 | First order stock: kept; not to be re-bought under the stance |
-| Labcorp | Strong | Drift: enter (not taken) | 68 | Health care barred; drift row open |
-| Chevron | Strong | Watching (sold 22 Oct) | 65 | First order stock: kept |
-| Texas Instruments | Strong | Watching | 64 | Broad scan leader; faded gap 2 Nov |
-| Shell | Strong | Watching (sold 22 Oct) | 63 | First order stock; drift row open |
-| Analog Devices | Strong | Watching | 60 | Heavy-volume down day 2 Nov |
-| Valero Energy | Middling | Watching | 49 | Energy, barred |
-| Shopify | Middling | Exit signal (sold for 2 Nov) | 48 | Kept to 6 Nov; results 3 Nov before the open |
-| Johnson Controls | Middling | Drift: needs 2nd day | 48 | Drift WATCH 27 Oct |
-| Quanta Services | Middling | Watching | 48 | Power |
-| Microsoft | Middling | Watching (sold 22 Oct) | 47 | Drift FAIL 29 Oct |
-| Pentair | Weak | Watching | 48 | Up 6.5% on 2 Nov with no reason seen; drift row open; rotate out once it settles |
-| Datadog | Weak | Exit signal (sold for 30 Oct) | 43 | Kept to 6 Nov; results 4 Nov |
-| Flex | Weak | Watching | 40 | Drift row open to 4 Nov |
-| Palantir | Weak | Exit signal (sold for 3 Nov) | 39 | Kept to 9 Nov; reaction session 3 Nov |
-| AMD | Weak | Watching (sold 23 Oct) | 39 | Results 3 Nov after the close |
-| Cloudflare | Weak | Exit signal (sold for 2 Nov) | 35 | Kept to 6 Nov; results 5 Nov |
-| Sandisk | Weak | Exit signal (sold for 2 Nov) | 32 | Kept to 6 Nov; drift FAIL |
-| TSMC | Weak | Watching | 31 | First order stock: kept |
-| Robinhood | Weak | Watching (sold for 27 Oct) | 31 | Can be removed from 3 Nov |
-| Fortinet | Weak | Watching | 29 | Drift row open to 5 Nov; -7.3% on 2 Nov |
-| Strategy (crypto tracker) | Weak | Watching | 29 | Tracker |
-| Coinbase (crypto tracker) | Weak | Watching | 28 | Tracker |
-| Arm Holdings | Weak | Exit signal (sold for 2 Nov) | 28 | Kept to 6 Nov; results 4 Nov |
-| Nvidia | Weak | Exit signal (sold for 2 Nov) | 25 | First order stock; kept |
+| Exxon Mobil | Strong | Watching | 74 | Sold in the endgame switch (22 Oct open); kept five sessions for the standstill test. |
+| Eli Lilly | Strong | Watching | 74 | Sold in the endgame switch (22 Oct open); kept five sessions for the standstill test. |
+| Labcorp | Strong | Drift: enter (not taken) | 73 | Drift scan 28 Oct: ENTER, all six tests passed (beat and raise, +8.8% on 2.8x volume, above its 50-day). Not b |
+| Coca-Cola | Strong | Watching | 72 | Sold in the endgame switch (22 Oct open); kept five sessions for the standstill test. |
+| Texas Instruments | Strong | Watching | 71 | Broad scan leader #12 (27 Oct): analog chips, +54.5% against the index over 12 months. Correlated with Analog  |
+| Chevron | Strong | Watching | 70 | Sold in the endgame switch (22 Oct open); kept five sessions for the standstill test. |
+| Quanta Services | Strong | Watching | 70 | Scan Event #3 28 Oct (+4.8%, gap +3.7%, 1.8x volume) on results day; AI power infrastructure. Results figures  |
+| Shell | Strong | Watching | 67 | Sold in the endgame switch (22 Oct open); kept five sessions for the standstill test. |
+| Valero Energy | Middling | Results ahead | 67 | Refiner at a 52-week high with record crack spreads; closed 1.5% below its open on Friday after a new high. Ex |
+| Microsoft | Strong | Watching | 66 | Sold 22 Oct. Reported 28 Oct after the close: EPS $4.89 vs $4.72, revenue $92.28bn vs $90.61bn; about +4% afte |
+| Analog Devices | Strong | Watching | 62 | Broad scan leader #16 (26 Oct), +4.3% on 26 Oct. Chip name with a smaller range than the memory names; panel m |
+| Johnson Controls | Strong | Watching | 62 | Scan Event 27 Oct (+5.7%, 1.7x volume) on a results beat and a record $23bn backlog led by data-centre cooling |
+| Datadog | Middling | Exit signal (sold for 30 Oct) | 56 | Sold for 30 Oct on the endgame exit rule (heavy-volume close below its open on 29 Oct); kept listed five sessi |
+| AMD | Middling | Exit signal | 49 | Reported 3 Nov after the close: beat, Q4 guide $17bn against about $16.3bn; shares up after hours. Reaction se |
+| Bloom Energy | Middling | Watching | 48 | Barclays upgrade on 3 Nov; AI power demand. Promote only on follow-through: a further close above its open. |
+| Flex | Middling | Watching | 45 | Drift scan 28 Oct: FAIL on trend only (beat and raise, +11.6% on 2.5x volume, but 13% below its 50-day). Fits  |
+| Cloudflare | Weak | Exit signal | 43 | Sold for Mon 2 Nov: heavy-volume close below its open on 30 Oct (endgame exit rule); kept on the list five ses |
+| Advanced Energy | Weak | Watching | 43 | Drift candidate: beat and strong guide on 2 Nov after the close; high-beta AI power supplies. Promote on the d |
+| Palantir | Weak | Exit signal | 40 | Exit signal: sold at the 3 Nov open, -5.70% from the previous close, then +4.29% open to close on 2.2 times vo |
+| Coinbase | Weak | Watching | 38 | Crypto tracker: kept on the list whatever its score. It earns its money from coin trading, so it follows Bitco |
+| Sandisk | Weak | Exit signal | 37 | Sold for Mon 2 Nov: heavy-volume close below its open on 30 Oct (endgame exit rule); kept on the list five ses |
+| Shopify | Weak | Exit signal | 37 | Sold for 2 Nov, avoiding a report that fell 8.7%. Kept to 6 Nov for the standstill test. |
+| Strategy | Weak | Exit signal (sold for 27 Oct) | 36 | Crypto tracker: sold for 27 Oct, IBIT closed below its 50-day average (crypto exit rule). Stays on the list as |
+| TSMC | Weak | Watching | 34 | Left the order 16 Oct; kept until Fri 23 Oct for the standstill test, then removed. |
+| Fortinet | Weak | Watching | 33 | Reaction day 29 Oct: gapped down after a beat and raise, closed near the high; logged in the drift scan, rotat |
+| Arm Holdings | Weak | Exit signal | 31 | Sold for Mon 2 Nov: heavy-volume close below its open on 30 Oct (endgame exit rule); kept on the list five ses |
+| Nvidia | Weak | Exit signal | 30 | Sold for Mon 2 Nov: heavy-volume close below its open on 30 Oct (endgame exit rule); kept on the list five ses |
 
 ## 5. Trade log
 
@@ -108,6 +110,7 @@ Points for the coming reviews:
 
 ## 6. Review log (newest first, keep the latest 15)
 
+- Tue 3 Nov 2026 (about 21:45): Evening review, a quiet evening: no holding gave an exit signal (Micron, Seagate, WDC closed below their opens on volume under 1.3 times). 3 Nov +1.99% against SPY +0.30%, value 91,605. Pipeline 7.8 from commit `9760163`, hash matched. Price feed: forced (first read 2 Nov; forced run generated 21:34 UTC, again 21:38 UTC for FISV, DD, AEIS, BE), nothing refused or missing. Non-US yields from the feed; commodities from the futures fallback. Broad scan: forced (3 Events, 30 Leaders). Drift: Palantir, Shopify, Fiserv, Advanced Energy all FAIL; DuPont left out (its results page was rate limited). Added Advanced Energy, Bloom Energy; removed Robinhood, Pentair. Files published (no deletes). WARNINGs: FLEX 2026-05-06 and CNC 2025-07-02 known genuine; BE 2024-11-15 (+59.2%) from the feed's new two-year history, believed genuine (AEP deal), not re-checked. Pages not read: CNBC article pages (site errors), investing.com and 24/7 Wall St's AMD live page (rate limited, not re-requested). JOLTS exact figure and Fiserv's consensus revenue not read. No ISSUE this run.
 - Mon 2 Nov 2026 (about 21:45): Evening review, a change evening for Tue 3 Nov (Palantir out, ServiceNow in). 2 Nov -4.33% against SPY -0.48%, value 89,814. Pipeline 7.8 from commit `9760163`, hash matched. Price feed: forced (first read 30 Oct; forced run generated 21:32 UTC, again 21:37 UTC for IDXX), nothing refused or missing. Non-US yields from the feed; commodities from the futures fallback (no current tradingeconomics page came through the search). Broad scan: forced (1 Event, 30 Leaders). Drift: Idexx FAIL on trend, not taken. Removed CrowdStrike; no additions. Order message sent about 21:39 UK. Files published (no deletes). WARNINGs for FLEX 2026-05-06 and CNC 2025-07-02: known genuine moves. Pages not read: Benzinga's Palantir article, CNBC's oil article, Seeking Alpha, Archynewsy (site errors), investingLive's ISM page (server error), BusinessWire's Palantir release (address too long). Apple's results and Palantir's later after-hours price not found at review time. No ISSUE this run.
 - Sun 1 Nov 2026 (about 21:45): Evening review, a change evening for Mon 2 Nov (five rule exits; Micron 20, Seagate 15, Western Digital 15, Monolithic Power 10, NetApp 10, Amazon 10 in). Pipeline 7.8 from commit `9760163`, hash matched. No new session (Friday logged by the weekly review). Price feed: current (Fri 30 Oct, generated 20:51 UTC), then forced at 21:35 UTC for 17 candidate tickers. Feed REFUSED Palantir on its second run (Yahoo's revised 30 Oct low 180.81 against the stored 183.68): checked on stockanalysis.com (low 180.81, "At close: Oct 30") and the corrected row given; RECALCULATED, value unchanged. Non-US yields from the feed; commodities from the futures fallback. Broad scan: current (2 Events, 30 Leaders, all outside the stance except TXN and ADI, both already listed and both with the exit signal). Drift: Sandisk, Monolithic Power, Amazon all FAIL. Intake: two (Monolithic Power, Amazon, both bought), fewer than five because nearly every high-beta tech name closed below its open on heavy volume on 30 Oct. Removed Aon, Palo Alto Networks, Illumina, Comfort Systems USA, F5, AbbVie. NetApp results event (25 Nov, est.) added. Order message sent about 21:40 UK. Files published (store 51 MB, 84 files; no deletes). No ISSUE this run.
 - Sun 1 Nov 2026 (about 20:30): Weekend news check (Sunday). No A item; three B items (Axios: Netanyahu pressing for a strike on Iran right after the 3 Nov midterms, Trump wants more time; new Hormuz shipping incidents, Saudi TASI -0.84%; Doha talks in a third day, no deal). Ledger published. No ISSUE this run. Order unchanged.
@@ -122,11 +125,12 @@ Points for the coming reviews:
 - Mon 26 Oct 2026 (about 21:45): Evening review, a change evening for Tue 27 Oct (ServiceNow, Robinhood, Strategy out; Shopify 20, Micron 10, Datadog 5 in).
 - ISSUE (26 Oct evening review; fixed the same night, playbook 6.14.1, feed 1.2): non-US 10-year yields not refreshed.
 - Mon 26 Oct 2026 (about 17:15): Hand-run session with Tim. Playbook 6.14: cut-off 08:00 UK, pipeline 7.8, nightly watchdog. Order unchanged.
-- Sun 25 Oct 2026 (about 21:50): Evening review, FAULT: running the script refused by the session's permission check; nothing published. Order for Mon 26 Oct stood.
 
 ## 7. Market regime notes
 
-Label: Risk-off in tech (Mon 2 Nov: Nasdaq -1.1%, Dow +0.4%, chips and memory down 5% to 8%, rotation to consumer and financials, oil down about 7% on Iran diplomacy). What would change it: a Nasdaq close back above its 20-day average.
+Label: Mixed (Tue 3 Nov: Nasdaq +0.8%, Dow -0.4%; chip bounce on light volume after the semiconductor index entered a bear market on Monday). What would change it: to risk-on, a Nasdaq close back above its 20-day average; to risk-off, a heavy-volume reversal in chips after AMD.
+
+Tue 3 Nov: S&P 500 about +0.36%, Nasdaq +0.83%, Dow -0.38%, Russell 2000 +0.24%; VIX 21.27 (Bank of Vol). Apple -4.4%: gross margin guide 45% to 46% against 47%, memory costs; its CEO called memory pricing "unprecedented" and rising beyond December. Palantir -1.65% (gap -5.70%). Shopify -8.74% (gap -12.67%): GMV $119.15bn against $120.08bn. Fiserv +12.5%. Bloom Energy on Barclays upgrade. AMD after the close: revenue about $13.4bn against $13.1bn, EPS about $2.10 against $1.95, Q4 guide about $17bn against $16.3bn, margin guide 55% against 55.5%. JOLTS little changed (forecast 7,164k; figure not read). A December Fed hike about 75% priced (Bank of Vol).
 
 Mon 2 Nov: S&P 500 -0.51%, Nasdaq -1.07%, Dow +0.41%, Russell 2000 -0.21%. Kioxia guided December-quarter operating profit to 2 trillion yen, below estimates, blaming shipment timing, and said next year's output has sold out. Marvell -12.7% and Lumentum -18.6% on Marvell's $115bn all-stock deal, read by Citrini's Jukan as a sign of an AI collapse in two to three years; Oracle down on a $20bn capital raise. ISM manufacturing 55.5 (forecast 54.5), prices paid 75.2. Palantir after the close: revenue $2.31bn (+96%), FY guide about $8.53bn, contract value +6%. Idexx +21.9% on a beat and raise.
 
@@ -142,9 +146,8 @@ Confirmed by the 1 Nov evening review (Al Jazeera, 1 Nov): Trump said on 31 Oct 
 Weekend of 24 and 25 Oct: no A item. Weekend of 17 and 18 Oct: no A item.
 
 Near calendar (the full calendar to 27 Nov is on the page and in the ledger):
-- Tue 3 Nov: US midterm elections; JOLTS (15:00 UK); Shopify (before the open), AMD (after the close).
-- Wed 4 Nov: Datadog (before the open); Arm and Qualcomm (after the close; Qualcomm's date from its own release).
-- Thu 5 Nov: Cloudflare (after the close). Wed 18 Nov (est.): Nvidia. Wed 25 Nov (est.): NetApp. Thu 26 Nov: US closed. Fri 27 Nov: US closes 18:00 UK, game ends.
+- Wed 4 Nov: ADP (13:15 UK), ISM services (15:00 UK), midterm count; Datadog (before the open); Arm and Qualcomm (after the close; Qualcomm's date from its own release); AMD's reaction session.
+- Thu 5 Nov: Bank of England (12:00 UK); Cloudflare (after the close). Fri 6 Nov: US jobs report (13:30 UK), forecast 55K. Tue 10 Nov: US CPI. Wed 18 Nov (est.): Nvidia. Wed 25 Nov (est.): NetApp. Thu 26 Nov: US closed. Fri 27 Nov: US closes 18:00 UK, game ends.
 
 ## 8. Open questions for Tim
 
@@ -237,7 +240,7 @@ In this game an order fills at the open, so the gap on the news day cannot be ca
 
 **Palantir, 2 Nov (a rule exit the session before a beat and raise)**
 
-- Closed 4.39% below its open on 1.44 times average volume in an AI sell-off, then beat after the close. Sold at the 3 Nov open, so it keeps the gap and gives up any drift; the 3 Nov row will show what that costs.
+- Closed 4.39% below its open on 1.44 times average volume in an AI sell-off, then beat after the close. Sold at the 3 Nov open, so it keeps the gap and gives up any drift; Sequel: it opened -5.70% from its close (-1.14 points at 20%), then rose 4.29% open to close on 2.2 times volume, while ServiceNow rose 3.64% from the same open: the swap cost 0.08 points on day one.
 
 **The five exits of 2 Nov (Nvidia, Shopify, Arm, Sandisk, Cloudflare)**
 
@@ -253,11 +256,11 @@ In this game an order fills at the open, so the gap on the news day cannot be ca
 
 ## 11. Confidence ratings, shadow ratings, the panel test and the day call
 
-- Confidence ratings (not calibrated): 24 of 28 settled, few distinct dates: below 55, 5 of 11 beat the index (45%); 55 to 59, 6 of 9 (67%); 60 and above, 4 of 4 (100%, all from the 9 to 15 Oct energy book). Far too few to judge. Ratings for the order in force: Monolithic Power 53, Micron 52, Amazon 52, ServiceNow 50, Seagate 50, Western Digital 50, NetApp 50.
-- Shadow ratings: 521 logged, 330 settled. Live: score 70 and above, 136 cases, 57% beat the index (-0.25 points); 60 to 69, 88, 48% (-2.07); 45 to 59, 51, 25% (-3.34); below 45, 55, 60% (+0.44). Not ordered by score. Judgement test: two dates, too few.
+- Confidence ratings (not calibrated): 24 of 28 settled, few distinct dates: below 55, 5 of 11 beat the index (45%); 55 to 59, 6 of 9 (67%); 60 and above, 4 of 4 (100%, all from the 9 to 15 Oct energy book). Far too few to judge. Ratings for the order in force: Monolithic Power 54, Micron 52, Amazon 52, ServiceNow 50, Seagate 50, Western Digital 50, NetApp 50.
+- Shadow ratings: 554 logged, 367 settled. Live: score 70 and above, 152 cases, 56% beat the index (-0.77 points); 60 to 69, 93, 48% (-2.10); 45 to 59, 61, 26% (-3.93); below 45, 61, 56% (-0.10). Not ordered by score. Judgement test: two dates, too few.
 - Panel test: see section 1. Old backtest (hindsight) correlation +0.008.
-- Drift record: ENTER 1 settled (Hasbro, +7.51 points), 1 open (Labcorp, not taken); WATCH Johnson Controls open; FAIL 7 settled (14% beat the index, -5.07 points), 13 open (including Idexx from 2 Nov).
-- Day call record (S&P 500): 9 right of 15. Below the 20 settled calls needed before it could be considered.
+- Drift record: ENTER 1 settled (Hasbro, +7.51 points), 1 open (Labcorp, not taken); WATCH 1 settled (-3.62); FAIL 9 settled (33% beat the index, -1.73 points), 15 open (including Palantir, Shopify, Fiserv, Advanced Energy from 3 Nov).
+- Day call record (S&P 500): 10 right of 16. Below the 20 settled calls needed before it could be considered.
 - Broad scan record (scan/latest.md, 30 Oct): Leaders, 60 settled, 40% beat the index, mean excess -1.81 points close to close and -1.89 from the next open; Events, 9 settled, 56%, -1.31 and -1.44; 70 rows open.
 
 ## 12. Tools
@@ -267,8 +270,8 @@ In this game an order fills at the open, so the gap on the news day cannot be ca
 - Panel file: `panel.json` on the same artifact, named by the document `store/panel`.
 - Scripts: the pipeline (version 7.8; runs take it from the repository at the commit in data doc G1) and the screening script are assets on that artifact. Their ids and hashes are in part B of the playbook, the only place they are kept.
 - Price feed (data doc G8): `feed/latest.json` and `feed/live.json` in the repository, with the non-US 10-year yields under `macro.intl_yields`. 1 Nov: current for Fri 30 Oct, then a forced run at 21:35 UTC for 17 tickers (two years each for the two new holdings). It refused Palantir on a revised low; the stockanalysis.com history page confirmed the revision.
-- Pages reached through searches on 2 Nov: Yahoo Finance live page and Kiplinger (closes), 24/7 Wall St (Palantir, ServiceNow), Motley Fool (Palantir), Investing.com (Idexx), TT News (ISM), Saxo. Refused: see the review log. Pages reached on 1 Nov: Qualcomm's and Investing News' release (Qualcomm results 4 Nov after the close), Regards of Wall Street (futures), Al Jazeera (Iran), 24/7 Wall St (memory sell-off), Investing.com (Monolithic Power results), Motley Fool (Amazon results), TipRanks (Dell and HP), stockanalysis.com (Palantir history). Nothing refused. The Artifact tool's multi-path read failed ("not found through this cloud session's artifact mount"); one path per call worked, as G1 says.
-- Market data service: massive.com, free plan, on an account opened by Tim's father. The key is in the evening and weekly review tasks and is never written into this project's docs, the page data, alerts or messages. Not used on 2 Nov (the feed covered every price).
+- Pages reached through searches on 3 Nov: TheStreet (closes), Yahoo Finance live page, ZeroHedge, Bank of Vol, investingLive (AMD), SEC (Fiserv 8-K), Grafa and StockStory (Shopify, Advanced Energy), MarketBeat (Bloom), 24/7 Wall St (memory), TIKR (Seagate). Refused or failed: CNBC article pages (site errors); investing.com and 24/7 Wall St's AMD live page (rate limited).
+- Market data service: massive.com, free plan, on an account opened by Tim's father. The key is in the evening and weekly review tasks and is never written into this project's docs, the page data, alerts or messages. Not used on 3 Nov (the feed covered every price).
 - Sources that did not work: Alphastreet, Chartmill and Rolling Out article pages (29 Oct); Benzinga article pages (28 Oct); CNBC article pages; gurufocus news pages and EBC; CNN article pages; Detroit News; Fortune's Bitcoin price page; capital.com news pages. tradingeconomics' news pages carry no statistics table.
 - Artifact leftovers: superseded data assets stay in the store (playbook 6.14.3). 1 Nov evening: 51 MB of 1 GB used, 84 files.
 - GitHub mirror: private repository `timzwang/ft-game` (part B and G6).
