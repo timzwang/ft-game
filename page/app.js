@@ -568,7 +568,7 @@ dash.calc('standing', {
     tiles.append(
       tile('Against S&P 500', has ? pts(s.gap_pts) : '—', has ? dir(s.gap_pts) : '', has ? 'pts' : ''),
       tile(last ? 'Last session, ' + shortDate(last.date) : 'Last session', pct(lastDay), dir(lastDay)),
-      tile(rankLabel, ranked ? fmt0(s.rank) : '—', '', ranked && s.percentile !== null ? 'top ' + Math.round(s.percentile) + '%' : '', ranked ? 'Of ' + fmt0(s.players) + ' players. The top 2% is rank ' + fmt0(s.target_rank) + ' or better. Only known when read off the FT site.' : 'Send your rank and the number of players.', stale),
+      tile(rankLabel, ranked ? fmt0(s.rank) : '—', '', ranked && s.percentile !== null ? 'top ' + Math.round(s.percentile) + '%' : '', ranked ? (s.players ? 'Of ' + fmt0(s.players) + ' players. The top 2% is rank ' + fmt0(s.target_rank) + ' or better. ' : '') + 'Only known when read off the FT site.' : 'Send your rank and the number of players.', stale),
       tile('Gap to top 2%', s && s.top2_gap !== null ? Math.abs(s.top2_gap).toFixed(1) : '—', s && s.top2_gap !== null ? (s.top2_gap > 0 ? 'down' : 'up') : '', s && s.top2_gap !== null ? 'pts' : '', s && s.top2_return !== null ? 'The player nearest the line was at ' + pct(s.top2_return) + ' on ' + shortDate(s.top2_on) + '. Portfolio now ' + pct(s.cum_pct) + ' (estimate).' : 'Needs the return of a player near the line.', stale),
     );
     box.replaceChildren(hero, tiles);
