@@ -1,6 +1,6 @@
 # Price feed: US session 2026-11-04, London 2026-11-04
 
-Generated 2026-11-04T21:33:18+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 94 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
+Generated 2026-11-04T21:36:51+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 97 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
 
 - Missing: none
 - Last bar not the session: none
@@ -28,11 +28,13 @@ Generated 2026-11-04T21:33:18+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 94 t
 | BAC | BAC | 2026-11-04 | 51.26 | 51.76 | 50.62 | 51.63 | 45615668 | agrees (24) | 0.000% | 0.000% |
 | BE | BE | 2026-11-04 | 205.50 | 213.96 | 190.60 | 200.40 | 23524254 | agrees (24) | 0.000% | 0.000% |
 | C | C | 2026-11-04 | 126.56 | 127.17 | 121.69 | 124.74 | 16257234 | agrees (24) | 0.000% | 0.000% |
+| CDW | CDW | 2026-11-04 | 160.82 | 172.47 | 155.00 | 168.75 | 3398482 | no overlap (0) | 0.000% | 0.000% |
 | CEG | CEG | 2026-11-04 | 248.78 | 250.85 | 237.81 | 245.72 | 6726648 | agrees (24) | 0.000% | 0.000% |
 | COIN | COIN | 2026-11-04 | 142.00 | 153.33 | 141.88 | 151.50 | 8994852 | agrees (24) | 0.000% | 0.117% |
 | COST | COST | 2026-11-04 | 1,036.83 | 1,053.66 | 1,028.50 | 1,046.47 | 2555282 | agrees (24) | 0.000% | 0.000% |
 | CRWD | CRWD | 2026-11-04 | 242.79 | 252.85 | 237.21 | 241.00 | 8829565 | agrees (24) | 0.000% | 0.212% |
 | CVX | CVX | 2026-11-04 | 222.56 | 223.01 | 214.61 | 216.96 | 11526646 | agrees (24) | 0.022% | 0.035% |
+| DASH | DASH | 2026-11-04 | 188.84 | 199.09 | 188.16 | 198.59 | 7656374 | no overlap (0) | 0.000% | 0.000% |
 | DD | DD | 2026-11-04 | 155.24 | 155.96 | 150.73 | 150.73 | 2547338 | no overlap (0) | 0.000% | 0.000% |
 | DDOG | DDOG | 2026-11-04 | 199.74 | 207.74 | 186.51 | 188.72 | 13184062 | agrees (24) | 0.000% | 0.000% |
 | DELL | DELL | 2026-11-04 | 384.69 | 394.49 | 366.63 | 372.36 | 10694383 | no overlap (0) | 0.000% | 0.000% |
@@ -104,6 +106,7 @@ Generated 2026-11-04T21:33:18+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 94 t
 | WFC | WFC | 2026-11-04 | 87.25 | 88.02 | 85.19 | 87.43 | 19817434 | agrees (24) | 0.000% | 0.000% |
 | WMT | WMT | 2026-11-04 | 127.00 | 130.94 | 125.84 | 129.17 | 29140875 | agrees (24) | 0.000% | 0.000% |
 | XOM | XOM | 2026-11-04 | 174.26 | 174.31 | 167.40 | 169.27 | 25167514 | agrees (24) | 0.017% | 0.003% |
+| XYZ | XYZ | 2026-11-04 | 84.00 | 88.43 | 83.26 | 87.63 | 20685235 | no overlap (0) | 0.000% | 0.000% |
 
 ## Macro
 
@@ -135,7 +138,7 @@ Non-US 10-year yields for 2026-11-04 (the first figure dated the session; feed 1
 
 Futures (fallback only; the stored series are tradingeconomics figures):
 
-- brent: BZ=F 95.04 (2026-11-04)
-- wti: CL=F 88.46 (2026-11-04)
+- brent: BZ=F 95.00 (2026-11-04)
+- wti: CL=F 88.45 (2026-11-04)
 - natgas: NG=F 2.95 (2026-11-04)
-- gold: GC=F 4,075.50 (2026-11-04)
+- gold: GC=F 4,072.70 (2026-11-04)
