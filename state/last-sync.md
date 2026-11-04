@@ -1,15 +1,14 @@
 # Last sync
 
-Run: evening review, 2026-11-03T21:43:16Z. Prices as of: Tue 3 Nov close.
-Session with Tim, 3 Nov 2026 about 23:30 UK: Tim's FT figures for the 2 Nov close added to data/ledger.json through the pipeline's own row builder and published; state doc updated.
+Run: evening review, 2026-11-04T21:40:23Z. Prices as of: Wed 4 Nov close.
 
 sha256 of each file as published to the artifact and the Project:
 
 ~~~
-2f1307b8380d965398d7a36ddfa1a357bcf2ed9579256ecbb9fae9f1b1c5d4f5  data/history.json
-c299fa96230769ae9339dfb75d8050202979846bdbe79d18c80864f69fa3a9b7  data/ledger.json
-2e0b2dcd0f3325c6cd64634471c4144f598229a1b13a4dded9ada11db48bef85  data/macro.json
-8ae646d9e0304480b157cc8cc39884478c65fdb3c936a5300265056dcaca646b  data/panel.json
-54a7e520f28c259afc00500373d09ff28582512a8a81f968a6b3641e2ecba0ea  data/stocks.json
-634a691e06e3dc43f9c168ca7a22578d6c0342c4753e675787a6193ac693612e  state/ft-game-state.md
+de588fd519f617ec914eca1a9d0b61de1d51b2b090893fbd71634c679aff7f22  data/history.json
+1f13a02f0916235cc76bb243d68c1077b46696375d652feb708c2c880dbd3fa0  data/ledger.json
+7e40e9c2721fe76b83da97dbeeeb48182f7944e948906d9171a995785e523141  data/macro.json
+a206c0d03c1902387e91b7a822805969954e2269e1af67ab13c991d1a07446c0  data/panel.json
+3a77e2218398e5f9b909c5794d51b34d6dc85942514ddee572d7528de5b84045  data/stocks.json
+9de3f446cb2b036b6ddf78f222757d1842f0886368615afd33b65f2a1650fb9a  state/ft-game-state.md
 ~~~
