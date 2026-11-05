@@ -54,3 +54,4 @@ live 17:06 UK 2026-11-04T17:06:28Z
 2026-11-04 19:22 UK live
 tickers: XYZ CDW DASH AVGO GOOGL AAPL
 2026-11-05 07:33 UK morning check
+2026-11-05 14:51 UK results-day refresh
