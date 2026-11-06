@@ -1,17 +1,15 @@
 {
  "rules_version": "1 (fixed 16 Oct 2026)",
- "session_us": "2026-11-05",
- "session_uk": "2026-11-05",
- "generated_utc": "2026-11-05T21:33:19+00:00",
+ "session_us": "2026-11-06",
+ "session_uk": "2026-11-06",
+ "generated_utc": "2026-11-06T21:52:00+00:00",
  "universe": 868,
- "measured": 866,
+ "measured": 867,
  "missing": [],
- "stale": [
-  "KVUE"
- ],
+ "stale": [],
  "holes": [],
  "leaders": 30,
- "events": 2,
+ "events": 4,
  "sources": {
   "yahoo": 870
  }
