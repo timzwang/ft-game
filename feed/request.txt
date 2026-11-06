@@ -61,3 +61,4 @@ tickers: APP CRM ADBE INTU ORCL ANET DELL TSLA CRWD ZS SNOW WDAY TEAM HUBS MDB P
 live 07:28 morning check
 2026-11-06 14:51 UK results-day refresh
 2026-11-06 17:05 UK live
+2026-11-06 19:23 UK late price refresh
