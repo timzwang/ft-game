@@ -1,14 +1,14 @@
 # Last sync
 
-Run: evening review, 2026-11-08T21:38:49Z. Prices as of: Fri 6 Nov close.
+Run: evening review, 2026-11-09T21:38:41Z. Prices as of: Mon 9 Nov close.
 
 sha256 of each file as published to the artifact and the Project:
 
 ~~~
-5d19315d800011efdf0ca43693d701f0412e7683fc75c655f47795b88e275dd2  data/history.json
-6d62e7e23de3e7f5d26cccca5d39c3d2b4b94d2d20cfc04946c8f4623d204367  data/ledger.json
-fe2382684b0306f1d54755da6d73be797ca053e3e013b6190c13d831e75db27d  data/macro.json
-a346b3e82b9e6e4119a74da59ac434659b006808c051e95b9ea34ab6d7af4657  data/panel.json
-eb396ecb04c24bf43c93d41b3a9c7c238ff86e146e145e8f878a70791eb0c5e3  data/stocks.json
-8c4b16ed27433ad6ff9f1b3e7a13d9914fdae5e8465103478b85b41ce7cea4f0  state/ft-game-state.md
+4d958e9fa27bec4d399e66c2678fdcd4b264ffc5814ae3d26ae47d2d723303af  data/history.json
+6d03cc378e135e3fd2a817fb09d4f683500dfaf0cf48cad82871aedfe402ad52  data/ledger.json
+e6bcc8d8abcbb85f2b8466063a1106736764cb372b437a7b39b52f3155db6a8b  data/macro.json
+b3d5712867936d3471c8c819757d329ad31ea1288fc61209146d564a276495fc  data/panel.json
+a24ead260d3085c76bb1ecbeca604735fa5785279e324625ea47cd1c2f4e66bf  data/stocks.json
+91fd14ef73bda90b5a826f28777b53a7e9f8c4d358d8c47f2500e65441f42211  state/ft-game-state.md
 ~~~
