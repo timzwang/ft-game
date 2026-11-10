@@ -1,6 +1,6 @@
 # Price feed: US session 2026-11-10, London 2026-11-10
 
-Generated 2026-11-10T21:32:33+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 108 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
+Generated 2026-11-10T21:35:30+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 109 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
 
 - Missing: none
 - Last bar not the session: none
@@ -107,6 +107,7 @@ Generated 2026-11-10T21:32:33+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 108 
 | TSLA | TSLA | 2026-11-10 | 370.54 | 380.00 | 370.43 | 379.78 | 23687709 | no overlap (0) | 0.000% | 0.000% |
 | TSM | TSM | 2026-11-10 | 388.42 | 400.21 | 387.20 | 396.48 | 13334630 | agrees (24) | 0.000% | 0.001% |
 | TTD | TTD | 2026-11-10 | 14.60 | 15.80 | 14.30 | 15.42 | 64837644 | no overlap (0) | 0.000% | 0.000% |
+| TTWO | TTWO | 2026-11-10 | 218.25 | 229.46 | 214.29 | 224.64 | 8191178 | no overlap (0) | 0.000% | 0.000% |
 | TXN | TXN | 2026-11-10 | 288.90 | 302.22 | 287.25 | 300.52 | 6115264 | agrees (24) | 0.000% | 0.002% |
 | UBER | UBER | 2026-11-10 | 70.85 | 71.03 | 69.19 | 70.05 | 12303723 | no overlap (0) | 0.000% | 0.000% |
 | VLO | VLO | 2026-11-10 | 346.08 | 351.12 | 341.51 | 350.71 | 3165380 | agrees (24) | 0.000% | 0.058% |
@@ -149,7 +150,7 @@ Non-US 10-year yields for 2026-11-10 (the first figure dated the session; feed 1
 
 Futures (fallback only; the stored series are tradingeconomics figures):
 
-- brent: BZ=F 91.98 (2026-11-10)
-- wti: CL=F 86.45 (2026-11-10)
-- natgas: NG=F 3.30 (2026-11-10)
-- gold: GC=F 4,039.30 (2026-11-10)
+- brent: BZ=F 92.04 (2026-11-10)
+- wti: CL=F 86.48 (2026-11-10)
+- natgas: NG=F 3.31 (2026-11-10)
+- gold: GC=F 4,037.80 (2026-11-10)
