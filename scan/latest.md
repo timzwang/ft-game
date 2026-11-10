@@ -1,51 +1,47 @@
-# Broad scan: US session 2026-11-09, London 2026-11-09
+# Broad scan: US session 2026-11-10, London 2026-11-10
 
-Generated 2026-11-09T21:34:13+00:00 UTC. Rules version 1 (fixed 16 Oct 2026); the rules are in `scan/README.md`. 867 of 868 stocks measured (0 without prices, 0 not traded or stale; 0 with a missing recent day, kept out of Events). These lists only point at stocks: every figure used in a decision is fetched again from the playbook's sources.
+Generated 2026-11-10T21:33:13+00:00 UTC. Rules version 1 (fixed 16 Oct 2026); the rules are in `scan/README.md`. 867 of 868 stocks measured (0 without prices, 0 not traded or stale; 0 with a missing recent day, kept out of Events). These lists only point at stocks: every figure used in a decision is fetched again from the playbook's sources.
 
-## Events (5)
+## Events (1)
 
 | # | Stock | Name | Mkt | Day | vs index | Gap | Close in range | Volume x | Above 50d |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | AMD | Advanced Micro Devices | US | +13.3% | +10.9% | +5.4% | 86% | 1.8 | no |
-| 2 | FERG | Ferguson Enterprises | US | +11.2% | +8.9% | +7.7% | 72% | 2.6 | yes |
-| 3 | CEG | Constellation Energy | US | +10.5% | +8.1% | +4.2% | 95% | 1.8 | yes |
-| 4 | AVGO | Broadcom | US | +8.8% | +6.4% | +3.9% | 81% | 1.5 | no |
-| 5 | BEN | Franklin Resources | US | +6.3% | +4.0% | +3.2% | 84% | 1.6 | yes |
+| 1 | TTWO | Take-Two Interactive | US | +8.3% | +8.7% | +5.2% | 68% | 2.8 | yes |
 
 ## Leaders (30)
 
 | # | Stock | Name | Mkt | 12-1 month vs index | 20 days vs index | From 52w high | Day |
 |---|---|---|---|---|---|---|---|
-| 1 | MRNA | Moderna | US | +807.4% | +29.1% | -4.2% | +5.8% |
-| 2 | VTRS | Viatris | US | +63.3% | +20.1% | -0.2% | +2.9% |
-| 3 | TGT | Target Corporation | US | +61.9% | +11.3% | -2.8% | +4.7% |
-| 4 | CRL | Charles River Laboratories | US | +59.2% | +20.3% | -6.9% | +4.7% |
-| 5 | MRK | Merck & Co. | US | +57.3% | +5.5% | -4.6% | +1.4% |
-| 6 | HUM | Humana | US | +56.5% | +1.1% | -7.1% | -2.4% |
-| 7 | RVTY | Revvity | US | +55.2% | +6.6% | -6.4% | +3.6% |
-| 8 | BME.L | B&M | UK | +54.1% | +1.8% | -2.6% | -0.1% |
-| 9 | WOSG.L | Watches of Switzerland | UK | +52.9% | +8.5% | -7.0% | -0.3% |
-| 10 | ROR.L | Rotork | UK | +40.3% | -0.7% | -0.4% | +0.0% |
-| 11 | TATE.L | Tate & Lyle | UK | +36.2% | -1.3% | -3.3% | -0.1% |
-| 12 | OCDO.L | Ocado Group | UK | +35.6% | +9.9% | -5.9% | +0.9% |
-| 13 | EZJ.L | EasyJet | UK | +35.5% | +0.2% | -0.4% | +0.4% |
-| 14 | BPT.L | Bridgepoint Group | UK | +29.3% | -2.7% | -4.9% | +3.0% |
-| 15 | GRG.L | Greggs | UK | +27.9% | +7.6% | -4.1% | -0.9% |
-| 16 | RS1.L | RS Group | UK | +27.0% | -1.0% | -4.9% | +0.6% |
-| 17 | BEN | Franklin Resources | US | +27.0% | +16.0% | -0.7% | +6.3% |
-| 18 | DCC.L | DCC Energy | UK | +26.8% | -0.8% | -4.2% | +0.2% |
-| 19 | WPP.L | WPP | UK | +26.8% | +8.0% | -3.9% | +1.1% |
-| 20 | NEM | Newmont | US | +26.7% | +10.1% | -7.3% | +3.5% |
-| 21 | NDSN | Nordson Corporation | US | +26.7% | +1.3% | -4.2% | +4.5% |
-| 22 | BIIB | Biogen | US | +26.6% | +14.4% | -2.3% | +2.6% |
-| 23 | HSX.L | Hiscox | UK | +26.2% | +1.2% | -4.9% | -0.2% |
-| 24 | DAL | Delta Air Lines | US | +25.9% | +18.2% | -3.5% | +5.3% |
-| 25 | CPAY | Corpay | US | +25.7% | +18.4% | -4.5% | +0.6% |
-| 26 | JNJ | Johnson & Johnson | US | +25.6% | +10.2% | -0.2% | +2.1% |
-| 27 | HTWS.L | Helios Towers | UK | +25.5% | +0.6% | -8.9% | +2.3% |
-| 28 | IEX | IDEX Corporation | US | +25.0% | +3.3% | -2.9% | +3.9% |
-| 29 | FDX | FedEx | US | +24.8% | +12.4% | -7.0% | +3.5% |
-| 30 | HST | Host Hotels & Resorts | US | +23.8% | +14.4% | -3.5% | +2.7% |
+| 1 | CRL | Charles River Laboratories | US | +62.4% | +19.3% | -8.9% | -2.1% |
+| 2 | VTRS | Viatris | US | +62.2% | +24.5% | -0.0% | +1.8% |
+| 3 | TXN | Texas Instruments | US | +61.2% | +8.5% | -9.1% | +1.6% |
+| 4 | TGT | Target Corporation | US | +58.0% | +10.1% | -5.3% | -2.5% |
+| 5 | BME.L | B&M | UK | +57.4% | +1.2% | -2.5% | +0.1% |
+| 6 | HUM | Humana | US | +56.7% | +8.0% | -3.8% | +3.5% |
+| 7 | MRK | Merck & Co. | US | +56.3% | +7.9% | -5.1% | -0.5% |
+| 8 | RVTY | Revvity | US | +54.5% | +6.2% | -7.4% | -1.0% |
+| 9 | BGEO.L | Lion Finance Group | UK | +52.5% | +5.7% | -9.0% | +1.5% |
+| 10 | WOSG.L | Watches of Switzerland | UK | +44.4% | +10.6% | -6.3% | +0.8% |
+| 11 | ROR.L | Rotork | UK | +38.8% | -0.9% | -0.4% | +0.0% |
+| 12 | EZJ.L | EasyJet | UK | +33.9% | +1.4% | +0.0% | +0.5% |
+| 13 | OCDO.L | Ocado Group | UK | +33.6% | +19.1% | -0.1% | +6.6% |
+| 14 | BEN | Franklin Resources | US | +33.0% | +20.0% | -1.3% | +1.2% |
+| 15 | HTWS.L | Helios Towers | UK | +30.5% | +0.8% | -7.3% | +1.8% |
+| 16 | BPT.L | Bridgepoint Group | UK | +30.5% | -0.5% | -4.5% | +0.4% |
+| 17 | BIIB | Biogen | US | +30.3% | +14.2% | -3.0% | -0.6% |
+| 18 | GRG.L | Greggs | UK | +29.1% | +7.8% | -3.6% | +0.5% |
+| 19 | EOG | EOG Resources | US | +29.1% | +3.2% | -8.7% | +2.1% |
+| 20 | JNJ | Johnson & Johnson | US | +27.3% | +16.6% | -0.9% | -0.5% |
+| 21 | RS1.L | RS Group | UK | +27.3% | +0.1% | -4.4% | +0.4% |
+| 22 | BBY.L | Balfour Beatty | UK | +27.1% | +2.7% | -9.6% | +0.6% |
+| 23 | NDSN | Nordson Corporation | US | +26.6% | +2.0% | -3.9% | +0.4% |
+| 24 | CPAY | Corpay | US | +26.6% | +18.8% | -4.1% | +0.4% |
+| 25 | HSX.L | Hiscox | UK | +26.0% | +1.7% | -4.1% | +0.8% |
+| 26 | IEX | IDEX Corporation | US | +25.1% | +3.5% | -2.5% | +0.4% |
+| 27 | ROST | Ross Stores | US | +24.2% | +9.5% | -6.8% | +0.8% |
+| 28 | DCC.L | DCC Energy | UK | +23.9% | -0.6% | -4.2% | +0.0% |
+| 29 | FDX | FedEx | US | +23.5% | +13.6% | -6.8% | +0.2% |
+| 30 | WAB | Wabtec | US | +21.9% | +9.5% | -0.9% | +1.8% |
 
 ## Record (top 10 of each list, settled after five sessions)
 
@@ -53,9 +49,9 @@ Excess is the stock's return less its index (S&P 500 through SPY, or the FTSE 10
 
 | List | Which rows | Settled | Beat index | Mean excess, close to close (pts) | Mean excess from next open (pts) |
 |---|---|---|---|---|---|
-| leaders | all rows | 120 | 36% | -3.68 | -3.58 |
-| leaders | first appearances | 35 | 34% | -3.85 | -3.56 |
-| events | all rows | 30 | 70% | +1.46 | +0.96 |
-| events | first appearances | 29 | 72% | +2.07 | +1.50 |
+| leaders | all rows | 130 | 35% | -3.60 | -3.47 |
+| leaders | first appearances | 37 | 32% | -3.83 | -3.52 |
+| events | all rows | 33 | 70% | +1.61 | +1.08 |
+| events | first appearances | 32 | 72% | +2.17 | +1.58 |
 
-Open rows waiting to settle: 74.
+Open rows waiting to settle: 72.
