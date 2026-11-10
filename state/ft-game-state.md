@@ -1,6 +1,6 @@
 # FT Stock Picking Game: state and log
 
-Last updated: Mon 9 Nov 2026, about 21:45 UK (evening review, a quiet evening: no change for Tue 10 Nov's open). Before that, Sun 8 Nov 2026, about 21:45 UK (evening review, quiet). Before that, Sun 8 Nov 2026, about 20:30 UK (weekend news check). Before that, Sat 7 Nov 2026, about 09:30 UK (weekly review: Fri 6 Nov logged; order unchanged). Before that, Thu 5 Nov 2026, about 22:15 UK (session with Tim: Roblox is not in the game, replaced by Netflix). Earlier entries: see the review log (section 6).
+Last updated: Tue 10 Nov 2026, about 21:45 UK (evening review, a quiet evening: no change for Wed 11 Nov's open). Before that, Mon 9 Nov 2026, about 21:45 UK (evening review, quiet). Before that, Sun 8 Nov 2026, about 21:45 UK (evening review, quiet). Before that, Sat 7 Nov 2026, about 09:30 UK (weekly review: Fri 6 Nov logged; order unchanged). Before that, Thu 5 Nov 2026, about 22:15 UK (session with Tim: Roblox is not in the game, replaced by Netflix). Earlier entries: see the review log (section 6).
 
 This doc is the narrative record for Tim's entry, "Seeking Beta". The procedure for every run is in `claude/ft-game-playbook.md` (the core doc) and the docs its routing table names. The numbers (prices, scores, daily performance, contributions, ratings and their outcomes, the full calendar, analyst changes, alerts, the panel test, the drift record) live in the data files behind Tim's page and the panel file, and are produced by the pipeline script; this doc carries the decisions and the reasons.
 
@@ -12,45 +12,45 @@ Scheduled runs: evening review 21:30 UK Sun to Thu; morning check 07:26 UK Mon t
 
 ## 1. Status
 
-- **Playbook version 6.15.1** (6.15.1, 3 Nov about 23:20: page only, hover details, calendar, log and tables; 6.15, 3 Nov late evening: results-day refresh only for stocks on the list, 17:04 UK price refresh, late refreshes not an issue, watchlist under the stance in core part D, page redesigned; 6.14.3, 29 Oct evening: runs no longer delete superseded data assets, data doc G5 step 4; G5 step 5 checks the store's size instead; 6.14.2, 27 Oct: feed 1.2.1 takes Japan's 10-year from CNBC first; 6.14.1, 26 Oct: the five non-US 10-year yields from the price feed; 6.14, 26 Oct: cut-off 08:00 UK, pipeline 7.8 from commit `9760163`, nightly watchdog 22:47 UK; 6.13.2: flag and fix every issue; 6.13.1: the script run from the repository; 6.13, 21 Oct: the endgame stance in core part D; earlier versions in the playbook header). **Pipeline script version 7.8** (part B holds the asset id, the run commit and the hash). The 9 Nov evening review ran it from commit `9760163` (hash matched part B).
-- **Estimated value at Mon 9 Nov close: 84,991, -15.01% since the start, against -3.03% for the S&P 500 fund (gap -11.98 points).** Mon 9 Nov +3.00% against SPY +2.37%: AppLovin +0.96 points, Meta +0.77, Qualcomm +0.55, NetApp +0.41, Netflix +0.13, Spotify +0.10, Salesforce +0.09. Fri 6 Nov +7.89%; week of 2 Nov -12.11% against SPY -2.70%.
+- **Playbook version 6.15.1** (6.15.1, 3 Nov about 23:20: page only, hover details, calendar, log and tables; 6.15, 3 Nov late evening: results-day refresh only for stocks on the list, 17:04 UK price refresh, late refreshes not an issue, watchlist under the stance in core part D, page redesigned; 6.14.3, 29 Oct evening: runs no longer delete superseded data assets, data doc G5 step 4; G5 step 5 checks the store's size instead; 6.14.2, 27 Oct: feed 1.2.1 takes Japan's 10-year from CNBC first; 6.14.1, 26 Oct: the five non-US 10-year yields from the price feed; 6.14, 26 Oct: cut-off 08:00 UK, pipeline 7.8 from commit `9760163`, nightly watchdog 22:47 UK; 6.13.2: flag and fix every issue; 6.13.1: the script run from the repository; 6.13, 21 Oct: the endgame stance in core part D; earlier versions in the playbook header). **Pipeline script version 7.8** (part B holds the asset id, the run commit and the hash). The 10 Nov evening review ran it from commit `9760163` (hash matched part B).
+- **Estimated value at Tue 10 Nov close: 84,275, -15.73% since the start, against -3.39% for the S&P 500 fund (gap -12.33 points).** Tue 10 Nov -0.84% against SPY -0.37%: AppLovin -0.71 points, Netflix -0.16, Salesforce -0.10, Spotify -0.05, NetApp -0.01, Meta 0.00, Qualcomm +0.18. Mon 9 Nov +3.00%; Fri 6 Nov +7.89%; week of 2 Nov -12.11% against SPY -2.70%.
 - **Last FT figures: Mon 2 Nov close, 89,956 (-10.04%), rank 11,537 (number of players not recorded; the top 2% line is about rank 307).** Read off the FT site by Tim late on 3 Nov, before it updated. `reported` row with top2_return_pct 10.29 (Cautious, rank 316; Owen'sbigmoney, rank 195, at +11.64%). RECONCILE +142 credits (+0.16%). Previous: Mon 26 Oct close, 100,973, rank 3,994 of 14,736.
-- **Standstill (9 Nov evening review):** change for 30 Oct +0.61, 2 Nov -4.00, 3 Nov -0.45, all complete; 5 Nov -1.48 after three sessions; 6 Nov +3.39 after two. Week of 26 Oct +5.58; week of 2 Nov +0.68. Inception (22 sessions): -11.85 as entered, -10.76 fully invested. EXPECTED BENEFIT: six settled, expected 0.0, actual -2.11, sign right in 3 of 6.
+- **Standstill (10 Nov evening review):** change for 30 Oct +0.61, 2 Nov -4.00, 3 Nov -0.45, all complete; 5 Nov -1.49 after four sessions; 6 Nov +3.64 after three. Week of 26 Oct +5.58; week of 2 Nov +0.68. Inception (23 sessions): -12.36 as entered, -11.20 fully invested. EXPECTED BENEFIT: six settled, expected 0.0, actual -2.11, sign right in 3 of 6.
 - **Panel test (all 30 members loaded):** history verdict "no evidence" (average rank correlation +0.044, t +1.2, 58 dates). Live: three dates (-0.101), too few to judge. Strongest parts in history: one-year return against the index +0.095 (t +1.9), two-month +0.059 (t +1.8), neither at t 2. The score is frozen.
-- **Order in force for Tue 10 Nov's open (unchanged by the Mon 9 Nov evening review, a quiet evening; set by the Thu 5 Nov evening review, corrected about 22:10 UK on 5 Nov when Roblox proved not to be in the game):** AppLovin 20, Meta Platforms 15, Qualcomm 15, Netflix 15, Salesforce 15, Spotify 10, NetApp 10, cash 0.
-- Day call record (S&P 500): 13 right of 20. Tue 10 Nov's call (Mon 9 Nov review): S&P 500 Green 54% against a usual 55%, portfolio Green 56% against a usual 54%, no reviewer adjustment (relief rally and falling oil against CPI risk). Close to a coin flip.
-- Macro at Mon 9 Nov: US 2-year 4.56% (+5bp; -3bp over five), 10-year 4.88% (+2bp; -3bp over five), 30-year 5.26%. UK 10-year 5.14% (-2bp; -6bp over five), Germany 3.25%, France 4.72%, Italy 4.31%, Japan 2.67% (all from the feed). Brent $92.84 (-5.2%; -10.9% over five), WTI $87.07, natural gas $3.21, gold $4,148 (futures fallback). CME FedWatch: about 84% for a December hike (Kiplinger). Backdrop label: tailwind.
-- Crypto: Bitcoin $74,760 at the Monday US close (-1.3% on the day, -2.5% over five). Trend **mixed** (IBIT 7.5% below its 50-day, 6.6% below its 20-day, 2.6% above its 200-day); Ether's trend down. No crypto-linked buy; no crypto-linked holding.
-- Regime: mixed (from risk-off). Mon 9 Nov: S&P 500 +2.35% to 7,549.94, Nasdaq +2.74% to 25,253.14, Dow +2.15% to 52,389.75, Russell 2000 +3.17%; VIX 20.02 (-21.9%) (Yahoo Finance, Kiplinger). Dip buying after the tech rout; AMD +13.3% on an Oppenheimer upgrade, memory +6% to +10%; Nvidia -4.3% on heavy volume over the investigation of Jensen Huang. Brent -5% on Trump's restraint on Iran.
+- **Order in force for Wed 11 Nov's open (unchanged by the Tue 10 Nov evening review, a quiet evening; set by the Thu 5 Nov evening review, corrected about 22:10 UK on 5 Nov when Roblox proved not to be in the game):** AppLovin 20, Meta Platforms 15, Qualcomm 15, Netflix 15, Salesforce 15, Spotify 10, NetApp 10, cash 0.
+- Day call record (S&P 500): 13 right of 21. Wed 11 Nov's call (Tue 10 Nov review): S&P 500 Green 53% against a usual 55%, portfolio Green 52% against a usual 54%, no reviewer adjustment (hot CPI against a below-average close and falling oil). Close to a coin flip.
+- Macro at Tue 10 Nov: US 2-year 4.73% (+17bp; +12bp over five), 10-year 4.98% (+10bp; +3bp over five), 30-year 5.35%. UK 10-year 5.21% (+7bp; -4bp over five), Germany 3.30%, France 4.79%, Italy 4.38%, Japan 2.69% (all from the feed). Brent $91.98 (-0.9%; -12.0% over five), WTI $86.45, natural gas $3.30, gold $4,039 (futures fallback). CME FedWatch: about 90% for a December quarter-point hike, 10% for a half point (Kiplinger). Backdrop label: tailwind (oil).
+- Crypto: Bitcoin $73,686 at the Tuesday US close (-1.4% on the day, -5.3% over five). Trend **mixed** (IBIT 8.8% below its 50-day, 7.4% below its 20-day, 1.2% above its 200-day); Ether's trend down. No crypto-linked buy; no crypto-linked holding.
+- Regime: mixed. Tue 10 Nov: S&P 500 -0.4% to 7,520, Nasdaq -0.7% to 25,065, Dow -0.3% to 52,231 (Kiplinger). October CPI +0.4% m/m (forecast +0.3%), core +0.3% (forecast +0.2%) (HNGN); 2-year +17bp. Nvidia -5.5% on 3.1 times volume over the board's probe of its chief executive; the Anthropic IPO pricing weighed on tech (Kiplinger).
 
 ## 2. Current portfolio
 
-The order in force for Tue 10 Nov's open (unchanged since Fri 6 Nov). Scores and bands from the pipeline at the Mon 9 Nov close (9 Nov evening review). Under the endgame stance (core part D) the score floor, trend tests, volatility caps, theme guide and results budget do not apply; the NOTE lines for them are expected.
+The order in force for Wed 11 Nov's open (unchanged since Fri 6 Nov). Scores and bands from the pipeline at the Tue 10 Nov close (10 Nov evening review). Under the endgame stance (core part D) the score floor, trend tests, volatility caps, theme guide and results budget do not apply; the NOTE lines for them are expected.
 
 | Stock | Weight | Confidence (not calibrated) | Score | Band | Flags | Next results (implied move) | Swap if missing or broken |
 |---|---|---|---|---|---|---|---|
-| AppLovin | 20% | 55 | 54 | Weak | downtrend (50-day below 200-day), extended, overbought | Reported 4 Nov; next Feb (est.) | Netflix |
+| AppLovin | 20% | 55 | 41 | Weak | downtrend (50-day below 200-day), extended | Reported 4 Nov; next Feb (est.) | Netflix |
 | Meta Platforms | 15% | 50 | 45 | Middling | below 50-day | Late Jan (est.) | Spotify |
-| Qualcomm | 15% | 50 | 45 | Middling | below 50-day | Reported 4 Nov; next Feb (est.) | Arm Holdings |
-| Netflix | 15% | 50 | 30 | Weak | below 50-day, downtrend | Jan (est., after the game) | IBM (20-day volume not checked) |
-| Salesforce | 15% | 50 | 31 | Weak | below 50-day | Early Dec (est., after the game) | Spotify |
-| Spotify | 10% | 50 | 60 | Strong | none | Feb (est.) | Netflix |
-| NetApp | 10% | 50 | 43 | Weak | below 50-day | 25 Nov, after US close (est.; no implied move yet) | Spotify |
+| Qualcomm | 15% | 50 | 43 | Weak | below 50-day | Reported 4 Nov; next Feb (est.) | Arm Holdings |
+| Netflix | 15% | 50 | 23 | Weak | below 50-day, downtrend | Jan (est., after the game) | IBM (20-day volume not checked) |
+| Salesforce | 15% | 50 | 29 | Weak | below 50-day, oversold | Early Dec (est., after the game) | Spotify |
+| Spotify | 10% | 50 | 58 | Middling | none | Feb (est.) | Netflix |
+| NetApp | 10% | 50 | 41 | Weak | below 50-day | 25 Nov, after US close (est.; no implied move yet) | Spotify |
 | Cash | 0% | | | | | | |
 
-Exit check on Mon 9 Nov: no holding closed below its open; all seven closed above (AppLovin +5.75% open to close on 1.34 times average volume, Qualcomm +3.96% on 1.22 times, NetApp +2.61%, Meta +1.64%, Spotify +1.18%, Netflix +1.03%, Salesforce +0.09%).
+Exit check on Tue 10 Nov (20-day average volume from stored rows): no heavy-volume close below the open. AppLovin closed 2.49% below its open on 0.95 times average volume (profit-taking after a six-day 79% run; TradingKey, Trefis), Salesforce 0.51% below on 1.00 times, Netflix 0.30% below on 0.57 times; Qualcomm +2.84% from its open, Meta +0.65%, Spotify +0.63%, NetApp +0.02%, all on light volume.
 
-Themes: Software 75%, AI and chips 25%. Largest risk shares: AppLovin 47%, Qualcomm 18.6%, Meta 14.2%, Netflix 9.2%; estimated daily volatility 1.91%. Worst scenario: a deeper AI sell-off, -6.5%. The concentration is deliberate under the stance.
+Themes: Software 75%, AI and chips 25%. Largest risk shares: AppLovin 47.3%, Qualcomm 18.4%, Meta 14.1%, Netflix 9.3%; estimated daily volatility 1.92%. Worst scenario: a deeper AI sell-off, -6.5%. The concentration is deliberate under the stance.
 
 Points for the coming reviews:
 
 - Still open from 5 Nov: the memory breakdown named in the stance has happened; a change of direction is Tim's call (question 1a).
-- Tue 10 Nov: US CPI (October), 13:30 UK, forecast headline +0.3% m/m, core +0.2% (previous +0.6%, +0.3%; FXEmpire). CoreWeave reports after the close the same day.
-- Wed 11 Nov: US bond market closed (Veterans Day); stocks open. Thu 12 Nov: Cisco and Applied Materials after the close. Fri 13 Nov: PPI.
-- Analyst targets and next-result dates of the holdings were not refreshed on 8 or 9 Nov.
-- Coherent gave its second strong close on 9 Nov (+14.0% from its open on 1.67 times volume): first stance candidate if a holding exits. AMD (+13.3%, Oppenheimer upgrade) is the other.
-- Sold and kept on the list five sessions: Sandisk, Seagate, Western Digital, AMD, ServiceNow, Amazon (to Thu 12 Nov); Micron, Monolithic Power (to Wed 11 Nov). Palantir's five sessions passed on 9 Nov; it stays as a stance name.
-- Iran: Brent -5% on 9 Nov on Trump's restraint and reports of a Qatar-brokered Hormuz deal; shipping attacks continue.
+- AppLovin: securities class action lead-plaintiff deadline 16 Nov and the SEC inquiry are named risks (TradingKey); watch for a heavy-volume close below the open.
+- Wed 11 Nov: US bond market closed (Veterans Day); stocks open. CoreWeave reported after the close on 10 Nov: revenue $3.66bn against $3.54bn, loss $1.27 a share against $1.55, FY26 revenue guide raised to $13.0bn to $13.3bn (24/7 Wall St); after-hours move not read. Its reaction day is 11 Nov: a drift candidate for tomorrow's review if it is stance-eligible.
+- Thu 12 Nov: Cisco and Applied Materials after the close. Fri 13 Nov: PPI; from 13 Nov the rank stance is stated first (outside the target: keep risk on).
+- Analyst targets and next-result dates of the holdings were not refreshed on 8, 9 or 10 Nov.
+- Candidates if a holding exits: Broadcom (second strong close, +4.80% from its open on 1.13 times volume), Cloudflare (third recovery session), AMD (+2.43% from its open on 1.63 times volume).
+- Sold and kept on the list five sessions: Sandisk, Seagate, Western Digital, AMD, ServiceNow, Amazon (to Thu 12 Nov); Micron, Monolithic Power (to Wed 11 Nov).
 - Bitcoin's trend is mixed: no crypto-linked buy.
 
 ## 3. Pending order
@@ -59,31 +59,31 @@ Points for the coming reviews:
 
 ## 4. Watchlist
 
-21 names after tonight. Scores and bands at the Mon 9 Nov close. Added tonight: Broadcom (scan Event, +8.8%). Removed: none (Arm Holdings kept as Qualcomm's swap, Nvidia as the AI bellwether reporting 18 Nov; the other ROTATE OUT names were sold inside five sessions or added under three sessions ago).
+21 names after tonight. Scores and bands at the Tue 10 Nov close. Added tonight: none (the scan's one Event, Take-Two, failed the drift tests; its 30 Leaders are health care, retail, industrials and London names the stance bars). Removed: none (every ROTATE OUT name was sold inside five sessions, added under three sessions ago, is Qualcomm's swap, or is a stance name; Nvidia kept as the AI bellwether reporting 18 Nov).
 
 | Name | Band | Status | Score | Note |
 |---|---|---|---|---|
-| Microsoft | Strong | Watching | 80 | +2.75% on 9 Nov, 0.13% above its open on 1.03 times volume. Promote on a heavy-volume close above its open. |
-| Block | Strong | Watching | 77 | +3.60%, 1.79% above its open on 1.24 times volume. |
-| Apple | Strong | Watching | 73 | +2.43%. Memory costs its main risk. |
-| CDW | Strong | Watching | 70 | +4.85%, 5.94% above its open. |
-| Monolithic Power Systems | Weak | Exit signal (sold for 5 Nov) | 67 | +16.6% on 9 Nov on 1.50 times volume. Listed to Wed 11 Nov. |
-| AMD | Middling | Exit signal (sold for 6 Nov) | 66 | +13.3% on 1.88 times volume (scan Event), Oppenheimer upgrade to Outperform. Listed to Thu 12 Nov; candidate if a holding exits. |
-| Amazon | Strong | Exit signal (sold for 6 Nov) | 61 | Closed 0.89% below its open on 1.05 times volume. Listed to Thu 12 Nov. |
-| Cloudflare | Middling | Faded gap: wait | 60 | +9.3%, 5.86% above its open on 1.58 times volume: a second-day recovery after the 6 Nov fade. |
-| Seagate | Middling | Exit signal (sold for 6 Nov) | 46 | +9.8%. Listed to Thu 12 Nov. |
-| Palantir | Middling | Watching | 45 | +5.5%, 4.92% above its open on 0.89 times volume. Five sessions after its sale passed 9 Nov. |
-| Shopify | Middling | Exit signal | 45 | +2.1% on light volume. |
-| Coherent | Weak | Second strong close | 44 | +16.8%, 14.0% above its open on 1.67 times volume after +13.6% on 6 Nov. First stance candidate if a holding exits. |
-| Sandisk | Weak | Exit signal (sold for 6 Nov) | 42 | +6.2% on 1.31 times volume. Listed to Thu 12 Nov. |
-| Arm Holdings | Weak | Exit signal | 38 | Swap for Qualcomm. |
-| Micron | Weak | Exit signal | 36 | +6.3%. Listed to Wed 11 Nov. |
-| Western Digital | Weak | Exit signal (sold for 6 Nov) | 34 | +9.9%. Listed to Thu 12 Nov. |
-| Broadcom | Weak | Watching | 34 | Added 9 Nov. Scan Event: +8.8%, gap +3.9%, close 81% up the range on 1.5 times volume; below its 50-day. Promote on a second strong close. |
-| Coinbase | Weak | Watching | 33 | Crypto tracker. |
-| ServiceNow | Weak | Exit signal (sold for 6 Nov) | 30 | Listed to Thu 12 Nov. |
-| Strategy | Weak | Exit signal | 28 | Crypto tracker. |
-| Nvidia | Weak | Exit signal | 27 | -4.3% on 3.9 times volume (investigation of its chief executive), though 3.25% above its open. Reports 18 Nov (est.). |
+| CDW | Strong | Watching | 73 | +2.89%, 2.83% above its open on 0.83 times volume. |
+| Microsoft | Strong | Watching | 67 | Closed 1.89% below its open on 1.03 times volume. Promote on a heavy-volume close above its open. |
+| Block | Strong | Watching | 66 | Closed 2.75% below its open on 0.83 times volume. |
+| Amazon | Strong | Exit signal (sold for 6 Nov) | 65 | +1.48%, 1.70% above its open. Listed to Thu 12 Nov. |
+| Apple | Strong | Watching | 65 | -0.62% on light volume. Memory costs its main risk. |
+| Cloudflare | Middling | Faded gap: wait | 64 | +4.10%, 3.66% above its open on 1.13 times volume: third recovery session. Candidate if a holding exits. |
+| AMD | Middling | Exit signal (sold for 6 Nov) | 63 | +1.30%, 2.43% above its open on 1.63 times volume. Listed to Thu 12 Nov; candidate if a holding exits. |
+| Monolithic Power Systems | Weak | Exit signal (sold for 5 Nov) | 57 | Listed to Wed 11 Nov. |
+| Shopify | Middling | Exit signal | 47 | Closed 2.60% below its open on 0.70 times volume. |
+| Seagate | Weak | Exit signal (sold for 6 Nov) | 44 | Listed to Thu 12 Nov. |
+| Palantir | Weak | Watching | 43 | Flat on light volume. Stance name. |
+| Broadcom | Weak | Second strong close | 37 | +3.91%, 4.80% above its open on 1.13 times volume, 85% up the range; below its 50-day. Candidate if a holding exits. |
+| Micron | Weak | Exit signal | 34 | Listed to Wed 11 Nov. |
+| Coherent | Weak | Watching | 33 | -4.68%, just below its open on 1.16 times volume after two strong closes. Wait for a fresh strong close. |
+| Sandisk | Weak | Exit signal (sold for 6 Nov) | 32 | Listed to Thu 12 Nov. |
+| Western Digital | Weak | Exit signal (sold for 6 Nov) | 32 | Listed to Thu 12 Nov. |
+| Arm Holdings | Weak | Exit signal | 31 | Swap for Qualcomm. |
+| ServiceNow | Weak | Exit signal (sold for 6 Nov) | 27 | Listed to Thu 12 Nov. |
+| Strategy | Weak | Exit signal | 25 | Crypto tracker. |
+| Coinbase | Weak | Watching | 25 | Crypto tracker. |
+| Nvidia | Weak | Exit signal | 21 | -5.47% on 3.1 times volume over the board's probe of its chief executive. Reports 18 Nov (est.). |
 
 ## 5. Trade log
 
@@ -109,6 +109,7 @@ Points for the coming reviews:
 
 ## 6. Review log (newest first, keep the latest 15)
 
+- Tue 10 Nov 2026 (about 21:45): Evening review, a quiet evening: no change for Wed 11 Nov's open (no holding closed below its open on heavy volume; AppLovin -2.49% from its open on 0.95 times). 10 Nov -0.84% against SPY -0.37%, value 84,275. Started 21:31 UK, on time. Pipeline 7.8 from commit `9760163`, hash matched. Price feed: forced (scheduled run still on 9 Nov; forced run generated 21:32 UTC, again 21:35 UTC for TTWO), nothing refused or missing. Non-US yields from the feed; commodities from the futures fallback. Broad scan: forced (1 Event, 30 Leaders). Drift: Take-Two FAIL (beat missing: bookings below consensus, EPS bases differ; guidance reaffirmed; below its 200-day). No additions or removals. CPI actual stored. Files published (store 149 MB, 175 files; no deletes). WARNINGs: APP 2024-11-07, FLEX 2026-05-06, BE 2024-11-15, known. Pages not read: StreetInsider (AppLovin), Benzinga (CoreWeave), Chartmill (Take-Two) (client errors). Research much lighter than the usual 25 to 40 sources (about eight pages and searches); analyst changes and holdings' targets not read; CoreWeave after-hours move not read. No ISSUE this run.
 - Mon 9 Nov 2026 (about 21:45): Evening review, a quiet evening: no change for Tue 10 Nov's open (every holding closed above its open). 9 Nov +3.00% against SPY +2.37%, value 84,991. Started 21:32 UK, on time. Pipeline 7.8 from commit `9760163`, hash matched. Price feed: forced (scheduled run at 21:00 UTC still on 6 Nov; forced run generated 21:33 UTC), nothing refused or missing. Non-US yields from the feed; commodities from the futures fallback. Broad scan: forced (5 Events, 30 Leaders). Drift: no reporter on the list or among the stance-eligible Events tonight (Constellation Energy, Ferguson, Franklin Resources outside the stance), so no entries. Added Broadcom; no removals. Files published (store 138 MB, 165 files; no deletes). WARNINGs: APP 2024-11-07, FLEX 2026-05-06, BE 2024-11-15, known. Page not read: Benzinga's trending-stocks page (client error). Research much lighter than the usual 25 to 40 sources (four pages and searches); analyst changes beyond AMD's upgrade and holdings' targets not read; CoreWeave implied move not read. No ISSUE this run.
 - Sun 8 Nov 2026 (about 21:45): Evening review, a quiet evening: no change for Mon 9 Nov's open (no holding closed below its open on heavy volume on 6 Nov; NetApp -3.31% from its open on 1.00 times volume). No new session (Friday logged by the weekly review). Started 21:33 UK, on time. Pipeline 7.8 from commit `9760163`, hash matched. Price feed: current (Fri 6 Nov), then forced at 21:35 UTC for Coherent (549 rows, two years), nothing refused or missing. Non-US yields from the feed; commodities from the futures fallback. Broad scan: current (4 Events, 30 Leaders). Drift: Cloudflare FAIL (held; volume and trend missing from the feed). Added Coherent; removed Datadog, Broadcom, Alphabet. Week's calendar stored (CPI and PPI forecasts, bond market closed 11 Nov, CoreWeave, Cisco, Applied Materials). Files published (store 126 MB, 155 files; no deletes). WARNINGs: APP 2024-11-07, FLEX 2026-05-06, BE 2024-11-15, known. Weekend B items confirmed from AND Magazine's 8 Nov brief (citing Al Jazeera, CENTCOM, CNN). Page not read: straits.live (client error). Research lighter than the usual 25 to 40 sources; analyst changes and holdings' targets not read. No ISSUE this run.
 - Sun 8 Nov 2026 (about 20:30): Weekend news check (Sunday). No A item; one B item (Sunday escalation in Hormuz: the IRGC says three tankers caught fire, CENTCOM disabled the M/V Huda, the IRGC lifted its 2,000 km missile range limit, missiles over Riyadh and an Aramco office damaged; against that, Trump told CNN new strikes are "highly unlikely" if talks progress and Araghchi said Iran's Hormuz proposal stands). Saudi TASI -0.52%; IG Weekend Wall Street -0.1%. Pipeline 7.8 from commit `9760163`, hash matched; one alert added through `refresh`, ledger published (store 122 MB, 152 files; no deletes). Page not read: Al Arabiya (client error; the same story read on Gulf News). No ISSUE this run. Order unchanged.
@@ -123,11 +124,12 @@ Points for the coming reviews:
 - Tue 3 Nov 2026 (about 23:00): Session with Tim. Playbook 6.15, page redesigned. Exit rule tested on stored prices: no change (roadmap item 69). Order unchanged. No open ISSUE; the midday task still to be switched off by Tim.
 - Tue 3 Nov 2026 (about 21:45): Evening review, a quiet evening: no holding gave an exit signal (Micron, Seagate, WDC closed below their opens on volume under 1.3 times). 3 Nov +1.99% against SPY +0.30%, value 91,605. Pipeline 7.8 from commit `9760163`, hash matched. Price feed: forced (first read 2 Nov; forced run generated 21:34 UTC, again 21:38 UTC for FISV, DD, AEIS, BE), nothing refused or missing. Non-US yields from the feed; commodities from the futures fallback. Broad scan: forced (3 Events, 30 Leaders). Drift: Palantir, Shopify, Fiserv, Advanced Energy all FAIL; DuPont left out (its results page was rate limited). Added Advanced Energy, Bloom Energy; removed Robinhood, Pentair. Files published (no deletes). WARNINGs: FLEX 2026-05-06 and CNC 2025-07-02 known genuine; BE 2024-11-15 (+59.2%) from the feed's new two-year history, believed genuine (AEP deal), not re-checked. Pages not read: CNBC article pages (site errors), investing.com and 24/7 Wall St's AMD live page (rate limited, not re-requested). JOLTS exact figure and Fiserv's consensus revenue not read. No ISSUE this run.
 - Mon 2 Nov 2026 (about 21:45): Evening review, a change evening for Tue 3 Nov (Palantir out, ServiceNow in). 2 Nov -4.33% against SPY -0.48%, value 89,814. Pipeline 7.8 from commit `9760163`, hash matched. Price feed: forced (first read 30 Oct; forced run generated 21:32 UTC, again 21:37 UTC for IDXX), nothing refused or missing. Non-US yields from the feed; commodities from the futures fallback (no current tradingeconomics page came through the search). Broad scan: forced (1 Event, 30 Leaders). Drift: Idexx FAIL on trend, not taken. Removed CrowdStrike; no additions. Order message sent about 21:39 UK. Files published (no deletes). WARNINGs for FLEX 2026-05-06 and CNC 2025-07-02: known genuine moves. Pages not read: Benzinga's Palantir article, CNBC's oil article, Seeking Alpha, Archynewsy (site errors), investingLive's ISM page (server error), BusinessWire's Palantir release (address too long). Apple's results and Palantir's later after-hours price not found at review time. No ISSUE this run.
-- Sun 1 Nov 2026 (about 21:45): Evening review, a change evening for Mon 2 Nov (five rule exits; Micron 20, Seagate 15, Western Digital 15, Monolithic Power 10, NetApp 10, Amazon 10 in). Pipeline 7.8 from commit `9760163`, hash matched. No new session (Friday logged by the weekly review). Price feed: current (Fri 30 Oct, generated 20:51 UTC), then forced at 21:35 UTC for 17 candidate tickers. Feed REFUSED Palantir on its second run (Yahoo's revised 30 Oct low 180.81 against the stored 183.68): checked on stockanalysis.com (low 180.81, "At close: Oct 30") and the corrected row given; RECALCULATED, value unchanged. Non-US yields from the feed; commodities from the futures fallback. Broad scan: current (2 Events, 30 Leaders, all outside the stance except TXN and ADI, both already listed and both with the exit signal). Drift: Sandisk, Monolithic Power, Amazon all FAIL. Intake: two (Monolithic Power, Amazon, both bought), fewer than five because nearly every high-beta tech name closed below its open on heavy volume on 30 Oct. Removed Aon, Palo Alto Networks, Illumina, Comfort Systems USA, F5, AbbVie. NetApp results event (25 Nov, est.) added. Order message sent about 21:40 UK. Files published (store 51 MB, 84 files; no deletes). No ISSUE this run.
 
 ## 7. Market regime notes
 
-Label: Mixed (Mon 9 Nov: a broad relief rally, chips and memory leading, VIX back to 20; one session does not make risk-on). What would change it: to mixed, a session that holds its gains with chips no longer leading down; to risk-on, chips and memory closing above their opens on heavy volume for two sessions.
+Label: Mixed (Tue 10 Nov: a hot CPI print gave back part of Monday's relief rally; the 2-year rose 17bp and a December hike is about 90% priced). What would change it: to mixed, a session that holds its gains with chips no longer leading down; to risk-on, chips and memory closing above their opens on heavy volume for two sessions.
+
+Tue 10 Nov: S&P 500 -0.4% to 7,520, Nasdaq -0.7% to 25,065, Dow -0.3% to 52,231 (Kiplinger). October CPI +0.4% m/m against +0.3% forecast, core +0.3% against +0.2%; the BLS did not publish 12-month rates (HNGN). 10-year 4.98%, 2-year 4.73% (Treasury). CME FedWatch 90% for a December quarter-point hike, 10% for a half point; Waller floated a half point, Logan two more quarter points (Kiplinger, HNGN). Nvidia -5.5% on 3.1 times volume, down nearly 30% since early October, over the investigation of its chief executive; Anthropic's IPO pricing (825m shares at $70 to $78) weighed on tech (Kiplinger). Chips mixed: Broadcom +3.9%, Cloudflare +4.1%, Qualcomm +1.2%, AMD +1.3%. AppLovin -3.5% on profit-taking after a six-day 79% run (TradingKey, Trefis). Take-Two +8.3% on its GTA VI date (19 Nov) despite a bookings miss. Brent -0.9% to $91.98 (futures) as Trump held off new Iran strikes (TheStreet). After the close: CoreWeave beat and raised (24/7 Wall St).
 
 Mon 9 Nov: S&P 500 +2.35% to 7,549.94, Nasdaq +2.74%, Dow +2.15% (+1,104 points), Russell 2000 +3.17%; VIX 20.02. First day since 5 April with all three indexes up 2% or more (Kiplinger). Dip buying after last week's rout; AMD +13.3% (Oppenheimer upgrade), Micron +6.3%, Sandisk +6.2%, Monolithic Power +16.6%, Coherent +16.8%, Constellation Energy +10.5%. Nvidia -4.3% on 3.9 times volume: its board opened an independent investigation of Jensen Huang over a relationship with an executive US officials link to Chinese intelligence; the board says it has no reason to believe secrets were compromised (TheStreet via Yahoo). Brent -5.2% to about $93 on Trump calling new strikes "highly unlikely" while talks progress, despite fresh shipping attacks (Reuters via GV Wire). Take-Two -3.5% before its results.
 
@@ -153,7 +155,7 @@ Confirmed by the 8 Nov evening review (AND Magazine brief, 8 Nov 17:34 UTC, citi
 Earlier weekends: 31 Oct and 1 Nov, no A item (B items on US strike threats against Iran, Hormuz tanker attacks and the Doha talks); 24 and 25 Oct, no A item; 17 and 18 Oct, no A item.
 
 Near calendar (the full calendar to 27 Nov is on the page and in the ledger):
-- Tue 10 Nov: US CPI 13:30 UK (headline +0.3% m/m forecast, core +0.2%); CoreWeave after the close. Wed 11 Nov: US bond market closed (Veterans Day), stocks open. Thu 12 Nov: jobless claims 13:30 UK (194K forecast); Cisco and Applied Materials after the close. Fri 13 Nov: PPI 13:30 UK (+0.4% m/m forecast, core +0.3%). Wed 18 Nov (est.): Nvidia. Wed 25 Nov (est.): NetApp. Thu 26 Nov: US closed. Fri 27 Nov: US closes 18:00 UK, game ends.
+- Tue 10 Nov: US CPI +0.4% m/m, core +0.3% (hot); CoreWeave beat and raised after the close. Wed 11 Nov: US bond market closed (Veterans Day), stocks open. Thu 12 Nov: jobless claims 13:30 UK (194K forecast); Cisco and Applied Materials after the close. Fri 13 Nov: PPI 13:30 UK (+0.4% m/m forecast, core +0.3%). Wed 18 Nov (est.): Nvidia. Wed 25 Nov (est.): NetApp. Thu 26 Nov: US closed. Fri 27 Nov: US closes 18:00 UK, game ends.
 
 ## 8. Open questions for Tim
 
@@ -271,7 +273,7 @@ In this game an order fills at the open, so the gap on the news day cannot be ca
 - Shadow ratings: 640 logged, 486 settled. Live: score 70 and above, 181 cases, 53% beat the index (-1.28 points); 60 to 69, 115, 42% (-3.89); 45 to 59, 93, 25% (-6.36); below 45, 97, 38% (-3.50). Not ordered by score. Judgement test: two dates, too few.
 - Panel test: see section 1. Old backtest (hindsight) correlation +0.008.
 - Drift record: ENTER 2 settled (100% beat the index, +5.55 points); WATCH 1 settled (-3.62); FAIL 19 settled (26%, -3.15 points), 12 open.
-- Day call record (S&P 500): 13 right of 20. Twenty calls have now settled; whether that beats always saying green is for the weekly review to report, and any use needs Tim's agreement.
+- Day call record (S&P 500): 13 right of 21. Twenty-one calls have now settled; whether that beats always saying green is for the weekly review to report, and any use needs Tim's agreement.
 - Broad scan record (scan/latest.md, 6 Nov): Leaders, 110 settled, 35% beat the index, -3.81 close to close, -3.67 from the next open (first appearances 34, 32%, -3.81); Events, 29 settled, 69%, +1.34 and +0.76 (first appearances 28, 71%, +1.31 from the next open); 70 open. Previous (30 Oct): Leaders, 60 settled, 40% beat the index, mean excess -1.81 points close to close and -1.89 from the next open; Events, 9 settled, 56%, -1.31 and -1.44; 70 rows open.
 
 ## 12. Tools
@@ -281,6 +283,7 @@ In this game an order fills at the open, so the gap on the news day cannot be ca
 - Panel file: `panel.json` on the same artifact, named by the document `store/panel`.
 - Scripts: the pipeline (version 7.8; runs take it from the repository at the commit in data doc G1) and the screening script are assets on that artifact. Their ids and hashes are in part B of the playbook, the only place they are kept.
 - Price feed (data doc G8): `feed/latest.json` and `feed/live.json` in the repository, with the non-US 10-year yields under `macro.intl_yields`. 1 Nov: current for Fri 30 Oct, then a forced run at 21:35 UTC for 17 tickers (two years each for the two new holdings). It refused Palantir on a revised low; the stockanalysis.com history page confirmed the revision.
+- Pages reached through searches on 10 Nov: Kiplinger, HNGN, TheStreet (live blog), TradingKey (AppLovin), 24/7 Wall St (CoreWeave card), Yahoo Finance (Take-Two). Refused or failed: StreetInsider, Benzinga, Chartmill (client errors).
 - Pages reached through searches on 9 Nov: Kiplinger, Yahoo Finance (TheStreet market article), 24/7 Wall St, GV Wire (Reuters oil). Refused or failed: Benzinga (client error).
 - Pages reached through searches on 8 Nov: Cloudflare's release, 24/7 Wall St (Cloudflare card; Coherent), Trefis (Coherent), Vanderbilt Report and FXEmpire (week ahead), AND Magazine (weekend brief). Refused or failed: straits.live (client error).
 - Pages reached through searches on 5 Nov: AP via VIN News, Yahoo Finance live page, 24/7 Wall St (memory), Kiplinger, Euronews, Motley Fool, JournalArta, TokenPost, StockStory (AppLovin). Search snippets only: US News, Al Jazeera, Gulf News, tech-insider, Cryptobriefing and StockStory (Cloudflare). Refused or failed: KRMG, CNBC, Benzinga, StockTitan, Invezz, Stockhouse, FinancialContent, Futu (no content), 247wallst's Cloudflare page, Investing.com (rate limited).
@@ -288,6 +291,6 @@ In this game an order fills at the open, so the gap on the news day cannot be ca
 - Pages reached through searches on 3 Nov: TheStreet (closes), Yahoo Finance live page, ZeroHedge, Bank of Vol, investingLive (AMD), SEC (Fiserv 8-K), Grafa and StockStory (Shopify, Advanced Energy), MarketBeat (Bloom), 24/7 Wall St (memory), TIKR (Seagate). Refused or failed: CNBC article pages (site errors); investing.com and 24/7 Wall St's AMD live page (rate limited).
 - Market data service: massive.com, free plan, on an account opened by Tim's father. The key is in the evening and weekly review tasks and is never written into this project's docs, the page data, alerts or messages. Not used on 3 Nov (the feed covered every price).
 - Sources that did not work: Alphastreet, Chartmill and Rolling Out article pages (29 Oct); Benzinga article pages (28 Oct); CNBC article pages; gurufocus news pages and EBC; CNN article pages; Detroit News; Fortune's Bitcoin price page; capital.com news pages. tradingeconomics' news pages carry no statistics table.
-- Artifact leftovers: superseded data assets stay in the store (playbook 6.14.3). 9 Nov evening: 138 MB of 1 GB used, 165 files.
+- Artifact leftovers: superseded data assets stay in the store (playbook 6.14.3). 10 Nov evening: 149 MB of 1 GB used, 175 files.
 - GitHub mirror: private repository `timzwang/ft-game` (part B and G6).
 - Two saved skills, `ft-game-playbook` and `stock-score`, load in scheduled runs; the project docs win where they differ.
