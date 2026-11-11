@@ -69,3 +69,4 @@ tickers: COHR
 2026-11-10 17:05 UK live
 2026-11-10 19:22 UK live request (late price refresh)
 tickers: TTWO
+2026-11-11 07:29 UK morning check
