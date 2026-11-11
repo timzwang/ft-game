@@ -72,3 +72,4 @@ tickers: TTWO
 2026-11-11 07:29 UK morning check
 2026-11-11 17:05 UK live request
 2026-11-11 19:23 UK live
+tickers: CRWV
