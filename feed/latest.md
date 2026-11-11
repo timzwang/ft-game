@@ -1,6 +1,6 @@
 # Price feed: US session 2026-11-11, London 2026-11-11
 
-Generated 2026-11-11T21:35:43+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 104 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
+Generated 2026-11-11T21:36:43+00:00 UTC (feed version 1.2.1 (27 Oct 2026)). 104 tickers. Every row is checked against the stored prices; the pipeline's `feed` command checks it again before use.
 
 - Missing: none
 - Last bar not the session: none
@@ -145,7 +145,7 @@ Non-US 10-year yields for 2026-11-11 (the first figure dated the session; feed 1
 
 Futures (fallback only; the stored series are tradingeconomics figures):
 
-- brent: BZ=F 92.54 (2026-11-11)
-- wti: CL=F 86.39 (2026-11-11)
+- brent: BZ=F 92.55 (2026-11-11)
+- wti: CL=F 86.42 (2026-11-11)
 - natgas: NG=F 3.25 (2026-11-11)
 - gold: GC=F 3,991.40 (2026-11-11)

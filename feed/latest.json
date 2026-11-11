@@ -2,7 +2,7 @@
  "meta": {
   "feed_version": "1.2.1 (27 Oct 2026)",
   "mode": "close",
-  "generated_utc": "2026-11-11T21:35:43+00:00",
+  "generated_utc": "2026-11-11T21:36:43+00:00",
   "session_us": "2026-11-11",
   "session_uk": "2026-11-11",
   "tickers": 104,
@@ -162832,17 +162832,17 @@
    "brent": {
     "symbol": "BZ=F",
     "date": "2026-11-11",
-    "close": 92.54
+    "close": 92.55
    },
    "wti": {
     "symbol": "CL=F",
     "date": "2026-11-11",
-    "close": 86.39
+    "close": 86.42
    },
    "natgas": {
     "symbol": "NG=F",
     "date": "2026-11-11",
-    "close": 3.246
+    "close": 3.247
    },
    "gold": {
     "symbol": "GC=F",
