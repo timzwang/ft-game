@@ -1,3 +1,3 @@
-21:44:07Z tickers: 104 (103 US symbols, 1 London; 30 panel stocks)
-21:44:13Z session: US 2026-11-11, London 2026-11-11
-21:44:13Z this session is already in latest.json: nothing to do
+22:15:33Z tickers: 101 (100 US symbols, 1 London; 30 panel stocks)
+22:15:40Z session: US 2026-11-11, London 2026-11-11
+22:15:40Z this session is already in latest.json: nothing to do
