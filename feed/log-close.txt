@@ -1,3 +1,6 @@
-21:58:56Z tickers: 77 (76 US symbols, 1 London; 30 panel stocks)
-21:59:04Z session: US 2026-11-16, London 2026-11-16
-21:59:04Z this session is already in latest.json: nothing to do
+21:32:07Z tickers: 77 (76 US symbols, 1 London; 30 panel stocks)
+21:32:14Z session: US 2026-11-17, London 2026-11-17
+21:32:33Z treasury: 6 rows, last 2026-11-17
+21:32:35Z coins: btc 63915.0, eth 1798.38, sol 73.03, xrp 0.9676
+21:32:36Z non-US 10-year yields: uk10y 5.3905 (cnbc), de10y 3.3736 (cnbc), fr10y 4.8733 (cnbc), it10y 4.4329 (cnbc), jp10y 2.884 (cnbc previous close)
+21:32:36Z written: 77 tickers; missing none; stale none; mismatched none; short of 200 sessions none; ranges widened ['HPE 2026-11-17']
