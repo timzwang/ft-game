@@ -2,645 +2,50 @@
  "meta": {
   "feed_version": "1.2.1 (27 Oct 2026)",
   "mode": "live",
-  "read_utc": "2026-11-16T19:23:35+00:00",
-  "read_uk": "19:23",
-  "quotes": 54,
+  "read_utc": "2026-11-17T07:28:37+00:00",
+  "read_uk": "07:28",
+  "quotes": 0,
   "note": "Yahoo quotes can lag the market by up to about 15 minutes; read_utc is when the feed read them."
  },
- "quotes": {
-  "AAPL": {
-   "price": 351.74,
-   "prev_close": 356.27,
-   "open": 357.1,
-   "high": 357.1,
-   "low": 351.67,
-   "volume": 20780973,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "AAPL"
-  },
-  "ABBV": {
-   "price": 295.17,
-   "prev_close": 295.03,
-   "open": 299.98,
-   "high": 301.18,
-   "low": 295.09,
-   "volume": 1910205,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "ABBV"
-  },
-  "ABNB": {
-   "price": 186.24,
-   "prev_close": 186.78,
-   "open": 184.38,
-   "high": 188.98,
-   "low": 180.56,
-   "volume": 4010705,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "ABNB"
-  },
-  "ADI": {
-   "price": 387.99,
-   "prev_close": 397.97,
-   "open": 387.26,
-   "high": 389.3499,
-   "low": 380.89,
-   "volume": 1508920,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "ADI"
-  },
-  "AMD": {
-   "price": 508.74,
-   "prev_close": 534.06,
-   "open": 503.45,
-   "high": 526.1999,
-   "low": 502.22,
-   "volume": 25448629,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "AMD"
-  },
-  "AMZN": {
-   "price": 258.09,
-   "prev_close": 266.66,
-   "open": 262.71,
-   "high": 262.92,
-   "low": 256.83,
-   "volume": 29091054,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "AMZN"
-  },
-  "ANET": {
-   "price": 186.39,
-   "prev_close": 197.29,
-   "open": 188.94,
-   "high": 191.06,
-   "low": 184.44,
-   "volume": 4155670,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "ANET"
-  },
-  "APP": {
-   "price": 411.955,
-   "prev_close": 409.1,
-   "open": 415.28,
-   "high": 418.7665,
-   "low": 404.78,
-   "volume": 3228531,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "APP"
-  },
-  "ARM": {
-   "price": 177.11,
-   "prev_close": 190.53,
-   "open": 180.445,
-   "high": 181.73,
-   "low": 174.6401,
-   "volume": 3134142,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "ARM"
-  },
-  "AVGO": {
-   "price": 333.61,
-   "prev_close": 347.01,
-   "open": 332.695,
-   "high": 337.74,
-   "low": 327.8,
-   "volume": 14115017,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "AVGO"
-  },
-  "CDW": {
-   "price": 166.6,
-   "prev_close": 171.65,
-   "open": 171.65,
-   "high": 171.75,
-   "low": 165.6801,
-   "volume": 674876,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "CDW"
-  },
-  "COHR": {
-   "price": 205.27,
-   "prev_close": 218.15,
-   "open": 201.36,
-   "high": 208.15,
-   "low": 196.12,
-   "volume": 5306903,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "COHR"
-  },
-  "COIN": {
-   "price": 120.07,
-   "prev_close": 127.65,
-   "open": 119.31,
-   "high": 122.98,
-   "low": 117.32,
-   "volume": 7644738,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "COIN"
-  },
-  "CRM": {
-   "price": 216.145,
-   "prev_close": 217.84,
-   "open": 217.92,
-   "high": 219.2,
-   "low": 213.57,
-   "volume": 2453805,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "CRM"
-  },
-  "CRWV": {
-   "price": 49.9,
-   "prev_close": 53.13,
-   "open": 49.5,
-   "high": 52.06,
-   "low": 48.593,
-   "volume": 39623594,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "CRWV"
-  },
-  "CSCO": {
-   "price": 94.635,
-   "prev_close": 95.64,
-   "open": 94.485,
-   "high": 96.21,
-   "low": 93.895,
-   "volume": 8997158,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "CSCO"
-  },
-  "CVX": {
-   "price": 217.16,
-   "prev_close": 219.89,
-   "open": 220.03,
-   "high": 219.96,
-   "low": 216.57,
-   "volume": 2722850,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "CVX"
-  },
-  "DDOG": {
-   "price": 173.74,
-   "prev_close": 184.16,
-   "open": 182.41,
-   "high": 182.41,
-   "low": 173.2265,
-   "volume": 1796919,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "DDOG"
-  },
-  "ETHA": {
-   "price": 41.04,
-   "prev_close": 44.02,
-   "open": 41.26,
-   "high": 42.165,
-   "low": 40.735,
-   "volume": 5191543,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "ETHA"
-  },
-  "GS": {
-   "price": 888.0,
-   "prev_close": 916.56,
-   "open": 906.49,
-   "high": 908.99,
-   "low": 883.74,
-   "volume": 1124403,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "GS"
-  },
-  "HAS": {
-   "price": 120.18,
-   "prev_close": 120.55,
-   "open": 121.15,
-   "high": 121.67,
-   "low": 119.8434,
-   "volume": 533400,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "HAS"
-  },
-  "HOOD": {
-   "price": 72.535,
-   "prev_close": 77.86,
-   "open": 73.97,
-   "high": 75.55,
-   "low": 71.62,
-   "volume": 15916394,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "HOOD"
-  },
-  "IBIT": {
-   "price": 36.705,
-   "prev_close": 38.94,
-   "open": 36.48,
-   "high": 37.14,
-   "low": 36.235,
-   "volume": 47863926,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "IBIT"
-  },
-  "INTU": {
-   "price": 347.52,
-   "prev_close": 341.7,
-   "open": 347.9,
-   "high": 351.39,
-   "low": 342.81,
-   "volume": 1012509,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "INTU"
-  },
-  "KO": {
-   "price": 99.265,
-   "prev_close": 99.25,
-   "open": 100.01,
-   "high": 100.56,
-   "low": 99.24,
-   "volume": 10251583,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "KO"
-  },
-  "LLY": {
-   "price": 1440.95,
-   "prev_close": 1443.5,
-   "open": 1453.75,
-   "high": 1475.25,
-   "low": 1439.0001,
-   "volume": 1589987,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "LLY"
-  },
-  "LMT": {
-   "price": 582.66,
-   "prev_close": 596.04,
-   "open": 599.92,
-   "high": 598.6899,
-   "low": 581.57,
-   "volume": 403948,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "LMT"
-  },
-  "META": {
-   "price": 625.2,
-   "prev_close": 641.69,
-   "open": 640.39,
-   "high": 640.7,
-   "low": 620.14,
-   "volume": 6203436,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "META"
-  },
-  "MPWR": {
-   "price": 1321.98,
-   "prev_close": 1390.54,
-   "open": 1319.6899,
-   "high": 1333.8101,
-   "low": 1280.0,
-   "volume": 383492,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "MPWR"
-  },
-  "MSFT": {
-   "price": 519.02,
-   "prev_close": 523.88,
-   "open": 525.09,
-   "high": 527.95,
-   "low": 516.9218,
-   "volume": 13934440,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "MSFT"
-  },
-  "MSTR": {
-   "price": 103.5,
-   "prev_close": 111.62,
-   "open": 103.74,
-   "high": 105.79,
-   "low": 101.7,
-   "volume": 13751210,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "MSTR"
-  },
-  "MU": {
-   "price": 727.745,
-   "prev_close": 778.31,
-   "open": 735.06,
-   "high": 739.12,
-   "low": 717.4,
-   "volume": 18263056,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "MU"
-  },
-  "NET": {
-   "price": 297.9,
-   "prev_close": 305.81,
-   "open": 298.41,
-   "high": 301.07,
-   "low": 290.355,
-   "volume": 2172285,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "NET"
-  },
-  "NFLX": {
-   "price": 60.63,
-   "prev_close": 62.15,
-   "open": 62.885,
-   "high": 62.975,
-   "low": 60.51,
-   "volume": 20345173,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "NFLX"
-  },
-  "NOW": {
-   "price": 100.505,
-   "prev_close": 102.25,
-   "open": 101.295,
-   "high": 101.94,
-   "low": 98.88,
-   "volume": 5236138,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "NOW"
-  },
-  "NTAP": {
-   "price": 177.5,
-   "prev_close": 181.37,
-   "open": 178.9,
-   "high": 179.9975,
-   "low": 174.022,
-   "volume": 1002014,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "NTAP"
-  },
-  "NVDA": {
-   "price": 156.33,
-   "prev_close": 162.85,
-   "open": 159.0025,
-   "high": 163.0,
-   "low": 155.02,
-   "volume": 234378203,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "NVDA"
-  },
-  "OIL": {
-   "price": 58.76,
-   "prev_close": 61.06,
-   "open": 59.6,
-   "high": 59.745,
-   "low": 58.62,
-   "volume": 777789,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "BNO"
-  },
-  "PANW": {
-   "price": 316.12,
-   "prev_close": 322.24,
-   "open": 319.135,
-   "high": 319.135,
-   "low": 311.36,
-   "volume": 2831653,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "PANW"
-  },
-  "PLTR": {
-   "price": 160.74,
-   "prev_close": 167.99,
-   "open": 165.74,
-   "high": 166.09,
-   "low": 160.17,
-   "volume": 9465320,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "PLTR"
-  },
-  "QCOM": {
-   "price": 171.27,
-   "prev_close": 172.47,
-   "open": 169.27,
-   "high": 172.92,
-   "low": 168.26,
-   "volume": 5376955,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "QCOM"
-  },
-  "RTX": {
-   "price": 194.94,
-   "prev_close": 198.58,
-   "open": 199.67,
-   "high": 200.0,
-   "low": 194.89,
-   "volume": 1101302,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "RTX"
-  },
-  "SHEL": {
-   "price": 3705.5,
-   "prev_close": 3719.5,
-   "open": 3719.5,
-   "high": 3752.0,
-   "low": 3695.5,
-   "volume": 7400275,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "SHEL.L"
-  },
-  "SHOP": {
-   "price": 148.615,
-   "prev_close": 147.09,
-   "open": 144.94,
-   "high": 150.33,
-   "low": 141.56,
-   "volume": 3690497,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "SHOP"
-  },
-  "SNDK": {
-   "price": 818.455,
-   "prev_close": 885.01,
-   "open": 827.4925,
-   "high": 838.48,
-   "low": 799.0,
-   "volume": 8669810,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "SNDK"
-  },
-  "SPOT": {
-   "price": 611.27,
-   "prev_close": 612.63,
-   "open": 618.56,
-   "high": 619.06,
-   "low": 598.56,
-   "volume": 594671,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "SPOT"
-  },
-  "SPY": {
-   "price": 740.25,
-   "prev_close": 754.37,
-   "open": 749.66,
-   "high": 749.82,
-   "low": 738.73,
-   "volume": 29120890,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "SPY"
-  },
-  "STX": {
-   "price": 500.77,
-   "prev_close": 528.29,
-   "open": 498.0,
-   "high": 506.8599,
-   "low": 491.0388,
-   "volume": 2846779,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "STX"
-  },
-  "TSM": {
-   "price": 377.51,
-   "prev_close": 398.73,
-   "open": 379.59,
-   "high": 385.469,
-   "low": 372.5,
-   "volume": 13509831,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "TSM"
-  },
-  "TTWO": {
-   "price": 215.0,
-   "prev_close": 227.82,
-   "open": 233.82,
-   "high": 235.9399,
-   "low": 214.61,
-   "volume": 3441782,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "TTWO"
-  },
-  "TXN": {
-   "price": 296.67,
-   "prev_close": 303.6,
-   "open": 294.47,
-   "high": 298.35,
-   "low": 289.59,
-   "volume": 2807569,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "TXN"
-  },
-  "WDC": {
-   "price": 284.02,
-   "prev_close": 295.65,
-   "open": 280.671,
-   "high": 287.45,
-   "low": 275.34,
-   "volume": 3354985,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "WDC"
-  },
-  "XOM": {
-   "price": 167.165,
-   "prev_close": 170.59,
-   "open": 169.53,
-   "high": 170.25,
-   "low": 167.1,
-   "volume": 5133423,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "XOM"
-  },
-  "XYZ": {
-   "price": 82.54,
-   "prev_close": 84.58,
-   "open": 83.56,
-   "high": 84.135,
-   "low": 82.5,
-   "volume": 1756098,
-   "bar_date": "2026-11-16",
-   "prev_date": "2026-11-13",
-   "yahoo": "XYZ"
-  }
- },
+ "quotes": {},
  "macro_now": {
   "coins": {
    "btc": {
-    "price": 64831.65,
-    "time_utc": "2026-11-16T19:23:35.179298474Z"
+    "price": 64632.38,
+    "time_utc": "2026-11-17T07:28:36.610186697Z"
    },
    "eth": {
-    "price": 1815.41,
-    "time_utc": "2026-11-16T19:23:34.268444502Z"
+    "price": 1829.89,
+    "time_utc": "2026-11-17T07:28:35.221438370Z"
    }
   },
   "futures": {
    "brent": {
     "symbol": "BZ=F",
-    "price": 92.5,
-    "bar_date": "2026-11-16"
+    "price": 91.61,
+    "bar_date": "2026-11-17"
    },
    "wti": {
     "symbol": "CL=F",
-    "price": 85.52,
-    "bar_date": "2026-11-16"
+    "price": 84.95,
+    "bar_date": "2026-11-17"
    },
    "natgas": {
     "symbol": "NG=F",
-    "price": 3.128,
-    "bar_date": "2026-11-16"
+    "price": 3.123,
+    "bar_date": "2026-11-17"
    },
    "gold": {
     "symbol": "GC=F",
-    "price": 3860.3,
-    "bar_date": "2026-11-16"
+    "price": 3879.2,
+    "bar_date": "2026-11-17"
    }
   },
   "intl_yields": {
    "us10y": {
-    "value": 5.117,
-    "prev_close": 5.153,
-    "time_utc": "2026-11-16T19:23+00:00",
+    "value": 5.119,
+    "prev_close": 5.121,
+    "time_utc": "2026-11-17T07:27+00:00",
     "source": "cnbc"
    },
    "uk10y": {
@@ -650,27 +55,27 @@
     "source": "cnbc"
    },
    "de10y": {
-    "value": 3.3738,
+    "value": 3.3704,
     "prev_close": 3.383,
-    "time_utc": "2026-11-16T19:23+00:00",
+    "time_utc": "2026-11-17T07:28+00:00",
     "source": "cnbc"
    },
    "fr10y": {
-    "value": 4.9429,
+    "value": 4.9402,
     "prev_close": 4.9498,
-    "time_utc": "2026-11-16T19:12+00:00",
+    "time_utc": "2026-11-17T07:28+00:00",
     "source": "cnbc"
    },
    "it10y": {
-    "value": 4.4649,
+    "value": 4.4329,
     "prev_close": 4.4574,
-    "time_utc": "2026-11-16T17:05+00:00",
+    "time_utc": "2026-11-17T07:28+00:00",
     "source": "cnbc"
    },
    "jp10y": {
-    "value": 2.885,
+    "value": 2.877,
     "prev_close": 2.884,
-    "time_utc": "2026-11-16T18:26+00:00",
+    "time_utc": "2026-11-17T07:27+00:00",
     "source": "cnbc"
    }
   },
