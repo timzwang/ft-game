@@ -24,3 +24,4 @@ Evening review request 2026-11-03 21:33 UK
 2026-11-17 21:31 UK evening review
 2026-11-18 21:37 UK daily after-close review
 2026-11-19 21:31 UK daily review
+2026-11-20 21:31 UK daily review request
