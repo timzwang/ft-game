@@ -1,6 +1,6 @@
-21:32:14Z tickers: 76 (75 US symbols, 1 London; 30 panel stocks)
-21:32:19Z session: US 2026-11-20, London 2026-11-20
-21:32:40Z treasury: 6 rows, last 2026-11-20
-21:32:42Z coins: btc 58352.55, eth 1599.14, sol 67.38, xrp 0.8865
-21:32:43Z non-US 10-year yields: uk10y 5.2427 (cnbc), de10y 3.2913 (cnbc), fr10y 4.871 (cnbc), it10y 4.4075 (cnbc), jp10y 2.787 (cnbc previous close)
-21:32:43Z written: 76 tickers; missing none; stale none; mismatched ['SNDK']; short of 200 sessions none; ranges widened none
+01:31:17Z tickers: 76 (75 US symbols, 1 London; 30 panel stocks)
+01:31:23Z session: US 2026-11-19, London 2026-11-19
+01:31:41Z treasury: 6 rows, last 2026-11-20
+01:31:43Z coins: btc 62048.94, eth 1758.89, sol 72.99, xrp 0.9612
+01:31:45Z non-US 10-year yields: uk10y 5.2457 (cnbc previous close), de10y 3.3019 (cnbc previous close), fr10y 4.8759 (cnbc previous close), it10y 4.405 (cnbc previous close), jp10y 2.87 (mof)
+01:31:45Z written: 76 tickers; missing none; stale none; mismatched ['SNDK']; short of 200 sessions none; ranges widened none
