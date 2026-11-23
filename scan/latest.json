@@ -1,15 +1,17 @@
 {
  "rules_version": "1 (fixed 16 Oct 2026)",
- "session_us": "2026-11-19",
- "session_uk": "2026-11-19",
- "generated_utc": "2026-11-21T01:37:00+00:00",
+ "session_us": "2026-11-23",
+ "session_uk": "2026-11-23",
+ "generated_utc": "2026-11-23T21:33:26+00:00",
  "universe": 868,
  "measured": 867,
  "missing": [],
  "stale": [],
- "holes": [],
+ "holes": [
+  "SNDK"
+ ],
  "leaders": 30,
- "events": 3,
+ "events": 5,
  "sources": {
   "yahoo": 870
  }
