@@ -1,18 +1,18 @@
-21:31:54Z universe: 868 stocks, built 2026-11-20, kept
-21:31:57Z yahoo: 1 of 1
-21:31:57Z raw index SPY: tz=None last=['2026-11-19 00:00:00', '2026-11-20 00:00:00', '2026-11-23 00:00:00'] close=[715.87, 689.81, 722.29]
-21:31:59Z yahoo: 1 of 1
-21:31:59Z raw index ^FTSE: tz=None last=['2026-11-19 00:00:00', '2026-11-20 00:00:00', '2026-11-23 00:00:00'] close=[10452.7, 10346.3, 10480.82]
-21:32:50Z yahoo: 518 of 518
-21:32:50Z raw index A: tz=None last=['2026-11-19 00:00:00', '2026-11-20 00:00:00', '2026-11-23 00:00:00'] close=[175.34, 170.38, 176.04]
-21:32:50Z raw index AAPL: tz=None last=['2026-11-19 00:00:00', '2026-11-20 00:00:00', '2026-11-23 00:00:00'] close=[349.21, 342.56, 349.08]
-21:33:24Z yahoo: 350 of 350
-21:33:24Z raw index 3IN.L: tz=None last=['2026-11-19 00:00:00', '2026-11-20 00:00:00', '2026-11-23 00:00:00'] close=[405.0, 399.5, 404.0]
-21:33:24Z raw index AAF.L: tz=None last=['2026-11-19 00:00:00', '2026-11-20 00:00:00', '2026-11-23 00:00:00'] close=[272.4, 274.2, 272.4]
-21:33:25Z 1 stocks lack a recent bar on Yahoo; trying Stooq
-21:33:25Z stooq: first reply 200 '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="no'
-21:33:25Z stooq: 0 returned, 0 complete
-21:33:26Z measured 867; missing 0; stale or not traded 0; too little history or unmeasurable 1 (VYLR)
-21:33:26Z last bars SPY: ['2026-11-19', '2026-11-20', '2026-11-23']
-21:33:26Z last bars ^FTSE: ['2026-11-19', '2026-11-20', '2026-11-23']
-21:33:26Z session 2026-11-23: 5 events, 30 leaders written
+21:32:02Z universe: 868 stocks, built 2026-11-20, kept
+21:32:05Z yahoo: 1 of 1
+21:32:05Z raw index SPY: tz=None last=['2026-11-20 00:00:00', '2026-11-23 00:00:00', '2026-11-24 00:00:00'] close=[689.81, 722.29, 718.78]
+21:32:07Z yahoo: 1 of 1
+21:32:07Z raw index ^FTSE: tz=None last=['2026-11-20 00:00:00', '2026-11-23 00:00:00', '2026-11-24 00:00:00'] close=[10346.3, 10480.8, 10467.07]
+21:32:47Z yahoo: 518 of 518
+21:32:47Z raw index A: tz=None last=['2026-11-20 00:00:00', '2026-11-23 00:00:00', '2026-11-24 00:00:00'] close=[170.38, 176.04, 183.52]
+21:32:47Z raw index AAPL: tz=None last=['2026-11-20 00:00:00', '2026-11-23 00:00:00', '2026-11-24 00:00:00'] close=[342.56, 349.08, 354.07]
+21:33:15Z yahoo: 350 of 350
+21:33:15Z raw index 3IN.L: tz=None last=['2026-11-20 00:00:00', '2026-11-23 00:00:00', '2026-11-24 00:00:00'] close=[399.5, 404.0, 405.5]
+21:33:15Z raw index AAF.L: tz=None last=['2026-11-20 00:00:00', '2026-11-23 00:00:00', '2026-11-24 00:00:00'] close=[274.2, 272.4, 272.2]
+21:33:15Z 1 stocks lack a recent bar on Yahoo; trying Stooq
+21:33:16Z stooq: first reply 200 '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="no'
+21:33:16Z stooq: 0 returned, 0 complete
+21:33:16Z measured 867; missing 0; stale or not traded 0; too little history or unmeasurable 1 (VYLR)
+21:33:16Z last bars SPY: ['2026-11-20', '2026-11-23', '2026-11-24']
+21:33:16Z last bars ^FTSE: ['2026-11-20', '2026-11-23', '2026-11-24']
+21:33:16Z session 2026-11-24: 1 events, 30 leaders written
