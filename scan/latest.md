@@ -1,47 +1,47 @@
-# Broad scan: US session 2026-11-24, London 2026-11-24
+# Broad scan: US session 2026-11-25, London 2026-11-25
 
-Generated 2026-11-24T21:33:16+00:00 UTC. Rules version 1 (fixed 16 Oct 2026); the rules are in `scan/README.md`. 867 of 868 stocks measured (0 without prices, 0 not traded or stale; 1 with a missing recent day, kept out of Events). These lists only point at stocks: every figure used in a decision is fetched again from the playbook's sources.
+Generated 2026-11-25T21:34:00+00:00 UTC. Rules version 1 (fixed 16 Oct 2026); the rules are in `scan/README.md`. 867 of 868 stocks measured (0 without prices, 0 not traded or stale; 1 with a missing recent day, kept out of Events). These lists only point at stocks: every figure used in a decision is fetched again from the playbook's sources.
 
 ## Events (1)
 
 | # | Stock | Name | Mkt | Day | vs index | Gap | Close in range | Volume x | Above 50d |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | DLTR | Dollar Tree | US | +11.2% | +11.7% | +7.8% | 75% | 2.7 | yes |
+| 1 | HPQ | HP Inc. | US | +11.5% | +11.8% | +7.2% | 62% | 2.7 | yes |
 
 ## Leaders (30)
 
 | # | Stock | Name | Mkt | 12-1 month vs index | 20 days vs index | From 52w high | Day |
 |---|---|---|---|---|---|---|---|
-| 1 | SAGA.L | Saga | UK | +202.1% | +2.9% | -7.8% | -2.7% |
-| 2 | VTRS | Viatris | US | +63.7% | +13.3% | -5.8% | +1.0% |
-| 3 | TGT | Target Corporation | US | +56.8% | +26.4% | -0.4% | +4.7% |
-| 4 | BME.L | B&M | UK | +56.0% | +27.7% | -5.1% | -2.3% |
-| 5 | WOSG.L | Watches of Switzerland | UK | +53.4% | +4.7% | -7.7% | -2.3% |
-| 6 | JDW.L | Wetherspoons | UK | +49.1% | +1.4% | -5.6% | -0.1% |
-| 7 | GRG.L | Greggs | UK | +46.0% | +2.5% | -4.5% | -0.9% |
-| 8 | HST | Host Hotels & Resorts | US | +37.9% | +5.2% | -5.1% | +0.5% |
-| 9 | HAS | Hasbro | US | +34.9% | +2.0% | -9.4% | -1.1% |
-| 10 | ROR.L | Rotork | UK | +34.4% | +2.4% | -0.4% | -0.0% |
-| 11 | CSX | CSX Corporation | US | +34.2% | +2.4% | -6.3% | +0.4% |
-| 12 | BEN | Franklin Resources | US | +32.6% | +13.5% | -9.2% | -0.4% |
-| 13 | EZJ.L | EasyJet | UK | +31.8% | +3.4% | -0.2% | +0.1% |
-| 14 | BPT.L | Bridgepoint Group | UK | +30.4% | +2.4% | -6.7% | -2.0% |
-| 15 | PSON.L | Pearson plc | UK | +27.2% | +0.5% | -6.1% | +1.2% |
-| 16 | HSX.L | Hiscox | UK | +26.9% | +10.1% | -1.9% | +0.6% |
-| 17 | BIIB | Biogen | US | +26.5% | +13.1% | -0.3% | +4.8% |
-| 18 | GWW | W. W. Grainger | US | +26.0% | +10.9% | -8.0% | +0.6% |
-| 19 | TRV | Travelers Companies (The) | US | +22.7% | +7.6% | -4.1% | +1.6% |
-| 20 | BMY | Bristol Myers Squibb | US | +21.7% | +7.4% | -8.7% | +3.6% |
-| 21 | BNZL.L | Bunzl | UK | +21.3% | +2.5% | -2.8% | -0.6% |
-| 22 | EXPD | Expeditors International | US | +21.2% | +5.7% | -4.9% | +1.2% |
-| 23 | CPAY | Corpay | US | +21.0% | +19.4% | -6.6% | +1.9% |
-| 24 | HTWS.L | Helios Towers | UK | +18.7% | +13.5% | -6.4% | -1.9% |
-| 25 | MET | MetLife | US | +18.7% | +6.4% | -7.0% | +0.5% |
-| 26 | CRDA.L | Croda International | UK | +18.5% | +7.3% | -2.0% | -1.6% |
-| 27 | DCC.L | DCC Energy | UK | +17.8% | +2.4% | -4.0% | +0.0% |
-| 28 | MO | Altria | US | +17.7% | +8.4% | -6.4% | +1.4% |
-| 29 | BBY | Best Buy | US | +17.6% | +7.7% | -6.7% | +2.7% |
-| 30 | WPP.L | WPP | UK | +17.3% | +4.5% | -6.6% | +1.3% |
+| 1 | VTRS | Viatris | US | +64.9% | +13.5% | -5.9% | -0.1% |
+| 2 | TGT | Target Corporation | US | +63.6% | +23.6% | -2.6% | -2.2% |
+| 3 | BME.L | B&M | UK | +52.5% | +28.4% | -5.7% | -0.6% |
+| 4 | WOSG.L | Watches of Switzerland | UK | +48.9% | +4.9% | -8.0% | -0.3% |
+| 5 | JDW.L | Wetherspoons | UK | +43.2% | +0.7% | -6.4% | -0.9% |
+| 6 | HST | Host Hotels & Resorts | US | +40.8% | +5.7% | -5.0% | +0.1% |
+| 7 | GRG.L | Greggs | UK | +38.0% | +3.5% | -4.4% | +0.1% |
+| 8 | CSX | CSX Corporation | US | +37.6% | +5.6% | -4.3% | +2.2% |
+| 9 | ROR.L | Rotork | UK | +36.3% | +2.7% | -0.4% | +0.0% |
+| 10 | BEN | Franklin Resources | US | +32.4% | +13.1% | -8.7% | +0.6% |
+| 11 | BPT.L | Bridgepoint Group | UK | +31.1% | +0.6% | -8.8% | -2.2% |
+| 12 | EZJ.L | EasyJet | UK | +30.6% | +3.9% | -0.3% | -0.0% |
+| 13 | GWW | W. W. Grainger | US | +28.9% | +13.0% | -6.8% | +1.3% |
+| 14 | FDX | FedEx | US | +28.8% | +8.6% | -9.9% | +0.2% |
+| 15 | HSX.L | Hiscox | UK | +27.0% | +8.0% | -3.1% | -1.3% |
+| 16 | BIIB | Biogen | US | +26.6% | +14.3% | -3.1% | -2.9% |
+| 17 | BNZL.L | Bunzl | UK | +24.1% | +6.0% | -1.1% | +1.7% |
+| 18 | PSON.L | Pearson plc | UK | +24.0% | +3.5% | -5.4% | +0.7% |
+| 19 | WAB | Wabtec | US | +23.6% | +9.2% | -6.5% | +2.6% |
+| 20 | EXPD | Expeditors International | US | +23.5% | +7.7% | -4.7% | +0.2% |
+| 21 | TRV | Travelers Companies (The) | US | +22.3% | +10.5% | -2.7% | +1.5% |
+| 22 | CPAY | Corpay | US | +22.0% | +22.0% | -5.3% | +1.4% |
+| 23 | CRDA.L | Croda International | UK | +21.9% | +7.0% | -3.1% | -1.2% |
+| 24 | BAX | Baxter International | US | +21.0% | +14.3% | -9.1% | +1.0% |
+| 25 | BBY | Best Buy | US | +20.9% | +13.0% | -4.0% | +3.0% |
+| 26 | LYV | Live Nation Entertainment | US | +20.6% | +12.6% | -4.0% | -1.0% |
+| 27 | HTWS.L | Helios Towers | UK | +20.6% | +12.5% | -8.8% | -2.6% |
+| 28 | MO | Altria | US | +20.5% | +11.7% | -4.6% | +2.0% |
+| 29 | AMGN | Amgen | US | +20.4% | +11.7% | -2.5% | -1.0% |
+| 30 | UNP | Union Pacific Corporation | US | +20.1% | +7.4% | -5.1% | +2.6% |
 
 ## Record (top 10 of each list, settled after five sessions)
 
@@ -49,9 +49,9 @@ Excess is the stock's return less its index (S&P 500 through SPY, or the FTSE 10
 
 | List | Which rows | Settled | Beat index | Mean excess, close to close (pts) | Mean excess from next open (pts) |
 |---|---|---|---|---|---|
-| leaders | all rows | 230 | 40% | -1.76 | -1.70 |
-| leaders | first appearances | 64 | 38% | -1.81 | -1.72 |
-| events | all rows | 60 | 67% | +1.21 | +1.03 |
-| events | first appearances | 58 | 67% | +1.52 | +1.29 |
+| leaders | all rows | 240 | 40% | -1.71 | -1.63 |
+| leaders | first appearances | 68 | 37% | -1.76 | -1.64 |
+| events | all rows | 63 | 68% | +1.40 | +1.28 |
+| events | first appearances | 61 | 69% | +1.70 | +1.54 |
 
-Open rows waiting to settle: 62.
+Open rows waiting to settle: 60.
