@@ -1,3 +1,6 @@
-03:35:25Z tickers: 76 (75 US symbols, 1 London; 30 panel stocks)
-03:35:31Z session: US 2026-11-25, London 2026-11-25
-03:35:31Z this session is already in latest.json: nothing to do
+02:51:05Z tickers: 76 (75 US symbols, 1 London; 30 panel stocks)
+02:51:10Z session: US 2026-11-25, London 2026-11-26
+02:51:27Z treasury: 6 rows, last 2026-11-25
+02:51:29Z coins: btc 60193.72, eth 1688.06, sol 70.55, xrp 0.9413
+02:51:30Z non-US 10-year yields: uk10y 5.1504 (cnbc previous close), de10y None (-), fr10y None (-), it10y 4.3368 (cnbc previous close), jp10y None (-)
+02:51:30Z written: 76 tickers; missing none; stale ['SHEL', 'SNDK']; mismatched ['SNDK']; short of 200 sessions none; ranges widened none
