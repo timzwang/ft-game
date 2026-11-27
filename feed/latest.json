@@ -2,15 +2,12 @@
  "meta": {
   "feed_version": "1.2.1 (27 Oct 2026)",
   "mode": "close",
-  "generated_utc": "2026-11-27T02:51:30+00:00",
-  "session_us": "2026-11-25",
-  "session_uk": "2026-11-26",
+  "generated_utc": "2026-11-27T21:33:11+00:00",
+  "session_us": "2026-11-27",
+  "session_uk": "2026-11-27",
   "tickers": 76,
   "missing": [],
-  "stale": [
-   "SHEL",
-   "SNDK"
-  ],
+  "stale": [],
   "mismatched": [
    "SNDK"
   ],
@@ -26,18 +23,10 @@
   "AAPL": {
    "yahoo": "AAPL",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 357.81,
-     "high": 359.37,
-     "low": 354.41,
-     "close": 354.88,
-     "volume": 31875000
-    },
     {
      "date": "2026-11-13",
      "open": 357.96,
@@ -109,15 +98,23 @@
      "low": 345.13,
      "close": 355.58,
      "volume": 54285300
+    },
+    {
+     "date": "2026-11-27",
+     "open": 358.44,
+     "high": 359.5,
+     "low": 355.64,
+     "close": 358.54,
+     "volume": 21599470
     }
    ],
    "week52_high": 360.83,
    "week52_low": 243.42,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 566,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.055,
@@ -127,14 +124,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -333,18 +322,10 @@
   "ABBV": {
    "yahoo": "ABBV",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 299.3,
-     "high": 300.42,
-     "low": 294.07,
-     "close": 294.45,
-     "volume": 4826600
-    },
     {
      "date": "2026-11-13",
      "open": 296.58,
@@ -416,15 +397,23 @@
      "low": 293.65,
      "close": 294.48,
      "volume": 6163300
+    },
+    {
+     "date": "2026-11-27",
+     "open": 292.33,
+     "high": 293.21,
+     "low": 289.4941,
+     "close": 291.88,
+     "volume": 4132734
     }
    ],
    "week52_high": 302.98,
    "week52_low": 190.75,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 282,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.002,
@@ -434,14 +423,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.007,
-      "low": 0.0,
-      "volume": 5.5
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -640,18 +621,10 @@
   "ABNB": {
    "yahoo": "ABNB",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 179.605,
-     "high": 184.42,
-     "low": 179.31,
-     "close": 181.13,
-     "volume": 4392500
-    },
     {
      "date": "2026-11-13",
      "open": 182.665,
@@ -723,15 +696,23 @@
      "low": 166.0,
      "close": 172.15,
      "volume": 3943800
+    },
+    {
+     "date": "2026-11-27",
+     "open": 173.71,
+     "high": 179.5,
+     "low": 173.69,
+     "close": 179.16,
+     "volume": 5198250
     }
    ],
    "week52_high": 197.87,
-   "week52_low": 114.465,
-   "sessions_available": 550,
+   "week52_low": 115.53,
+   "sessions_available": 551,
    "stored_rows": 558,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -741,14 +722,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -947,18 +920,10 @@
   "ABT": {
    "yahoo": "ABT",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 110.32,
-     "high": 110.78,
-     "low": 106.89,
-     "close": 107.25,
-     "volume": 9954600
-    },
     {
      "date": "2026-11-13",
      "open": 108.2,
@@ -1030,15 +995,23 @@
      "low": 105.53,
      "close": 108.0,
      "volume": 8061700
+    },
+    {
+     "date": "2026-11-27",
+     "open": 108.28,
+     "high": 108.41,
+     "low": 106.97,
+     "close": 108.07,
+     "volume": 3133338
     }
    ],
    "week52_high": 129.85,
    "week52_low": 81.97,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -1048,10 +1021,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -1155,18 +1124,10 @@
   "ADBE": {
    "yahoo": "ADBE",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 238.82,
-     "high": 240.63,
-     "low": 233.51,
-     "close": 238.54,
-     "volume": 3551400
-    },
     {
      "date": "2026-11-13",
      "open": 240.35,
@@ -1238,15 +1199,23 @@
      "low": 227.71,
      "close": 232.83,
      "volume": 3752600
+    },
+    {
+     "date": "2026-11-27",
+     "open": 232.85,
+     "high": 237.0,
+     "low": 232.66,
+     "close": 234.79,
+     "volume": 1729037
     }
    ],
    "week52_high": 362.71,
    "week52_low": 190.12,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -1256,10 +1225,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -1363,18 +1328,10 @@
   "ADI": {
    "yahoo": "ADI",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 404.85,
-     "high": 415.03,
-     "low": 402.0,
-     "close": 409.29,
-     "volume": 2943000
-    },
     {
      "date": "2026-11-13",
      "open": 408.65,
@@ -1446,15 +1403,23 @@
      "low": 300.25,
      "close": 333.11,
      "volume": 9202700
+    },
+    {
+     "date": "2026-11-27",
+     "open": 343.0,
+     "high": 349.0,
+     "low": 333.61,
+     "close": 346.0,
+     "volume": 4271370
     }
    ],
    "week52_high": 445.91,
-   "week52_low": 229.29,
-   "sessions_available": 550,
+   "week52_low": 252.92,
+   "sessions_available": 551,
    "stored_rows": 561,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.002,
      "open": 1.123,
@@ -1464,14 +1429,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -1671,18 +1628,10 @@
   "AMD": {
    "yahoo": "AMD",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 569.28,
-     "high": 594.0,
-     "low": 554.9,
-     "close": 585.3,
-     "volume": 55411500
-    },
     {
      "date": "2026-11-13",
      "open": 566.79,
@@ -1754,15 +1703,23 @@
      "low": 370.4,
      "close": 406.03,
      "volume": 51632000
+    },
+    {
+     "date": "2026-11-27",
+     "open": 419.745,
+     "high": 426.81,
+     "low": 398.5901,
+     "close": 424.54,
+     "volume": 22152138
     }
    ],
    "week52_high": 658.52,
    "week52_low": 188.22,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.24,
@@ -1772,14 +1729,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.001,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 2.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -1979,18 +1928,10 @@
   "AMZN": {
    "yahoo": "AMZN",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 267.92,
-     "high": 273.6,
-     "low": 267.2,
-     "close": 267.44,
-     "volume": 34501500
-    },
     {
      "date": "2026-11-13",
      "open": 269.56,
@@ -2062,15 +2003,23 @@
      "low": 235.96,
      "close": 244.43,
      "volume": 62479500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 250.45,
+     "high": 255.275,
+     "low": 248.45,
+     "close": 254.12,
+     "volume": 27148968
     }
    ],
    "week52_high": 287.2,
    "week52_low": 196.0,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 567,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.099,
@@ -2080,14 +2029,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -2286,18 +2227,10 @@
   "ANET": {
    "yahoo": "ANET",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 193.145,
-     "high": 207.17,
-     "low": 190.82,
-     "close": 206.63,
-     "volume": 9788200
-    },
     {
      "date": "2026-11-13",
      "open": 204.9,
@@ -2369,15 +2302,23 @@
      "low": 154.51,
      "close": 163.99,
      "volume": 8264300
+    },
+    {
+     "date": "2026-11-27",
+     "open": 170.13,
+     "high": 175.09,
+     "low": 166.8601,
+     "close": 174.73,
+     "volume": 4395590
     }
    ],
    "week52_high": 217.41,
    "week52_low": 115.42,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 561,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -2387,14 +2328,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -2593,18 +2526,10 @@
   "APP": {
    "yahoo": "APP",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 400.09,
-     "high": 408.99,
-     "low": 393.05,
-     "close": 393.68,
-     "volume": 3061800
-    },
     {
      "date": "2026-11-13",
      "open": 395.57,
@@ -2676,15 +2601,23 @@
      "low": 355.01,
      "close": 378.95,
      "volume": 4528400
+    },
+    {
+     "date": "2026-11-27",
+     "open": 397.375,
+     "high": 404.88,
+     "low": 387.02,
+     "close": 399.21,
+     "volume": 2407684
     }
    ],
    "week52_high": 738.01,
    "week52_low": 225.19,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 565,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.238,
@@ -2694,14 +2627,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -2900,18 +2825,10 @@
   "ARM": {
    "yahoo": "ARM",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 190.365,
-     "high": 204.77,
-     "low": 190.0,
-     "close": 199.78,
-     "volume": 3976700
-    },
     {
      "date": "2026-11-13",
      "open": 196.48,
@@ -2983,15 +2900,23 @@
      "low": 143.55,
      "close": 161.51,
      "volume": 8187900
+    },
+    {
+     "date": "2026-11-27",
+     "open": 171.18,
+     "high": 171.78,
+     "low": 161.14,
+     "close": 171.55,
+     "volume": 2928441
     }
    ],
    "week52_high": 452.7,
    "week52_low": 100.02,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.465,
@@ -3001,14 +2926,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.028,
-      "high": 0.0,
-      "low": -0.005,
-      "volume": 0.6
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -3207,18 +3124,10 @@
   "AVGO": {
    "yahoo": "AVGO",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 356.8,
-     "high": 369.82,
-     "low": 354.72,
-     "close": 364.36,
-     "volume": 43768100
-    },
     {
      "date": "2026-11-13",
      "open": 356.54,
@@ -3290,15 +3199,23 @@
      "low": 278.0,
      "close": 300.86,
      "volume": 34349500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 306.44,
+     "high": 313.125,
+     "low": 304.75,
+     "close": 312.34,
+     "volume": 17045811
     }
    ],
    "week52_high": 495.0,
    "week52_low": 278.0,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -3308,10 +3225,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -3415,18 +3328,10 @@
   "BAC": {
    "yahoo": "BAC",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 50.65,
-     "high": 50.93,
-     "low": 50.38,
-     "close": 50.51,
-     "volume": 19603800
-    },
     {
      "date": "2026-11-13",
      "open": 50.89,
@@ -3498,15 +3403,23 @@
      "low": 46.94,
      "close": 48.54,
      "volume": 38285800
+    },
+    {
+     "date": "2026-11-27",
+     "open": 49.24,
+     "high": 49.345,
+     "low": 48.925,
+     "close": 49.07,
+     "volume": 16315492
     }
    ],
    "week52_high": 65.23,
    "week52_low": 46.12,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -3516,10 +3429,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -3623,18 +3532,10 @@
   "C": {
    "yahoo": "C",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 124.08,
-     "high": 125.19,
-     "low": 123.34,
-     "close": 124.06,
-     "volume": 6085100
-    },
     {
      "date": "2026-11-13",
      "open": 125.25,
@@ -3706,15 +3607,23 @@
      "low": 109.99,
      "close": 113.33,
      "volume": 11764900
+    },
+    {
+     "date": "2026-11-27",
+     "open": 115.64,
+     "high": 116.3301,
+     "low": 114.47,
+     "close": 115.59,
+     "volume": 7729987
     }
    ],
    "week52_high": 147.96,
-   "week52_low": 99.53,
-   "sessions_available": 550,
+   "week52_low": 101.46,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -3724,10 +3633,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -3831,18 +3736,10 @@
   "CDW": {
    "yahoo": "CDW",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 173.75,
-     "high": 174.51,
-     "low": 170.39,
-     "close": 172.79,
-     "volume": 1022100
-    },
     {
      "date": "2026-11-13",
      "open": 173.3,
@@ -3914,15 +3811,23 @@
      "low": 158.28,
      "close": 174.97,
      "volume": 1542300
+    },
+    {
+     "date": "2026-11-27",
+     "open": 176.685,
+     "high": 180.43,
+     "low": 175.82,
+     "close": 179.1,
+     "volume": 708563
     }
    ],
-   "week52_high": 175.61,
+   "week52_high": 180.43,
    "week52_low": 97.12,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 566,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.003,
@@ -3932,14 +3837,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -4138,18 +4035,10 @@
   "CEG": {
    "yahoo": "CEG",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 270.9,
-     "high": 282.7,
-     "low": 268.0,
-     "close": 282.4,
-     "volume": 3542800
-    },
     {
      "date": "2026-11-13",
      "open": 284.76,
@@ -4221,15 +4110,23 @@
      "low": 230.53,
      "close": 235.28,
      "volume": 4789800
+    },
+    {
+     "date": "2026-11-27",
+     "open": 242.16,
+     "high": 242.16,
+     "low": 232.66,
+     "close": 238.1,
+     "volume": 2316135
     }
    ],
    "week52_high": 380.78,
    "week52_low": 228.63,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -4239,10 +4136,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -4346,18 +4239,10 @@
   "COIN": {
    "yahoo": "COIN",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 129.93,
-     "high": 135.1,
-     "low": 129.63,
-     "close": 130.67,
-     "volume": 6394900
-    },
     {
      "date": "2026-11-13",
      "open": 127.27,
@@ -4429,15 +4314,23 @@
      "low": 94.88,
      "close": 103.72,
      "volume": 9968400
+    },
+    {
+     "date": "2026-11-27",
+     "open": 108.44,
+     "high": 108.9,
+     "low": 104.44,
+     "close": 107.04,
+     "volume": 5134910
     }
    ],
    "week52_high": 284.74,
    "week52_low": 94.88,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.005,
      "open": 0.442,
@@ -4447,14 +4340,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": -0.117,
-      "high": 0.0,
-      "low": -0.006,
-      "volume": 0.8
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -4653,18 +4538,10 @@
   "COST": {
    "yahoo": "COST",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 1096.27,
-     "high": 1102.84,
-     "low": 1088.98,
-     "close": 1092.21,
-     "volume": 2203000
-    },
     {
      "date": "2026-11-13",
      "open": 1094.59,
@@ -4736,15 +4613,23 @@
      "low": 1086.25,
      "close": 1086.8101,
      "volume": 2701700
+    },
+    {
+     "date": "2026-11-27",
+     "open": 1086.035,
+     "high": 1101.3,
+     "low": 1086.035,
+     "close": 1097.8101,
+     "volume": 1362828
     }
    ],
    "week52_high": 1123.67,
    "week52_low": 844.06,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -4754,10 +4639,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -4861,18 +4742,10 @@
   "CRM": {
    "yahoo": "CRM",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 218.53,
-     "high": 219.35,
-     "low": 213.77,
-     "close": 217.57,
-     "volume": 3640400
-    },
     {
      "date": "2026-11-13",
      "open": 220.0,
@@ -4944,15 +4817,23 @@
      "low": 188.2,
      "close": 197.21,
      "volume": 6734500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 197.53,
+     "high": 200.345,
+     "low": 196.645,
+     "close": 198.21,
+     "volume": 2508645
     }
    ],
    "week52_high": 269.11,
    "week52_low": 146.32,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 565,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.002,
@@ -4962,14 +4843,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -5168,18 +5041,10 @@
   "CRWV": {
    "yahoo": "CRWV",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 50.905,
-     "high": 58.56,
-     "low": 50.17,
-     "close": 56.6,
-     "volume": 108555200
-    },
     {
      "date": "2026-11-13",
      "open": 56.055,
@@ -5251,15 +5116,23 @@
      "low": 37.4,
      "close": 42.57,
      "volume": 82504000
+    },
+    {
+     "date": "2026-11-27",
+     "open": 43.81,
+     "high": 44.22,
+     "low": 40.8801,
+     "close": 44.15,
+     "volume": 41517676
     }
    ],
    "week52_high": 138.25,
    "week52_low": 37.4,
-   "sessions_available": 419,
+   "sessions_available": 420,
    "stored_rows": 419,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.283,
@@ -5269,14 +5142,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -5475,18 +5340,10 @@
   "CSCO": {
    "yahoo": "CSCO",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 99.61,
-     "high": 103.18,
-     "low": 99.37,
-     "close": 102.01,
-     "volume": 26714000
-    },
     {
      "date": "2026-11-13",
      "open": 100.47,
@@ -5558,15 +5415,23 @@
      "low": 91.03,
      "close": 94.2,
      "volume": 18532700
+    },
+    {
+     "date": "2026-11-27",
+     "open": 96.75,
+     "high": 97.1,
+     "low": 95.3,
+     "close": 97.04,
+     "volume": 8605521
     }
    ],
    "week52_high": 130.37,
    "week52_low": 72.8,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 561,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.174,
@@ -5576,14 +5441,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -5782,18 +5639,10 @@
   "CVX": {
    "yahoo": "CVX",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 215.0,
-     "high": 218.09,
-     "low": 214.12,
-     "close": 216.35,
-     "volume": 9046300
-    },
     {
      "date": "2026-11-13",
      "open": 218.28,
@@ -5865,32 +5714,32 @@
      "low": 207.19,
      "close": 210.95,
      "volume": 7365500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 213.14,
+     "high": 214.92,
+     "low": 212.16,
+     "close": 212.45,
+     "volume": 4272503
     }
    ],
    "week52_high": 236.48,
    "week52_low": 146.49,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.002,
-     "high": 0.08,
+     "high": 0.017,
      "low": 0.02,
      "volume": 24.2
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.001,
-      "high": 0.08,
-      "low": 0.0,
-      "volume": 0.8
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -6089,18 +5938,10 @@
   "DDOG": {
    "yahoo": "DDOG",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 178.702,
-     "high": 186.58,
-     "low": 176.42,
-     "close": 184.46,
-     "volume": 2871500
-    },
     {
      "date": "2026-11-13",
      "open": 188.24,
@@ -6172,15 +6013,23 @@
      "low": 149.84,
      "close": 158.25,
      "volume": 5786000
+    },
+    {
+     "date": "2026-11-27",
+     "open": 163.34,
+     "high": 165.75,
+     "low": 161.605,
+     "close": 165.75,
+     "volume": 2005530
     }
    ],
    "week52_high": 300.68,
    "week52_low": 98.01,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.506,
@@ -6190,14 +6039,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": -0.004,
-      "volume": 1.4
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -6396,18 +6237,10 @@
   "DHR": {
    "yahoo": "DHR",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 235.42,
-     "high": 235.66,
-     "low": 231.83,
-     "close": 232.16,
-     "volume": 2381900
-    },
     {
      "date": "2026-11-13",
      "open": 232.99,
@@ -6479,15 +6312,23 @@
      "low": 223.25,
      "close": 227.35,
      "volume": 2503400
+    },
+    {
+     "date": "2026-11-27",
+     "open": 228.0,
+     "high": 229.245,
+     "low": 225.615,
+     "close": 228.89,
+     "volume": 1845727
     }
    ],
    "week52_high": 242.8,
    "week52_low": 160.93,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -6497,10 +6338,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -6604,18 +6441,10 @@
   "ETHA": {
    "yahoo": "ETHA",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 44.96,
-     "high": 45.8,
-     "low": 44.94,
-     "close": 45.54,
-     "volume": 9347300
-    },
     {
      "date": "2026-11-13",
      "open": 44.33,
@@ -6687,15 +6516,23 @@
      "low": 36.32,
      "close": 38.17,
      "volume": 12447500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 38.932,
+     "high": 38.932,
+     "low": 36.9,
+     "close": 37.76,
+     "volume": 6492002
     }
    ],
    "week52_high": 78.27,
    "week52_low": 34.575,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.099,
@@ -6705,14 +6542,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.018,
-      "high": 0.0,
-      "low": -0.019,
-      "volume": 1.5
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -6911,18 +6740,10 @@
   "GLW": {
    "yahoo": "GLW",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 113.5,
-     "high": 120.92,
-     "low": 112.68,
-     "close": 119.5,
-     "volume": 7402100
-    },
     {
      "date": "2026-11-13",
      "open": 118.0,
@@ -6994,15 +6815,23 @@
      "low": 92.78,
      "close": 100.24,
      "volume": 9025300
+    },
+    {
+     "date": "2026-11-27",
+     "open": 104.58,
+     "high": 105.24,
+     "low": 101.37,
+     "close": 105.08,
+     "volume": 4446916
     }
    ],
    "week52_high": 271.78,
-   "week52_low": 80.27,
-   "sessions_available": 550,
+   "week52_low": 81.67,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -7012,10 +6841,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -7119,18 +6944,10 @@
   "GS": {
    "yahoo": "GS",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 916.76,
-     "high": 931.0,
-     "low": 911.79,
-     "close": 913.6,
-     "volume": 1546900
-    },
     {
      "date": "2026-11-13",
      "open": 922.7,
@@ -7202,15 +7019,23 @@
      "low": 772.74,
      "close": 801.03,
      "volume": 3421900
+    },
+    {
+     "date": "2026-11-27",
+     "open": 818.6,
+     "high": 819.26,
+     "low": 805.0,
+     "close": 812.87,
+     "volume": 1220401
     }
    ],
    "week52_high": 1153.99,
    "week52_low": 772.74,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -7220,14 +7045,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": -0.0,
-      "low": 0.0,
-      "volume": 0.2
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -7426,18 +7243,10 @@
   "HAS": {
    "yahoo": "HAS",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 124.2,
-     "high": 124.5,
-     "low": 121.35,
-     "close": 121.48,
-     "volume": 1662100
-    },
     {
      "date": "2026-11-13",
      "open": 122.19,
@@ -7509,15 +7318,23 @@
      "low": 108.2,
      "close": 110.58,
      "volume": 3066100
+    },
+    {
+     "date": "2026-11-27",
+     "open": 111.25,
+     "high": 111.365,
+     "low": 108.48,
+     "close": 109.09,
+     "volume": 1314911
     }
    ],
    "week52_high": 124.62,
    "week52_low": 75.19,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.412,
@@ -7527,14 +7344,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.07,
-      "high": 0.0,
-      "low": -0.0,
-      "volume": 0.1
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -7733,18 +7542,10 @@
   "HOOD": {
    "yahoo": "HOOD",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 80.765,
-     "high": 84.68,
-     "low": 80.517,
-     "close": 81.35,
-     "volume": 13070100
-    },
     {
      "date": "2026-11-13",
      "open": 79.7,
@@ -7816,32 +7617,32 @@
      "low": 61.26,
      "close": 65.78,
      "volume": 20255800
+    },
+    {
+     "date": "2026-11-27",
+     "open": 69.02,
+     "high": 69.09,
+     "low": 65.5223,
+     "close": 67.92,
+     "volume": 10355650
     }
    ],
    "week52_high": 139.75,
    "week52_low": 61.26,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
-     "open": 0.205,
+     "open": 0.169,
      "high": 0.257,
      "low": 0.195,
      "volume": 29.9
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.205,
-      "high": 0.0,
-      "low": -0.0,
-      "volume": 0.7
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -8040,18 +7841,10 @@
   "HPE": {
    "yahoo": "HPE",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 47.6,
-     "high": 51.0,
-     "low": 47.54,
-     "close": 50.16,
-     "volume": 9962600
-    },
     {
      "date": "2026-11-13",
      "open": 49.85,
@@ -8123,15 +7916,23 @@
      "low": 37.04,
      "close": 40.82,
      "volume": 27644100
+    },
+    {
+     "date": "2026-11-27",
+     "open": 42.29,
+     "high": 43.045,
+     "low": 41.65,
+     "close": 42.76,
+     "volume": 10626068
     }
    ],
    "week52_high": 73.56,
    "week52_low": 19.84,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -8141,10 +7942,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -8248,18 +8045,10 @@
   "IBIT": {
    "yahoo": "IBIT",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 40.61,
-     "high": 40.835,
-     "low": 40.23,
-     "close": 40.36,
-     "volume": 56400300
-    },
     {
      "date": "2026-11-13",
      "open": 39.08,
@@ -8331,15 +8120,23 @@
      "low": 32.35,
      "close": 34.07,
      "volume": 70112500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 34.705,
+     "high": 34.705,
+     "low": 33.21,
+     "close": 33.86,
+     "volume": 45402798
     }
    ],
    "week52_high": 55.6,
    "week52_low": 32.35,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.03,
@@ -8349,14 +8146,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.011,
-      "high": 0.022,
-      "low": -0.004,
-      "volume": 0.7
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -8555,18 +8344,10 @@
   "INTU": {
    "yahoo": "INTU",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 343.92,
-     "high": 345.5,
-     "low": 337.44,
-     "close": 340.17,
-     "volume": 1707100
-    },
     {
      "date": "2026-11-13",
      "open": 344.56,
@@ -8638,15 +8419,23 @@
      "low": 268.86,
      "close": 271.72,
      "volume": 3819700
+    },
+    {
+     "date": "2026-11-27",
+     "open": 273.115,
+     "high": 278.0,
+     "low": 271.22,
+     "close": 271.94,
+     "volume": 1652750
     }
    ],
    "week52_high": 681.2,
    "week52_low": 252.84,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 558,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.144,
@@ -8656,14 +8445,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -8862,18 +8643,10 @@
   "KO": {
    "yahoo": "KO",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 98.25,
-     "high": 98.38,
-     "low": 97.38,
-     "close": 97.44,
-     "volume": 13869200
-    },
     {
      "date": "2026-11-13",
      "open": 98.18,
@@ -8945,15 +8718,23 @@
      "low": 97.49,
      "close": 97.59,
      "volume": 24905500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 96.79,
+     "high": 97.805,
+     "low": 96.52,
+     "close": 97.4,
+     "volume": 9201516
     }
    ],
    "week52_high": 100.56,
    "week52_low": 67.27,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.005,
@@ -8963,14 +8744,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": -0.0,
-      "volume": 2.1
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -9169,18 +8942,10 @@
   "LIN": {
    "yahoo": "LIN",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 529.77,
-     "high": 530.2,
-     "low": 521.93,
-     "close": 522.49,
-     "volume": 1675400
-    },
     {
      "date": "2026-11-13",
      "open": 526.15,
@@ -9252,15 +9017,23 @@
      "low": 513.0,
      "close": 524.61,
      "volume": 1981900
+    },
+    {
+     "date": "2026-11-27",
+     "open": 525.48,
+     "high": 532.83,
+     "low": 524.355,
+     "close": 532.61,
+     "volume": 1067732
     }
    ],
    "week52_high": 548.2,
    "week52_low": 387.78,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -9270,10 +9043,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -9377,18 +9146,10 @@
   "LLY": {
    "yahoo": "LLY",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 1446.55,
-     "high": 1460.0,
-     "low": 1427.28,
-     "close": 1427.28,
-     "volume": 2407800
-    },
     {
      "date": "2026-11-13",
      "open": 1429.91,
@@ -9460,15 +9221,23 @@
      "low": 1370.76,
      "close": 1392.22,
      "volume": 2927400
+    },
+    {
+     "date": "2026-11-27",
+     "open": 1387.98,
+     "high": 1404.28,
+     "low": 1383.0,
+     "close": 1392.38,
+     "volume": 1541610
     }
    ],
    "week52_high": 1475.25,
    "week52_low": 850.51,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 282,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -9478,14 +9247,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.5
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -9684,18 +9445,10 @@
   "LMT": {
    "yahoo": "LMT",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 615.97,
-     "high": 619.5,
-     "low": 600.56,
-     "close": 604.09,
-     "volume": 1001600
-    },
     {
      "date": "2026-11-13",
      "open": 605.0,
@@ -9767,32 +9520,32 @@
      "low": 581.22,
      "close": 599.24,
      "volume": 1545000
+    },
+    {
+     "date": "2026-11-27",
+     "open": 605.3,
+     "high": 606.21,
+     "low": 599.63,
+     "close": 605.88,
+     "volume": 532577
     }
    ],
    "week52_high": 692.0,
    "week52_low": 437.25,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
-     "open": 0.001,
+     "open": 0.0,
      "high": 0.143,
      "low": 0.048,
      "volume": 22.4
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.001,
-      "high": 0.002,
-      "low": -0.045,
-      "volume": 0.4
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -9991,18 +9744,10 @@
   "MCK": {
    "yahoo": "MCK",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 1090.0,
-     "high": 1090.9,
-     "low": 1074.65,
-     "close": 1077.05,
-     "volume": 539000
-    },
     {
      "date": "2026-11-13",
      "open": 1087.46,
@@ -10074,15 +9819,23 @@
      "low": 1073.87,
      "close": 1077.3199,
      "volume": 557100
+    },
+    {
+     "date": "2026-11-27",
+     "open": 1074.1,
+     "high": 1082.98,
+     "low": 1070.0,
+     "close": 1075.66,
+     "volume": 230596
     }
    ],
    "week52_high": 1121.5,
    "week52_low": 723.68,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -10092,10 +9845,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -10199,18 +9948,10 @@
   "META": {
    "yahoo": "META",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 625.35,
-     "high": 630.32,
-     "low": 618.92,
-     "close": 623.61,
-     "volume": 10341800
-    },
     {
      "date": "2026-11-13",
      "open": 627.21,
@@ -10282,15 +10023,23 @@
      "low": 567.75,
      "close": 609.89,
      "volume": 18668200
+    },
+    {
+     "date": "2026-11-27",
+     "open": 627.825,
+     "high": 636.62,
+     "low": 620.8,
+     "close": 628.96,
+     "volume": 11087057
     }
    ],
    "week52_high": 779.82,
    "week52_low": 520.26,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.167,
@@ -10300,14 +10049,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.083,
-      "high": 0.0,
-      "low": -0.0,
-      "volume": 0.7
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -10506,18 +10247,10 @@
   "MPWR": {
    "yahoo": "MPWR",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 1433.77,
-     "high": 1464.63,
-     "low": 1403.39,
-     "close": 1447.4,
-     "volume": 809000
-    },
     {
      "date": "2026-11-13",
      "open": 1435.51,
@@ -10589,15 +10322,23 @@
      "low": 1096.23,
      "close": 1194.63,
      "volume": 922700
+    },
+    {
+     "date": "2026-11-27",
+     "open": 1226.84,
+     "high": 1285.85,
+     "low": 1194.0201,
+     "close": 1265.02,
+     "volume": 580923
     }
    ],
    "week52_high": 1714.09,
-   "week52_low": 864.45,
-   "sessions_available": 550,
+   "week52_low": 894.39,
+   "sessions_available": 551,
    "stored_rows": 567,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.684,
@@ -10607,14 +10348,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -10813,18 +10546,10 @@
   "MRSH": {
    "yahoo": "MRSH",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 210.0,
-     "high": 210.0,
-     "low": 205.62,
-     "close": 205.69,
-     "volume": 1350400
-    },
     {
      "date": "2026-11-13",
      "open": 207.72,
@@ -10896,15 +10621,23 @@
      "low": 214.1,
      "close": 216.66,
      "volume": 2711300
+    },
+    {
+     "date": "2026-11-27",
+     "open": 215.49,
+     "high": 218.55,
+     "low": 215.49,
+     "close": 218.04,
+     "volume": 1205339
     }
    ],
    "week52_high": 218.99,
    "week52_low": 156.6,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -10914,10 +10647,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -11021,18 +10750,10 @@
   "MSFT": {
    "yahoo": "MSFT",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 521.1,
-     "high": 529.66,
-     "low": 520.0,
-     "close": 523.0,
-     "volume": 18644000
-    },
     {
      "date": "2026-11-13",
      "open": 519.75,
@@ -11104,15 +10825,23 @@
      "low": 477.39,
      "close": 489.93,
      "volume": 26759500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 499.485,
+     "high": 500.465,
+     "low": 488.83,
+     "close": 492.85,
+     "volume": 12423912
     }
    ],
    "week52_high": 559.15,
    "week52_low": 349.2,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.001,
      "open": 0.109,
@@ -11122,14 +10851,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.083,
-      "high": 0.001,
-      "low": 0.0,
-      "volume": 1.2
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -11329,18 +11050,10 @@
   "MSTR": {
    "yahoo": "MSTR",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 114.12,
-     "high": 119.65,
-     "low": 112.32,
-     "close": 114.41,
-     "volume": 19824300
-    },
     {
      "date": "2026-11-13",
      "open": 112.05,
@@ -11412,15 +11125,23 @@
      "low": 70.37,
      "close": 79.96,
      "volume": 30231600
+    },
+    {
+     "date": "2026-11-27",
+     "open": 84.565,
+     "high": 84.674,
+     "low": 78.84,
+     "close": 81.62,
+     "volume": 16375416
     }
    ],
    "week52_high": 198.4,
    "week52_low": 70.37,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.162,
@@ -11430,14 +11151,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": -0.034,
-      "high": 0.0,
-      "low": -0.007,
-      "volume": 1.2
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -11636,18 +11349,10 @@
   "MU": {
    "yahoo": "MU",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 769.31,
-     "high": 799.7,
-     "low": 764.57,
-     "close": 798.44,
-     "volume": 27638400
-    },
     {
      "date": "2026-11-13",
      "open": 782.69,
@@ -11719,15 +11424,23 @@
      "low": 548.13,
      "close": 601.25,
      "volume": 52988400
+    },
+    {
+     "date": "2026-11-27",
+     "open": 630.28,
+     "high": 654.33,
+     "low": 607.2704,
+     "close": 646.95,
+     "volume": 26547049
     }
    ],
    "week52_high": 1255.0,
-   "week52_low": 216.0,
-   "sessions_available": 550,
+   "week52_low": 221.69,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.122,
@@ -11737,14 +11450,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": -0.048,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 4.9
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -11943,18 +11648,10 @@
   "NEM": {
    "yahoo": "NEM",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 114.98,
-     "high": 116.37,
-     "low": 112.41,
-     "close": 112.64,
-     "volume": 8849200
-    },
     {
      "date": "2026-11-13",
      "open": 112.88,
@@ -12026,15 +11723,23 @@
      "low": 94.24,
      "close": 101.44,
      "volume": 7992000
+    },
+    {
+     "date": "2026-11-27",
+     "open": 105.55,
+     "high": 106.99,
+     "low": 104.51,
+     "close": 106.87,
+     "volume": 4368123
     }
    ],
    "week52_high": 135.29,
-   "week52_low": 85.26,
-   "sessions_available": 550,
+   "week52_low": 87.17,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -12044,10 +11749,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -12151,18 +11852,10 @@
   "NET": {
    "yahoo": "NET",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 306.28,
-     "high": 322.61,
-     "low": 305.0,
-     "close": 318.5,
-     "volume": 3460600
-    },
     {
      "date": "2026-11-13",
      "open": 325.0,
@@ -12234,15 +11927,23 @@
      "low": 265.74,
      "close": 283.3,
      "volume": 2557400
+    },
+    {
+     "date": "2026-11-27",
+     "open": 291.76,
+     "high": 296.95,
+     "low": 282.3195,
+     "close": 296.79,
+     "volume": 1546093
     }
    ],
    "week52_high": 370.35,
    "week52_low": 158.83,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 575,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -12252,14 +11953,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.2
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -12458,18 +12151,10 @@
   "NFLX": {
    "yahoo": "NFLX",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 64.27,
-     "high": 64.3,
-     "low": 62.55,
-     "close": 62.69,
-     "volume": 31558100
-    },
     {
      "date": "2026-11-13",
      "open": 62.88,
@@ -12541,15 +12226,23 @@
      "low": 57.03,
      "close": 59.41,
      "volume": 45756500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 60.04,
+     "high": 61.01,
+     "low": 59.99,
+     "close": 60.93,
+     "volume": 21583856
     }
    ],
    "week52_high": 109.73,
    "week52_low": 56.56,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 565,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.216,
@@ -12559,14 +12252,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -12765,18 +12450,10 @@
   "NOW": {
    "yahoo": "NOW",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 101.42,
-     "high": 102.5,
-     "low": 99.63,
-     "close": 100.66,
-     "volume": 10891800
-    },
     {
      "date": "2026-11-13",
      "open": 102.2,
@@ -12848,15 +12525,23 @@
      "low": 86.85,
      "close": 92.16,
      "volume": 15479100
+    },
+    {
+     "date": "2026-11-27",
+     "open": 93.2,
+     "high": 94.57,
+     "low": 92.041,
+     "close": 92.8,
+     "volume": 7068899
     }
    ],
    "week52_high": 175.0,
    "week52_low": 81.24,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.006,
@@ -12866,14 +12551,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.003,
-      "volume": 0.8
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -13073,18 +12750,10 @@
   "NTAP": {
    "yahoo": "NTAP",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 178.93,
-     "high": 188.01,
-     "low": 176.1,
-     "close": 186.08,
-     "volume": 1430600
-    },
     {
      "date": "2026-11-13",
      "open": 186.51,
@@ -13156,15 +12825,23 @@
      "low": 154.32,
      "close": 165.0,
      "volume": 1865700
+    },
+    {
+     "date": "2026-11-27",
+     "open": 169.23,
+     "high": 172.99,
+     "low": 167.51,
+     "close": 172.67,
+     "volume": 844013
     }
    ],
    "week52_high": 240.87,
    "week52_low": 93.69,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.521,
@@ -13174,14 +12851,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.002,
-      "low": -0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -13380,18 +13049,10 @@
   "NVDA": {
    "yahoo": "NVDA",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 151.01,
-     "high": 167.14,
-     "low": 148.8,
-     "close": 166.19,
-     "volume": 747707600
-    },
     {
      "date": "2026-11-13",
      "open": 169.91,
@@ -13463,15 +13124,23 @@
      "low": 141.17,
      "close": 149.3,
      "volume": 366571900
+    },
+    {
+     "date": "2026-11-27",
+     "open": 151.94,
+     "high": 151.98,
+     "low": 145.39,
+     "close": 150.49,
+     "volume": 180940449
     }
    ],
    "week52_high": 243.37,
    "week52_low": 124.5,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.046,
@@ -13481,14 +13150,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": -0.046,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 3.1
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -13687,18 +13348,10 @@
   "OIL": {
    "yahoo": "BNO",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 59.34,
-     "high": 61.13,
-     "low": 59.18,
-     "close": 61.01,
-     "volume": 1785100
-    },
     {
      "date": "2026-11-13",
      "open": 61.5,
@@ -13770,15 +13423,23 @@
      "low": 58.47,
      "close": 59.4,
      "volume": 861300
+    },
+    {
+     "date": "2026-11-27",
+     "open": 59.77,
+     "high": 59.77,
+     "low": 58.81,
+     "close": 58.93,
+     "volume": 493713
     }
    ],
    "week52_high": 72.5,
    "week52_low": 27.14,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 631,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -13788,14 +13449,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.007,
-      "low": 0.0,
-      "volume": 0.4
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -13994,18 +13647,10 @@
   "PANW": {
    "yahoo": "PANW",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 323.69,
-     "high": 326.34,
-     "low": 314.79,
-     "close": 322.66,
-     "volume": 6025900
-    },
     {
      "date": "2026-11-13",
      "open": 330.51,
@@ -14077,15 +13722,23 @@
      "low": 337.23,
      "close": 356.14,
      "volume": 6690900
+    },
+    {
+     "date": "2026-11-27",
+     "open": 343.44,
+     "high": 367.258,
+     "low": 338.57,
+     "close": 366.76,
+     "volume": 5316671
     }
    ],
    "week52_high": 432.33,
    "week52_low": 139.57,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 558,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.358,
@@ -14095,14 +13748,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -14302,18 +13947,10 @@
   "PFE": {
    "yahoo": "PFE",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 29.75,
-     "high": 29.77,
-     "low": 28.83,
-     "close": 28.83,
-     "volume": 30780100
-    },
     {
      "date": "2026-11-13",
      "open": 28.92,
@@ -14385,15 +14022,23 @@
      "low": 28.09,
      "close": 28.46,
      "volume": 27143400
+    },
+    {
+     "date": "2026-11-27",
+     "open": 28.41,
+     "high": 28.59,
+     "low": 28.33,
+     "close": 28.52,
+     "volume": 11114146
     }
    ],
    "week52_high": 31.44,
    "week52_low": 23.62,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -14403,10 +14048,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -14510,18 +14151,10 @@
   "PG": {
    "yahoo": "PG",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 169.04,
-     "high": 169.95,
-     "low": 167.96,
-     "close": 168.03,
-     "volume": 7172800
-    },
     {
      "date": "2026-11-13",
      "open": 168.97,
@@ -14593,15 +14226,23 @@
      "low": 172.54,
      "close": 173.23,
      "volume": 9892500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 171.77,
+     "high": 173.3081,
+     "low": 171.4,
+     "close": 172.86,
+     "volume": 3947179
     }
    ],
    "week52_high": 174.56,
    "week52_low": 137.62,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -14611,10 +14252,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -14718,18 +14355,10 @@
   "PLTR": {
    "yahoo": "PLTR",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 170.2,
-     "high": 173.052,
-     "low": 168.25,
-     "close": 171.58,
-     "volume": 12458600
-    },
     {
      "date": "2026-11-13",
      "open": 171.74,
@@ -14801,15 +14430,23 @@
      "low": 151.51,
      "close": 163.59,
      "volume": 21486000
+    },
+    {
+     "date": "2026-11-27",
+     "open": 169.765,
+     "high": 173.22,
+     "low": 164.8,
+     "close": 172.17,
+     "volume": 14987597
     }
    ],
    "week52_high": 212.94,
    "week52_low": 106.37,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.188,
@@ -14819,14 +14456,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": -0.109,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 1.8
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -15025,18 +14654,10 @@
   "PNC": {
    "yahoo": "PNC",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 232.41,
-     "high": 233.89,
-     "low": 230.01,
-     "close": 231.03,
-     "volume": 1139000
-    },
     {
      "date": "2026-11-13",
      "open": 232.61,
@@ -15108,15 +14729,23 @@
      "low": 215.02,
      "close": 220.33,
      "volume": 1149800
+    },
+    {
+     "date": "2026-11-27",
+     "open": 223.31,
+     "high": 224.65,
+     "low": 221.97,
+     "close": 222.7,
+     "volume": 733522
     }
    ],
    "week52_high": 258.96,
-   "week52_low": 188.5,
-   "sessions_available": 550,
+   "week52_low": 190.01,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -15126,10 +14755,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -15233,18 +14858,10 @@
   "PWR": {
    "yahoo": "PWR",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 598.63,
-     "high": 614.67,
-     "low": 592.7,
-     "close": 606.16,
-     "volume": 840500
-    },
     {
      "date": "2026-11-13",
      "open": 610.89,
@@ -15316,15 +14933,23 @@
      "low": 539.65,
      "close": 565.47,
      "volume": 2456200
+    },
+    {
+     "date": "2026-11-27",
+     "open": 586.0,
+     "high": 586.53,
+     "low": 569.2,
+     "close": 580.6,
+     "volume": 762144
     }
    ],
    "week52_high": 788.75,
    "week52_low": 408.36,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -15334,10 +14959,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -15441,18 +15062,10 @@
   "QCOM": {
    "yahoo": "QCOM",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 175.11,
-     "high": 183.4,
-     "low": 175.0,
-     "close": 177.14,
-     "volume": 8983200
-    },
     {
      "date": "2026-11-13",
      "open": 176.4,
@@ -15524,15 +15137,23 @@
      "low": 155.38,
      "close": 168.66,
      "volume": 14054400
+    },
+    {
+     "date": "2026-11-27",
+     "open": 173.475,
+     "high": 180.4,
+     "low": 170.3668,
+     "close": 179.27,
+     "volume": 9752667
     }
    ],
    "week52_high": 259.92,
    "week52_low": 121.99,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 565,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.201,
@@ -15542,14 +15163,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -15748,18 +15361,10 @@
   "RTX": {
    "yahoo": "RTX",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 202.69,
-     "high": 204.27,
-     "low": 198.25,
-     "close": 198.36,
-     "volume": 4047800
-    },
     {
      "date": "2026-11-13",
      "open": 199.39,
@@ -15831,32 +15436,32 @@
      "low": 192.38,
      "close": 196.19,
      "volume": 4508300
+    },
+    {
+     "date": "2026-11-27",
+     "open": 198.69,
+     "high": 198.9,
+     "low": 196.29,
+     "close": 198.48,
+     "volume": 1667131
     }
    ],
    "week52_high": 226.88,
    "week52_low": 166.74,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
-     "open": 0.003,
+     "open": 0.0,
      "high": 0.03,
      "low": 0.078,
      "volume": 28.7
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.003,
-      "high": 0.0,
-      "low": -0.031,
-      "volume": 1.2
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -16055,26 +15660,10 @@
   "SHEL": {
    "yahoo": "SHEL.L",
    "market": "UK",
-   "session": "2026-11-26",
-   "last_bar": "2026-11-25",
-   "complete": false,
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
+   "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 3657.0,
-     "high": 3684.0,
-     "low": 3643.5,
-     "close": 3665.0,
-     "volume": 33274760
-    },
-    {
-     "date": "2026-11-13",
-     "open": 3679.5,
-     "high": 3734.5,
-     "low": 3679.5,
-     "close": 3719.5,
-     "volume": 7527170
-    },
     {
      "date": "2026-11-16",
      "open": 3719.5,
@@ -16138,15 +15727,31 @@
      "low": 3510.0,
      "close": 3555.5,
      "volume": 12558519
+    },
+    {
+     "date": "2026-11-26",
+     "open": 3582.5,
+     "high": 3627.0,
+     "low": 3572.0,
+     "close": 3623.5,
+     "volume": 4985212
+    },
+    {
+     "date": "2026-11-27",
+     "open": 3636.0,
+     "high": 3660.0,
+     "low": 3626.0,
+     "close": 3643.0,
+     "volume": 4170249
     }
    ],
    "week52_high": 4110.0,
    "week52_low": 2553.772,
-   "sessions_available": 555,
+   "sessions_available": 557,
    "stored_rows": 581,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 23,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -16156,22 +15761,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.5
-     },
-     {
-      "date": "2026-10-23",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.4
-     },
      {
       "date": "2026-10-26",
       "close": 0.0,
@@ -16362,18 +15951,10 @@
   "SHOP": {
    "yahoo": "SHOP",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 147.995,
-     "high": 150.48,
-     "low": 144.43,
-     "close": 146.78,
-     "volume": 4924500
-    },
     {
      "date": "2026-11-13",
      "open": 147.23,
@@ -16445,15 +16026,23 @@
      "low": 123.74,
      "close": 133.4,
      "volume": 7334900
+    },
+    {
+     "date": "2026-11-27",
+     "open": 139.045,
+     "high": 142.56,
+     "low": 138.6034,
+     "close": 141.78,
+     "volume": 6207390
     }
    ],
    "week52_high": 180.88,
    "week52_low": 94.0,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.629,
@@ -16463,14 +16052,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.026,
-      "high": 0.028,
-      "low": -0.021,
-      "volume": 1.9
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -16669,18 +16250,10 @@
   "SNDK": {
    "yahoo": "SNDK",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-19",
-   "complete": false,
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
+   "complete": true,
    "rows": [
-    {
-     "date": "2026-11-06",
-     "open": 112.2838,
-     "high": 114.0113,
-     "low": 102.0525,
-     "close": 104.3825,
-     "volume": 142109336
-    },
     {
      "date": "2026-11-09",
      "open": 107.055,
@@ -16752,15 +16325,23 @@
      "low": 94.1588,
      "close": 94.395,
      "volume": 119852712
+    },
+    {
+     "date": "2026-11-27",
+     "open": 79.92,
+     "high": 85.44,
+     "low": 77.1,
+     "close": 85.36,
+     "volume": 96234051
     }
    ],
    "week52_high": 294.2987,
    "week52_low": 22.875,
-   "sessions_available": 445,
+   "sessions_available": 446,
    "stored_rows": 445,
    "check": {
     "status": "mismatch",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 87.5,
      "open": 87.516,
@@ -16769,7 +16350,6 @@
      "volume": 903.1
     },
     "mismatched_sessions": [
-     "2026-10-16",
      "2026-10-19",
      "2026-10-20",
      "2026-10-21",
@@ -16796,14 +16376,6 @@
      "2026-11-19"
     ],
     "rows": [
-     {
-      "date": "2026-10-16",
-      "close": -87.5,
-      "open": -87.5,
-      "high": -87.5,
-      "low": -87.5,
-      "volume": 700.0
-     },
      {
       "date": "2026-10-19",
       "close": -87.5,
@@ -17002,18 +16574,10 @@
   "SNPS": {
    "yahoo": "SNPS",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 455.26,
-     "high": 469.07,
-     "low": 452.63,
-     "close": 462.69,
-     "volume": 1608200
-    },
     {
      "date": "2026-11-13",
      "open": 462.4,
@@ -17085,15 +16649,23 @@
      "low": 388.69,
      "close": 405.09,
      "volume": 1796200
+    },
+    {
+     "date": "2026-11-27",
+     "open": 417.0,
+     "high": 421.16,
+     "low": 410.61,
+     "close": 420.07,
+     "volume": 1076199
     }
    ],
    "week52_high": 539.48,
    "week52_low": 362.55,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -17103,10 +16675,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -17210,18 +16778,10 @@
   "SPOT": {
    "yahoo": "SPOT",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 607.17,
-     "high": 612.65,
-     "low": 597.73,
-     "close": 598.51,
-     "volume": 1003100
-    },
     {
      "date": "2026-11-13",
      "open": 600.93,
@@ -17293,15 +16853,23 @@
      "low": 586.44,
      "close": 616.46,
      "volume": 1967500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 621.37,
+     "high": 628.0,
+     "low": 616.41,
+     "close": 620.38,
+     "volume": 648240
     }
    ],
    "week52_high": 635.0,
    "week52_low": 405.0,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 565,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -17311,14 +16879,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -17517,18 +17077,10 @@
   "SPY": {
    "yahoo": "SPY",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 753.98,
-     "high": 763.04,
-     "low": 753.67,
-     "close": 757.12,
-     "volume": 37460600
-    },
     {
      "date": "2026-11-13",
      "open": 760.07,
@@ -17600,15 +17152,23 @@
      "low": 695.45,
      "close": 716.7,
      "volume": 73112800
+    },
+    {
+     "date": "2026-11-27",
+     "open": 725.86,
+     "high": 729.15,
+     "low": 719.62,
+     "close": 728.32,
+     "volume": 38759705
     }
    ],
    "week52_high": 781.62,
    "week52_low": 629.28,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 605,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.001,
@@ -17618,14 +17178,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 8.9
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -17824,18 +17376,10 @@
   "STX": {
    "yahoo": "STX",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 527.52,
-     "high": 558.17,
-     "low": 516.78,
-     "close": 545.14,
-     "volume": 3589900
-    },
     {
      "date": "2026-11-13",
      "open": 535.14,
@@ -17907,15 +17451,23 @@
      "low": 432.04,
      "close": 472.33,
      "volume": 3710200
+    },
+    {
+     "date": "2026-11-27",
+     "open": 494.28,
+     "high": 509.87,
+     "low": 480.34,
+     "close": 509.66,
+     "volume": 2544281
     }
    ],
    "week52_high": 1145.0,
-   "week52_low": 247.0,
-   "sessions_available": 550,
+   "week52_low": 250.53,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.842,
@@ -17925,14 +17477,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": -0.177,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 4.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -18131,18 +17675,10 @@
   "T": {
    "yahoo": "T",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 22.39,
-     "high": 22.55,
-     "low": 22.08,
-     "close": 22.18,
-     "volume": 43610400
-    },
     {
      "date": "2026-11-13",
      "open": 22.33,
@@ -18214,15 +17750,23 @@
      "low": 22.89,
      "close": 22.97,
      "volume": 40325800
+    },
+    {
+     "date": "2026-11-27",
+     "open": 22.912,
+     "high": 23.3057,
+     "low": 22.912,
+     "close": 23.21,
+     "volume": 20879880
     }
    ],
    "week52_high": 29.44,
    "week52_low": 19.89,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -18232,10 +17776,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -18339,18 +17879,10 @@
   "TSM": {
    "yahoo": "TSM",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 394.62,
-     "high": 411.77,
-     "low": 393.91,
-     "close": 405.49,
-     "volume": 11389800
-    },
     {
      "date": "2026-11-13",
      "open": 407.6,
@@ -18422,15 +17954,23 @@
      "low": 321.1,
      "close": 342.34,
      "volume": 22861100
+    },
+    {
+     "date": "2026-11-27",
+     "open": 352.64,
+     "high": 354.36,
+     "low": 344.5953,
+     "close": 353.34,
+     "volume": 9436839
     }
    ],
    "week52_high": 487.47,
-   "week52_low": 273.08,
-   "sessions_available": 550,
+   "week52_low": 275.08,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.002,
@@ -18440,14 +17980,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 1.1
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -18646,18 +18178,10 @@
   "TTWO": {
    "yahoo": "TTWO",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 232.16,
-     "high": 232.99,
-     "low": 223.16,
-     "close": 226.95,
-     "volume": 3289600
-    },
     {
      "date": "2026-11-13",
      "open": 230.29,
@@ -18729,11 +18253,19 @@
      "low": 214.15,
      "close": 227.34,
      "volume": 4892500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 227.58,
+     "high": 232.1,
+     "low": 226.61,
+     "close": 230.22,
+     "volume": 3714760
     }
    ],
    "week52_high": 265.94,
    "week52_low": 183.86,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "no overlap",
@@ -23148,24 +22680,24 @@
      "low": 214.15,
      "close": 227.34,
      "volume": 4892500
+    },
+    {
+     "date": "2026-11-27",
+     "open": 227.58,
+     "high": 232.1,
+     "low": 226.61,
+     "close": 230.22,
+     "volume": 3714760
     }
    ]
   },
   "TXN": {
    "yahoo": "TXN",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 307.25,
-     "high": 316.97,
-     "low": 305.77,
-     "close": 312.48,
-     "volume": 6171400
-    },
     {
      "date": "2026-11-13",
      "open": 311.78,
@@ -23237,15 +22769,23 @@
      "low": 244.81,
      "close": 270.19,
      "volume": 10467000
+    },
+    {
+     "date": "2026-11-27",
+     "open": 273.62,
+     "high": 285.18,
+     "low": 269.6575,
+     "close": 281.85,
+     "volume": 7050279
     }
    ],
    "week52_high": 334.03,
-   "week52_low": 158.69,
-   "sessions_available": 550,
+   "week52_low": 162.05,
+   "sessions_available": 551,
    "stored_rows": 561,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.09,
@@ -23255,14 +22795,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -23461,18 +22993,10 @@
   "VLO": {
    "yahoo": "VLO",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 365.0,
-     "high": 379.56,
-     "low": 361.91,
-     "close": 374.95,
-     "volume": 2385900
-    },
     {
      "date": "2026-11-13",
      "open": 378.75,
@@ -23544,15 +23068,23 @@
      "low": 314.01,
      "close": 323.0,
      "volume": 2304300
+    },
+    {
+     "date": "2026-11-27",
+     "open": 329.82,
+     "high": 331.735,
+     "low": 326.71,
+     "close": 329.39,
+     "volume": 921528
     }
    ],
    "week52_high": 461.52,
    "week52_low": 159.9,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -23562,10 +23094,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -23669,18 +23197,10 @@
   "VRT": {
    "yahoo": "VRT",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 197.57,
-     "high": 214.38,
-     "low": 193.82,
-     "close": 209.64,
-     "volume": 5854700
-    },
     {
      "date": "2026-11-13",
      "open": 213.06,
@@ -23752,15 +23272,23 @@
      "low": 160.03,
      "close": 173.37,
      "volume": 7335700
+    },
+    {
+     "date": "2026-11-27",
+     "open": 180.955,
+     "high": 181.5635,
+     "low": 173.9,
+     "close": 178.71,
+     "volume": 3593097
     }
    ],
    "week52_high": 379.935,
    "week52_low": 147.82,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -23770,10 +23298,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -23877,18 +23401,10 @@
   "WDC": {
    "yahoo": "WDC",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 300.98,
-     "high": 316.41,
-     "low": 295.1,
-     "close": 311.21,
-     "volume": 5229000
-    },
     {
      "date": "2026-11-13",
      "open": 305.12,
@@ -23960,32 +23476,32 @@
      "low": 244.77,
      "close": 272.45,
      "volume": 6515100
+    },
+    {
+     "date": "2026-11-27",
+     "open": 286.15,
+     "high": 292.6,
+     "low": 278.55,
+     "close": 292.11,
+     "volume": 3708625
     }
    ],
    "week52_high": 799.87,
-   "week52_low": 147.7,
-   "sessions_available": 550,
+   "week52_low": 151.42,
+   "sessions_available": 551,
    "stored_rows": 576,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.436,
      "high": 0.069,
      "low": 0.099,
-     "volume": 20.1
+     "volume": 12.6
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 20.1
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -24185,18 +23701,10 @@
   "WFC": {
    "yahoo": "WFC",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 86.27,
-     "high": 86.67,
-     "low": 85.61,
-     "close": 85.76,
-     "volume": 7677900
-    },
     {
      "date": "2026-11-13",
      "open": 86.47,
@@ -24268,15 +23776,23 @@
      "low": 79.24,
      "close": 80.94,
      "volume": 10488100
+    },
+    {
+     "date": "2026-11-27",
+     "open": 82.0,
+     "high": 82.6591,
+     "low": 81.8,
+     "close": 82.28,
+     "volume": 4747980
     }
    ],
    "week52_high": 97.76,
    "week52_low": 72.78,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -24286,10 +23802,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -24393,18 +23905,10 @@
   "WMT": {
    "yahoo": "WMT",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 126.8,
-     "high": 127.66,
-     "low": 125.48,
-     "close": 126.19,
-     "volume": 17222400
-    },
     {
      "date": "2026-11-13",
      "open": 126.77,
@@ -24476,15 +23980,23 @@
      "low": 131.21,
      "close": 131.94,
      "volume": 23619900
+    },
+    {
+     "date": "2026-11-27",
+     "open": 131.86,
+     "high": 133.16,
+     "low": 131.685,
+     "close": 133.13,
+     "volume": 10371136
     }
    ],
    "week52_high": 135.16,
    "week52_low": 102.15,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 0,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -24494,10 +24006,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0
@@ -24601,18 +24109,10 @@
   "XOM": {
    "yahoo": "XOM",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 168.25,
-     "high": 170.92,
-     "low": 167.34,
-     "close": 169.78,
-     "volume": 12243800
-    },
     {
      "date": "2026-11-13",
      "open": 171.43,
@@ -24684,15 +24184,23 @@
      "low": 156.83,
      "close": 158.08,
      "volume": 21532400
+    },
+    {
+     "date": "2026-11-27",
+     "open": 159.765,
+     "high": 161.245,
+     "low": 159.5887,
+     "close": 160.18,
+     "volume": 8348583
     }
    ],
    "week52_high": 188.5,
-   "week52_low": 114.19,
-   "sessions_available": 550,
+   "week52_low": 114.31,
+   "sessions_available": 551,
    "stored_rows": 285,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.003,
@@ -24702,14 +24210,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.9
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -24908,18 +24408,10 @@
   "XYZ": {
    "yahoo": "XYZ",
    "market": "US",
-   "session": "2026-11-25",
-   "last_bar": "2026-11-25",
+   "session": "2026-11-27",
+   "last_bar": "2026-11-27",
    "complete": true,
    "rows": [
-    {
-     "date": "2026-11-12",
-     "open": 84.49,
-     "high": 84.85,
-     "low": 82.14,
-     "close": 82.26,
-     "volume": 3855400
-    },
     {
      "date": "2026-11-13",
      "open": 82.29,
@@ -24991,15 +24483,23 @@
      "low": 71.35,
      "close": 76.1,
      "volume": 4734200
+    },
+    {
+     "date": "2026-11-27",
+     "open": 77.53,
+     "high": 78.69,
+     "low": 77.17,
+     "close": 77.68,
+     "volume": 2231432
     }
    ],
    "week52_high": 89.395,
    "week52_low": 48.21,
-   "sessions_available": 550,
+   "sessions_available": 551,
    "stored_rows": 566,
    "check": {
     "status": "agrees",
-    "sessions_compared": 25,
+    "sessions_compared": 24,
     "max_abs_pct": {
      "close": 0.0,
      "open": 0.0,
@@ -25009,14 +24509,6 @@
     },
     "mismatched_sessions": [],
     "rows": [
-     {
-      "date": "2026-10-22",
-      "close": 0.0,
-      "open": 0.0,
-      "high": 0.0,
-      "low": 0.0,
-      "volume": 0.0
-     },
      {
       "date": "2026-10-23",
       "close": 0.0,
@@ -25216,12 +24708,6 @@
  "macro": {
   "treasury": [
    {
-    "date": "2026-11-18",
-    "us2y": 4.8,
-    "us10y": 5.07,
-    "us30y": 5.41
-   },
-   {
     "date": "2026-11-19",
     "us2y": 4.76,
     "us10y": 5.04,
@@ -25250,127 +24736,135 @@
     "us2y": 4.61,
     "us10y": 4.85,
     "us30y": 5.24
+   },
+   {
+    "date": "2026-11-27",
+    "us2y": 4.69,
+    "us10y": 4.94,
+    "us30y": 5.33
    }
   ],
   "coins": {
    "btc": {
-    "price": 60193.72,
-    "candle_start_utc": "2026-11-25T20:00:00Z",
+    "price": 59847.1,
+    "candle_start_utc": "2026-11-27T17:00:00Z",
     "pair": "BTC-USD"
    },
    "eth": {
-    "price": 1688.06,
-    "candle_start_utc": "2026-11-25T20:00:00Z",
+    "price": 1670.01,
+    "candle_start_utc": "2026-11-27T17:00:00Z",
     "pair": "ETH-USD"
    },
    "sol": {
-    "price": 70.55,
-    "candle_start_utc": "2026-11-25T20:00:00Z",
+    "price": 72.0,
+    "candle_start_utc": "2026-11-27T17:00:00Z",
     "pair": "SOL-USD"
    },
    "xrp": {
-    "price": 0.9413,
-    "candle_start_utc": "2026-11-25T20:00:00Z",
+    "price": 0.9479,
+    "candle_start_utc": "2026-11-27T17:00:00Z",
     "pair": "XRP-USD"
    }
   },
   "futures": {
    "brent": {
     "symbol": "BZ=F",
-    "date": "2026-11-25",
-    "close": 94.61
+    "date": "2026-11-27",
+    "close": 90.84
    },
    "wti": {
     "symbol": "CL=F",
-    "date": "2026-11-25",
-    "close": 83.68
+    "date": "2026-11-27",
+    "close": 83.08
    },
    "natgas": {
     "symbol": "NG=F",
-    "date": "2026-11-25",
-    "close": 3.269
+    "date": "2026-11-27",
+    "close": 3.491
    },
    "gold": {
     "symbol": "GC=F",
-    "date": "2026-11-25",
-    "close": 3535.8
+    "date": "2026-11-27",
+    "close": 3668.5
    }
   },
   "intl_yields": {
-   "session": "2026-11-25",
+   "session": "2026-11-27",
    "values": {
     "uk10y": {
-     "source": "cnbc previous close",
-     "date": "2026-11-25",
-     "value": 5.1504
+     "source": "cnbc",
+     "date": "2026-11-27",
+     "value": 5.1784,
+     "time_utc": "2026-11-27T17:15+00:00"
     },
     "de10y": {
-     "value": null,
-     "note": "no figure dated 2026-11-25; latest cnbc 3.265 on 2026-11-27"
+     "source": "cnbc",
+     "date": "2026-11-27",
+     "value": 3.268,
+     "time_utc": "2026-11-27T21:33+00:00"
     },
     "fr10y": {
-     "value": null,
-     "note": "no figure dated 2026-11-25; latest cnbc 4.756 on 2026-11-27"
+     "source": "cnbc",
+     "date": "2026-11-27",
+     "value": 4.7073,
+     "time_utc": "2026-11-27T21:33+00:00"
     },
     "it10y": {
-     "source": "cnbc previous close",
-     "date": "2026-11-25",
-     "value": 4.3368
+     "source": "cnbc",
+     "date": "2026-11-27",
+     "value": 4.32,
+     "time_utc": "2026-11-27T21:29+00:00"
     },
     "jp10y": {
-     "value": null,
-     "note": "no figure dated 2026-11-25; latest cnbc 2.631 on 2026-11-27"
+     "source": "cnbc previous close",
+     "date": "2026-11-27",
+     "value": 2.643
     }
    },
    "sources": {
     "uk10y": [
      {
       "source": "cnbc",
-      "date": "2026-11-26",
-      "value": 5.1575,
-      "time_utc": "2026-11-26T17:15+00:00"
-     },
-     {
-      "source": "cnbc previous close",
-      "date": "2026-11-25",
-      "value": 5.1504
+      "date": "2026-11-27",
+      "value": 5.1784,
+      "time_utc": "2026-11-27T17:15+00:00"
      }
     ],
     "de10y": [
      {
       "source": "cnbc",
       "date": "2026-11-27",
-      "value": 3.2653,
-      "time_utc": "2026-11-26T23:59+00:00"
+      "value": 3.268,
+      "time_utc": "2026-11-27T21:33+00:00"
      }
     ],
     "fr10y": [
      {
       "source": "cnbc",
       "date": "2026-11-27",
-      "value": 4.7565,
-      "time_utc": "2026-11-27T02:51+00:00"
+      "value": 4.7073,
+      "time_utc": "2026-11-27T21:33+00:00"
      }
     ],
     "it10y": [
      {
       "source": "cnbc",
-      "date": "2026-11-26",
-      "value": 4.3252,
-      "time_utc": "2026-11-26T17:00+00:00"
-     },
-     {
-      "source": "cnbc previous close",
-      "date": "2026-11-25",
-      "value": 4.3368
+      "date": "2026-11-27",
+      "value": 4.32,
+      "time_utc": "2026-11-27T21:29+00:00"
      }
     ],
     "jp10y": [
      {
       "source": "cnbc",
+      "date": "2026-11-28",
+      "value": 2.641,
+      "time_utc": "2026-11-27T18:25+00:00"
+     },
+     {
+      "source": "cnbc previous close",
       "date": "2026-11-27",
-      "value": 2.631,
-      "time_utc": "2026-11-27T02:00+00:00"
+      "value": 2.643
      },
      {
       "source": "mof",
