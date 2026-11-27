@@ -1,8 +1,8 @@
 {
  "rules_version": "1 (fixed 16 Oct 2026)",
- "session_us": "2026-11-25",
- "session_uk": "2026-11-25",
- "generated_utc": "2026-11-25T21:34:00+00:00",
+ "session_us": "2026-11-27",
+ "session_uk": "2026-11-27",
+ "generated_utc": "2026-11-27T21:34:08+00:00",
  "universe": 868,
  "measured": 867,
  "missing": [],
@@ -11,7 +11,7 @@
   "SNDK"
  ],
  "leaders": 30,
- "events": 1,
+ "events": 0,
  "sources": {
   "yahoo": 870
  }
